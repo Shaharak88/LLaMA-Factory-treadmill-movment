@@ -50,9 +50,9 @@ Training improved model accuracy on treadmill motion detection from baseline ~50
 
 
 
-- Training config: `examples/train\_qlora/qwen25vl\_lora\_sft.yaml`
+- Training config: `examples/train\_qlora/qwen25vl_lora_sft.yaml`
 
-- Dataset: `data/treadmill\_dataset.json`
+- Dataset: `data/treadmill_dataset.json`
 
 - Output: `saves/qwen2vl-treadmill-lora/`
 
