@@ -20,21 +20,21 @@ llamafactory-cli train examples/train\_qlora/qwen25vl\_lora\_sft.yaml
 
 
 
-- \*\*Config file\*\*: `examples/train\_qlora/qwen25vl\_lora\_sft.yaml`
+- Config file: `examples/train\_qlora/qwen25vl\_lora\_sft.yaml`
 
-- \*\*Dataset\*\*: `data/treadmill\_dataset.json` (72 videos: 36 moving, 36 stopped)
+- Dataset: `data/treadmill\_dataset.json` (72 videos: 36 moving, 36 stopped)
 
-- \*\*Base Model\*\*: Qwen2.5-VL-3B-Instruct
+- Base Model: Qwen2.5-VL-3B-Instruct
 
-- \*\*LoRA Rank\*\*: 8, Alpha: 16
+- LoRA Rank: 8, Alpha: 16
 
-- \*\*Epochs\*\*: 4
+- Epochs: 1
 
-- \*\*Batch Size\*\*: 1 (with gradient accumulation)
+- Batch Size: 1 (with gradient accumulation)
 
-- \*\*Quantization\*\*: 4-bit (for 8GB VRAM)
+- Quantization: 4-bit (for 8GB VRAM)
 
-- \*\*Hardware\*\*: RTX 4070 Laptop
+- Hardware: RTX 4070 Laptop
 
 
 
