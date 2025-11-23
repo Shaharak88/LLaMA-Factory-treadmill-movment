@@ -20,9 +20,9 @@ llamafactory-cli train examples/train_qlora/qwen25vl_lora_sft.yaml
 
 
 
-- Config file: `examples/train\_qlora/qwen25vl_lora_sft.yaml`
+- Config file: `examples/train_qlora/qwen25vl_lora_sft.yaml`
 
-- Dataset: `data/treadmill\_dataset.json` (72 videos: 36 moving, 36 stopped)
+- Dataset: `data/treadmill_dataset.json` (72 videos: 36 moving, 36 stopped)
 
 - Base Model: Qwen2.5-VL-3B-Instruct
 
@@ -50,7 +50,7 @@ Training improved model accuracy on treadmill motion detection from baseline ~50
 
 
 
-- Training config: `examples/train\_qlora/qwen25vl_lora_sft.yaml`
+- Training config: `examples/train_qlora/qwen25vl_lora_sft.yaml`
 
 - Dataset: `data/treadmill_dataset.json`
 
