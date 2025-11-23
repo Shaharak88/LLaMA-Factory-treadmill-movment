@@ -10,7 +10,7 @@ Improved Qwen2.5-VL-3B's treadmill belt motion detection from ~50% to >75% accur
 
 ```bash
 
-llamafactory-cli train examples/train\_qlora/qwen25vl\_lora\_sft.yaml
+llamafactory-cli train examples/train_qlora/qwen25vl_lora_sft.yaml
 
 ```
 
@@ -20,7 +20,7 @@ llamafactory-cli train examples/train\_qlora/qwen25vl\_lora\_sft.yaml
 
 
 
-- Config file: `examples/train\_qlora/qwen25vl\_lora\_sft.yaml`
+- Config file: `examples/train\_qlora/qwen25vl_lora_sft.yaml`
 
 - Dataset: `data/treadmill\_dataset.json` (72 videos: 36 moving, 36 stopped)
 
