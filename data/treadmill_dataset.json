@@ -1,0 +1,1087 @@
+[
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0376.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0377.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0378.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0379.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0380.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0381.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0382.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0383.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0384.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0385.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0388.MOV"
+    ]
+  },
+  
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0392.MOV"
+    ]
+  },
+  
+  
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0395.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0396.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0397.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0398.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0399.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0400.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0401.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0403.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0404.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0405.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0406.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0407.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0408.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0409.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0410.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0411.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0412.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0413.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0414.MOV"
+    ]
+  },
+  
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0416.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0338.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0340.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0341.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0342.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0347.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0348.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0349.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0350.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0351.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0353.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0354.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0356.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0358.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0359.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0360.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0361.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0364.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0365.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0366.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0367.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0368.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0370.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0371.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0373.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0374.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0375.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0418.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0419.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0420.MOV"
+    ]
+  },
+
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0423.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0425.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0426.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0389.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0427.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0394.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0428.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0393.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0429.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving. I can see the surface texture of the belt shifting continuously."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/moving/IMG_0415.MOV"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped. The surface texture is static and there is no motion."
+      }
+    ],
+    "videos": [
+      "data/treadmill_videos/stopped/IMG_0430.MOV"
+    ]
+  }
+]
