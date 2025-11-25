@@ -1,0 +1,45 @@
+CUDA Available: True
+GPU: NVIDIA GeForce RTX 4070 Laptop GPU
+Total VRAM: 8.00 GB
+
+================================================================================
+LOADING BASE MODEL
+================================================================================
+Loading base model with 4-bit quantization...
+✓ Base model loaded - VRAM: 2.24 GB
+
+
+################################################################################
+# TREADMILL MOTION DETECTION EVALUATION
+# Timestamp: 20251121_194637
+# Output file: evaluation_results_20251121_194637.txt
+################################################################################
+
+
+
+████████████████████████████████████████████████████████████████████████████████
+█ TEST 1: BASELINE MODEL (No LoRA)
+████████████████████████████████████████████████████████████████████████████████
+
+
+################################################################################
+# EVALUATING: BASELINE MODEL
+################################################################################
+
+
+================================================================================
+TESTING MOVING VIDEOS
+Directory: C:\Users\shaha\Desktop\Qwen2.5\LLaMA-Factory\data\treadmill_videos\Treadmill_moving_test
+================================================================================
+Found 4 moving videos
+
+────────────────────────────────────────────────────────────────────────────────
+VIDEO 1/4: IMG_0445.MOV
+Expected answer: MOVING
+────────────────────────────────────────────────────────────────────────────────
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ERROR OCCURRED: CUDA out of memory. Tried to allocate 19.39 GiB. GPU 0 has a total capacity of 8.00 GiB of which 1.50 GiB is free. Of the allocated memory 4.82 GiB is allocated by PyTorch, and 551.97 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Peak memory: 5.79 GB
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+

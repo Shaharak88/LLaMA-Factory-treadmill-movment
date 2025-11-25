@@ -1,0 +1,58 @@
+CUDA Available: True
+GPU: NVIDIA GeForce RTX 4070 Laptop GPU
+Total VRAM: 8.00 GB
+
+================================================================================
+LOADING BASE MODEL
+================================================================================
+Loading base model with 4-bit quantization...
+✓ Base model loaded - VRAM: 2.24 GB
+
+
+################################################################################
+# TREADMILL MOTION DETECTION EVALUATION
+# Timestamp: 20251121_205528
+# Output file: evaluation_results_20251121_205528.txt
+################################################################################
+
+
+
+████████████████████████████████████████████████████████████████████████████████
+█ TEST 1: BASELINE MODEL (No LoRA)
+████████████████████████████████████████████████████████████████████████████████
+
+
+################################################################################
+# EVALUATING: BASELINE MODEL
+################################################################################
+
+
+================================================================================
+TESTING MOVING VIDEOS
+Directory: C:\Users\shaha\Desktop\Qwen2.5\LLaMA-Factory\data\treadmill_videos\Treadmill_moving_test
+================================================================================
+Found 4 moving videos
+
+────────────────────────────────────────────────────────────────────────────────
+VIDEO 1/4: IMG_0445.MOV
+Expected answer: MOVING
+────────────────────────────────────────────────────────────────────────────────
+
+📊 Tensor Shapes:
+  input_ids: torch.Size([1, 4534])
+  pixel_values_videos: torch.Size([18000, 1176])
+  → Number of frames: 1176
+  attention_mask: torch.Size([1, 4534])
+Model answer: The treadmill belt is stationary in the video. There is no visible movement of the belt, indicating that it is not running.
+Result: ✗ INCORRECT
+
+────────────────────────────────────────────────────────────────────────────────
+VIDEO 2/4: IMG_0446.MOV
+Expected answer: MOVING
+────────────────────────────────────────────────────────────────────────────────
+
+📊 Tensor Shapes:
+  input_ids: torch.Size([1, 4714])
+  pixel_values_videos: torch.Size([18720, 1176])
+  → Number of frames: 1176
+  attention_mask: torch.Size([1, 4714])

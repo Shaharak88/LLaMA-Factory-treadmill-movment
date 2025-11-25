@@ -1,0 +1,51 @@
+CUDA Available: True
+GPU: NVIDIA GeForce RTX 4070 Laptop GPU
+Total VRAM: 8.00 GB
+
+================================================================================
+LOADING BASE MODEL
+================================================================================
+Loading base model with 4-bit quantization...
+✓ Base model loaded - VRAM: 2.24 GB
+
+
+################################################################################
+# BOOTSTRAP EVALUATION - MULTIPLE RUNS
+# Timestamp: 20251125_150548
+# Output file: bootstrap_evaluation_20251125_150548.txt
+# Number of runs per model: 3
+################################################################################
+
+
+████████████████████████████████████████████████████████████████████████████████
+█ BASELINE MODEL EVALUATION (3 runs)
+████████████████████████████████████████████████████████████████████████████████
+
+  Run 1/3... 50.0%
+  Run 2/3... 50.0%
+  Run 3/3... 50.0%
+
+================================================================================
+STATISTICAL SUMMARY FOR: BASELINE MODEL
+================================================================================
+
+Number of runs:        3
+Individual accuracies: 50.0%, 50.0%, 50.0%
+
+Mean accuracy:         50.00%
+Standard deviation:    0.00%
+Min accuracy:          50.0%
+Max accuracy:          50.0%
+95% Confidence Int:    [nan%, nan%]
+================================================================================
+
+
+████████████████████████████████████████████████████████████████████████████████
+█ FINE-TUNED MODEL EVALUATION (3 runs)
+████████████████████████████████████████████████████████████████████████████████
+
+Loading LoRA adapter from: C:\Users\shaha\Desktop\Qwen2.5\LLaMA-Factory\saves\qwen2vl-treadmill-lora-4-epochs
+✓ LoRA adapter loaded successfully
+
+  Run 1/3... 50.0%
+  Run 2/3... 

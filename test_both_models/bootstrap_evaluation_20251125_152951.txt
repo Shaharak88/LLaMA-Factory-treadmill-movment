@@ -1,0 +1,112 @@
+CUDA Available: True
+GPU: NVIDIA GeForce RTX 4070 Laptop GPU
+Total VRAM: 8.00 GB
+
+================================================================================
+LOADING BASE MODEL
+================================================================================
+Loading base model with 4-bit quantization...
+✓ Base model loaded - VRAM: 2.26 GB
+
+
+################################################################################
+# BOOTSTRAP EVALUATION - MULTIPLE RUNS
+# Timestamp: 20251125_152951
+# Output file: bootstrap_evaluation_20251125_152951.txt
+# Number of runs per model: 2
+################################################################################
+
+
+████████████████████████████████████████████████████████████████████████████████
+█ BASELINE MODEL EVALUATION (2 runs)
+████████████████████████████████████████████████████████████████████████████████
+
+  Run 1/2... 50.0%
+  Run 2/2... 50.0%
+
+================================================================================
+STATISTICAL SUMMARY FOR: BASELINE MODEL
+================================================================================
+
+Number of runs:        2
+Individual accuracies: 50.0%, 50.0%
+
+Mean accuracy:         50.00%
+Standard deviation:    0.00%
+Min accuracy:          50.0%
+Max accuracy:          50.0%
+95% Confidence Int:    [50.00%, 50.00%] (no variance)
+================================================================================
+
+
+████████████████████████████████████████████████████████████████████████████████
+█ FINE-TUNED MODEL EVALUATION (2 runs)
+████████████████████████████████████████████████████████████████████████████████
+
+Loading LoRA adapter from: ../saves/qwen2vl-treadmill-lora
+✓ LoRA adapter loaded successfully
+
+  Run 1/2... 50.0%
+  Run 2/2... 50.0%
+
+================================================================================
+STATISTICAL SUMMARY FOR: FINE-TUNED MODEL (LoRA)
+================================================================================
+
+Number of runs:        2
+Individual accuracies: 50.0%, 50.0%
+
+Mean accuracy:         50.00%
+Standard deviation:    0.00%
+Min accuracy:          50.0%
+Max accuracy:          50.0%
+95% Confidence Int:    [50.00%, 50.00%] (no variance)
+================================================================================
+
+
+================================================================================
+STATISTICAL COMPARISON
+================================================================================
+
+Baseline mean:         50.00%
+Fine-tuned mean:       50.00%
+Mean improvement:      +0.00%
+
+Paired t-test results:
+  t-statistic:         nan
+  p-value:             nan
+
+What does the p-value mean?
+  p ≥ 0.10: NOT SIGNIFICANT
+  → Difference could be due to random chance
+
+In other words:
+  There is a nan% chance that this difference
+  is just random variation (not a real improvement).
+
+Effect size (Cohen's d): Cannot calculate (zero variance)
+  → All measurements are identical
+
+================================================================================
+
+
+================================================================================
+FINAL SUMMARY
+================================================================================
+
+BASELINE MODEL:
+  Mean: 50.00% ± 0.00%
+  Range: [50.0%, 50.0%]
+
+FINE-TUNED MODEL:
+  Mean: 50.00% ± 0.00%
+  Range: [50.0%, 50.0%]
+
+IMPROVEMENT: +0.00%
+STATUS: ⚠ Not statistically significant (p=nan)
+
+================================================================================
+✓✓✓ BOOTSTRAP EVALUATION COMPLETED
+✓✓✓ All results saved to: bootstrap_evaluation_20251125_152951.txt
+================================================================================
+

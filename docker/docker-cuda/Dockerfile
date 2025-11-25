@@ -39,6 +39,13 @@ COPY . /app
 # Install LLaMA Factory
 RUN pip install --no-cache-dir -e ".[${EXTRAS}]" --no-build-isolation
 
+# Fix package versions for compatibility (transformers 5.0 dev has LoRA bugs)
+RUN pip install --no-cache-dir --force-reinstall \
+    transformers==4.57.1 \
+    qwen-vl-utils==0.0.14 \
+    'huggingface-hub<1.0,>=0.34.0' \
+    'pillow<12.0,>=8.0'
+
 # Rebuild flash attention
 RUN if [ "${INSTALL_FLASHATTN}" == "true" ]; then \
         pip uninstall -y ninja && \

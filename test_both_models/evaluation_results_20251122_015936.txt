@@ -1,0 +1,225 @@
+CUDA Available: True
+GPU: NVIDIA GeForce RTX 4070 Laptop GPU
+Total VRAM: 8.00 GB
+
+================================================================================
+LOADING BASE MODEL
+================================================================================
+Loading base model with 4-bit quantization...
+✓ Base model loaded - VRAM: 2.24 GB
+
+
+################################################################################
+# TREADMILL MOTION DETECTION EVALUATION
+# Timestamp: 20251122_015936
+# Output file: evaluation_results_20251122_015936.txt
+################################################################################
+
+
+
+████████████████████████████████████████████████████████████████████████████████
+█ TEST 1: BASELINE MODEL (No LoRA)
+████████████████████████████████████████████████████████████████████████████████
+
+
+################################################################################
+# EVALUATING: BASELINE MODEL
+################################################################################
+
+
+================================================================================
+TESTING MOVING VIDEOS
+Directory: C:\Users\shaha\Desktop\Qwen2.5\LLaMA-Factory\data\treadmill_videos\Treadmill_moving_test
+================================================================================
+Found 4 moving videos
+
+────────────────────────────────────────────────────────────────────────────────
+VIDEO 1/4: IMG_0445.MOV
+Expected answer: MOVING
+────────────────────────────────────────────────────────────────────────────────
+
+🎥 Raw Video Data:
+  Number of videos: 1
+  Video 0 shape: torch.Size([50, 3, 280, 504])
+  → Frames (dimension 0): 50
+Model answer: The treadmill belt is stationary in the video. There is no visible movement of the belt, indicating that it is not running.
+Result: ✗ INCORRECT
+
+────────────────────────────────────────────────────────────────────────────────
+VIDEO 2/4: IMG_0446.MOV
+Expected answer: MOVING
+────────────────────────────────────────────────────────────────────────────────
+
+🎥 Raw Video Data:
+  Number of videos: 1
+  Video 0 shape: torch.Size([52, 3, 280, 504])
+  → Frames (dimension 0): 52
+Model answer: The treadmill belt in the video is stationary. There is no visible movement of the belt, and the display screen shows a static image with no indication of speed or motion.
+Result: ✗ INCORRECT
+
+────────────────────────────────────────────────────────────────────────────────
+VIDEO 3/4: IMG_0447.MOV
+Expected answer: MOVING
+────────────────────────────────────────────────────────────────────────────────
+
+🎥 Raw Video Data:
+  Number of videos: 1
+  Video 0 shape: torch.Size([56, 3, 280, 504])
+  → Frames (dimension 0): 56
+Model answer: The treadmill belt in the video is stationary. There is no visible movement of the belt, indicating that it is not running at the moment the video was taken.
+Result: ✗ INCORRECT
+
+────────────────────────────────────────────────────────────────────────────────
+VIDEO 4/4: IMG_0448.MOV
+Expected answer: MOVING
+────────────────────────────────────────────────────────────────────────────────
+
+🎥 Raw Video Data:
+  Number of videos: 1
+  Video 0 shape: torch.Size([52, 3, 280, 504])
+  → Frames (dimension 0): 52
+Model answer: The treadmill belt in the video is stationary. There is no visible movement of the belt, and the display on the control panel shows that the machine is not running.
+Result: ✗ INCORRECT
+
+
+================================================================================
+TESTING STOPPED VIDEOS
+Directory: C:\Users\shaha\Desktop\Qwen2.5\LLaMA-Factory\data\treadmill_videos\Treadmill_stopped_test
+================================================================================
+Found 4 stopped videos
+
+────────────────────────────────────────────────────────────────────────────────
+VIDEO 1/4: IMG_0449.MOV
+Expected answer: STOPPED
+────────────────────────────────────────────────────────────────────────────────
+
+🎥 Raw Video Data:
+  Number of videos: 1
+  Video 0 shape: torch.Size([50, 3, 280, 504])
+  → Frames (dimension 0): 50
+Model answer: The treadmill belt in the video is stationary. There is no visible movement of the belt, indicating that it is not running at the moment the video was taken.
+Result: ✓ CORRECT
+
+────────────────────────────────────────────────────────────────────────────────
+VIDEO 2/4: IMG_0450.MOV
+Expected answer: STOPPED
+────────────────────────────────────────────────────────────────────────────────
+
+🎥 Raw Video Data:
+  Number of videos: 1
+  Video 0 shape: torch.Size([50, 3, 280, 504])
+  → Frames (dimension 0): 50
+Model answer: The treadmill belt is not moving in the video. The motor is turned off, and there is no visible motion on the belt.
+Result: ✓ CORRECT
+
+────────────────────────────────────────────────────────────────────────────────
+VIDEO 3/4: IMG_0451.MOV
+Expected answer: STOPPED
+────────────────────────────────────────────────────────────────────────────────
+
+🎥 Raw Video Data:
+  Number of videos: 1
+  Video 0 shape: torch.Size([54, 3, 280, 504])
+  → Frames (dimension 0): 54
+Model answer: The treadmill belt in the video is stationary. There is no visible movement of the belt, indicating that it is not running at the moment the video was taken.
+Result: ✓ CORRECT
+
+────────────────────────────────────────────────────────────────────────────────
+VIDEO 4/4: IMG_0452.MOV
+Expected answer: STOPPED
+────────────────────────────────────────────────────────────────────────────────
+
+🎥 Raw Video Data:
+  Number of videos: 1
+  Video 0 shape: torch.Size([50, 3, 280, 504])
+  → Frames (dimension 0): 50
+Model answer: The treadmill belt in the video is stationary. There is no visible movement of the belt, indicating that it is not running at the moment the video was taken.
+Result: ✓ CORRECT
+
+
+================================================================================
+SUMMARY FOR: BASELINE MODEL
+================================================================================
+
+OVERALL ACCURACY: 50.0% (4/8)
+
+MOVING Videos: 0.0% (0/4)
+  ✗ IMG_0445.MOV: The treadmill belt is stationary in the video. There is no visible movement of the belt, indicating that it is not running.
+  ✗ IMG_0446.MOV: The treadmill belt in the video is stationary. There is no visible movement of the belt, and the display screen shows a static image with no indication of speed or motion.
+  ✗ IMG_0447.MOV: The treadmill belt in the video is stationary. There is no visible movement of the belt, indicating that it is not running at the moment the video was taken.
+  ✗ IMG_0448.MOV: The treadmill belt in the video is stationary. There is no visible movement of the belt, and the display on the control panel shows that the machine is not running.
+
+STOPPED Videos: 100.0% (4/4)
+  ✓ IMG_0449.MOV: The treadmill belt in the video is stationary. There is no visible movement of the belt, indicating that it is not running at the moment the video was taken.
+  ✓ IMG_0450.MOV: The treadmill belt is not moving in the video. The motor is turned off, and there is no visible motion on the belt.
+  ✓ IMG_0451.MOV: The treadmill belt in the video is stationary. There is no visible movement of the belt, indicating that it is not running at the moment the video was taken.
+  ✓ IMG_0452.MOV: The treadmill belt in the video is stationary. There is no visible movement of the belt, indicating that it is not running at the moment the video was taken.
+
+================================================================================
+
+
+
+████████████████████████████████████████████████████████████████████████████████
+█ TEST 2: FINE-TUNED MODEL (With LoRA)
+████████████████████████████████████████████████████████████████████████████████
+
+Loading LoRA adapter from: C:\Users\shaha\Desktop\Qwen2.5\LLaMA-Factory\saves\qwen2vl-treadmill-lora
+✓ LoRA adapter loaded successfully
+
+
+################################################################################
+# EVALUATING: FINE-TUNED MODEL (LoRA)
+################################################################################
+
+
+================================================================================
+TESTING MOVING VIDEOS
+Directory: C:\Users\shaha\Desktop\Qwen2.5\LLaMA-Factory\data\treadmill_videos\Treadmill_moving_test
+================================================================================
+Found 4 moving videos
+
+────────────────────────────────────────────────────────────────────────────────
+VIDEO 1/4: IMG_0445.MOV
+Expected answer: MOVING
+────────────────────────────────────────────────────────────────────────────────
+
+🎥 Raw Video Data:
+  Number of videos: 1
+  Video 0 shape: torch.Size([50, 3, 280, 504])
+  → Frames (dimension 0): 50
+Model answer: The treadmill belt is stationary in the video. There is no movement detected on the belt, indicating that it is not running.
+Result: ✗ INCORRECT
+
+────────────────────────────────────────────────────────────────────────────────
+VIDEO 2/4: IMG_0446.MOV
+Expected answer: MOVING
+────────────────────────────────────────────────────────────────────────────────
+
+🎥 Raw Video Data:
+  Number of videos: 1
+  Video 0 shape: torch.Size([52, 3, 280, 504])
+  → Frames (dimension 0): 52
+Model answer: The treadmill belt is stopped in the video.
+Result: ✗ INCORRECT
+
+────────────────────────────────────────────────────────────────────────────────
+VIDEO 3/4: IMG_0447.MOV
+Expected answer: MOVING
+────────────────────────────────────────────────────────────────────────────────
+
+🎥 Raw Video Data:
+  Number of videos: 1
+  Video 0 shape: torch.Size([56, 3, 280, 504])
+  → Frames (dimension 0): 56
+Model answer: The treadmill belt is moving in the video.
+Result: ✓ CORRECT
+
+────────────────────────────────────────────────────────────────────────────────
+VIDEO 4/4: IMG_0448.MOV
+Expected answer: MOVING
+────────────────────────────────────────────────────────────────────────────────
+
+🎥 Raw Video Data:
+  Number of videos: 1
+  Video 0 shape: torch.Size([52, 3, 280, 504])
+  → Frames (dimension 0): 52

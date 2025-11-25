@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  llamafactory:
+    # Use committed image with fixed dependencies
+    image: llamafactory:fixed-v1
+
+    # Build from source (use this for fresh builds):
+    # build:
+    #   dockerfile: ./docker/docker-cuda/Dockerfile
+    #   context: .
+    #   args:
+    #     PIP_INDEX: https://pypi.org/simple
+    #     EXTRAS: metrics
+    #     INSTALL_FLASHATTN: "false"
+
+    # Original buggy pre-built image:
+    # image: hiyouga/llamafactory:latest
+    container_name: llamafactory
+    ports:
+      - "7860:7860"  # Gradio UI
+      - "8000:8000"  # API service
+    ipc: host
+    tty: true
+    stdin_open: true
+    command: bash
+
+    # GPU support
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: "all"
+            capabilities: [gpu]
+
+    # Environment variables
+    environment:
+      - GRADIO_SERVER_NAME=0.0.0.0
+      - GRADIO_SERVER_PORT=7860
+      - API_PORT=8000
+      - CUDA_VISIBLE_DEVICES=0
+      - HF_HOME=/root/.cache/huggingface
+      - TRANSFORMERS_CACHE=/root/.cache/huggingface
+      - HF_HUB_CACHE=/root/.cache/huggingface/hub
+
+    # Volume mounts - mount all important directories
+    volumes:
+      # Source code (for development)
+      - ./src:/app/src
+      - ./examples:/app/examples
+      - ./scripts:/app/scripts
+
+      # Data directories
+      - ./data:/app/data
+      - ./saves:/app/saves
+
+      # Test/Evaluation directory
+      - ./test_both_models:/app/test_both_models
+
+      # Cache directories (persistent between runs)
+      - ./hf_cache:/root/.cache/huggingface
+      - ./ms_cache:/root/.cache/modelscope
+
+      # Output directories
+      - ./output:/app/output
+
+      # Config files
+      - ./examples/train_qlora:/app/examples/train_qlora
+
+    # Restart policy
+    restart: unless-stopped
+
+    # Working directory
+    working_dir: /app
