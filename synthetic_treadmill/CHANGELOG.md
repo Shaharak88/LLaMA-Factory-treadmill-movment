@@ -1,5 +1,39 @@
 # Changelog - Synthetic Treadmill Video Generator
 
+## [1.4.0] - 2025-11-26 - Moving Belt Edges & Dark Factory Textures
+
+### Fixed
+- **Critical Fix**: Belt enclosure edges now move with the treadmill texture
+  - Previously, belt edges/boundaries were applied as static overlay after motion
+  - Now applied to base texture BEFORE motion simulation
+  - Belt edges and enclosure now correctly translate with the moving belt
+  - Creates much more realistic appearance of actual conveyor belts
+
+### Added
+- **New texture type: `factory_dark`** - Dark/black factory conveyor belt (no stripes)
+  - RGB base color: (25, 25, 25) - very dark like real industrial belts
+  - Subtle texture variations simulating worn rubber surface
+  - Multi-octave noise for natural appearance
+  - Sparse directional wear marks mimicking real factory equipment
+  - Usage: `--texture_type factory_dark`
+
+- **New texture type: `factory_dark_stripes`** - Dark factory conveyor with widely-spaced stripes
+  - RGB base colors: (20, 20, 20) and (35, 35, 35) for dark industrial look
+  - Default stripe width: 50 pixels (wider spacing than standard stripes)
+  - Auto-orientation perpendicular to motion (like standard stripes)
+  - Minimal noise to maintain dark appearance
+  - Usage: `--texture_type factory_dark_stripes`
+
+### Enhanced
+- Updated texture type choices in argument parser to include new types
+- Updated `generate_varied_configs()` to include new factory textures in dataset variation
+- Both new textures suitable for industrial/factory conveyor belt simulation
+
+### Technical Details
+- Moved `apply_belt_enclosure()` call from frame loop to before seamless texture creation
+- Enclosure is now part of the scrolling texture instead of static overlay
+- Updated video generation pipeline: texture → enclosure → seamless → motion → effects
+
 ## [1.3.0] - 2025-11-26 - Realistic Belt Enclosure
 
 ### Added

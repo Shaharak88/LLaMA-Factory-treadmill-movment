@@ -224,12 +224,113 @@ class TreadmillTextureGenerator:
 
         return texture
 
+    def generate_factory_dark(self, base_color: Tuple[int, int, int] = (25, 25, 25),
+                             texture_intensity: float = 0.15) -> np.ndarray:
+        """
+        Generate dark/black factory conveyor belt texture (no stripes).
+
+        Simulates the appearance of real industrial conveyor belts with dark rubber
+        surface and subtle texture variations typical of factory equipment.
+
+        Args:
+            base_color: RGB base color (very dark, typically 20-35 for each channel)
+            texture_intensity: Intensity of subtle texture variations (0.0 to 1.0)
+
+        Returns:
+            numpy.ndarray: RGB image of shape (height, width, 3)
+        """
+        texture = np.ones((self.height, self.width, 3), dtype=np.float32)
+        texture[:, :, 0] = base_color[0]
+        texture[:, :, 1] = base_color[1]
+        texture[:, :, 2] = base_color[2]
+
+        # Add subtle noise for realistic worn rubber appearance
+        # Use multiple noise octaves for natural variation
+        for octave in range(4):
+            scale = 2 ** octave
+            noise = self.rng.randn(self.height // scale, self.width // scale)
+            noise = cv2.resize(noise, (self.width, self.height), interpolation=cv2.INTER_LINEAR)
+            texture += noise[:, :, np.newaxis] * (texture_intensity * 255 / (scale + 2))
+
+        # Add very subtle directional wear marks (like real conveyor belts)
+        num_marks = int(self.width * self.height * 0.0001)  # Very sparse
+        for _ in range(num_marks):
+            x = self.rng.randint(0, self.width)
+            y = self.rng.randint(0, self.height)
+            length = self.rng.randint(10, 30)
+            angle = self.rng.uniform(0, np.pi)
+
+            # Draw subtle wear mark
+            end_x = int(x + length * np.cos(angle))
+            end_y = int(y + length * np.sin(angle))
+            end_x = np.clip(end_x, 0, self.width - 1)
+            end_y = np.clip(end_y, 0, self.height - 1)
+
+            # Very subtle brightness variation for wear marks
+            brightness_shift = self.rng.uniform(3, 8)
+            cv2.line(texture, (x, y), (end_x, end_y),
+                    (base_color[0] + brightness_shift,
+                     base_color[1] + brightness_shift,
+                     base_color[2] + brightness_shift), 1)
+
+        texture = np.clip(texture, 0, 255).astype(np.uint8)
+        return texture
+
+    def generate_factory_dark_stripes(self, stripe_width: int = 50, orientation: str = 'horizontal',
+                                     base_color: Tuple[int, int, int] = (20, 20, 20),
+                                     stripe_color: Tuple[int, int, int] = (35, 35, 35),
+                                     motion_direction: str = None) -> np.ndarray:
+        """
+        Generate dark factory conveyor with widely-spaced stripes.
+
+        Similar to generate_stripes but with darker colors suitable for factory/industrial
+        environments and wider default spacing between stripes.
+
+        Args:
+            stripe_width: Width of each stripe in pixels (default 50 - wider than standard)
+            orientation: 'horizontal' or 'vertical' (ignored if motion_direction is set)
+            base_color: RGB color of base stripes (very dark)
+            stripe_color: RGB color of alternating stripes (slightly lighter dark)
+            motion_direction: 'left', 'right', 'up', 'down' - auto-sets perpendicular stripes
+
+        Returns:
+            numpy.ndarray: RGB image of shape (height, width, 3)
+        """
+        # Auto-orient stripes perpendicular to motion for visibility
+        if motion_direction:
+            if motion_direction in ['left', 'right']:
+                orientation = 'vertical'
+            else:  # up or down
+                orientation = 'horizontal'
+
+        texture = np.zeros((self.height, self.width, 3), dtype=np.uint8)
+
+        if orientation == 'horizontal':
+            for y in range(self.height):
+                if (y // stripe_width) % 2 == 0:
+                    texture[y, :] = base_color
+                else:
+                    texture[y, :] = stripe_color
+        else:  # vertical
+            for x in range(self.width):
+                if (x // stripe_width) % 2 == 0:
+                    texture[:, x] = base_color
+                else:
+                    texture[:, x] = stripe_color
+
+        # Add subtle noise for realism (less than standard to maintain dark look)
+        noise = self.rng.randint(-3, 3, texture.shape, dtype=np.int16)
+        texture = np.clip(texture.astype(np.int16) + noise, 0, 255).astype(np.uint8)
+
+        return texture
+
     def generate_texture(self, texture_type: str, **kwargs) -> np.ndarray:
         """
         Main interface for generating textures of specified type.
 
         Args:
-            texture_type: One of 'stripes', 'noise', 'rubber', 'grid', 'diamond_plate'
+            texture_type: One of 'stripes', 'noise', 'rubber', 'grid', 'diamond_plate',
+                         'factory_dark', 'factory_dark_stripes'
             **kwargs: Additional parameters passed to specific texture generators
 
         Returns:
@@ -237,6 +338,8 @@ class TreadmillTextureGenerator:
         """
         if texture_type == 'stripes':
             return self.generate_stripes(**kwargs)
+        elif texture_type == 'factory_dark_stripes':
+            return self.generate_factory_dark_stripes(**kwargs)
         else:
             # Remove motion_direction for non-stripe textures (they don't use it)
             kwargs.pop('motion_direction', None)
@@ -249,6 +352,8 @@ class TreadmillTextureGenerator:
                 return self.generate_grid_pattern(**kwargs)
             elif texture_type == 'diamond_plate':
                 return self.generate_diamond_plate(**kwargs)
+            elif texture_type == 'factory_dark':
+                return self.generate_factory_dark(**kwargs)
             else:
                 raise ValueError(f"Unknown texture type: {texture_type}")
 
@@ -702,6 +807,13 @@ class SyntheticVideoGenerator:
             motion_direction=self.config['direction']
         )
 
+        # Apply belt enclosure to base texture BEFORE motion (so edges move with belt)
+        print("  Step 1.5/4: Adding belt enclosure to texture...")
+        base_texture = self.effects.apply_belt_enclosure(
+            base_texture,
+            edge_width_percent=self.config.get('edge_width', 0.1)
+        )
+
         # Create seamless scrolling texture
         print("  Step 2/4: Creating seamless texture...")
         seamless_texture = self.motion_sim.create_seamless_texture(base_texture)
@@ -741,12 +853,6 @@ class SyntheticVideoGenerator:
 
             # Apply camera noise
             frame = self.effects.apply_camera_noise(frame, self.config['camera_noise'])
-
-            # Apply belt enclosure (frame/edges for realism)
-            frame = self.effects.apply_belt_enclosure(
-                frame,
-                edge_width_percent=self.config.get('edge_width', 0.1)
-            )
 
             # Write frame (convert RGB to BGR for OpenCV)
             frame_bgr = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
@@ -837,7 +943,8 @@ Examples:
 
     # Texture parameters
     parser.add_argument('--texture_type', type=str, default='stripes',
-                       choices=['stripes', 'noise', 'rubber', 'grid', 'diamond_plate'],
+                       choices=['stripes', 'noise', 'rubber', 'grid', 'diamond_plate',
+                               'factory_dark', 'factory_dark_stripes'],
                        help='Type of belt texture (default: stripes)')
     parser.add_argument('--background_color', type=str, default='80,80,80',
                        help='Background color as R,G,B (default: 80,80,80)')
@@ -924,7 +1031,8 @@ def generate_varied_configs(base_config: dict, num_videos: int) -> list:
     configs = []
     rng = np.random.RandomState(base_config['seed'])
 
-    textures = ['stripes', 'noise', 'rubber', 'grid', 'diamond_plate']
+    textures = ['stripes', 'noise', 'rubber', 'grid', 'diamond_plate',
+                'factory_dark', 'factory_dark_stripes']
     directions = ['left', 'right', 'up', 'down']
     lighting_types = ['none', 'vignette', 'gradient_lr', 'gradient_tb', 'spotlight']
 
