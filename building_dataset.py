@@ -204,6 +204,7 @@ class DatasetBuilder:
                 config['lighting_intensity'] = self.rng.uniform(0.3, 0.8)
                 config['motion_blur'] = self.rng.randint(1, 3) if config['speed'] > 5.0 else 0
                 config['camera_noise'] = self.rng.uniform(0.0, 0.3)
+                config['edge_width'] = self.rng.uniform(0.05, 0.15)
             else:
                 # Use provided parameters
                 config['texture_type'] = getattr(self.args, 'texture_type', 'stripes')
@@ -216,6 +217,7 @@ class DatasetBuilder:
                 config['lighting_intensity'] = getattr(self.args, 'lighting_intensity', 0.5)
                 config['motion_blur'] = getattr(self.args, 'motion_blur', 0)
                 config['camera_noise'] = getattr(self.args, 'camera_noise', 0.0)
+                config['edge_width'] = getattr(self.args, 'edge_width', 0.1)
 
             configs.append(config)
 
@@ -256,6 +258,7 @@ class DatasetBuilder:
                 '--lighting_intensity', str(config['lighting_intensity']),
                 '--motion_blur', str(config['motion_blur']),
                 '--camera_noise', str(config['camera_noise']),
+                '--edge_width', str(config['edge_width']),
                 '--resolution', config['resolution'],
                 '--fps', str(config['fps']),
                 '--duration', str(config['duration'])
@@ -672,6 +675,8 @@ Notes:
                        help='Motion blur amount (default: 0)')
     parser.add_argument('--camera_noise', type=float, default=0.0,
                        help='Camera noise level (default: 0.0)')
+    parser.add_argument('--edge_width', type=float, default=0.1,
+                       help='Belt enclosure edge width as percentage, 0.05 to 0.2 (default: 0.1)')
 
     args = parser.parse_args()
 
