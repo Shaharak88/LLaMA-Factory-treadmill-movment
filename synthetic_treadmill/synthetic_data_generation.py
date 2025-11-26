@@ -807,13 +807,6 @@ class SyntheticVideoGenerator:
             motion_direction=self.config['direction']
         )
 
-        # Apply belt enclosure to base texture BEFORE motion (so edges move with belt)
-        print("  Step 1.5/4: Adding belt enclosure to texture...")
-        base_texture = self.effects.apply_belt_enclosure(
-            base_texture,
-            edge_width_percent=self.config.get('edge_width', 0.1)
-        )
-
         # Create seamless scrolling texture
         print("  Step 2/4: Creating seamless texture...")
         seamless_texture = self.motion_sim.create_seamless_texture(base_texture)
@@ -834,6 +827,12 @@ class SyntheticVideoGenerator:
 
             # Apply motion
             frame = self.motion_sim.apply_motion(seamless_texture, frame_idx)
+
+            # Apply belt enclosure AFTER motion (creates fixed, non-moving border)
+            frame = self.effects.apply_belt_enclosure(
+                frame,
+                edge_width_percent=self.config.get('edge_width', 0.1)
+            )
 
             # Apply camera effects
             frame = self.effects.apply_view_angle(frame, self.config['view_angle'])

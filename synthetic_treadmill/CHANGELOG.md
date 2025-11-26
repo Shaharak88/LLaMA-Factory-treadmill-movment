@@ -1,5 +1,26 @@
 # Changelog - Synthetic Treadmill Video Generator
 
+## [1.5.0] - 2025-11-26 - Fixed Stationary Belt Enclosure
+
+### Fixed
+- **Critical Fix**: Belt enclosure now appears as a single, fixed outline that doesn't move
+  - Previously: Enclosure was applied to base texture before seamless tiling, causing it to wrap around stripes and move with the pattern
+  - Problem: Outline appeared to "wrap" around internal stripes, creating borders between them
+  - Problem: Outline shifted/moved relative to the striped pattern
+  - Now: Enclosure is applied AFTER motion is applied to each frame
+  - Result: Single, fixed border around the entire belt object that stays stationary
+  - Creates much more realistic appearance - frame stays fixed while belt moves inside it
+
+### Changed
+- Moved `apply_belt_enclosure()` from before seamless texture creation to within frame generation loop
+- Updated video generation pipeline: texture → seamless → motion → **enclosure** → camera effects
+- Enclosure is now applied per-frame instead of being part of the texture
+
+### Technical Details
+- Removed enclosure application at line ~812 (before `create_seamless_texture()`)
+- Added enclosure application at line ~832 (after `apply_motion()` in frame loop)
+- Ensures enclosure appears as fixed overlay rather than moving texture element
+
 ## [1.4.0] - 2025-11-26 - Moving Belt Edges & Dark Factory Textures
 
 ### Fixed
