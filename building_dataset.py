@@ -32,6 +32,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional
 import random
+import itertools
 
 
 # Configure logging
@@ -133,6 +134,106 @@ class DatasetBuilder:
         except Exception as e:
             raise RuntimeError(f"Python3 not available: {e}")
 
+    def _parse_parameter_values(self, param_str: str, param_type=str):
+        """
+        Parse comma-separated parameter values.
+
+        Args:
+            param_str: Comma-separated values (e.g., "4,6,8" or "stripes,noise")
+            param_type: Type to convert values to (int, float, str)
+
+        Returns:
+            List of parsed values
+        """
+        if ',' in str(param_str):
+            values = [param_type(v.strip()) for v in str(param_str).split(',')]
+            return values
+        else:
+            return [param_type(param_str)]
+
+    def _generate_all_combinations(self) -> List[Dict]:
+        """
+        Generate all parameter combinations based on comma-separated arguments.
+
+        Returns:
+            List[Dict]: All parameter combinations
+        """
+        # Parse all parameters that might have multiple values
+        texture_types = self._parse_parameter_values(self.args.texture_type, str)
+        directions = self._parse_parameter_values(self.args.direction, str)
+        fps_values = self._parse_parameter_values(self.args.fps, int)
+        durations = self._parse_parameter_values(self.args.duration, float)
+        resolutions = self._parse_parameter_values(self.args.resolution, str)
+        view_angles = self._parse_parameter_values(self.args.view_angle, float)
+        brightness_values = self._parse_parameter_values(self.args.brightness, float)
+        contrast_values = self._parse_parameter_values(self.args.contrast, float)
+        lighting_variations = self._parse_parameter_values(self.args.lighting_variation, str)
+        lighting_intensities = self._parse_parameter_values(self.args.lighting_intensity, float)
+        motion_blurs = self._parse_parameter_values(self.args.motion_blur, int)
+        camera_noises = self._parse_parameter_values(self.args.camera_noise, float)
+        edge_widths = self._parse_parameter_values(self.args.edge_width, float)
+
+        # Parse speed range
+        if hasattr(self.args, 'speed_range') and self.args.speed_range:
+            speed_parts = self.args.speed_range.split(',')
+            if len(speed_parts) == 2:
+                speed_min, speed_max = map(float, speed_parts)
+                speeds = [speed_min, speed_max]
+            else:
+                speeds = [float(s.strip()) for s in speed_parts]
+        else:
+            speeds = [1.0, 8.0]
+
+        # Generate all combinations
+        all_combinations = list(itertools.product(
+            texture_types,
+            directions,
+            speeds,
+            fps_values,
+            durations,
+            resolutions,
+            view_angles,
+            brightness_values,
+            contrast_values,
+            lighting_variations,
+            lighting_intensities,
+            motion_blurs,
+            camera_noises,
+            edge_widths
+        ))
+
+        logger.info(f"  Generated {len(all_combinations)} parameter combinations")
+
+        # Create config dictionaries
+        configs = []
+        for idx, combo in enumerate(all_combinations):
+            (texture, direction, speed, fps, duration, resolution, view_angle,
+             brightness, contrast, lighting_var, lighting_int, motion_blur,
+             camera_noise, edge_width) = combo
+
+            config = {
+                'index': idx,
+                'seed': self.seed + idx,
+                'is_moving': speed > 0.0,
+                'texture_type': texture,
+                'direction': direction,
+                'speed': speed,
+                'fps': fps,
+                'duration': duration,
+                'resolution': resolution,
+                'view_angle': view_angle,
+                'brightness': brightness,
+                'contrast': contrast,
+                'lighting_variation': lighting_var,
+                'lighting_intensity': lighting_int,
+                'motion_blur': motion_blur,
+                'camera_noise': camera_noise,
+                'edge_width': edge_width
+            }
+            configs.append(config)
+
+        return configs
+
     def generate_video_configs(self) -> Tuple[List[Dict], List[Dict]]:
         """
         Generate video configurations for moving and stopped videos.
@@ -142,16 +243,37 @@ class DatasetBuilder:
         """
         logger.info("Generating video configurations...")
 
-        # Calculate number of moving vs stopped videos (always 50/50)
-        num_moving = self.num_videos // 2
-        num_stopped = self.num_videos - num_moving
+        # Check if using combination mode (any comma-separated parameters)
+        using_combinations = any([
+            ',' in str(getattr(self.args, param, ''))
+            for param in ['texture_type', 'direction', 'fps', 'duration', 'resolution',
+                         'view_angle', 'brightness', 'contrast', 'lighting_variation',
+                         'lighting_intensity', 'motion_blur', 'camera_noise', 'edge_width']
+        ])
 
-        logger.info(f"  Target: {num_moving} moving, {num_stopped} stopped videos")
+        if using_combinations:
+            logger.info("  Using parameter combination mode")
+            all_configs = self._generate_all_combinations()
 
-        moving_configs = self._generate_configs(num_moving, is_moving=True)
-        stopped_configs = self._generate_configs(num_stopped, is_moving=False)
+            # Separate moving and stopped
+            moving_configs = [c for c in all_configs if c['is_moving']]
+            stopped_configs = [c for c in all_configs if not c['is_moving']]
 
-        return moving_configs, stopped_configs
+            logger.info(f"  Generated: {len(moving_configs)} moving, {len(stopped_configs)} stopped videos")
+
+            return moving_configs, stopped_configs
+        else:
+            # Original behavior
+            # Calculate number of moving vs stopped videos (always 50/50)
+            num_moving = self.num_videos // 2
+            num_stopped = self.num_videos - num_moving
+
+            logger.info(f"  Target: {num_moving} moving, {num_stopped} stopped videos")
+
+            moving_configs = self._generate_configs(num_moving, is_moving=True)
+            stopped_configs = self._generate_configs(num_stopped, is_moving=False)
+
+            return moving_configs, stopped_configs
 
     def _generate_configs(self, count: int, is_moving: bool) -> List[Dict]:
         """
@@ -601,6 +723,23 @@ Examples:
     --vary_parameters \\
     --speed_range 1.0,8.0
 
+  # Generate all combinations of parameters (NEW!)
+  # Example: 4 textures x 2 speeds = 8 videos
+  python building_dataset.py \\
+    --dataset_name combo_dataset \\
+    --texture_type stripes,noise,rubber,grid \\
+    --speed_range 2.0,5.0 \\
+    --fps 30 \\
+    --duration 5.0
+
+  # Multiple parameters with combinations
+  # Example: 2 fps x 2 durations x 2 textures = 8 videos
+  python building_dataset.py \\
+    --dataset_name multi_combo \\
+    --fps 15,30 \\
+    --duration 3.0,5.0 \\
+    --texture_type stripes,noise
+
   # Generate small test dataset
   python building_dataset.py \\
     --dataset_name test_dataset \\
@@ -615,9 +754,17 @@ Docker Usage:
     --num_videos 50 \\
     --vary_parameters
 
+  # Combination mode in Docker
+  docker exec llamafactory python3 /app/building_dataset.py \\
+    --dataset_name combo_test \\
+    --texture_type stripes,noise,rubber,grid \\
+    --speed_range 3.0
+
 Notes:
-  - Moving vs stopped split is always 50/50
-  - Use --vary_parameters for diverse training data
+  - Moving vs stopped split is always 50/50 (when not using combination mode)
+  - COMBINATION MODE: Use comma-separated values for any parameter to generate
+    all combinations (e.g., --fps 15,30 --texture_type stripes,noise)
+  - Use --vary_parameters for diverse training data with random variation
   - Set seed for reproducibility
   - Videos saved to data/<dataset_name>/
   - Dataset JSON created at data/<dataset_name>.json
@@ -645,38 +792,35 @@ Notes:
     parser.add_argument('--vary_parameters', action='store_true',
                        help='Automatically vary parameters for diversity')
     parser.add_argument('--texture_type', type=str, default='stripes',
-                       choices=['stripes', 'noise', 'rubber', 'grid', 'diamond_plate', 'factory_dark', 'factory_dark_stripes'],
-                       help='Texture type (default: stripes, used if --vary_parameters not set)')
+                       help='Texture type (default: stripes). Accepts comma-separated values for combinations (e.g., stripes,noise,rubber)')
     parser.add_argument('--direction', type=str, default='right',
-                       choices=['left', 'right', 'up', 'down'],
-                       help='Motion direction (default: right, used if --vary_parameters not set)')
+                       help='Motion direction (default: right). Accepts comma-separated values (e.g., left,right)')
     parser.add_argument('--speed_range', type=str, default='1.0,8.0',
-                       help='Speed range as min,max (default: 1.0,8.0)')
+                       help='Speed values as comma-separated list (default: 1.0,8.0 for min,max). Can specify multiple speeds (e.g., 2.0,4.0,6.0)')
     parser.add_argument('--resolution', type=str, default='640x480',
-                       help='Video resolution as WxH (default: 640x480)')
-    parser.add_argument('--fps', type=int, default=30,
-                       help='Frames per second (default: 30)')
-    parser.add_argument('--duration', type=float, default=5.0,
-                       help='Video duration in seconds (default: 5.0)')
+                       help='Video resolution as WxH (default: 640x480). Accepts comma-separated values (e.g., 640x480,800x600)')
+    parser.add_argument('--fps', type=str, default='30',
+                       help='Frames per second (default: 30). Accepts comma-separated values (e.g., 15,30)')
+    parser.add_argument('--duration', type=str, default='5.0',
+                       help='Video duration in seconds (default: 5.0). Accepts comma-separated values (e.g., 3.0,5.0)')
 
     # Camera/lighting parameters
-    parser.add_argument('--view_angle', type=float, default=0.0,
-                       help='Camera viewing angle in degrees (default: 0.0)')
-    parser.add_argument('--brightness', type=float, default=0.0,
-                       help='Brightness adjustment (default: 0.0)')
-    parser.add_argument('--contrast', type=float, default=1.0,
-                       help='Contrast adjustment (default: 1.0)')
+    parser.add_argument('--view_angle', type=str, default='0.0',
+                       help='Camera viewing angle in degrees (default: 0.0). Accepts comma-separated values (e.g., -15,0,15)')
+    parser.add_argument('--brightness', type=str, default='0.0',
+                       help='Brightness adjustment (default: 0.0). Accepts comma-separated values (e.g., -0.2,0.0,0.2)')
+    parser.add_argument('--contrast', type=str, default='1.0',
+                       help='Contrast adjustment (default: 1.0). Accepts comma-separated values (e.g., 0.8,1.0,1.2)')
     parser.add_argument('--lighting_variation', type=str, default='none',
-                       choices=['none', 'vignette', 'gradient_lr', 'gradient_tb', 'spotlight'],
-                       help='Lighting variation type (default: none)')
-    parser.add_argument('--lighting_intensity', type=float, default=0.5,
-                       help='Lighting intensity (default: 0.5)')
-    parser.add_argument('--motion_blur', type=int, default=0,
-                       help='Motion blur amount (default: 0)')
-    parser.add_argument('--camera_noise', type=float, default=0.0,
-                       help='Camera noise level (default: 0.0)')
-    parser.add_argument('--edge_width', type=float, default=0.1,
-                       help='Belt enclosure edge width as percentage, 0.05 to 0.2 (default: 0.1)')
+                       help='Lighting variation type (default: none). Accepts comma-separated values (e.g., none,vignette,spotlight)')
+    parser.add_argument('--lighting_intensity', type=str, default='0.5',
+                       help='Lighting intensity (default: 0.5). Accepts comma-separated values (e.g., 0.3,0.5,0.7)')
+    parser.add_argument('--motion_blur', type=str, default='0',
+                       help='Motion blur amount (default: 0). Accepts comma-separated values (e.g., 0,1,2)')
+    parser.add_argument('--camera_noise', type=str, default='0.0',
+                       help='Camera noise level (default: 0.0). Accepts comma-separated values (e.g., 0.0,0.1,0.2)')
+    parser.add_argument('--edge_width', type=str, default='0.1',
+                       help='Belt enclosure edge width as percentage (default: 0.1). Accepts comma-separated values (e.g., 0.05,0.1,0.15)')
 
     args = parser.parse_args()
 
