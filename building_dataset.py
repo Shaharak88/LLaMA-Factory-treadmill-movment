@@ -792,9 +792,9 @@ Notes:
     parser.add_argument('--vary_parameters', action='store_true',
                        help='Automatically vary parameters for diversity')
     parser.add_argument('--texture_type', type=str, default='stripes',
-                       help='Texture type (default: stripes). Accepts comma-separated values for combinations (e.g., stripes,noise,rubber)')
+                       help='Texture type (default: stripes). Accepts comma-separated values for combinations (e.g., stripes,noise,rubber). Valid types: stripes, noise, rubber, grid, diamond_plate, factory_dark, factory_dark_stripes')
     parser.add_argument('--direction', type=str, default='right',
-                       help='Motion direction (default: right). Accepts comma-separated values (e.g., left,right)')
+                       help='Motion direction (default: right). Accepts comma-separated values (e.g., left,right). Valid directions: left, right, up, down')
     parser.add_argument('--speed_range', type=str, default='1.0,8.0',
                        help='Speed values as comma-separated list (default: 1.0,8.0 for min,max). Can specify multiple speeds (e.g., 2.0,4.0,6.0)')
     parser.add_argument('--resolution', type=str, default='640x480',
@@ -812,7 +812,7 @@ Notes:
     parser.add_argument('--contrast', type=str, default='1.0',
                        help='Contrast adjustment (default: 1.0). Accepts comma-separated values (e.g., 0.8,1.0,1.2)')
     parser.add_argument('--lighting_variation', type=str, default='none',
-                       help='Lighting variation type (default: none). Accepts comma-separated values (e.g., none,vignette,spotlight)')
+                       help='Lighting variation type (default: none). Accepts comma-separated values (e.g., none,vignette,spotlight). Valid types: none, vignette, gradient_lr, gradient_tb, spotlight')
     parser.add_argument('--lighting_intensity', type=str, default='0.5',
                        help='Lighting intensity (default: 0.5). Accepts comma-separated values (e.g., 0.3,0.5,0.7)')
     parser.add_argument('--motion_blur', type=str, default='0',
