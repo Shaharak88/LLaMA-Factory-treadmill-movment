@@ -53,12 +53,24 @@ Created a complete orchestration pipeline that automates dataset generation, mod
 - Training: LoRA rank, alpha, dropout, learning rate, epochs, batch size, etc.
 - Evaluation: Max tokens, batch size, video processing parameters
 
-**Usage Example:**
+**Usage Example (inside container):**
 ```bash
+# Recommended: Run inside Docker container
+docker exec llamafactory python3 /app/run_full_pipeline.py \
+  --dataset_name my_experiment \
+  --num_videos 100 \
+  --vary_parameters \
+  --seed 42
+```
+
+**Usage Example (outside container):**
+```bash
+# If running from host machine
 python3 run_full_pipeline.py \
   --dataset_name my_experiment \
   --num_videos 100 \
   --vary_parameters \
+  --use_docker \
   --seed 42
 ```
 

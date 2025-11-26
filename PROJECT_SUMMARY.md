@@ -19,14 +19,18 @@ Vision model training for detecting moving vs. stationary treadmill surfaces usi
 LLaMA-Factory/
 ├── data/
 │   ├── treadmill_videos/          # Training video data
-│   └── synthetic_treadmill/        # Synthetic data generator
+│   ├── synthetic_treadmill/        # Synthetic data generator
+│   └── dataset_info.json          # Dataset registry
 ├── examples/train_qlora/
 │   └── qwen25vl_lora_sft.yaml     # LoRA training config
 ├── saves/                          # Model checkpoints
 ├── output/                         # Training outputs
 ├── scripts/
 │   └── vllm_infer.py              # Inference script
-└── synthetic_treadmill/            # Data generation tool
+├── building_dataset.py            # Dataset builder (NEW)
+├── README_DATASET_BUILDER.md      # Dataset builder docs (NEW)
+├── evaluate_treadmill_lora.py     # Evaluation script
+└── evaluate_bootstrap.py          # Bootstrap evaluation
 ```
 
 ---
@@ -175,9 +179,109 @@ docker exec llamafactory python3 /app/data/synthetic_treadmill/synthetic_data_ge
 
 ---
 
-## Phase 4: Complete Workflow
+## Phase 4: Automated Dataset Builder
 
-### Training Pipeline
+### Dataset Builder Tool
+**File**: `building_dataset.py`
+
+#### Purpose
+Automated pipeline for creating synthetic treadmill video datasets formatted for LLaMA-Factory training. Eliminates manual dataset creation and formatting steps.
+
+#### Key Features
+- **Automated Generation**: Calls `synthetic_data_generation.py` with varied parameters
+- **50/50 Split**: Always generates equal moving vs stopped videos
+- **ShareGPT Formatting**: Creates properly formatted JSON for training
+- **Auto-Registration**: Updates `dataset_info.json` automatically
+- **Simple Prompts**: Compact, focused question-answer pairs
+- **Summary Reports**: Detailed statistics and file information
+- **Validation**: Complete error checking and file verification
+
+#### Usage Example
+```bash
+# Generate 100-video training dataset
+python building_dataset.py \
+  --dataset_name synthetic_treadmill_100 \
+  --num_videos 100 \
+  --vary_parameters \
+  --seed 42
+
+# Docker usage
+docker exec llamafactory python3 /app/building_dataset.py \
+  --dataset_name my_dataset \
+  --num_videos 50 \
+  --vary_parameters
+```
+
+#### Output Structure
+```
+data/
+├── <dataset_name>/
+│   ├── treadmill_0001_*.mp4
+│   ├── treadmill_0002_*.mp4
+│   ├── ...
+│   ├── <dataset_name>_build_log.txt
+│   └── <dataset_name>_summary.txt
+├── <dataset_name>.json              # ShareGPT format
+└── dataset_info.json                # Auto-updated
+```
+
+#### Dataset Format
+Each entry follows ShareGPT format:
+```json
+{
+  "messages": [
+    {
+      "role": "user",
+      "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+    },
+    {
+      "role": "assistant",
+      "content": "The treadmill belt is moving."
+    }
+  ],
+  "videos": ["data/<dataset_name>/video.mp4"]
+}
+```
+
+#### Documentation
+See `README_DATASET_BUILDER.md` for:
+- Complete command-line reference
+- Advanced usage examples
+- Troubleshooting guide
+- Best practices
+- Performance notes
+
+---
+
+## Phase 5: Complete Workflow
+
+### Training Pipeline (with Dataset Builder)
+1. **Generate Dataset** (NEW - Automated)
+   ```bash
+   python building_dataset.py \
+     --dataset_name my_training_data \
+     --num_videos 100 \
+     --vary_parameters
+   ```
+
+2. **Train LoRA Adapter**
+   ```bash
+   # Dataset automatically registered, just update YAML
+   # Set: dataset: my_training_data
+   llamafactory-cli train examples/train_qlora/qwen25vl_lora_sft.yaml
+   ```
+
+3. **Evaluate Model**
+   ```bash
+   python evaluate_treadmill_lora.py
+   python evaluate_bootstrap.py  # With confidence intervals
+   ```
+
+4. **Deploy**
+   - Use `scripts/vllm_infer.py` for inference
+   - Serve on port 8000
+
+### Legacy Manual Pipeline (for reference)
 1. **Prepare Data**
    - Collect real treadmill videos OR
    - Generate synthetic videos with varied parameters
@@ -254,6 +358,14 @@ docker exec llamafactory python3 /app/data/synthetic_treadmill/synthetic_data_ge
 - CV models cannot learn from invisible motion
 - Perpendicular orientation ensures detectable features
 
+### 5. Why Automated Dataset Builder?
+- Manual dataset creation is time-consuming and error-prone
+- Ensures consistent 50/50 moving/stopped split
+- Automatic ShareGPT formatting eliminates formatting errors
+- Auto-registration prevents missing dataset_info.json entries
+- Reproducible datasets with seed control
+- Comprehensive logging and validation
+
 ---
 
 ## Dependencies
@@ -287,6 +399,12 @@ pip install -r synthetic_treadmill/requirements.txt
 - 100 videos, 3 epochs: ~30-60 minutes
 - Depends on: GPU, video length, batch size
 
+### Dataset Builder Performance
+- 10 videos @ 640x480: ~1-2 minutes (total pipeline)
+- 100 videos @ 640x480: ~10-20 minutes (total pipeline)
+- 100 videos @ 1280x720: ~25-35 minutes (total pipeline)
+- Includes: video generation, JSON creation, validation
+
 ---
 
 ## Future Enhancements
@@ -319,16 +437,30 @@ pip install -r synthetic_treadmill/requirements.txt
 - ✅ LoRA training pipeline setup
 - ✅ Synthetic data generator (16 DOF)
 - ✅ Stripe orientation fix implemented
+- ✅ **Automated dataset builder tool (NEW)**
 - ✅ Complete documentation
 - ✅ Git version control
 - ✅ Tested in Docker container
 
+### Key Files
+| File | Purpose |
+|------|---------|
+| `building_dataset.py` | Automated dataset generation & formatting |
+| `README_DATASET_BUILDER.md` | Complete dataset builder documentation |
+| `data/synthetic_treadmill/synthetic_data_generation.py` | Synthetic video generator |
+| `examples/train_qlora/qwen25vl_lora_sft.yaml` | LoRA training config |
+| `evaluate_treadmill_lora.py` | Model evaluation |
+| `evaluate_bootstrap.py` | Bootstrap confidence intervals |
+
 ### Next Steps
-1. Generate large synthetic dataset (100-1000 videos)
-2. Train LoRA adapter on synthetic data
-3. Evaluate on real treadmill videos
-4. Fine-tune with real data if needed
-5. Deploy inference pipeline
+1. **Generate Dataset**: Use `building_dataset.py` to create training dataset
+   ```bash
+   python building_dataset.py --dataset_name training_v1 --num_videos 100 --vary_parameters
+   ```
+2. **Train LoRA Adapter**: Update YAML config with dataset name and train
+3. **Evaluate Model**: Run evaluation scripts on test set
+4. **Fine-tune**: Optionally add real data for domain adaptation
+5. **Deploy**: Set up inference pipeline for production use
 
 ---
 

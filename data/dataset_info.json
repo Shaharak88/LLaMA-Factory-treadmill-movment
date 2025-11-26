@@ -744,5 +744,61 @@
       "user_tag": "user",
       "assistant_tag": "assistant"
     }
+  },
+  "test_dataset_10": {
+    "file_name": "test_dataset_10.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "videos": "videos"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
+  "test_edge_width": {
+    "file_name": "test_edge_width.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "videos": "videos"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
+  "test_factory_textures": {
+    "file_name": "test_factory_textures.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "videos": "videos"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
+  "test_combo_4textures": {
+    "file_name": "test_combo_4textures.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "videos": "videos"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
   }
 }

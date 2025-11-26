@@ -176,8 +176,8 @@ def vllm_infer(
                     )
                     total_frames = video_stream.frames
                     video_metadata_kwargs = {
-                        "fps": getattr(tokenizer_module["processor"], "video_fps", 24.0),
-                        "do_sample_frames": False,
+                        "fps": getattr(tokenizer_module["processor"], "video_fps", 4.0),
+                        "do_sample_frames": True,
                         "total_num_frames": total_frames,
                     }
                     video_metadata = dict(

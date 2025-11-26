@@ -200,7 +200,7 @@ class FullPipelineRunner:
         """
         Step 2: Train LoRA adapter on the training dataset.
 
-        Creates a custom training config YAML and runs training via docker-compose.
+        Creates a custom training config YAML and runs training.
         """
         logger.info("\n" + "#"*70)
         logger.info("# STEP 2: MODEL TRAINING")
@@ -210,10 +210,17 @@ class FullPipelineRunner:
         config_path = self._create_training_config()
 
         # Build training command
-        cmd = [
-            'docker-compose', 'run', '--rm', 'llamafactory',
-            'llamafactory-cli', 'train', str(config_path)
-        ]
+        # If running inside container, use llamafactory-cli directly
+        # If running outside container, use docker-compose
+        if self.args.use_docker:
+            cmd = [
+                'docker-compose', 'run', '--rm', 'llamafactory',
+                'llamafactory-cli', 'train', str(config_path)
+            ]
+        else:
+            cmd = [
+                'llamafactory-cli', 'train', str(config_path)
+            ]
 
         self.run_command(cmd, "LoRA Model Training", timeout=14400)  # 4 hour timeout
 
@@ -396,14 +403,22 @@ Examples:
 
 Docker Usage:
 
-  # Run inside Docker container
+  # Run inside Docker container (recommended)
   docker exec llamafactory python3 /app/run_full_pipeline.py \\
     --dataset_name docker_experiment \\
     --num_videos 50
 
+  # Run outside Docker container (uses docker-compose for training)
+  python3 run_full_pipeline.py \\
+    --dataset_name local_experiment \\
+    --num_videos 50 \\
+    --use_docker
+
 Notes:
   - Train/test split defaults to 90/10
   - Test set is completely held out from training
+  - By default, assumes running INSIDE Docker container
+  - Use --use_docker when running OUTSIDE container (for training step)
   - All sub-script arguments are exposed with defaults
   - Use --skip_dataset, --skip_training, or --skip_evaluation to run partial pipeline
         """
@@ -412,6 +427,8 @@ Notes:
     # Pipeline control
     parser.add_argument('--dataset_name', type=str, required=True,
                        help='Base name for datasets (will create <name>_train and <name>_test)')
+    parser.add_argument('--use_docker', action='store_true',
+                       help='Run training via docker-compose (use when running outside container)')
     parser.add_argument('--skip_dataset', action='store_true',
                        help='Skip dataset generation step')
     parser.add_argument('--skip_training', action='store_true',

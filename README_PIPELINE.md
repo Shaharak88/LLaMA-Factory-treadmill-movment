@@ -20,7 +20,9 @@ This single command will:
 3. Evaluate both base and fine-tuned models
 4. Generate accuracy comparison report
 
-### Inside Docker Container
+### Inside Docker Container (Recommended)
+
+The pipeline is designed to run **inside the Docker container**:
 
 ```bash
 docker exec llamafactory python3 /app/run_full_pipeline.py \
@@ -28,6 +30,19 @@ docker exec llamafactory python3 /app/run_full_pipeline.py \
   --num_videos 50 \
   --vary_parameters
 ```
+
+### Outside Docker Container
+
+If running from outside the container, use `--use_docker` flag:
+
+```bash
+python3 run_full_pipeline.py \
+  --dataset_name local_experiment \
+  --num_videos 50 \
+  --use_docker
+```
+
+**Note:** By default, the pipeline assumes it's running **inside** the container. Only use `--use_docker` when running from the host machine.
 
 ## Pipeline Components
 
