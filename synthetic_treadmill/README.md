@@ -15,7 +15,9 @@ A comprehensive Python tool for generating synthetic videos of moving treadmill/
 
 ### 🎬 Motion Control
 - **Directions**: Left, Right, Up, Down
-- **Variable Speed**: Configurable pixels per frame (0.5 to 20+)
+- **Variable Speed**: Configurable pixels per frame (0 to 20+)
+  - **Speed 0**: Generates stationary (non-moving) videos - perfect for training binary classifiers!
+  - **Speed 0.5-20+**: Moving belt at various speeds
 - **Seamless Looping**: Infinite scrolling effect with no visible seams
 
 ### 📷 Camera Effects
@@ -123,6 +125,20 @@ python synthetic_data_generation.py --num_videos 5
 - 5 videos with stripe texture, rightward motion
 - 640x480 resolution at 30 FPS
 - 5 seconds duration each
+
+### Example 1b: Stationary (Non-Moving) Videos
+
+Generate stationary treadmill videos for binary classification training:
+
+```bash
+# Stationary stripes
+python synthetic_data_generation.py --speed 0 --texture_type stripes
+
+# Stationary rubber texture
+python synthetic_data_generation.py --speed 0 --texture_type rubber
+```
+
+**Use Case**: Perfect for training "moving" vs "stationary" classifiers!
 
 ### Example 2: Specific Texture and Motion
 

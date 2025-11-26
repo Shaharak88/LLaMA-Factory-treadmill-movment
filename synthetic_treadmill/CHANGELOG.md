@@ -1,5 +1,22 @@
 # Changelog - Synthetic Treadmill Video Generator
 
+## [1.2.0] - 2025-11-26 - Stationary Video Support & Bug Fix
+
+### Added
+- **Stationary video generation**: `--speed 0` now generates non-moving treadmill videos
+  - Perfect for binary classification training (moving vs stationary)
+  - Works with all texture types
+  - Example: `--speed 0 --texture_type stripes`
+
+### Fixed
+- Fixed bug where non-stripe textures (rubber, noise, grid, diamond_plate) failed with `motion_direction` parameter
+- Added parameter filtering in `generate_texture()` to only pass `motion_direction` to stripe generator
+
+### Tested
+- Stationary videos with stripes texture ✓
+- Stationary videos with rubber texture ✓
+- All texture types now work correctly with motion_direction parameter
+
 ## [1.1.0] - 2025-11-26 - Stripe Orientation Fix
 
 ### Fixed

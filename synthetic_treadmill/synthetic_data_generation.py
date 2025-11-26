@@ -237,16 +237,20 @@ class TreadmillTextureGenerator:
         """
         if texture_type == 'stripes':
             return self.generate_stripes(**kwargs)
-        elif texture_type == 'noise':
-            return self.generate_noise_pattern(**kwargs)
-        elif texture_type == 'rubber':
-            return self.generate_rubber_pattern(**kwargs)
-        elif texture_type == 'grid':
-            return self.generate_grid_pattern(**kwargs)
-        elif texture_type == 'diamond_plate':
-            return self.generate_diamond_plate(**kwargs)
         else:
-            raise ValueError(f"Unknown texture type: {texture_type}")
+            # Remove motion_direction for non-stripe textures (they don't use it)
+            kwargs.pop('motion_direction', None)
+
+            if texture_type == 'noise':
+                return self.generate_noise_pattern(**kwargs)
+            elif texture_type == 'rubber':
+                return self.generate_rubber_pattern(**kwargs)
+            elif texture_type == 'grid':
+                return self.generate_grid_pattern(**kwargs)
+            elif texture_type == 'diamond_plate':
+                return self.generate_diamond_plate(**kwargs)
+            else:
+                raise ValueError(f"Unknown texture type: {texture_type}")
 
 
 class TreadmillMotionSimulator:
