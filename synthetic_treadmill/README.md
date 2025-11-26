@@ -20,6 +20,17 @@ A comprehensive Python tool for generating synthetic videos of moving treadmill/
   - **Speed 0.5-20+**: Moving belt at various speeds
 - **Seamless Looping**: Infinite scrolling effect with no visible seams
 
+### 🖼️ Realistic Belt Appearance
+- **Belt Enclosure**: Automatic frame/edges around the belt surface
+  - Side rails (left/right edges)
+  - Top and bottom enclosure
+  - Simulates actual treadmill/conveyor structure
+- **Visual Details**:
+  - Belt edge lines showing belt boundaries
+  - 3D shading/gradient for depth perception
+  - Corner bolts/screws for mechanical realism
+- **Configurable**: Adjustable edge width (5-20% of frame)
+
 ### 📷 Camera Effects
 - **View Angle**: Perspective transforms (-45° to +45°)
 - **Brightness**: Global brightness adjustment
@@ -107,6 +118,7 @@ python synthetic_data_generation.py --num_videos 1
 #### Additional Effects
 - `--motion_blur`: Motion blur amount in pixels, 0 to 10 (default: 0)
 - `--camera_noise`: Camera sensor noise level, 0.0 to 1.0 (default: 0.0)
+- `--edge_width`: Belt enclosure edge width as percentage, 0.05 to 0.2 (default: 0.1)
 
 #### Variation Mode
 - `--vary_parameters`: Automatically vary parameters across multiple videos

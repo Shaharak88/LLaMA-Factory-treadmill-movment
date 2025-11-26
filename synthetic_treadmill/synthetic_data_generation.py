@@ -566,6 +566,91 @@ class CameraEffectsProcessor:
 
         return noisy
 
+    def apply_belt_enclosure(self, frame: np.ndarray,
+                            edge_width_percent: float = 0.1,
+                            enclosure_color: Tuple[int, int, int] = (40, 40, 40),
+                            edge_color: Tuple[int, int, int] = (60, 60, 60)) -> np.ndarray:
+        """
+        Add realistic belt enclosure and edges to simulate actual treadmill/conveyor appearance.
+
+        Creates a frame around the belt to show:
+        - Side rails/edges of the belt
+        - Metal/plastic enclosure typical of treadmills
+        - Visible belt boundaries
+
+        Args:
+            frame: Input frame showing belt texture
+            edge_width_percent: Width of edge/enclosure as percentage of frame (0.05 to 0.2)
+            enclosure_color: RGB color of enclosure/frame (dark gray/black)
+            edge_color: RGB color of belt edges (slightly lighter)
+
+        Returns:
+            numpy.ndarray: Frame with belt enclosure overlay
+        """
+        h, w = frame.shape[:2]
+        result = frame.copy()
+
+        # Calculate edge dimensions
+        edge_width = int(w * edge_width_percent)
+        edge_height = int(h * edge_width_percent)
+
+        # Draw left and right edges (side rails)
+        cv2.rectangle(result, (0, 0), (edge_width, h), enclosure_color, -1)
+        cv2.rectangle(result, (w - edge_width, 0), (w, h), enclosure_color, -1)
+
+        # Draw top and bottom edges
+        cv2.rectangle(result, (0, 0), (w, edge_height), enclosure_color, -1)
+        cv2.rectangle(result, (0, h - edge_height), (w, h), enclosure_color, -1)
+
+        # Draw belt edge lines (inner border showing belt edge)
+        # Left belt edge
+        cv2.line(result, (edge_width, edge_height), (edge_width, h - edge_height),
+                edge_color, 3)
+        # Right belt edge
+        cv2.line(result, (w - edge_width, edge_height), (w - edge_width, h - edge_height),
+                edge_color, 3)
+        # Top belt edge
+        cv2.line(result, (edge_width, edge_height), (w - edge_width, edge_height),
+                edge_color, 3)
+        # Bottom belt edge
+        cv2.line(result, (edge_width, h - edge_height), (w - edge_width, h - edge_height),
+                edge_color, 3)
+
+        # Add subtle shading/gradient to enclosure for 3D effect
+        # Left side gradient
+        for i in range(edge_width):
+            alpha = i / edge_width
+            shade = int(enclosure_color[0] * (1 - alpha * 0.3))
+            cv2.line(result, (i, edge_height), (i, h - edge_height),
+                    (shade, shade, shade), 1)
+
+        # Right side gradient
+        for i in range(edge_width):
+            alpha = i / edge_width
+            shade = int(enclosure_color[0] * (1 - alpha * 0.3))
+            cv2.line(result, (w - edge_width + i, edge_height),
+                    (w - edge_width + i, h - edge_height),
+                    (shade, shade, shade), 1)
+
+        # Add corner details (screws/bolts for realism)
+        bolt_radius = max(3, int(edge_width * 0.15))
+        bolt_color = (80, 80, 80)
+
+        # Corner positions (inset from edges)
+        corner_offset = edge_width // 2
+        corners = [
+            (corner_offset, corner_offset),  # Top-left
+            (w - corner_offset, corner_offset),  # Top-right
+            (corner_offset, h - corner_offset),  # Bottom-left
+            (w - corner_offset, h - corner_offset)  # Bottom-right
+        ]
+
+        for corner in corners:
+            cv2.circle(result, corner, bolt_radius, bolt_color, -1)
+            cv2.circle(result, corner, bolt_radius // 2, (100, 100, 100), -1)
+
+        return result
+
 
 class SyntheticVideoGenerator:
     """
@@ -656,6 +741,12 @@ class SyntheticVideoGenerator:
 
             # Apply camera noise
             frame = self.effects.apply_camera_noise(frame, self.config['camera_noise'])
+
+            # Apply belt enclosure (frame/edges for realism)
+            frame = self.effects.apply_belt_enclosure(
+                frame,
+                edge_width_percent=self.config.get('edge_width', 0.1)
+            )
 
             # Write frame (convert RGB to BGR for OpenCV)
             frame_bgr = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
@@ -769,6 +860,8 @@ Examples:
                        help='Motion blur amount in pixels, 0 to 10 (default: 0)')
     parser.add_argument('--camera_noise', type=float, default=0.0,
                        help='Camera sensor noise level, 0.0 to 1.0 (default: 0.0)')
+    parser.add_argument('--edge_width', type=float, default=0.1,
+                       help='Belt enclosure edge width as percentage, 0.05 to 0.2 (default: 0.1)')
 
     # Variation mode
     parser.add_argument('--vary_parameters', action='store_true',
@@ -904,6 +997,7 @@ def main():
         'lighting_intensity': args.lighting_intensity,
         'motion_blur': args.motion_blur,
         'camera_noise': args.camera_noise,
+        'edge_width': args.edge_width,
         'seed': args.seed,
         'background_color': bg_color,
     }

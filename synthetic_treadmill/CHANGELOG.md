@@ -1,5 +1,27 @@
 # Changelog - Synthetic Treadmill Video Generator
 
+## [1.3.0] - 2025-11-26 - Realistic Belt Enclosure
+
+### Added
+- **Belt enclosure rendering**: Videos now include realistic treadmill/conveyor frame
+  - Side rails (left/right edges) showing belt boundaries
+  - Top and bottom enclosure
+  - Belt edge lines with 3D shading for depth perception
+  - Corner bolts/screws for mechanical realism
+  - New parameter: `--edge_width` (0.05 to 0.2, default: 0.1)
+- Automatic application of belt overlay to all generated frames
+- Gradient shading on enclosure for 3D depth effect
+
+### Enhanced
+- Videos now look much more realistic with visible belt structure
+- Better simulation of actual treadmill/conveyor appearance
+- Configurable edge width for different belt sizes
+
+### Tested
+- Moving stripes video with enclosure ✓
+- Stationary rubber video with enclosure ✓
+- Moving grid video with wider enclosure (edge_width=0.12) ✓
+
 ## [1.2.0] - 2025-11-26 - Stationary Video Support & Bug Fix
 
 ### Added
