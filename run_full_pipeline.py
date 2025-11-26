@@ -51,7 +51,7 @@ class FullPipelineRunner:
         # Script paths
         self.building_dataset_script = self.project_root / "building_dataset.py"
         self.train_script = "llamafactory-cli"  # Will be run via docker-compose
-        self.evaluate_script = self.project_root / "evaluate_pipeline.py"
+        self.evaluate_script = self.project_root / "evaluate_pipeline_simple.py"
 
         # Dataset names
         self.train_dataset_name = f"{args.dataset_name}_train"
@@ -329,8 +329,7 @@ seed: {self.args.seed}
         if self.args.eval_video_maxlen:
             cmd.extend(['--video_maxlen', str(self.args.eval_video_maxlen)])
 
-        if self.args.gpu_memory_utilization:
-            cmd.extend(['--gpu_memory_utilization', str(self.args.gpu_memory_utilization)])
+        # Removed gpu_memory_utilization as it is not needed for simple eval
 
         self.run_command(cmd, "Model Evaluation", timeout=7200)
 
