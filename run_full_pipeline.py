@@ -329,6 +329,9 @@ seed: {self.args.seed}
         if self.args.eval_video_maxlen:
             cmd.extend(['--video_maxlen', str(self.args.eval_video_maxlen)])
 
+        if self.args.gpu_memory_utilization:
+            cmd.extend(['--gpu_memory_utilization', str(self.args.gpu_memory_utilization)])
+
         self.run_command(cmd, "Model Evaluation", timeout=7200)
 
     def run(self) -> None:
@@ -531,6 +534,8 @@ Notes:
                            help='Video FPS for evaluation (default: 2.0)')
     eval_group.add_argument('--eval_video_maxlen', type=int, default=128,
                            help='Max video length for evaluation (default: 128)')
+    eval_group.add_argument('--gpu_memory_utilization', type=float, default=0.8,
+                           help='GPU memory utilization for vllm (default: 0.8)')
 
     return parser.parse_args()
 

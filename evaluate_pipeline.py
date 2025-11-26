@@ -109,7 +109,8 @@ class TreadmillEvaluator:
             '--video_fps', str(self.args.video_fps),
             '--video_maxlen', str(self.args.video_maxlen),
             '--image_max_pixels', str(self.args.image_max_pixels),
-            '--image_min_pixels', str(self.args.image_min_pixels)
+            '--image_min_pixels', str(self.args.image_min_pixels),
+            '--vllm_config', json.dumps({"gpu_memory_utilization": self.args.gpu_memory_utilization})
         ]
 
         # Add adapter if provided
@@ -438,6 +439,8 @@ def parse_arguments() -> argparse.Namespace:
                        help='Maximum image pixels (default: 768*768)')
     parser.add_argument('--image_min_pixels', type=int, default=32*32,
                        help='Minimum image pixels (default: 32*32)')
+    parser.add_argument('--gpu_memory_utilization', type=float, default=0.8,
+                       help='GPU memory utilization for vllm (default: 0.8)')
 
     # Output arguments
     parser.add_argument('--output_dir', type=str, default='evaluation_results',
