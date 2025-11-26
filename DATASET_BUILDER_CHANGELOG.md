@@ -139,11 +139,38 @@ docker exec llamafactory python3 /app/building_dataset.py \
 ```
 Result: 2×2×2×2 = 16 videos
 
-### Testing Plan
-1. Test with 4 texture types as requested
-2. Verify all videos are generated correctly
-3. Check dataset JSON is created properly
-4. Confirm dataset_info.json is updated
+### Testing Results
+
+#### Test Command
+```bash
+docker exec llamafactory python3 /app/building_dataset.py \
+  --dataset_name test_combo_4textures \
+  --texture_type stripes,noise,rubber,grid \
+  --speed_range 3.0 \
+  --fps 30 \
+  --duration 5.0
+```
+
+#### Test Results ✅ PASSED
+- **Videos Generated**: 4/4 (100% success)
+- **Video Details**:
+  1. `treadmill_0000_stripes_right_speed3.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4` (415.4 KB)
+  2. `treadmill_0000_noise_right_speed3.0_angle0_bright0.00_contr1.00_640x480_seed43.mp4` (2458.1 KB)
+  3. `treadmill_0000_rubber_right_speed3.0_angle0_bright0.00_contr1.00_640x480_seed44.mp4` (2066.6 KB)
+  4. `treadmill_0000_grid_right_speed3.0_angle0_bright0.00_contr1.00_640x480_seed45.mp4` (637.0 KB)
+- **Dataset JSON**: Created successfully at `data/test_combo_4textures.json`
+- **Dataset Info**: Updated successfully with new dataset entry
+- **Total Size**: 5.45 MB
+- **Average Size**: 1.36 MB per video
+- **Generation Time**: ~1.5 minutes for 4 videos
+
+#### Verification
+✅ All 4 texture types generated correctly
+✅ Parameter combination mode detected automatically
+✅ All videos have identical parameters except texture_type
+✅ Dataset JSON contains 4 entries
+✅ dataset_info.json updated with test_combo_4textures entry
+✅ Summary report generated successfully
 
 ### Backward Compatibility
 ✅ All existing commands continue to work
@@ -157,7 +184,18 @@ Result: 2×2×2×2 = 16 videos
    - Added `_generate_all_combinations()` method
    - Enhanced `generate_video_configs()` method
    - Updated argument parser types and help text
+   - Removed `choices` restrictions from `--texture_type`, `--direction`, and `--lighting_variation`
+   - Added valid values to help text instead of choices
    - Added usage examples in epilog
 
 ### Files Created
 1. `/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/DATASET_BUILDER_CHANGELOG.md` (this file)
+
+### Git Commits
+1. `5d4e391` - Add parameter combination mode to building_dataset.py
+   - Main implementation of combination mode feature
+   - Added new methods and updated argument parser
+
+2. `f3336f6` - Remove choices restrictions to allow comma-separated parameter values
+   - Fixed argparse choices preventing comma-separated values
+   - Moved valid values to help text
