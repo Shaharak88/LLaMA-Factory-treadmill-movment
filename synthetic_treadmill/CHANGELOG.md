@@ -21,6 +21,17 @@
 - Added enclosure application at line ~832 (after `apply_motion()` in frame loop)
 - Ensures enclosure appears as fixed overlay rather than moving texture element
 
+### Tested
+Generated comprehensive test videos to verify the fix:
+- **Stripes (no angle)**: Fixed border with vertical stripes moving right
+- **Stripes (25° angle)**: Fixed border maintained with perspective transform
+- **Factory dark stripes (no angle)**: Fixed border with dark industrial texture
+- **Factory dark stripes (30° angle)**: Fixed border with steep perspective
+- **Rubber texture (no angle)**: Fixed border with non-stripe texture (edge_width=0.12)
+- **Grid texture (20° angle)**: Fixed border with grid pattern moving left
+- All test videos located in: `data/synthetic_treadmill/test_enclosure_fix/`
+- All videos confirmed: Single stationary outline, no wrapping, texture moves inside frame ✓
+
 ## [1.4.0] - 2025-11-26 - Moving Belt Edges & Dark Factory Textures
 
 ### Fixed
