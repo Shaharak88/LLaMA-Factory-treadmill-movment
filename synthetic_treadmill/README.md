@@ -5,11 +5,13 @@ A comprehensive Python tool for generating synthetic videos of moving treadmill/
 ## Features
 
 ### 🎨 Multiple Texture Types
-- **Stripes**: Classic conveyor belt segment pattern
+- **Stripes**: Classic conveyor belt segment pattern (automatically oriented perpendicular to motion direction for visibility)
 - **Noise**: Rough rubber surface with Perlin-like noise
 - **Rubber**: Textured surface with raised bumps/dimples
 - **Grid**: Tiled pattern with grid lines
 - **Diamond Plate**: Industrial metal tread plate pattern
+
+**Important**: The script automatically orients stripe patterns perpendicular to the motion direction. For example, if the belt moves left/right, stripes will be vertical; if the belt moves up/down, stripes will be horizontal. This ensures motion is always visible to the human eye and to computer vision models.
 
 ### 🎬 Motion Control
 - **Directions**: Left, Right, Up, Down
@@ -313,6 +315,19 @@ Motion is simulated by:
 4. Extracting viewport-sized region
 
 This creates smooth, infinite scrolling motion without visible seams.
+
+### Automatic Stripe Orientation
+
+**Critical Design Decision**: The stripe texture generator automatically orients stripes perpendicular to the motion direction. This is essential because:
+
+- **Parallel stripes are invisible**: If stripes run parallel to motion (e.g., horizontal stripes moving left/right), the human eye cannot perceive any movement, and computer vision models cannot detect motion features.
+- **Perpendicular stripes create visible flow**: When stripes cross the direction of motion, optical flow is clearly visible and measurable.
+
+**Implementation**:
+- Left/Right motion → Vertical stripes (crossing the motion path)
+- Up/Down motion → Horizontal stripes (crossing the motion path)
+
+This ensures all generated videos have detectable motion patterns suitable for training vision models.
 
 ### Perspective Transform
 

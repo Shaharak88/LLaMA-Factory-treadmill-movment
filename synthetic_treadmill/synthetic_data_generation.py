@@ -45,19 +45,33 @@ class TreadmillTextureGenerator:
 
     def generate_stripes(self, stripe_width: int = 20, orientation: str = 'horizontal',
                         base_color: Tuple[int, int, int] = (80, 80, 80),
-                        stripe_color: Tuple[int, int, int] = (120, 120, 120)) -> np.ndarray:
+                        stripe_color: Tuple[int, int, int] = (120, 120, 122),
+                        motion_direction: str = None) -> np.ndarray:
         """
         Generate stripe pattern texture (simulates conveyor belt segments).
 
+        IMPORTANT: Stripes are automatically oriented perpendicular to motion direction
+        so that movement is visible. If motion_direction is provided, it overrides
+        the orientation parameter.
+
         Args:
             stripe_width: Width of each stripe in pixels
-            orientation: 'horizontal' or 'vertical'
+            orientation: 'horizontal' or 'vertical' (ignored if motion_direction is set)
             base_color: RGB color of base stripes
             stripe_color: RGB color of alternating stripes
+            motion_direction: 'left', 'right', 'up', 'down' - auto-sets perpendicular stripes
 
         Returns:
             numpy.ndarray: RGB image of shape (height, width, 3)
         """
+        # Auto-orient stripes perpendicular to motion for visibility
+        if motion_direction:
+            if motion_direction in ['left', 'right']:
+                # Horizontal motion needs vertical stripes
+                orientation = 'vertical'
+            else:  # up or down
+                # Vertical motion needs horizontal stripes
+                orientation = 'horizontal'
         texture = np.zeros((self.height, self.width, 3), dtype=np.uint8)
 
         if orientation == 'horizontal':
@@ -595,7 +609,8 @@ class SyntheticVideoGenerator:
         # Generate base texture
         print("  Step 1/4: Generating texture...")
         base_texture = self.texture_gen.generate_texture(
-            self.config['texture_type']
+            self.config['texture_type'],
+            motion_direction=self.config['direction']
         )
 
         # Create seamless scrolling texture
