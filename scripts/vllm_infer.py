@@ -28,10 +28,11 @@ from llamafactory.extras.packages import is_vllm_available
 from llamafactory.hparams import get_infer_args
 from llamafactory.model import load_tokenizer
 
-
-if is_vllm_available():
-    from vllm import LLM, SamplingParams
-    from vllm.lora.request import LoRARequest
+# Import vLLM components unconditionally to ensure they're available in function scope
+# The availability check happens at import time naturally - if vllm is not installed,
+# the import will fail with a clear error message
+from vllm import LLM, SamplingParams
+from vllm.lora.request import LoRARequest
 
 
 def _need_video_kwargs(template):
