@@ -284,8 +284,8 @@ warmup_ratio: {self.args.warmup_ratio}
 bf16: {str(self.args.bf16).lower()}
 fp16: {str(self.args.fp16).lower()}
 
-### Evaluation Configuration (using validation split, not test set)
-val_size: 0.1
+### Evaluation Configuration (no validation split - train on 100% of training set)
+val_size: 0.0
 per_device_eval_batch_size: 1
 eval_strategy: steps
 eval_steps: {self.args.eval_steps}
