@@ -85,13 +85,13 @@ class FullPipelineRunner:
             if result.returncode != 0:
                 raise RuntimeError(f"{description} failed with return code {result.returncode}")
 
-            logger.info(f"✓ {description} completed successfully")
+            logger.info(f"[OK] {description} completed successfully")
 
         except subprocess.TimeoutExpired:
-            logger.error(f"✗ {description} timed out")
+            logger.error(f"[FAIL] {description} timed out")
             raise
         except Exception as e:
-            logger.error(f"✗ {description} failed: {e}")
+            logger.error(f"[FAIL] {description} failed: {e}")
             raise
 
     def step1_generate_datasets(self) -> None:
@@ -207,6 +207,9 @@ class FullPipelineRunner:
         if hasattr(self.args, 'background_gray') and self.args.background_gray:
             cmd.extend(['--background_gray', str(self.args.background_gray)])
 
+        if hasattr(self.args, 'stripe_distance_variance') and self.args.stripe_distance_variance:
+            cmd.extend(['--stripe_distance_variance', str(self.args.stripe_distance_variance)])
+
         return cmd
 
     def step2_train_model(self) -> None:
@@ -287,8 +290,10 @@ fp16: {str(self.args.fp16).lower()}
 ### Evaluation Configuration (no validation split - train on 100% of training set)
 val_size: 0.0
 per_device_eval_batch_size: 1
-eval_strategy: steps
+eval_strategy: "no"
 eval_steps: {self.args.eval_steps}
+save_strategy: "steps"
+logging_strategy: "steps"
 
 ### Memory Optimization
 quantization_bit: {self.args.quantization_bit}
@@ -304,7 +309,7 @@ seed: {self.args.seed}
         with open(config_path, 'w') as f:
             f.write(config_content)
 
-        logger.info(f"  ✓ Created config: {config_path}")
+        logger.info(f"  [OK] Created config: {config_path}")
         return config_path
 
     def step3_evaluate_models(self) -> None:
@@ -374,7 +379,7 @@ seed: {self.args.seed}
                 logger.info("\n### Skipping evaluation (--skip_evaluation) ###")
 
             logger.info("\n" + "="*70)
-            logger.info("✓✓✓ FULL PIPELINE COMPLETED SUCCESSFULLY ✓✓✓")
+            logger.info("[OK] FULL PIPELINE COMPLETED SUCCESSFULLY")
             logger.info("="*70)
 
         except KeyboardInterrupt:
@@ -499,6 +504,8 @@ Notes:
                               help='Stripe gray level (0-255) for subtle_gray_stripes (default: 125). Supports comma-separated values.')
     dataset_group.add_argument('--background_gray', type=str, default='140',
                               help='Background gray level (0-255) for subtle_gray_stripes (default: 140). Supports comma-separated values.')
+    dataset_group.add_argument('--stripe_distance_variance', type=str, default='0.0',
+                              help='Variance (std dev) for stripe spacing in subtle_gray_stripes (default: 0.0). Supports comma-separated values.')
 
     # Model configuration
     model_group = parser.add_argument_group('Model Configuration')
