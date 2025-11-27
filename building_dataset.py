@@ -113,14 +113,14 @@ class DatasetBuilder:
             raise FileNotFoundError(
                 f"Synthetic generation script not found: {self.synthetic_script}"
             )
-        logger.info(f"  ✓ Found synthetic generation script")
+        logger.info(f"  [OK] Found synthetic generation script")
 
         # Check if dataset_info.json exists
         if not self.dataset_info_path.exists():
             raise FileNotFoundError(
                 f"dataset_info.json not found: {self.dataset_info_path}"
             )
-        logger.info(f"  ✓ Found dataset_info.json")
+        logger.info(f"  [OK] Found dataset_info.json")
 
         # Check Python availability
         try:
@@ -130,7 +130,7 @@ class DatasetBuilder:
                 text=True,
                 timeout=5
             )
-            logger.info(f"  ✓ Python3 available: {result.stdout.strip()}")
+            logger.info(f"  [OK] Python3 available: {result.stdout.strip()}")
         except Exception as e:
             raise RuntimeError(f"Python3 not available: {e}")
 
@@ -178,6 +178,7 @@ class DatasetBuilder:
         stripe_spacings = self._parse_parameter_values(self.args.stripe_spacing, int) if hasattr(self.args, 'stripe_spacing') else [60]
         stripe_grays = self._parse_parameter_values(self.args.stripe_gray, int) if hasattr(self.args, 'stripe_gray') else [125]
         background_grays = self._parse_parameter_values(self.args.background_gray, int) if hasattr(self.args, 'background_gray') else [140]
+        stripe_distance_variances = self._parse_parameter_values(self.args.stripe_distance_variance, float) if hasattr(self.args, 'stripe_distance_variance') else [0.0]
 
         # Parse speed range
         if hasattr(self.args, 'speed_range') and self.args.speed_range:
@@ -209,7 +210,8 @@ class DatasetBuilder:
             stripe_widths,
             stripe_spacings,
             stripe_grays,
-            background_grays
+            background_grays,
+            stripe_distance_variances
         ))
 
         logger.info(f"  Generated {len(all_combinations)} parameter combinations")
@@ -220,7 +222,7 @@ class DatasetBuilder:
             (texture, direction, speed, fps, duration, resolution, view_angle,
              brightness, contrast, lighting_var, lighting_int, motion_blur,
              camera_noise, edge_width, stripe_width, stripe_spacing, stripe_gray,
-             background_gray) = combo
+             background_gray, stripe_distance_variance) = combo
 
             config = {
                 'index': idx,
@@ -243,7 +245,8 @@ class DatasetBuilder:
                 'stripe_width': stripe_width,
                 'stripe_spacing': stripe_spacing,
                 'stripe_gray': stripe_gray,
-                'background_gray': background_gray
+                'background_gray': background_gray,
+                'stripe_distance_variance': stripe_distance_variance
             }
             configs.append(config)
 
@@ -258,19 +261,10 @@ class DatasetBuilder:
         """
         logger.info("Generating video configurations...")
 
-        # Check if using combination mode (any comma-separated parameters)
-        using_combinations = any([
-            ',' in str(getattr(self.args, param, ''))
-            for param in ['texture_type', 'direction', 'fps', 'duration', 'resolution',
-                         'view_angle', 'brightness', 'contrast', 'lighting_variation',
-                         'lighting_intensity', 'motion_blur', 'camera_noise', 'edge_width',
-                         'stripe_width', 'stripe_spacing', 'stripe_gray', 'background_gray']
-        ])
-
-        if using_combinations:
-            logger.info("  Using parameter combination mode")
+        # Check if we're in combination mode (any parameter has comma)
+        if (',' in str(self.args.texture_type) or ',' in str(self.args.view_angle) or
+            ',' in str(self.args.background_gray) or ',' in str(self.args.stripe_gray)):
             all_configs = self._generate_all_combinations()
-
             # Separate moving and stopped
             moving_configs = [c for c in all_configs if c['is_moving']]
             stopped_configs = [c for c in all_configs if not c['is_moving']]
@@ -360,6 +354,7 @@ class DatasetBuilder:
                 config['stripe_spacing'] = getattr(self.args, 'stripe_spacing', 60)
                 config['stripe_gray'] = getattr(self.args, 'stripe_gray', 125)
                 config['background_gray'] = getattr(self.args, 'background_gray', 140)
+                config['stripe_distance_variance'] = getattr(self.args, 'stripe_distance_variance', 0.0)
 
             configs.append(config)
 
@@ -415,6 +410,8 @@ class DatasetBuilder:
                 cmd.extend(['--stripe_gray', str(config['stripe_gray'])])
             if 'background_gray' in config:
                 cmd.extend(['--background_gray', str(config['background_gray'])])
+            if 'stripe_distance_variance' in config:
+                cmd.extend(['--stripe_distance_variance', str(config['stripe_distance_variance'])])
 
             try:
                 # Run video generation
@@ -427,7 +424,7 @@ class DatasetBuilder:
                 )
 
                 if result.returncode != 0:
-                    logger.error(f"    ✗ Video generation failed:")
+                    logger.error(f"    [FAIL] Video generation failed:")
                     logger.error(f"    {result.stderr}")
                     continue
 
@@ -439,17 +436,17 @@ class DatasetBuilder:
                     generated_files.append(str(video_file))
                     file_size = video_file.stat().st_size
                     self.stats['total_size_bytes'] += file_size
-                    logger.info(f"    ✓ Generated: {video_file.name} ({file_size / 1024:.1f} KB)")
+                    logger.info(f"    [OK] Generated: {video_file.name} ({file_size / 1024:.1f} KB)")
 
                     # Update statistics
                     self._update_stats(config)
                 else:
-                    logger.error(f"    ✗ Generated video not found")
+                    logger.error(f"    [FAIL] Generated video not found")
 
             except subprocess.TimeoutExpired:
-                logger.error(f"    ✗ Video generation timed out")
+                logger.error(f"    [FAIL] Video generation timed out")
             except Exception as e:
-                logger.error(f"    ✗ Error: {e}")
+                logger.error(f"    [FAIL] Error: {e}")
 
         logger.info(f"Successfully generated {len(generated_files)}/{len(configs)} videos")
         return generated_files
@@ -528,7 +525,7 @@ class DatasetBuilder:
         with open(self.dataset_json_path, 'w', encoding='utf-8') as f:
             json.dump(dataset_entries, f, indent=2, ensure_ascii=False)
 
-        logger.info(f"  ✓ Created dataset with {len(dataset_entries)} entries")
+        logger.info(f"  [OK] Created dataset with {len(dataset_entries)} entries")
 
     def _is_video_moving(self, video_path: str) -> bool:
         """
@@ -618,7 +615,7 @@ class DatasetBuilder:
         with open(self.dataset_info_path, 'w', encoding='utf-8') as f:
             json.dump(dataset_info, f, indent=2, ensure_ascii=False)
 
-        logger.info(f"  ✓ Added '{self.dataset_name}' to dataset_info.json")
+        logger.info(f"  [OK] Added '{self.dataset_name}' to dataset_info.json")
 
     def generate_summary_report(self) -> None:
         """Generate and save summary report of dataset generation."""
@@ -714,7 +711,7 @@ class DatasetBuilder:
             self.generate_summary_report()
 
             logger.info("=" * 70)
-            logger.info("✓ Dataset building complete!")
+            logger.info("[OK] Dataset building complete!")
             logger.info("=" * 70)
 
         except KeyboardInterrupt:

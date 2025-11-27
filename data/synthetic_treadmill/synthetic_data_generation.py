@@ -324,13 +324,91 @@ class TreadmillTextureGenerator:
 
         return texture
 
+    def generate_subtle_gray_stripes(self, stripe_width: int = 10, stripe_spacing: int = 60,
+                                     orientation: str = 'horizontal',
+                                     stripe_gray: int = 125, background_gray: int = 140,
+                                     motion_direction: str = None,
+                                     stripe_distance_variance: float = 0.0) -> np.ndarray:
+        """
+        Generate subtle low-contrast gray stripe pattern for motion detection challenges.
+
+        This texture creates narrow gray stripes on a gray background with minimal contrast,
+        designed to test the threshold at which vision models can detect belt movement.
+        Both the stripes and background are shades of gray with low perceptual difference.
+
+        Args:
+            stripe_width: Width of each stripe in pixels (default: 10 - thinner than standard)
+            stripe_spacing: Spacing between stripe centers in pixels (default: 60 - wider apart)
+            orientation: 'horizontal' or 'vertical' (ignored if motion_direction is set)
+            stripe_gray: Gray level for stripes, 0-255 (default: 125)
+            background_gray: Gray level for background, 0-255 (default: 140)
+            motion_direction: 'left', 'right', 'up', 'down' - auto-sets perpendicular stripes
+            stripe_distance_variance: Variance (std dev) for randomized stripe spacing.
+                                    0 = fixed spacing. >0 = randomized spacing.
+
+        Returns:
+            numpy.ndarray: RGB image of shape (height, width, 3)
+        """
+        # Auto-orient stripes perpendicular to motion for visibility
+        if motion_direction:
+            if motion_direction in ['left', 'right']:
+                orientation = 'vertical'
+            else:  # up or down
+                orientation = 'horizontal'
+
+        # Create base texture with background gray
+        texture = np.zeros((self.height, self.width, 3), dtype=np.uint8)
+        texture[:, :] = (background_gray, background_gray, background_gray)
+
+        # Add stripes
+        if orientation == 'horizontal':
+            y = 0
+            while y < self.height:
+                # Draw stripe of specified width
+                y_end = min(y + stripe_width, self.height)
+                texture[y:y_end, :] = (stripe_gray, stripe_gray, stripe_gray)
+                
+                # Calculate next position
+                if stripe_distance_variance > 0:
+                    # Randomize spacing
+                    # Use normal distribution centered on stripe_spacing
+                    spacing = self.rng.normal(stripe_spacing, stripe_distance_variance)
+                    # Ensure minimum spacing of stripe_width + 1 pixel
+                    spacing = max(stripe_width + 1, spacing)
+                    y += int(spacing)
+                else:
+                    y += stripe_spacing
+        else:  # vertical
+            x = 0
+            while x < self.width:
+                # Draw stripe of specified width
+                x_end = min(x + stripe_width, self.width)
+                texture[:, x:x_end] = (stripe_gray, stripe_gray, stripe_gray)
+                
+                # Calculate next position
+                if stripe_distance_variance > 0:
+                    # Randomize spacing
+                    # Use normal distribution centered on stripe_spacing
+                    spacing = self.rng.normal(stripe_spacing, stripe_distance_variance)
+                    # Ensure minimum spacing of stripe_width + 1 pixel
+                    spacing = max(stripe_width + 1, spacing)
+                    x += int(spacing)
+                else:
+                    x += stripe_spacing
+
+        # Add subtle noise for realism (as requested by user)
+        noise = self.rng.randint(-3, 3, texture.shape, dtype=np.int16)
+        texture = np.clip(texture.astype(np.int16) + noise, 0, 255).astype(np.uint8)
+
+        return texture
+
     def generate_texture(self, texture_type: str, **kwargs) -> np.ndarray:
         """
         Main interface for generating textures of specified type.
 
         Args:
             texture_type: One of 'stripes', 'noise', 'rubber', 'grid', 'diamond_plate',
-                         'factory_dark', 'factory_dark_stripes'
+                         'factory_dark', 'factory_dark_stripes', 'subtle_gray_stripes'
             **kwargs: Additional parameters passed to specific texture generators
 
         Returns:
@@ -340,6 +418,8 @@ class TreadmillTextureGenerator:
             return self.generate_stripes(**kwargs)
         elif texture_type == 'factory_dark_stripes':
             return self.generate_factory_dark_stripes(**kwargs)
+        elif texture_type == 'subtle_gray_stripes':
+            return self.generate_subtle_gray_stripes(**kwargs)
         else:
             # Remove motion_direction for non-stripe textures (they don't use it)
             kwargs.pop('motion_direction', None)
@@ -802,9 +882,23 @@ class SyntheticVideoGenerator:
 
         # Generate base texture
         print("  Step 1/4: Generating texture...")
+        texture_kwargs = {'motion_direction': self.config['direction']}
+
+        # Add subtle_gray_stripes specific parameters if present
+        if 'stripe_width' in self.config:
+            texture_kwargs['stripe_width'] = self.config['stripe_width']
+        if 'stripe_spacing' in self.config:
+            texture_kwargs['stripe_spacing'] = self.config['stripe_spacing']
+        if 'stripe_gray' in self.config:
+            texture_kwargs['stripe_gray'] = self.config['stripe_gray']
+        if 'background_gray' in self.config:
+            texture_kwargs['background_gray'] = self.config['background_gray']
+        if 'stripe_distance_variance' in self.config:
+            texture_kwargs['stripe_distance_variance'] = self.config['stripe_distance_variance']
+
         base_texture = self.texture_gen.generate_texture(
             self.config['texture_type'],
-            motion_direction=self.config['direction']
+            **texture_kwargs
         )
 
         # Create seamless scrolling texture
@@ -860,7 +954,7 @@ class SyntheticVideoGenerator:
         # Cleanup
         print("  Step 4/4: Finalizing video...")
         out.release()
-        print(f"  ✓ Video saved: {output_path}")
+        print(f"  [OK] Video saved: {output_path}")
 
     @staticmethod
     def generate_filename(config: dict, video_idx: int) -> str:
@@ -943,10 +1037,22 @@ Examples:
     # Texture parameters
     parser.add_argument('--texture_type', type=str, default='stripes',
                        choices=['stripes', 'noise', 'rubber', 'grid', 'diamond_plate',
-                               'factory_dark', 'factory_dark_stripes'],
+                               'factory_dark', 'factory_dark_stripes', 'subtle_gray_stripes'],
                        help='Type of belt texture (default: stripes)')
     parser.add_argument('--background_color', type=str, default='80,80,80',
                        help='Background color as R,G,B (default: 80,80,80)')
+
+    # Subtle gray stripes parameters (for subtle_gray_stripes texture type)
+    parser.add_argument('--stripe_width', type=str, default='10',
+                       help='Stripe width in pixels for subtle_gray_stripes (default: 10). Supports comma-separated values.')
+    parser.add_argument('--stripe_spacing', type=str, default='60',
+                       help='Stripe spacing in pixels for subtle_gray_stripes (default: 60). Supports comma-separated values.')
+    parser.add_argument('--stripe_gray', type=str, default='125',
+                       help='Stripe gray level (0-255) for subtle_gray_stripes (default: 125). Supports comma-separated values.')
+    parser.add_argument('--background_gray', type=str, default='140',
+                       help='Background gray level (0-255) for subtle_gray_stripes (default: 140). Supports comma-separated values.')
+    parser.add_argument('--stripe_distance_variance', type=str, default='0.0',
+                       help='Variance (std dev) for stripe spacing in subtle_gray_stripes (default: 0.0). Supports comma-separated values.')
 
     # Camera/lighting parameters
     parser.add_argument('--view_angle', type=float, default=0.0,
@@ -1089,6 +1195,13 @@ def main():
     width, height = parse_resolution(args.resolution)
     bg_color = parse_color(args.background_color)
 
+    # Parse subtle_gray_stripes parameters (can be single or comma-separated values)
+    stripe_width = int(args.stripe_width.split(',')[0]) if ',' not in args.stripe_width else args.stripe_width
+    stripe_spacing = int(args.stripe_spacing.split(',')[0]) if ',' not in args.stripe_spacing else args.stripe_spacing
+    stripe_gray = int(args.stripe_gray.split(',')[0]) if ',' not in args.stripe_gray else args.stripe_gray
+    background_gray = int(args.background_gray.split(',')[0]) if ',' not in args.background_gray else args.background_gray
+    stripe_distance_variance = float(args.stripe_distance_variance.split(',')[0]) if ',' not in args.stripe_distance_variance else args.stripe_distance_variance
+
     # Create base configuration
     base_config = {
         'resolution': (width, height),
@@ -1107,6 +1220,11 @@ def main():
         'edge_width': args.edge_width,
         'seed': args.seed,
         'background_color': bg_color,
+        'stripe_width': stripe_width,
+        'stripe_spacing': stripe_spacing,
+        'stripe_gray': stripe_gray,
+        'background_gray': background_gray,
+        'stripe_distance_variance': stripe_distance_variance,
     }
 
     # Create output directory
@@ -1145,7 +1263,7 @@ def main():
     # Summary
     elapsed = datetime.now() - start_time
     print("=" * 70)
-    print(f"✓ Generation complete!")
+    print(f"[OK] Generation complete!")
     print(f"  Generated: {len(configs)} video(s)")
     print(f"  Output: {output_dir.absolute()}")
     print(f"  Time elapsed: {elapsed.total_seconds():.1f} seconds")
