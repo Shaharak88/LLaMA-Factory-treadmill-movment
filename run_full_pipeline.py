@@ -194,6 +194,19 @@ class FullPipelineRunner:
         if self.args.edge_width:
             cmd.extend(['--edge_width', str(self.args.edge_width)])
 
+        # Add subtle_gray_stripes specific parameters if provided
+        if hasattr(self.args, 'stripe_width') and self.args.stripe_width:
+            cmd.extend(['--stripe_width', str(self.args.stripe_width)])
+
+        if hasattr(self.args, 'stripe_spacing') and self.args.stripe_spacing:
+            cmd.extend(['--stripe_spacing', str(self.args.stripe_spacing)])
+
+        if hasattr(self.args, 'stripe_gray') and self.args.stripe_gray:
+            cmd.extend(['--stripe_gray', str(self.args.stripe_gray)])
+
+        if hasattr(self.args, 'background_gray') and self.args.background_gray:
+            cmd.extend(['--background_gray', str(self.args.background_gray)])
+
         return cmd
 
     def step2_train_model(self) -> None:
@@ -476,6 +489,16 @@ Notes:
                               help='Camera noise level (default: 0.0)')
     dataset_group.add_argument('--edge_width', type=str, default='0.1',
                               help='Belt edge width (default: 0.1)')
+
+    # Subtle gray stripes parameters (for subtle_gray_stripes texture type)
+    dataset_group.add_argument('--stripe_width', type=str, default='10',
+                              help='Stripe width in pixels for subtle_gray_stripes (default: 10). Supports comma-separated values.')
+    dataset_group.add_argument('--stripe_spacing', type=str, default='60',
+                              help='Stripe spacing in pixels for subtle_gray_stripes (default: 60). Supports comma-separated values.')
+    dataset_group.add_argument('--stripe_gray', type=str, default='125',
+                              help='Stripe gray level (0-255) for subtle_gray_stripes (default: 125). Supports comma-separated values.')
+    dataset_group.add_argument('--background_gray', type=str, default='140',
+                              help='Background gray level (0-255) for subtle_gray_stripes (default: 140). Supports comma-separated values.')
 
     # Model configuration
     model_group = parser.add_argument_group('Model Configuration')

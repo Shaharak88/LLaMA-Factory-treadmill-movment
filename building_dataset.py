@@ -173,6 +173,12 @@ class DatasetBuilder:
         camera_noises = self._parse_parameter_values(self.args.camera_noise, float)
         edge_widths = self._parse_parameter_values(self.args.edge_width, float)
 
+        # Parse subtle_gray_stripes parameters
+        stripe_widths = self._parse_parameter_values(self.args.stripe_width, int) if hasattr(self.args, 'stripe_width') else [10]
+        stripe_spacings = self._parse_parameter_values(self.args.stripe_spacing, int) if hasattr(self.args, 'stripe_spacing') else [60]
+        stripe_grays = self._parse_parameter_values(self.args.stripe_gray, int) if hasattr(self.args, 'stripe_gray') else [125]
+        background_grays = self._parse_parameter_values(self.args.background_gray, int) if hasattr(self.args, 'background_gray') else [140]
+
         # Parse speed range
         if hasattr(self.args, 'speed_range') and self.args.speed_range:
             speed_parts = self.args.speed_range.split(',')
@@ -199,7 +205,11 @@ class DatasetBuilder:
             lighting_intensities,
             motion_blurs,
             camera_noises,
-            edge_widths
+            edge_widths,
+            stripe_widths,
+            stripe_spacings,
+            stripe_grays,
+            background_grays
         ))
 
         logger.info(f"  Generated {len(all_combinations)} parameter combinations")
@@ -209,7 +219,8 @@ class DatasetBuilder:
         for idx, combo in enumerate(all_combinations):
             (texture, direction, speed, fps, duration, resolution, view_angle,
              brightness, contrast, lighting_var, lighting_int, motion_blur,
-             camera_noise, edge_width) = combo
+             camera_noise, edge_width, stripe_width, stripe_spacing, stripe_gray,
+             background_gray) = combo
 
             config = {
                 'index': idx,
@@ -228,7 +239,11 @@ class DatasetBuilder:
                 'lighting_intensity': lighting_int,
                 'motion_blur': motion_blur,
                 'camera_noise': camera_noise,
-                'edge_width': edge_width
+                'edge_width': edge_width,
+                'stripe_width': stripe_width,
+                'stripe_spacing': stripe_spacing,
+                'stripe_gray': stripe_gray,
+                'background_gray': background_gray
             }
             configs.append(config)
 
@@ -248,7 +263,8 @@ class DatasetBuilder:
             ',' in str(getattr(self.args, param, ''))
             for param in ['texture_type', 'direction', 'fps', 'duration', 'resolution',
                          'view_angle', 'brightness', 'contrast', 'lighting_variation',
-                         'lighting_intensity', 'motion_blur', 'camera_noise', 'edge_width']
+                         'lighting_intensity', 'motion_blur', 'camera_noise', 'edge_width',
+                         'stripe_width', 'stripe_spacing', 'stripe_gray', 'background_gray']
         ])
 
         if using_combinations:
@@ -340,6 +356,10 @@ class DatasetBuilder:
                 config['motion_blur'] = getattr(self.args, 'motion_blur', 0)
                 config['camera_noise'] = getattr(self.args, 'camera_noise', 0.0)
                 config['edge_width'] = getattr(self.args, 'edge_width', 0.1)
+                config['stripe_width'] = getattr(self.args, 'stripe_width', 10)
+                config['stripe_spacing'] = getattr(self.args, 'stripe_spacing', 60)
+                config['stripe_gray'] = getattr(self.args, 'stripe_gray', 125)
+                config['background_gray'] = getattr(self.args, 'background_gray', 140)
 
             configs.append(config)
 
@@ -385,6 +405,16 @@ class DatasetBuilder:
                 '--fps', str(config['fps']),
                 '--duration', str(config['duration'])
             ]
+
+            # Add subtle_gray_stripes specific parameters if present in config
+            if 'stripe_width' in config:
+                cmd.extend(['--stripe_width', str(config['stripe_width'])])
+            if 'stripe_spacing' in config:
+                cmd.extend(['--stripe_spacing', str(config['stripe_spacing'])])
+            if 'stripe_gray' in config:
+                cmd.extend(['--stripe_gray', str(config['stripe_gray'])])
+            if 'background_gray' in config:
+                cmd.extend(['--background_gray', str(config['background_gray'])])
 
             try:
                 # Run video generation
@@ -792,7 +822,7 @@ Notes:
     parser.add_argument('--vary_parameters', action='store_true',
                        help='Automatically vary parameters for diversity')
     parser.add_argument('--texture_type', type=str, default='stripes',
-                       help='Texture type (default: stripes). Accepts comma-separated values for combinations (e.g., stripes,noise,rubber). Valid types: stripes, noise, rubber, grid, diamond_plate, factory_dark, factory_dark_stripes')
+                       help='Texture type (default: stripes). Accepts comma-separated values for combinations (e.g., stripes,noise,rubber). Valid types: stripes, noise, rubber, grid, diamond_plate, factory_dark, factory_dark_stripes, subtle_gray_stripes')
     parser.add_argument('--direction', type=str, default='right',
                        help='Motion direction (default: right). Accepts comma-separated values (e.g., left,right). Valid directions: left, right, up, down')
     parser.add_argument('--speed_range', type=str, default='1.0,8.0',
@@ -821,6 +851,16 @@ Notes:
                        help='Camera noise level (default: 0.0). Accepts comma-separated values (e.g., 0.0,0.1,0.2)')
     parser.add_argument('--edge_width', type=str, default='0.1',
                        help='Belt enclosure edge width as percentage (default: 0.1). Accepts comma-separated values (e.g., 0.05,0.1,0.15)')
+
+    # Subtle gray stripes parameters (for subtle_gray_stripes texture type)
+    parser.add_argument('--stripe_width', type=str, default='10',
+                       help='Stripe width in pixels for subtle_gray_stripes (default: 10). Accepts comma-separated values (e.g., 5,10,15)')
+    parser.add_argument('--stripe_spacing', type=str, default='60',
+                       help='Stripe spacing in pixels for subtle_gray_stripes (default: 60). Accepts comma-separated values (e.g., 40,60,80)')
+    parser.add_argument('--stripe_gray', type=str, default='125',
+                       help='Stripe gray level (0-255) for subtle_gray_stripes (default: 125). Accepts comma-separated values (e.g., 110,115,120,125,130,135)')
+    parser.add_argument('--background_gray', type=str, default='140',
+                       help='Background gray level (0-255) for subtle_gray_stripes (default: 140). Accepts comma-separated values (e.g., 135,140,145)')
 
     args = parser.parse_args()
 
