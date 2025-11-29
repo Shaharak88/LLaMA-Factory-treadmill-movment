@@ -401,19 +401,24 @@ class DatasetBuilder:
                 '--duration', str(config['duration'])
             ]
 
-            # Add subtle_gray_stripes specific parameters if present in config
-            if 'stripe_width' in config:
-                cmd.extend(['--stripe_width', str(config['stripe_width'])])
-            if 'stripe_spacing' in config:
-                cmd.extend(['--stripe_spacing', str(config['stripe_spacing'])])
-            if 'stripe_gray' in config:
-                cmd.extend(['--stripe_gray', str(config['stripe_gray'])])
-            if 'background_gray' in config:
-                cmd.extend(['--background_gray', str(config['background_gray'])])
-            if 'stripe_distance_variance' in config:
-                cmd.extend(['--stripe_distance_variance', str(config['stripe_distance_variance'])])
+            # Add subtle_gray_stripes specific parameters ONLY for subtle_gray_stripes texture
+            if config['texture_type'] == 'subtle_gray_stripes':
+                if 'stripe_width' in config:
+                    cmd.extend(['--stripe_width', str(config['stripe_width'])])
+                if 'stripe_spacing' in config:
+                    cmd.extend(['--stripe_spacing', str(config['stripe_spacing'])])
+                if 'stripe_gray' in config:
+                    cmd.extend(['--stripe_gray', str(config['stripe_gray'])])
+                if 'background_gray' in config:
+                    cmd.extend(['--background_gray', str(config['background_gray'])])
+                if 'stripe_distance_variance' in config:
+                    cmd.extend(['--stripe_distance_variance', str(config['stripe_distance_variance'])])
 
             try:
+                # DEBUG: Print the actual command being run
+                if config['texture_type'] in ['factory_dark', 'factory_dark_stripes']:
+                    logger.info(f"    DEBUG CMD for {config['texture_type']}: {' '.join(cmd)}")
+
                 # Run video generation
                 result = subprocess.run(
                     cmd,

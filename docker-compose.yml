@@ -3,7 +3,7 @@ version: '3.8'
 services:
   llamafactory:
     # Use committed image with fixed dependencies
-    image: llamafactory:fixed-v1
+    image: llamafactory:vllm-fix
 
     # Build from source (use this for fresh builds):
     # build:
@@ -18,8 +18,8 @@ services:
     # image: hiyouga/llamafactory:latest
     container_name: llamafactory
     ports:
-      - "7860:7860"  # Gradio UI
-      - "8000:8000"  # API service
+      - "7860:7860" # Gradio UI
+      - "8000:8000" # API service
     ipc: host
     tty: true
     stdin_open: true
@@ -30,9 +30,9 @@ services:
       resources:
         reservations:
           devices:
-          - driver: nvidia
-            count: "all"
-            capabilities: [gpu]
+            - driver: nvidia
+              count: "all"
+              capabilities: [ gpu ]
 
     # Environment variables
     environment:
@@ -67,6 +67,12 @@ services:
 
       # Config files
       - ./examples/train_qlora:/app/examples/train_qlora
+
+      # Pipeline scripts
+      - ./run_full_pipeline.py:/app/run_full_pipeline.py
+      - ./building_dataset.py:/app/building_dataset.py
+      - ./evaluate_pipeline.py:/app/evaluate_pipeline.py
+      - ./evaluate_pipeline_simple.py:/app/evaluate_pipeline_simple.py
 
     # Restart policy
     restart: unless-stopped
