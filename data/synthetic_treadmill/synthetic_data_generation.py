@@ -417,7 +417,10 @@ class TreadmillTextureGenerator:
         if texture_type == 'stripes':
             return self.generate_stripes(**kwargs)
         elif texture_type == 'factory_dark_stripes':
-            return self.generate_factory_dark_stripes(**kwargs)
+            # Filter kwargs to only include parameters that generate_factory_dark_stripes accepts
+            factory_dark_stripes_params = {'stripe_width', 'orientation', 'base_color', 'stripe_color', 'motion_direction'}
+            filtered_kwargs = {k: v for k, v in kwargs.items() if k in factory_dark_stripes_params}
+            return self.generate_factory_dark_stripes(**filtered_kwargs)
         elif texture_type == 'subtle_gray_stripes':
             return self.generate_subtle_gray_stripes(**kwargs)
         else:
@@ -433,7 +436,10 @@ class TreadmillTextureGenerator:
             elif texture_type == 'diamond_plate':
                 return self.generate_diamond_plate(**kwargs)
             elif texture_type == 'factory_dark':
-                return self.generate_factory_dark(**kwargs)
+                # Filter kwargs to only include parameters that generate_factory_dark accepts
+                factory_dark_params = {'base_color', 'texture_intensity'}
+                filtered_kwargs = {k: v for k, v in kwargs.items() if k in factory_dark_params}
+                return self.generate_factory_dark(**filtered_kwargs)
             else:
                 raise ValueError(f"Unknown texture type: {texture_type}")
 
