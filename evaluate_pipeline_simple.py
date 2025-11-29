@@ -52,6 +52,7 @@ class SimpleEvaluator:
         """
         Parse texture and angle from video filename.
         Expected format: treadmill_XXXX_<texture>_<direction>_speed<X.X>_angle<X>_...
+        Texture can be multi-word with underscores (e.g., subtle_gray_stripes, factory_dark_stripes)
 
         Returns:
             Dict with 'texture' and 'angle' keys
@@ -59,11 +60,13 @@ class SimpleEvaluator:
         filename = Path(video_path).name
 
         # Pattern: treadmill_XXXX_<texture>_<direction>_speed<X.X>_angle<X>_...
-        match = re.search(r'treadmill_\d+_([^_]+)_[^_]+_speed[\d.]+_angle(\d+)', filename)
+        # Capture texture (can have underscores) until we hit a known direction
+        # Directions: left, right, up, down
+        match = re.search(r'treadmill_\d+_(.+?)_(left|right|up|down)_speed[\d.]+_angle(\d+)', filename)
 
         if match:
             texture = match.group(1)
-            angle = f"angle{match.group(2)}"
+            angle = f"angle{match.group(3)}"
             return {'texture': texture, 'angle': angle}
         else:
             logger.warning(f"Could not parse metadata from filename: {filename}")
