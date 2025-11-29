@@ -20,6 +20,9 @@ from transformers import AutoProcessor, BitsAndBytesConfig
 from transformers import Qwen2_5_VLForConditionalGeneration as QwenModel
 from qwen_vl_utils import process_vision_info
 from peft import PeftModel
+from sklearn.metrics import f1_score, precision_score, recall_score, classification_report
+import re
+from collections import defaultdict
 
 # Configure logging
 logging.basicConfig(
@@ -36,14 +39,35 @@ class SimpleEvaluator:
         self.output_dir = Path(args.output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        
+
         # Load dataset info
         self.dataset_info_path = self.project_root / args.dataset_dir / "dataset_info.json"
         if not self.dataset_info_path.exists():
             raise FileNotFoundError(f"dataset_info.json not found at {self.dataset_info_path}")
-            
+
         with open(self.dataset_info_path, 'r') as f:
             self.dataset_info = json.load(f)
+
+    def parse_video_metadata(self, video_path: str) -> Dict[str, str]:
+        """
+        Parse texture and angle from video filename.
+        Expected format: treadmill_XXXX_<texture>_<direction>_speed<X.X>_angle<X>_...
+
+        Returns:
+            Dict with 'texture' and 'angle' keys
+        """
+        filename = Path(video_path).name
+
+        # Pattern: treadmill_XXXX_<texture>_<direction>_speed<X.X>_angle<X>_...
+        match = re.search(r'treadmill_\d+_([^_]+)_[^_]+_speed[\d.]+_angle(\d+)', filename)
+
+        if match:
+            texture = match.group(1)
+            angle = f"angle{match.group(2)}"
+            return {'texture': texture, 'angle': angle}
+        else:
+            logger.warning(f"Could not parse metadata from filename: {filename}")
+            return {'texture': 'unknown', 'angle': 'unknown'}
 
     def load_model(self, model_path: str, adapter_path: str = None):
         """Load model and processor."""
@@ -90,14 +114,31 @@ class SimpleEvaluator:
     def evaluate(self, model, processor, data: List[Dict], model_name: str) -> Dict:
         """Run evaluation loop."""
         logger.info(f"Evaluating {model_name} on {len(data)} samples...")
-        
+
         results = {
             'total': 0,
             'correct': 0,
             'incorrect': 0,
             'moving': {'total': 0, 'correct': 0},
             'stopped': {'total': 0, 'correct': 0},
-            'details': []
+            'details': [],
+            # For F1 score calculation
+            'y_true': [],
+            'y_pred': [],
+            # Per-texture metrics
+            'per_texture': defaultdict(lambda: {
+                'y_true': [], 'y_pred': [],
+                'correct': 0, 'total': 0,
+                'moving': {'total': 0, 'correct': 0},
+                'stopped': {'total': 0, 'correct': 0}
+            }),
+            # Per-angle metrics
+            'per_angle': defaultdict(lambda: {
+                'y_true': [], 'y_pred': [],
+                'correct': 0, 'total': 0,
+                'moving': {'total': 0, 'correct': 0},
+                'stopped': {'total': 0, 'correct': 0}
+            })
         }
         
         for i, item in enumerate(data):
@@ -157,30 +198,100 @@ class SimpleEvaluator:
             # Scoring
             is_moving_pred = self._is_moving(output_text)
             is_correct = (is_moving_gt == is_moving_pred)
-            
-            # Update stats
+
+            # Parse metadata
+            metadata = self.parse_video_metadata(video_rel_path)
+            texture = metadata['texture']
+            angle = metadata['angle']
+
+            # Labels for F1 calculation: 1 = moving, 0 = stopped
+            y_true_label = 1 if is_moving_gt else 0
+            y_pred_label = 1 if is_moving_pred else 0
+
+            # Update overall stats
             results['total'] += 1
+            results['y_true'].append(y_true_label)
+            results['y_pred'].append(y_pred_label)
             if is_correct: results['correct'] += 1
             else: results['incorrect'] += 1
-            
+
             cat = 'moving' if is_moving_gt else 'stopped'
             results[cat]['total'] += 1
             if is_correct: results[cat]['correct'] += 1
-            
+
+            # Update per-texture stats
+            results['per_texture'][texture]['total'] += 1
+            results['per_texture'][texture]['y_true'].append(y_true_label)
+            results['per_texture'][texture]['y_pred'].append(y_pred_label)
+            if is_correct: results['per_texture'][texture]['correct'] += 1
+            results['per_texture'][texture][cat]['total'] += 1
+            if is_correct: results['per_texture'][texture][cat]['correct'] += 1
+
+            # Update per-angle stats
+            results['per_angle'][angle]['total'] += 1
+            results['per_angle'][angle]['y_true'].append(y_true_label)
+            results['per_angle'][angle]['y_pred'].append(y_pred_label)
+            if is_correct: results['per_angle'][angle]['correct'] += 1
+            results['per_angle'][angle][cat]['total'] += 1
+            if is_correct: results['per_angle'][angle][cat]['correct'] += 1
+
             results['details'].append({
                 'index': i,
                 'video': video_rel_path,
                 'gt': 'moving' if is_moving_gt else 'stopped',
                 'pred': 'moving' if is_moving_pred else 'stopped',
                 'correct': is_correct,
-                'output': output_text
+                'output': output_text,
+                'texture': texture,
+                'angle': angle
             })
-            
+
             if (i + 1) % 10 == 0:
                 logger.info(f"Processed {i + 1}/{len(data)} samples")
 
-        # Calculate accuracy
+        # Calculate overall accuracy and F1 scores
         results['accuracy'] = (results['correct'] / results['total'] * 100) if results['total'] > 0 else 0.0
+
+        if len(results['y_true']) > 0:
+            # Overall metrics
+            results['f1_score'] = f1_score(results['y_true'], results['y_pred'], average='binary', zero_division=0) * 100
+            results['precision'] = precision_score(results['y_true'], results['y_pred'], average='binary', zero_division=0) * 100
+            results['recall'] = recall_score(results['y_true'], results['y_pred'], average='binary', zero_division=0) * 100
+
+            # Per-class F1 scores
+            f1_per_class = f1_score(results['y_true'], results['y_pred'], average=None, zero_division=0)
+            if len(f1_per_class) == 2:
+                results['f1_stopped'] = f1_per_class[0] * 100  # class 0 = stopped
+                results['f1_moving'] = f1_per_class[1] * 100   # class 1 = moving
+
+            # Calculate per-texture metrics
+            for texture, tex_data in results['per_texture'].items():
+                if len(tex_data['y_true']) > 0:
+                    tex_data['accuracy'] = (tex_data['correct'] / tex_data['total'] * 100)
+                    tex_data['f1_score'] = f1_score(tex_data['y_true'], tex_data['y_pred'], average='binary', zero_division=0) * 100
+                    tex_data['precision'] = precision_score(tex_data['y_true'], tex_data['y_pred'], average='binary', zero_division=0) * 100
+                    tex_data['recall'] = recall_score(tex_data['y_true'], tex_data['y_pred'], average='binary', zero_division=0) * 100
+
+                    # Per-class F1 for texture
+                    f1_tex_class = f1_score(tex_data['y_true'], tex_data['y_pred'], average=None, zero_division=0)
+                    if len(f1_tex_class) == 2:
+                        tex_data['f1_stopped'] = f1_tex_class[0] * 100
+                        tex_data['f1_moving'] = f1_tex_class[1] * 100
+
+            # Calculate per-angle metrics
+            for angle, ang_data in results['per_angle'].items():
+                if len(ang_data['y_true']) > 0:
+                    ang_data['accuracy'] = (ang_data['correct'] / ang_data['total'] * 100)
+                    ang_data['f1_score'] = f1_score(ang_data['y_true'], ang_data['y_pred'], average='binary', zero_division=0) * 100
+                    ang_data['precision'] = precision_score(ang_data['y_true'], ang_data['y_pred'], average='binary', zero_division=0) * 100
+                    ang_data['recall'] = recall_score(ang_data['y_true'], ang_data['y_pred'], average='binary', zero_division=0) * 100
+
+                    # Per-class F1 for angle
+                    f1_ang_class = f1_score(ang_data['y_true'], ang_data['y_pred'], average=None, zero_division=0)
+                    if len(f1_ang_class) == 2:
+                        ang_data['f1_stopped'] = f1_ang_class[0] * 100
+                        ang_data['f1_moving'] = f1_ang_class[1] * 100
+
         return results
 
     def _is_moving(self, text: str) -> bool:
@@ -221,10 +332,69 @@ class SimpleEvaluator:
 
     def _write_results(self, f, title, results):
         f.write(f"{title}\n")
-        f.write("-" * len(title) + "\n")
-        f.write(f"Accuracy: {results['accuracy']:.2f}% ({results['correct']}/{results['total']})\n")
-        f.write(f"Moving:   {results['moving']['correct']}/{results['moving']['total']}\n")
-        f.write(f"Stopped:  {results['stopped']['correct']}/{results['stopped']['total']}\n\n")
+        f.write("=" * len(title) + "\n\n")
+
+        # Overall metrics
+        f.write("OVERALL METRICS:\n")
+        f.write(f"  Accuracy:  {results['accuracy']:.2f}% ({results['correct']}/{results['total']})\n")
+        if 'f1_score' in results:
+            f.write(f"  F1 Score:  {results['f1_score']:.2f}%\n")
+            f.write(f"  Precision: {results['precision']:.2f}%\n")
+            f.write(f"  Recall:    {results['recall']:.2f}%\n")
+
+        # Per-class metrics
+        f.write("\nPER-CLASS METRICS:\n")
+        f.write(f"  Moving:  {results['moving']['correct']}/{results['moving']['total']}")
+        if 'f1_moving' in results:
+            moving_acc = (results['moving']['correct'] / results['moving']['total'] * 100) if results['moving']['total'] > 0 else 0
+            f.write(f" (Acc: {moving_acc:.2f}%, F1: {results['f1_moving']:.2f}%)")
+        f.write("\n")
+
+        f.write(f"  Stopped: {results['stopped']['correct']}/{results['stopped']['total']}")
+        if 'f1_stopped' in results:
+            stopped_acc = (results['stopped']['correct'] / results['stopped']['total'] * 100) if results['stopped']['total'] > 0 else 0
+            f.write(f" (Acc: {stopped_acc:.2f}%, F1: {results['f1_stopped']:.2f}%)")
+        f.write("\n\n")
+
+        # Per-texture breakdown
+        if 'per_texture' in results and len(results['per_texture']) > 0:
+            f.write("PER-TEXTURE BREAKDOWN:\n")
+            for texture in sorted(results['per_texture'].keys()):
+                tex_data = results['per_texture'][texture]
+                f.write(f"  {texture}:\n")
+                f.write(f"    Total: {tex_data['total']} videos\n")
+                f.write(f"    Accuracy: {tex_data.get('accuracy', 0):.2f}% ({tex_data['correct']}/{tex_data['total']})\n")
+                if 'f1_score' in tex_data:
+                    f.write(f"    F1 Score: {tex_data['f1_score']:.2f}%\n")
+                    f.write(f"    Precision: {tex_data['precision']:.2f}%\n")
+                    f.write(f"    Recall: {tex_data['recall']:.2f}%\n")
+                f.write(f"    Moving: {tex_data['moving']['correct']}/{tex_data['moving']['total']}")
+                if 'f1_moving' in tex_data:
+                    f.write(f" (F1: {tex_data['f1_moving']:.2f}%)")
+                f.write(f"\n    Stopped: {tex_data['stopped']['correct']}/{tex_data['stopped']['total']}")
+                if 'f1_stopped' in tex_data:
+                    f.write(f" (F1: {tex_data['f1_stopped']:.2f}%)")
+                f.write("\n\n")
+
+        # Per-angle breakdown
+        if 'per_angle' in results and len(results['per_angle']) > 0:
+            f.write("PER-ANGLE BREAKDOWN:\n")
+            for angle in sorted(results['per_angle'].keys()):
+                ang_data = results['per_angle'][angle]
+                f.write(f"  {angle}:\n")
+                f.write(f"    Total: {ang_data['total']} videos\n")
+                f.write(f"    Accuracy: {ang_data.get('accuracy', 0):.2f}% ({ang_data['correct']}/{ang_data['total']})\n")
+                if 'f1_score' in ang_data:
+                    f.write(f"    F1 Score: {ang_data['f1_score']:.2f}%\n")
+                    f.write(f"    Precision: {ang_data['precision']:.2f}%\n")
+                    f.write(f"    Recall: {ang_data['recall']:.2f}%\n")
+                f.write(f"    Moving: {ang_data['moving']['correct']}/{ang_data['moving']['total']}")
+                if 'f1_moving' in ang_data:
+                    f.write(f" (F1: {ang_data['f1_moving']:.2f}%)")
+                f.write(f"\n    Stopped: {ang_data['stopped']['correct']}/{ang_data['stopped']['total']}")
+                if 'f1_stopped' in ang_data:
+                    f.write(f" (F1: {ang_data['f1_stopped']:.2f}%)")
+                f.write("\n\n")
 
     def run(self):
         try:
