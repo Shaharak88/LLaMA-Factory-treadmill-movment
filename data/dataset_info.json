@@ -1025,6 +1025,20 @@
       "assistant_tag": "assistant"
     }
   },
+  "yesno_subtle_factory_20251129_120400_train": {
+    "file_name": "yesno_subtle_factory_20251129_120400_train.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "videos": "videos"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
   "yesno_subtle_factory_train": {
     "file_name": "yesno_subtle_factory_train.json",
     "formatting": "sharegpt",
@@ -1041,6 +1055,34 @@
   },
   "yesno_subtle_factory_test": {
     "file_name": "yesno_subtle_factory_test.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "videos": "videos"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
+  "yesno_factory_v2_train": {
+    "file_name": "yesno_factory_v2_train.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "videos": "videos"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
+  "yesno_factory_v2_test": {
+    "file_name": "yesno_factory_v2_test.json",
     "formatting": "sharegpt",
     "columns": {
       "messages": "messages",
