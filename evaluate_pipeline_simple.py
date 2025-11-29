@@ -163,7 +163,7 @@ class SimpleEvaluator:
                             "min_pixels": 224 * 224,
                             "max_pixels": 384 * 384
                         },
-                        {"type": "text", "text": "Analyze this video. Is the treadmill belt moving or stopped?"}
+                        {"type": "text", "text": "Is there movement in the video? Answer only with yes or no."}
                     ]
                 }
             ]
@@ -203,6 +203,18 @@ class SimpleEvaluator:
             metadata = self.parse_video_metadata(video_rel_path)
             texture = metadata['texture']
             angle = metadata['angle']
+
+            # VERBOSE LOGGING: Print EVERY video prediction
+            video_filename = Path(video_rel_path).name
+            gt_label = "MOVING (yes)" if is_moving_gt else "STOPPED (no)"
+            pred_label = "MOVING (yes)" if is_moving_pred else "STOPPED (no)"
+            status_icon = "✓" if is_correct else "✗"
+            logger.info(f"  [{i+1}/{len(data)}] {status_icon} {video_filename}")
+            logger.info(f"      Ground Truth: {gt_label}")
+            logger.info(f"      Model Output: '{output_text}'")
+            logger.info(f"      Predicted:    {pred_label}")
+            logger.info(f"      Texture: {texture}, Angle: {angle}")
+            logger.info(f"")
 
             # Labels for F1 calculation: 1 = moving, 0 = stopped
             y_true_label = 1 if is_moving_gt else 0
@@ -245,9 +257,6 @@ class SimpleEvaluator:
                 'texture': texture,
                 'angle': angle
             })
-
-            if (i + 1) % 10 == 0:
-                logger.info(f"Processed {i + 1}/{len(data)} samples")
 
         # Calculate overall accuracy and F1 scores
         results['accuracy'] = (results['correct'] / results['total'] * 100) if results['total'] > 0 else 0.0
@@ -295,13 +304,39 @@ class SimpleEvaluator:
         return results
 
     def _is_moving(self, text: str) -> bool:
-        """Determine if text indicates moving."""
-        text = text.lower()
-        if 'moving' in text and 'not moving' not in text:
+        """
+        Determine if text indicates moving.
+        Searches for yes/no answers as well as legacy moving/stopped keywords.
+        """
+        text = text.lower().strip()
+
+        # Primary: Check for yes/no answers (new format)
+        # Look for "yes" indicating movement
+        if text.startswith('yes') or text == 'yes' or text == 'yes.':
+            return True
+
+        # Look for "no" indicating stopped
+        if text.startswith('no') or text == 'no' or text == 'no.':
+            return False
+
+        # Also check for yes/no anywhere in the response (more robust)
+        # But avoid false positives like "yes, the belt is stopped"
+        if 'yes' in text and 'no' not in text:
+            # Make sure it's not "yes, stopped" or similar
+            if 'stopped' not in text and 'stationary' not in text:
+                return True
+
+        if 'no' in text and 'yes' not in text:
+            return False
+
+        # Fallback: Legacy keywords for backward compatibility
+        if 'moving' in text and 'not moving' not in text and 'stopped' not in text:
             return True
         if 'stopped' in text or 'stationary' in text or 'not moving' in text:
             return False
-        return False # Default to stopped if unclear
+
+        # Default to stopped if completely unclear
+        return False
 
     def generate_report(self, base_results, lora_results=None):
         """Generate text report."""

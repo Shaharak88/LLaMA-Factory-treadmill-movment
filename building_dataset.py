@@ -560,13 +560,13 @@ class DatasetBuilder:
         Returns:
             Dict: Dataset entry
         """
-        # Simple, compact prompts and responses
-        user_prompt = "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+        # Simple, compact prompts and responses with yes/no format
+        user_prompt = "<video>Is there movement in the video? Answer only with yes or no."
 
         if is_moving:
-            assistant_response = "The treadmill belt is moving."
+            assistant_response = "Yes."
         else:
-            assistant_response = "The treadmill belt is stopped."
+            assistant_response = "No."
 
         return {
             "messages": [
