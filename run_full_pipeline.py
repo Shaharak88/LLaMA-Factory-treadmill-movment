@@ -373,12 +373,12 @@ seed: {self.args.seed}
 
         self.run_command(cmd, "Model Evaluation", timeout=7200)
 
-        # Parse and update evaluation results
-        base_accuracy, finetuned_accuracy = parse_evaluation_results(self.evaluation_output_dir)
-        if base_accuracy is not None or finetuned_accuracy is not None:
+        # Parse and update evaluation results with all metrics
+        base_results, finetuned_results = parse_evaluation_results(self.evaluation_output_dir)
+        if base_results is not None or finetuned_results is not None:
             self.tracker.update_evaluation_results(
-                base_accuracy=base_accuracy,
-                finetuned_accuracy=finetuned_accuracy
+                base_results=base_results,
+                finetuned_results=finetuned_results
             )
 
         # Update tracker status
