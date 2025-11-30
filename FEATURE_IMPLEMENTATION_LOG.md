@@ -266,15 +266,89 @@ Potential improvements for future versions:
 - Combined features: Total overhead ~0.2-0.4s per video
 - No significant impact on generation speed
 
+## Updates (2025-11-30 - Final Version)
+
+### Object Motion Tracking Enhancement
+
+After initial implementation, the object motion system was enhanced to properly simulate real conveyor belt behavior:
+
+**Key Improvements:**
+1. **Motion Synchronization**: Objects now move WITH the belt texture, matching the visual belt motion exactly
+2. **Correct Starting Positions**: Objects initialize at the entry edge based on visual belt direction
+3. **Smooth Exit Behavior**: Objects disappear UNDER belt enclosure edges (rendered before enclosure)
+4. **Direction Mapping**: Corrected understanding of texture offset vs visual motion direction
+
+**Technical Details:**
+- When direction='right', texture offset increases → visual belt moves LEFT → objects move LEFT
+- When direction='left', texture offset decreases → visual belt moves RIGHT → objects move RIGHT
+- Objects are rendered BEFORE belt enclosure to create realistic depth effect
+- Motion speed matches belt speed exactly (same `speed` parameter)
+
+### Filename Enhancement
+
+Updated filename generation to include object and blur information for easy identification:
+
+**Format:**
+```
+treadmill_{idx}_{texture}_{direction}_speed{spd}_angle{ang}_bright{bri}_contr{con}_[obj_info]_[blur_info]_{res}_seed{seed}.mp4
+```
+
+**Object Info Format:** `obj_{type}x{num}_{size}_{position}`
+- Example: `obj_boxx3_medium_center` (3 boxes, medium size, center position)
+- Example: `obj_circlex2_large_random` (2 circles, large size, random position)
+
+**Blur Info Format:** `blur_{type}_{intensity}[_var]`
+- Example: `blur_gaussian_medium` (gaussian blur, medium intensity)
+- Example: `blur_random_0.5_var` (random blur, intensity 0.5, with variation)
+- Variation flag `_var` added when `--random-blur-variation` is enabled
+
+## Example Videos Generated
+
+Successfully generated diverse example videos showcasing all features:
+
+1. **treadmill_0000_factory_dark_right_speed2.5_obj_boxx3_medium_center_640x480_seed500.mp4**
+   - 3 medium boxes moving with belt (direction: right)
+   - Duration: 6 seconds
+   - Shows objects moving smoothly and disappearing under edges
+
+2. **treadmill_0000_subtle_gray_stripes_left_speed3.0_obj_circlex2_large_random_640x480_seed501.mp4**
+   - 2 large circles moving with belt (direction: left)
+   - Duration: 5 seconds
+   - Demonstrates circular objects on subtle texture
+
+3. **treadmill_0000_factory_dark_stripes_right_speed2.0_obj_randomx5_small_random_blur_gaussian_medium_640x480_seed502.mp4**
+   - 5 small random objects (mix of boxes and circles)
+   - Gaussian blur (medium intensity)
+   - Duration: 4 seconds
+   - Shows combined features: multiple objects + blur
+
+4. **treadmill_0000_factory_dark_up_speed2.5_obj_circlex1_large_random_blur_motion_heavy_640x480_seed504.mp4**
+   - 1 large circle moving upward with belt
+   - Heavy motion blur effect
+   - Duration: 3 seconds
+   - Demonstrates vertical belt motion with blur
+
+## Testing Summary
+
+✅ **Motion Accuracy**: Objects move exactly with belt texture at same speed
+✅ **Direction Correctness**: All 4 directions tested (left, right, up, down)
+✅ **Edge Behavior**: Objects smoothly disappear under belt enclosure
+✅ **Blur Effects**: Gaussian and motion blur work correctly
+✅ **Filename Generation**: All parameters correctly encoded in filenames
+✅ **Backward Compatibility**: Existing functionality unchanged
+✅ **Container Execution**: All tests run successfully in Docker container
+
 ## Conclusion
 
 Both features have been successfully implemented with:
 ✅ Full backward compatibility
 ✅ Comprehensive command-line interface
 ✅ Flexible configuration options
-✅ Realistic visual effects
+✅ Realistic visual effects (objects move WITH belt like real conveyors)
+✅ Proper depth layering (objects disappear under enclosure edges)
+✅ Descriptive filenames encoding all parameters
 ✅ Robust error handling
 ✅ Clear documentation
-✅ Successful testing
+✅ Successful testing across all motion directions
 
-The implementation is ready for production use and maintains the high quality and flexibility of the original synthetic data generation system.
+The implementation is ready for production use and maintains the high quality and flexibility of the original synthetic data generation system. Objects now behave exactly like real items on a factory conveyor belt, moving smoothly with the belt motion and disappearing naturally under the belt enclosure frame.

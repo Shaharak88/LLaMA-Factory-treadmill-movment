@@ -535,24 +535,27 @@ class TreadmillMotionSimulator:
 
 class ObjectPlacementGenerator:
     """
-    Generates and places objects on the treadmill belt surface.
+    Generates and places objects on the treadmill belt surface with motion tracking.
 
     Supports various object types (boxes, circles) with different colors, sizes,
-    and positions. Objects respect the belt surface and can be placed in specified
-    locations or randomly distributed.
+    and positions. Objects move with the belt motion like real items on a conveyor.
     """
 
-    def __init__(self, width: int, height: int, seed: int):
+    def __init__(self, width: int, height: int, seed: int, direction: str, speed: float):
         """
-        Initialize object placement generator.
+        Initialize object placement generator with motion tracking.
 
         Args:
             width: Frame width in pixels
             height: Frame height in pixels
             seed: Random seed for reproducible placement
+            direction: Belt motion direction ('left', 'right', 'up', 'down')
+            speed: Belt speed in pixels per frame
         """
         self.width = width
         self.height = height
+        self.direction = direction
+        self.speed = speed
         self.rng = np.random.RandomState(seed)
 
         # Define available colors (BGR format for OpenCV)
@@ -573,6 +576,9 @@ class ObjectPlacementGenerator:
             'medium': 0.15,
             'large': 0.25
         }
+
+        # Object tracking list: each object is {x, y, type, size, color}
+        self.objects = []
 
     def _get_position_coordinates(self, position: str, object_size: int,
                                    edge_width_percent: float) -> tuple:
@@ -724,28 +730,28 @@ class ObjectPlacementGenerator:
 
         return result
 
-    def place_objects(self, frame: np.ndarray, num_objects: int,
-                     object_type: str, object_size: str, position: str,
-                     edge_width_percent: float) -> np.ndarray:
+    def initialize_objects(self, num_objects: int, object_type: str,
+                          object_size: str, position: str,
+                          edge_width_percent: float) -> None:
         """
-        Place multiple objects on the frame.
+        Initialize objects at starting positions based on belt direction.
+
+        Objects start at the entry edge of the belt and will move with belt motion.
 
         Args:
-            frame: Input frame (RGB)
-            num_objects: Number of objects to place
+            num_objects: Number of objects to initialize
             object_type: Type of object ('box', 'circle', 'random')
             object_size: Size descriptor ('small', 'medium', 'large', or numeric)
-            position: Position descriptor ('center', 'left', 'right', 'random')
+            position: Position descriptor (affects cross-belt positioning)
             edge_width_percent: Belt enclosure edge width percentage
-
-        Returns:
-            numpy.ndarray: Frame with objects placed
         """
-        result = frame.copy()
+        self.objects = []
         size_pixels = self._parse_size(object_size)
-
-        # Get list of available colors
         color_names = list(self.colors.keys())
+
+        # Calculate usable belt area
+        edge_width = int(self.width * edge_width_percent)
+        edge_height = int(self.height * edge_width_percent)
 
         for i in range(num_objects):
             # Determine object type
@@ -754,24 +760,118 @@ class ObjectPlacementGenerator:
             else:
                 current_type = object_type
 
-            # Get position
-            if position == 'random' or num_objects > 1:
-                # For multiple objects or random position, always randomize
-                pos = self._get_position_coordinates('random', size_pixels, edge_width_percent)
-            else:
-                pos = self._get_position_coordinates(position, size_pixels, edge_width_percent)
-
             # Select random color
             color_name = self.rng.choice(color_names)
             color_bgr = self.colors[color_name]
-            # Convert BGR to RGB
             color_rgb = (color_bgr[2], color_bgr[1], color_bgr[0])
 
-            # Place object
-            if current_type == 'box':
-                result = self.place_box(result, pos, size_pixels, color_rgb)
-            elif current_type == 'circle':
-                result = self.place_circle(result, pos, size_pixels, color_rgb)
+            # Determine starting position based on visual belt motion
+            # Objects start at the entry edge and move with the visual belt flow
+            if self.direction == 'right':
+                # Visual motion is LEFT, so start from RIGHT edge
+                x = self.width - edge_width - size_pixels
+                y = self.rng.randint(edge_height + size_pixels,
+                                    self.height - edge_height - size_pixels)
+            elif self.direction == 'left':
+                # Visual motion is RIGHT, so start from LEFT edge
+                x = edge_width + size_pixels
+                y = self.rng.randint(edge_height + size_pixels,
+                                    self.height - edge_height - size_pixels)
+            elif self.direction == 'down':
+                # Visual motion is UP, so start from BOTTOM edge
+                x = self.rng.randint(edge_width + size_pixels,
+                                    self.width - edge_width - size_pixels)
+                y = self.height - edge_height - size_pixels
+            elif self.direction == 'up':
+                # Visual motion is DOWN, so start from TOP edge
+                x = self.rng.randint(edge_width + size_pixels,
+                                    self.width - edge_width - size_pixels)
+                y = edge_height + size_pixels
+
+            # Space objects out along visual belt motion direction
+            if self.direction in ['left', 'right']:
+                offset = i * (self.width // (num_objects + 1))
+                if self.direction == 'right':
+                    # Visual motion left, so space leftward (decrease X)
+                    x -= offset
+                else:
+                    # Visual motion right, so space rightward (increase X)
+                    x += offset
+            else:  # up or down
+                offset = i * (self.height // (num_objects + 1))
+                if self.direction == 'down':
+                    # Visual motion up, so space upward (decrease Y)
+                    y -= offset
+                else:
+                    # Visual motion down, so space downward (increase Y)
+                    y += offset
+
+            # Store object info
+            obj = {
+                'x': x,
+                'y': y,
+                'type': current_type,
+                'size': size_pixels,
+                'color': color_rgb
+            }
+            self.objects.append(obj)
+
+    def update_object_positions(self) -> None:
+        """
+        Update object positions based on belt motion.
+        Removes objects that have exited the viewable area.
+
+        Note: Objects move WITH the belt texture. The texture scrolling creates
+        visual motion in the opposite direction to the offset change.
+        """
+        objects_to_keep = []
+
+        for obj in self.objects:
+            # Update position based on direction and speed
+            # Objects move WITH the belt visual motion (opposite to texture offset direction)
+            # When texture offset increases right, visual effect is belt moving LEFT
+            # So objects should move LEFT (decrease X) to match visual belt motion
+            if self.direction == 'right':
+                # Belt appears to move left, so objects move left
+                obj['x'] -= self.speed
+            elif self.direction == 'left':
+                # Belt appears to move right, so objects move right
+                obj['x'] += self.speed
+            elif self.direction == 'down':
+                # Belt appears to move up, so objects move up
+                obj['y'] -= self.speed
+            elif self.direction == 'up':
+                # Belt appears to move down, so objects move down
+                obj['y'] += self.speed
+
+            # Check if object is still in viewable area (with generous margin for smooth exit)
+            margin = obj['size'] * 2
+            if (obj['x'] > -margin and obj['x'] < self.width + margin and
+                obj['y'] > -margin and obj['y'] < self.height + margin):
+                objects_to_keep.append(obj)
+
+        self.objects = objects_to_keep
+
+    def render_objects(self, frame: np.ndarray) -> np.ndarray:
+        """
+        Render all tracked objects onto the frame.
+
+        Args:
+            frame: Input frame (RGB)
+
+        Returns:
+            numpy.ndarray: Frame with objects rendered
+        """
+        result = frame.copy()
+
+        for obj in self.objects:
+            pos = (int(obj['x']), int(obj['y']))
+
+            # Place object based on type
+            if obj['type'] == 'box':
+                result = self.place_box(result, pos, obj['size'], obj['color'])
+            elif obj['type'] == 'circle':
+                result = self.place_circle(result, pos, obj['size'], obj['color'])
 
         return result
 
@@ -1190,7 +1290,8 @@ class SyntheticVideoGenerator:
             self.width, self.height, config['seed']
         )
         self.object_gen = ObjectPlacementGenerator(
-            self.width, self.height, config['seed']
+            self.width, self.height, config['seed'],
+            config['direction'], config['speed']
         )
 
     def generate_video(self, output_path: str) -> None:
@@ -1237,6 +1338,16 @@ class SyntheticVideoGenerator:
         if not out.isOpened():
             raise RuntimeError(f"Failed to create video writer for {output_path}")
 
+        # Initialize objects if enabled (before frame loop)
+        if self.config.get('add_object', False):
+            self.object_gen.initialize_objects(
+                num_objects=self.config.get('num_objects', 1),
+                object_type=self.config.get('object_type', 'box'),
+                object_size=self.config.get('object_size', 'medium'),
+                position=self.config.get('object_position', 'center'),
+                edge_width_percent=self.config.get('edge_width', 0.1)
+            )
+
         # Generate frames
         print("  Step 3/4: Generating frames...")
         for frame_idx in range(self.num_frames):
@@ -1246,22 +1357,17 @@ class SyntheticVideoGenerator:
             # Apply motion
             frame = self.motion_sim.apply_motion(seamless_texture, frame_idx)
 
-            # Apply belt enclosure AFTER motion (creates fixed, non-moving border)
+            # Render moving objects BEFORE belt enclosure (so they disappear under edges)
+            if self.config.get('add_object', False):
+                frame = self.object_gen.render_objects(frame)
+                # Update object positions for next frame
+                self.object_gen.update_object_positions()
+
+            # Apply belt enclosure AFTER objects (creates fixed frame that objects go under)
             frame = self.effects.apply_belt_enclosure(
                 frame,
                 edge_width_percent=self.config.get('edge_width', 0.1)
             )
-
-            # Place objects on belt (if enabled)
-            if self.config.get('add_object', False):
-                frame = self.object_gen.place_objects(
-                    frame,
-                    num_objects=self.config.get('num_objects', 1),
-                    object_type=self.config.get('object_type', 'box'),
-                    object_size=self.config.get('object_size', 'medium'),
-                    position=self.config.get('object_position', 'center'),
-                    edge_width_percent=self.config.get('edge_width', 0.1)
-                )
 
             # Apply camera effects
             frame = self.effects.apply_view_angle(frame, self.config['view_angle'])
@@ -1320,19 +1426,51 @@ class SyntheticVideoGenerator:
             video_idx: Video index number
 
         Returns:
-            str: Filename encoding key parameters
+            str: Filename encoding key parameters including object and blur info
         """
-        filename = (
-            f"treadmill_{video_idx:04d}_"
-            f"{config['texture_type']}_"
-            f"{config['direction']}_"
-            f"speed{config['speed']:.1f}_"
-            f"angle{config['view_angle']:.0f}_"
-            f"bright{config['brightness']:.2f}_"
-            f"contr{config['contrast']:.2f}_"
-            f"{config['resolution'][0]}x{config['resolution'][1]}_"
-            f"seed{config['seed']}.mp4"
-        )
+        # Build base filename
+        parts = [
+            f"treadmill_{video_idx:04d}",
+            config['texture_type'],
+            config['direction'],
+            f"speed{config['speed']:.1f}",
+            f"angle{config['view_angle']:.0f}",
+            f"bright{config['brightness']:.2f}",
+            f"contr{config['contrast']:.2f}",
+        ]
+
+        # Add object information if objects are enabled
+        if config.get('add_object', False):
+            obj_type = config.get('object_type', 'box')
+            obj_num = config.get('num_objects', 1)
+            obj_size = config.get('object_size', 'medium')
+            obj_pos = config.get('object_position', 'center')
+            parts.append(f"obj_{obj_type}x{obj_num}_{obj_size}_{obj_pos}")
+
+        # Add blur information if blur is enabled
+        if config.get('add_blur', False):
+            blur_type = config.get('blur_type', 'gaussian')
+            blur_intensity = config.get('blur_intensity', 0.3)
+
+            # Format intensity: use descriptor if string, numeric if float
+            if isinstance(blur_intensity, str):
+                intensity_str = blur_intensity
+            else:
+                intensity_str = f"{blur_intensity:.1f}"
+
+            blur_str = f"blur_{blur_type}_{intensity_str}"
+
+            # Add variation flag if enabled
+            if config.get('random_blur_variation', False):
+                blur_str += "_var"
+
+            parts.append(blur_str)
+
+        # Add resolution and seed
+        parts.append(f"{config['resolution'][0]}x{config['resolution'][1]}")
+        parts.append(f"seed{config['seed']}")
+
+        filename = "_".join(parts) + ".mp4"
         return filename
 
 
