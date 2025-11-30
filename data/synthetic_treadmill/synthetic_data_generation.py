@@ -533,12 +533,255 @@ class TreadmillMotionSimulator:
         return frame.copy()
 
 
+class ObjectPlacementGenerator:
+    """
+    Generates and places objects on the treadmill belt surface.
+
+    Supports various object types (boxes, circles) with different colors, sizes,
+    and positions. Objects respect the belt surface and can be placed in specified
+    locations or randomly distributed.
+    """
+
+    def __init__(self, width: int, height: int, seed: int):
+        """
+        Initialize object placement generator.
+
+        Args:
+            width: Frame width in pixels
+            height: Frame height in pixels
+            seed: Random seed for reproducible placement
+        """
+        self.width = width
+        self.height = height
+        self.rng = np.random.RandomState(seed)
+
+        # Define available colors (BGR format for OpenCV)
+        self.colors = {
+            'red': (0, 0, 200),
+            'blue': (200, 0, 0),
+            'green': (0, 180, 0),
+            'yellow': (0, 200, 200),
+            'orange': (0, 100, 255),
+            'purple': (200, 0, 200),
+            'cyan': (255, 200, 0),
+            'white': (220, 220, 220)
+        }
+
+        # Define size mappings (as percentage of image dimensions)
+        self.size_mappings = {
+            'small': 0.08,
+            'medium': 0.15,
+            'large': 0.25
+        }
+
+    def _get_position_coordinates(self, position: str, object_size: int,
+                                   edge_width_percent: float) -> tuple:
+        """
+        Calculate object center coordinates based on position descriptor.
+
+        Args:
+            position: Position descriptor ('center', 'left', 'right', 'random')
+            object_size: Size of the object (for boundary calculations)
+            edge_width_percent: Belt enclosure edge width percentage
+
+        Returns:
+            tuple: (x, y) coordinates for object center
+        """
+        # Calculate usable belt area (excluding enclosure edges)
+        edge_width = int(self.width * edge_width_percent)
+        edge_height = int(self.height * edge_width_percent)
+
+        usable_left = edge_width + object_size
+        usable_right = self.width - edge_width - object_size
+        usable_top = edge_height + object_size
+        usable_bottom = self.height - edge_height - object_size
+
+        # Ensure we have valid bounds
+        if usable_left >= usable_right:
+            usable_left = self.width // 4
+            usable_right = 3 * self.width // 4
+        if usable_top >= usable_bottom:
+            usable_top = self.height // 4
+            usable_bottom = 3 * self.height // 4
+
+        center_x = self.width // 2
+        center_y = self.height // 2
+
+        if position == 'center':
+            return (center_x, center_y)
+        elif position == 'left':
+            x = (usable_left + center_x) // 2
+            y = center_y
+            return (x, y)
+        elif position == 'right':
+            x = (center_x + usable_right) // 2
+            y = center_y
+            return (x, y)
+        elif position == 'random':
+            x = self.rng.randint(usable_left, usable_right)
+            y = self.rng.randint(usable_top, usable_bottom)
+            return (x, y)
+        else:
+            return (center_x, center_y)
+
+    def _parse_size(self, size: str) -> int:
+        """
+        Parse size parameter into pixel dimensions.
+
+        Args:
+            size: Size descriptor ('small', 'medium', 'large') or numeric value
+
+        Returns:
+            int: Object size in pixels
+        """
+        if size in self.size_mappings:
+            # Use percentage of smaller dimension to ensure object fits
+            base_size = min(self.width, self.height)
+            return int(base_size * self.size_mappings[size])
+        else:
+            try:
+                # Try to parse as numeric value (0.0-1.0 as percentage, >1 as pixels)
+                numeric_size = float(size)
+                if 0.0 < numeric_size <= 1.0:
+                    base_size = min(self.width, self.height)
+                    return int(base_size * numeric_size)
+                else:
+                    return int(numeric_size)
+            except ValueError:
+                # Default to medium if parsing fails
+                base_size = min(self.width, self.height)
+                return int(base_size * self.size_mappings['medium'])
+
+    def place_box(self, frame: np.ndarray, position: tuple, size: int,
+                  color: tuple) -> np.ndarray:
+        """
+        Place a box (rectangle) object on the frame.
+
+        Args:
+            frame: Input frame (RGB)
+            position: (x, y) coordinates for box center
+            size: Size of the box in pixels
+            color: RGB color tuple
+
+        Returns:
+            numpy.ndarray: Frame with box placed
+        """
+        result = frame.copy()
+        x, y = position
+        half_size = size // 2
+
+        # Calculate box corners
+        x1 = max(0, x - half_size)
+        y1 = max(0, y - half_size)
+        x2 = min(self.width, x + half_size)
+        y2 = min(self.height, y + half_size)
+
+        # Convert RGB to BGR for OpenCV
+        bgr_color = (color[2], color[1], color[0])
+
+        # Draw filled rectangle
+        cv2.rectangle(result, (x1, y1), (x2, y2), bgr_color, -1)
+
+        # Add subtle shading for 3D effect
+        shadow_color = tuple(max(0, c - 40) for c in bgr_color)
+        cv2.rectangle(result, (x1, y1), (x2, y2), shadow_color, 2)
+
+        return result
+
+    def place_circle(self, frame: np.ndarray, position: tuple, size: int,
+                     color: tuple) -> np.ndarray:
+        """
+        Place a circular object on the frame.
+
+        Args:
+            frame: Input frame (RGB)
+            position: (x, y) coordinates for circle center
+            size: Diameter of the circle in pixels
+            color: RGB color tuple
+
+        Returns:
+            numpy.ndarray: Frame with circle placed
+        """
+        result = frame.copy()
+        x, y = position
+        radius = size // 2
+
+        # Convert RGB to BGR for OpenCV
+        bgr_color = (color[2], color[1], color[0])
+
+        # Draw filled circle
+        cv2.circle(result, (x, y), radius, bgr_color, -1)
+
+        # Add subtle shading for 3D effect
+        shadow_color = tuple(max(0, c - 40) for c in bgr_color)
+        cv2.circle(result, (x, y), radius, shadow_color, 2)
+
+        # Add highlight for sphere effect
+        highlight_color = tuple(min(255, c + 60) for c in bgr_color)
+        highlight_offset = radius // 3
+        cv2.circle(result, (x - highlight_offset, y - highlight_offset),
+                  radius // 4, highlight_color, -1)
+
+        return result
+
+    def place_objects(self, frame: np.ndarray, num_objects: int,
+                     object_type: str, object_size: str, position: str,
+                     edge_width_percent: float) -> np.ndarray:
+        """
+        Place multiple objects on the frame.
+
+        Args:
+            frame: Input frame (RGB)
+            num_objects: Number of objects to place
+            object_type: Type of object ('box', 'circle', 'random')
+            object_size: Size descriptor ('small', 'medium', 'large', or numeric)
+            position: Position descriptor ('center', 'left', 'right', 'random')
+            edge_width_percent: Belt enclosure edge width percentage
+
+        Returns:
+            numpy.ndarray: Frame with objects placed
+        """
+        result = frame.copy()
+        size_pixels = self._parse_size(object_size)
+
+        # Get list of available colors
+        color_names = list(self.colors.keys())
+
+        for i in range(num_objects):
+            # Determine object type
+            if object_type == 'random':
+                current_type = self.rng.choice(['box', 'circle'])
+            else:
+                current_type = object_type
+
+            # Get position
+            if position == 'random' or num_objects > 1:
+                # For multiple objects or random position, always randomize
+                pos = self._get_position_coordinates('random', size_pixels, edge_width_percent)
+            else:
+                pos = self._get_position_coordinates(position, size_pixels, edge_width_percent)
+
+            # Select random color
+            color_name = self.rng.choice(color_names)
+            color_bgr = self.colors[color_name]
+            # Convert BGR to RGB
+            color_rgb = (color_bgr[2], color_bgr[1], color_bgr[0])
+
+            # Place object
+            if current_type == 'box':
+                result = self.place_box(result, pos, size_pixels, color_rgb)
+            elif current_type == 'circle':
+                result = self.place_circle(result, pos, size_pixels, color_rgb)
+
+        return result
+
+
 class CameraEffectsProcessor:
     """
     Applies camera and lighting effects to simulate realistic viewing conditions.
 
     Includes perspective transforms for view angle simulation, brightness/contrast
-    adjustments, lighting gradients, vignetting, motion blur, and noise.
+    adjustments, lighting gradients, vignetting, motion blur, gaussian blur, and noise.
     """
 
     def __init__(self, width: int, height: int, seed: int):
@@ -735,6 +978,78 @@ class CameraEffectsProcessor:
 
         return blurred
 
+    def apply_gaussian_blur(self, frame: np.ndarray, blur_intensity: float) -> np.ndarray:
+        """
+        Apply gaussian blur to simulate out-of-focus camera effect.
+
+        Args:
+            frame: Input frame
+            blur_intensity: Blur intensity (0.0 to 1.0)
+                          0.0 = no blur
+                          light (0.1-0.3) = slight out of focus
+                          medium (0.4-0.6) = moderate blur
+                          heavy (0.7-1.0) = strong blur
+
+        Returns:
+            numpy.ndarray: Blurred frame
+        """
+        if blur_intensity < 0.01:
+            return frame
+
+        # Map intensity to kernel size (must be odd)
+        # Intensity 0.1-1.0 maps to kernel size 3-31
+        kernel_size = int(3 + (blur_intensity * 28))
+        if kernel_size % 2 == 0:
+            kernel_size += 1
+
+        # Apply gaussian blur
+        blurred = cv2.GaussianBlur(frame, (kernel_size, kernel_size), 0)
+
+        return blurred
+
+    def apply_blur(self, frame: np.ndarray, blur_type: str, blur_intensity: float,
+                   direction: str = None) -> np.ndarray:
+        """
+        Apply blur effect based on specified type and intensity.
+
+        Args:
+            frame: Input frame
+            blur_type: Type of blur ('motion', 'gaussian', 'random', 'none')
+            blur_intensity: Blur intensity (0.0 to 1.0) or string ('light', 'medium', 'heavy')
+            direction: Motion direction for motion blur (required if blur_type='motion')
+
+        Returns:
+            numpy.ndarray: Blurred frame
+        """
+        if blur_type == 'none':
+            return frame
+
+        # Parse intensity if it's a string
+        intensity_value = blur_intensity
+        if isinstance(blur_intensity, str):
+            intensity_map = {
+                'light': 0.2,
+                'medium': 0.5,
+                'heavy': 0.8
+            }
+            intensity_value = intensity_map.get(blur_intensity.lower(), 0.5)
+
+        # Select blur type
+        if blur_type == 'random':
+            blur_type = self.rng.choice(['motion', 'gaussian'])
+
+        # Apply selected blur
+        if blur_type == 'motion':
+            if direction is None:
+                direction = 'right'  # Default direction
+            # Convert intensity to blur amount (1-10 range)
+            blur_amount = int(1 + (intensity_value * 9))
+            return self.apply_motion_blur(frame, direction, blur_amount)
+        elif blur_type == 'gaussian':
+            return self.apply_gaussian_blur(frame, intensity_value)
+        else:
+            return frame
+
     def apply_camera_noise(self, frame: np.ndarray, noise_level: float) -> np.ndarray:
         """
         Add camera sensor noise to simulate realistic image capture.
@@ -874,6 +1189,9 @@ class SyntheticVideoGenerator:
         self.effects = CameraEffectsProcessor(
             self.width, self.height, config['seed']
         )
+        self.object_gen = ObjectPlacementGenerator(
+            self.width, self.height, config['seed']
+        )
 
     def generate_video(self, output_path: str) -> None:
         """
@@ -934,6 +1252,17 @@ class SyntheticVideoGenerator:
                 edge_width_percent=self.config.get('edge_width', 0.1)
             )
 
+            # Place objects on belt (if enabled)
+            if self.config.get('add_object', False):
+                frame = self.object_gen.place_objects(
+                    frame,
+                    num_objects=self.config.get('num_objects', 1),
+                    object_type=self.config.get('object_type', 'box'),
+                    object_size=self.config.get('object_size', 'medium'),
+                    position=self.config.get('object_position', 'center'),
+                    edge_width_percent=self.config.get('edge_width', 0.1)
+                )
+
             # Apply camera effects
             frame = self.effects.apply_view_angle(frame, self.config['view_angle'])
             frame = self.effects.apply_brightness_contrast(
@@ -944,8 +1273,27 @@ class SyntheticVideoGenerator:
                 self.config['lighting_intensity']
             )
 
-            # Apply optional motion blur
-            if self.config.get('motion_blur', 0) > 0:
+            # Apply blur effects (new unified blur system)
+            if self.config.get('add_blur', False):
+                # Use new blur system with random variation
+                blur_type = self.config.get('blur_type', 'gaussian')
+                blur_intensity = self.config.get('blur_intensity', 0.3)
+
+                # If random blur variation is enabled, randomize per frame
+                if self.config.get('random_blur_variation', False):
+                    # Randomly vary intensity slightly per frame
+                    if isinstance(blur_intensity, (int, float)):
+                        intensity_variation = self.effects.rng.uniform(-0.1, 0.1)
+                        blur_intensity = max(0.0, min(1.0, blur_intensity + intensity_variation))
+
+                frame = self.effects.apply_blur(
+                    frame,
+                    blur_type=blur_type,
+                    blur_intensity=blur_intensity,
+                    direction=self.config['direction']
+                )
+            # Legacy motion blur support (for backward compatibility)
+            elif self.config.get('motion_blur', 0) > 0:
                 frame = self.effects.apply_motion_blur(
                     frame, self.config['direction'], self.config['motion_blur']
                 )
@@ -1081,6 +1429,31 @@ Examples:
     parser.add_argument('--edge_width', type=float, default=0.1,
                        help='Belt enclosure edge width as percentage, 0.05 to 0.2 (default: 0.1)')
 
+    # Object placement parameters
+    parser.add_argument('--add-object', action='store_true',
+                       help='Enable object placement on treadmill belt')
+    parser.add_argument('--object-type', type=str, default='box',
+                       choices=['box', 'circle', 'random'],
+                       help='Type of object to place (default: box)')
+    parser.add_argument('--object-position', type=str, default='center',
+                       choices=['center', 'left', 'right', 'random'],
+                       help='Position of object on belt (default: center)')
+    parser.add_argument('--object-size', type=str, default='medium',
+                       help='Size of object: small/medium/large or numeric value (default: medium)')
+    parser.add_argument('--num-objects', type=int, default=1,
+                       help='Number of objects to place (default: 1)')
+
+    # Camera blur parameters
+    parser.add_argument('--add-blur', action='store_true',
+                       help='Enable camera blur effects')
+    parser.add_argument('--blur-type', type=str, default='gaussian',
+                       choices=['motion', 'gaussian', 'random'],
+                       help='Type of blur effect (default: gaussian)')
+    parser.add_argument('--blur-intensity', type=str, default='0.3',
+                       help='Blur intensity: light/medium/heavy or 0.0-1.0 (default: 0.3)')
+    parser.add_argument('--random-blur-variation', action='store_true',
+                       help='Add random blur intensity variation across frames')
+
     # Variation mode
     parser.add_argument('--vary_parameters', action='store_true',
                        help='Automatically vary parameters across multiple videos')
@@ -1208,6 +1581,14 @@ def main():
     background_gray = int(args.background_gray.split(',')[0]) if ',' not in args.background_gray else args.background_gray
     stripe_distance_variance = float(args.stripe_distance_variance.split(',')[0]) if ',' not in args.stripe_distance_variance else args.stripe_distance_variance
 
+    # Parse blur intensity (can be string like 'light' or numeric like '0.5')
+    blur_intensity = args.blur_intensity
+    try:
+        blur_intensity = float(blur_intensity)
+    except ValueError:
+        # Keep as string if it's a descriptor like 'light', 'medium', 'heavy'
+        pass
+
     # Create base configuration
     base_config = {
         'resolution': (width, height),
@@ -1231,6 +1612,17 @@ def main():
         'stripe_gray': stripe_gray,
         'background_gray': background_gray,
         'stripe_distance_variance': stripe_distance_variance,
+        # Object placement parameters
+        'add_object': args.add_object,
+        'object_type': args.object_type,
+        'object_position': args.object_position,
+        'object_size': args.object_size,
+        'num_objects': args.num_objects,
+        # Camera blur parameters
+        'add_blur': args.add_blur,
+        'blur_type': args.blur_type,
+        'blur_intensity': blur_intensity,
+        'random_blur_variation': args.random_blur_variation,
     }
 
     # Create output directory
