@@ -23,6 +23,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import List
 
+# Import experiment tracker
+from experiment_tracker import ExperimentTracker, parse_evaluation_results
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -59,6 +62,10 @@ class FullPipelineRunner:
 
         # Training output
         self.lora_output_dir = args.lora_output_dir
+
+        # Initialize experiment tracker
+        self.tracker = ExperimentTracker(csv_path='experiments_log.csv')
+        self.evaluation_output_dir = f'evaluation_results_{self.timestamp}'
 
     def run_command(self, cmd: List[str], description: str, timeout: int = None) -> None:
         """
@@ -106,6 +113,9 @@ class FullPipelineRunner:
         logger.info("# STEP 1: DATASET GENERATION")
         logger.info("#"*70)
 
+        # Update tracker status
+        self.tracker.update_status('dataset', 'in_progress')
+
         # Calculate train/test split
         num_train = int(self.args.num_videos * self.args.train_split)
         num_test = self.args.num_videos - num_train
@@ -127,6 +137,9 @@ class FullPipelineRunner:
             seed=self.args.seed + 10000  # Different seed for test set
         )
         self.run_command(test_cmd, "Test Dataset Generation", timeout=7200)
+
+        # Update tracker status
+        self.tracker.update_status('dataset', 'completed')
 
     def _build_dataset_command(self, dataset_name: str, num_videos: int, seed: int) -> List[str]:
         """
@@ -222,6 +235,9 @@ class FullPipelineRunner:
         logger.info("# STEP 2: MODEL TRAINING")
         logger.info("#"*70)
 
+        # Update tracker status
+        self.tracker.update_status('training', 'in_progress')
+
         # Create custom training config
         config_path = self._create_training_config()
 
@@ -239,6 +255,9 @@ class FullPipelineRunner:
             ]
 
         self.run_command(cmd, "LoRA Model Training", timeout=14400)  # 4 hour timeout
+
+        # Update tracker status
+        self.tracker.update_status('training', 'completed')
 
     def _create_training_config(self) -> Path:
         """
@@ -322,6 +341,9 @@ seed: {self.args.seed}
         logger.info("# STEP 3: MODEL EVALUATION")
         logger.info("#"*70)
 
+        # Update tracker status
+        self.tracker.update_status('evaluation', 'in_progress')
+
         # Build evaluation command
         cmd = [
             'python3',
@@ -331,7 +353,7 @@ seed: {self.args.seed}
             '--test_dataset', self.test_dataset_name,
             '--dataset_dir', 'data',
             '--template', self.args.template,
-            '--output_dir', f'evaluation_results_{self.timestamp}'
+            '--output_dir', self.evaluation_output_dir
         ]
 
         # Add inference parameters
@@ -351,6 +373,17 @@ seed: {self.args.seed}
 
         self.run_command(cmd, "Model Evaluation", timeout=7200)
 
+        # Parse and update evaluation results
+        base_accuracy, finetuned_accuracy = parse_evaluation_results(self.evaluation_output_dir)
+        if base_accuracy is not None or finetuned_accuracy is not None:
+            self.tracker.update_evaluation_results(
+                base_accuracy=base_accuracy,
+                finetuned_accuracy=finetuned_accuracy
+            )
+
+        # Update tracker status
+        self.tracker.update_status('evaluation', 'completed')
+
     def run(self) -> None:
         """Execute the complete pipeline."""
         try:
@@ -359,6 +392,10 @@ seed: {self.args.seed}
             logger.info("="*70)
             logger.info(f"Run timestamp: {self.timestamp}")
             logger.info(f"Configuration: {vars(self.args)}")
+
+            # Start experiment tracking
+            experiment_id = self.tracker.start_experiment(self.args)
+            logger.info(f"Experiment ID: {experiment_id}")
 
             # Step 1: Generate datasets
             if not self.args.skip_dataset:
@@ -382,11 +419,24 @@ seed: {self.args.seed}
             logger.info("[OK] FULL PIPELINE COMPLETED SUCCESSFULLY")
             logger.info("="*70)
 
+            # Finalize experiment tracking
+            self.tracker.finalize_experiment()
+
         except KeyboardInterrupt:
             logger.warning("\n\nPipeline interrupted by user")
+            # Mark current stage as failed
+            if hasattr(self, 'tracker') and self.tracker.current_experiment_id:
+                # Try to determine which stage failed
+                for stage in ['dataset', 'training', 'evaluation']:
+                    self.tracker.update_status(stage, 'failed')
             sys.exit(1)
         except Exception as e:
             logger.error(f"\n\nPipeline failed: {e}", exc_info=True)
+            # Mark current stage as failed
+            if hasattr(self, 'tracker') and self.tracker.current_experiment_id:
+                # Mark any in-progress stages as failed
+                for stage in ['dataset', 'training', 'evaluation']:
+                    self.tracker.update_status(stage, 'failed')
             sys.exit(1)
 
 
