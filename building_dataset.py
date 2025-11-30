@@ -565,13 +565,13 @@ class DatasetBuilder:
         Returns:
             Dict: Dataset entry
         """
-        # Simple, compact prompts and responses with yes/no format
-        user_prompt = "<video>Is there movement in the video? Answer only with yes or no."
+        # Simple, compact prompts and responses
+        user_prompt = "<video>Analyze this video. Is the treadmill belt moving or stopped?"
 
         if is_moving:
-            assistant_response = "Yes."
+            assistant_response = "The treadmill belt is moving."
         else:
-            assistant_response = "No."
+            assistant_response = "The treadmill belt is stopped."
 
         return {
             "messages": [
@@ -863,6 +863,8 @@ Notes:
                        help='Stripe gray level (0-255) for subtle_gray_stripes (default: 125). Accepts comma-separated values (e.g., 110,115,120,125,130,135)')
     parser.add_argument('--background_gray', type=str, default='140',
                        help='Background gray level (0-255) for subtle_gray_stripes (default: 140). Accepts comma-separated values (e.g., 135,140,145)')
+    parser.add_argument('--stripe_distance_variance', type=str, default='0.0',
+                       help='Variance (std dev) for stripe spacing in subtle_gray_stripes (default: 0.0). Accepts comma-separated values (e.g., 0.0,5.0,10.0)')
 
     args = parser.parse_args()
 
