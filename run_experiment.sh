@@ -121,6 +121,7 @@ EVAL_VIDEO_FPS="4"
 EVAL_VIDEO_MAXLEN="128"
 
 # Flags
+EXECUTION_MODE="remote"  # "local" or "remote"
 DRY_RUN=false
 SKIP_SYNC=false
 SKIP_DATASETS=false
@@ -173,6 +174,7 @@ Automated experiment runner with tracking for LLaMA-Factory.
 OPTIONS:
     -h, --help              Show this help message
     -d, --dry-run           Show what would be executed without running
+    --local                 Run on local PC (default: run on remote server)
     --skip-sync             Skip syncing code to server
     --skip-datasets         Skip dataset generation (use existing datasets)
     --retrieve-models       Also retrieve trained model files
@@ -257,6 +259,10 @@ parse_args() {
                 ;;
             -d|--dry-run)
                 DRY_RUN=true
+                shift
+                ;;
+            --local)
+                EXECUTION_MODE="local"
                 shift
                 ;;
             --skip-sync)
@@ -447,6 +453,11 @@ generate_dataset_name() {
 step_sync_code() {
     log_step "STEP 1: Syncing code to server"
 
+    if [ "$EXECUTION_MODE" = "local" ]; then
+        log_warning "Running in LOCAL mode - skipping code sync"
+        return 0
+    fi
+
     if [ "$SKIP_SYNC" = true ]; then
         log_warning "Skipping code sync (--skip-sync)"
         return 0
@@ -523,7 +534,15 @@ step_build_datasets() {
 
     # Build training dataset - construct command with all parameters
     log_info "Building TRAINING dataset..."
-    local train_cmd="docker exec $CONTAINER_NAME python3 $REMOTE_APP_DIR/building_dataset.py \
+
+    # Base python command (different for local vs remote)
+    if [ "$EXECUTION_MODE" = "local" ]; then
+        local train_base_cmd="python3 $LOCAL_DIR/building_dataset.py"
+    else
+        local train_base_cmd="docker exec $CONTAINER_NAME python3 $REMOTE_APP_DIR/building_dataset.py"
+    fi
+
+    local train_cmd="$train_base_cmd \
         --dataset_name ${DATASET_NAME}_train \
         --texture_type $TRAIN_TEXTURE_TYPE \
         --direction $TRAIN_DIRECTION \
@@ -561,12 +580,25 @@ step_build_datasets() {
         [ -n "$TRAIN_RANDOM_BLUR_VARIATION" ] && train_cmd="$train_cmd --random_blur_variation $TRAIN_RANDOM_BLUR_VARIATION"
     fi
 
-    run_cmd "ssh '$SERVER_SSH' '$train_cmd'" "Running training dataset generation..."
+    # Execute command (with or without SSH)
+    if [ "$EXECUTION_MODE" = "local" ]; then
+        run_cmd "$train_cmd" "Running training dataset generation..."
+    else
+        run_cmd "ssh '$SERVER_SSH' '$train_cmd'" "Running training dataset generation..."
+    fi
     log_success "Training dataset created"
 
     # Build test dataset with potentially different parameters
     log_info "Building TEST dataset..."
-    local test_cmd="docker exec $CONTAINER_NAME python3 $REMOTE_APP_DIR/building_dataset.py \
+
+    # Base python command (different for local vs remote)
+    if [ "$EXECUTION_MODE" = "local" ]; then
+        local test_base_cmd="python3 $LOCAL_DIR/building_dataset.py"
+    else
+        local test_base_cmd="docker exec $CONTAINER_NAME python3 $REMOTE_APP_DIR/building_dataset.py"
+    fi
+
+    local test_cmd="$test_base_cmd \
         --dataset_name ${DATASET_NAME}_test \
         --texture_type $test_texture \
         --direction $test_direction \
@@ -604,7 +636,12 @@ step_build_datasets() {
         [ -n "$test_random_blur_variation" ] && test_cmd="$test_cmd --random_blur_variation $test_random_blur_variation"
     fi
 
-    run_cmd "ssh '$SERVER_SSH' '$test_cmd'" "Running test dataset generation..."
+    # Execute command (with or without SSH)
+    if [ "$EXECUTION_MODE" = "local" ]; then
+        run_cmd "$test_cmd" "Running test dataset generation..."
+    else
+        run_cmd "ssh '$SERVER_SSH' '$test_cmd'" "Running test dataset generation..."
+    fi
     log_success "Test dataset created"
 
     log_success "Datasets built: ${DATASET_NAME}_train and ${DATASET_NAME}_test"
@@ -654,7 +691,14 @@ step_run_training() {
     local test_vary_parameters="${TEST_VARY_PARAMETERS:-$TRAIN_VARY_PARAMETERS}"
 
     # Construct command with all training, evaluation, and METADATA parameters
-    local train_pipeline_cmd="docker exec $CONTAINER_NAME python3 $REMOTE_APP_DIR/run_full_pipeline.py \
+    # Base command (different for local vs remote)
+    if [ "$EXECUTION_MODE" = "local" ]; then
+        local pipeline_base_cmd="python3 $LOCAL_DIR/run_full_pipeline.py"
+    else
+        local pipeline_base_cmd="docker exec $CONTAINER_NAME python3 $REMOTE_APP_DIR/run_full_pipeline.py"
+    fi
+
+    local train_pipeline_cmd="$pipeline_base_cmd \
         --dataset_name $DATASET_NAME \
         --skip_dataset \
         --num_train_epochs $NUM_EPOCHS \
@@ -725,14 +769,28 @@ step_run_training() {
         --test_random_blur_variation '$test_random_blur_variation' \
         --test_vary_parameters '$test_vary_parameters'"
 
-    run_cmd "ssh '$SERVER_SSH' '$train_pipeline_cmd'" "Running training and evaluation..."
+    # Execute command (with or without SSH)
+    if [ "$EXECUTION_MODE" = "local" ]; then
+        run_cmd "$train_pipeline_cmd" "Running training and evaluation..."
+        log_info "Experiment has been logged to experiments_log.csv locally"
+    else
+        run_cmd "ssh '$SERVER_SSH' '$train_pipeline_cmd'" "Running training and evaluation..."
+        log_info "Experiment has been logged to experiments_log.csv on server"
+    fi
 
     log_success "Training pipeline completed"
-    log_info "Experiment has been logged to experiments_log.csv on server"
 }
 
 step_retrieve_results() {
     log_step "STEP 4: Retrieving results to local PC"
+
+    if [ "$EXECUTION_MODE" = "local" ]; then
+        log_warning "Running in LOCAL mode - results already on local PC"
+        log_success "Results location:"
+        log_success "  CSV: $LOCAL_DIR/experiments_log.csv"
+        log_success "  Reports: $LOCAL_DIR/evaluation_results_*/"
+        return 0
+    fi
 
     # Create results directory
     mkdir -p "$RESULTS_DIR"
@@ -810,8 +868,14 @@ EOF
 
     # Pre-flight checks
     log_step "Pre-flight checks"
-    check_ssh_connection
-    check_docker_container
+    if [ "$EXECUTION_MODE" = "local" ]; then
+        log_info "Execution mode: LOCAL"
+        log_warning "Skipping SSH and Docker checks (running locally)"
+    else
+        log_info "Execution mode: REMOTE (via SSH + Docker)"
+        check_ssh_connection
+        check_docker_container
+    fi
 
     # Use test parameters if specified, otherwise default to train parameters
     local test_texture="${TEST_TEXTURE_TYPE:-$TRAIN_TEXTURE_TYPE}"
@@ -822,9 +886,18 @@ EOF
     # Show configuration
     log_step "Experiment Configuration"
     cat << EOF
+Execution Mode: $EXECUTION_MODE
+EOF
+
+    if [ "$EXECUTION_MODE" = "remote" ]; then
+        cat << EOF
 Server: $SERVER_SSH
 Container: $CONTAINER_NAME
 
+EOF
+    fi
+
+    cat << EOF
 TRAINING Dataset:
   Texture: $TRAIN_TEXTURE_TYPE
   View Angles: $TRAIN_VIEW_ANGLES
