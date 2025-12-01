@@ -415,7 +415,10 @@ class TreadmillTextureGenerator:
             numpy.ndarray: RGB texture image
         """
         if texture_type == 'stripes':
-            return self.generate_stripes(**kwargs)
+            # Filter kwargs to only include parameters that generate_stripes accepts
+            stripes_params = {'stripe_width', 'orientation', 'base_color', 'stripe_color', 'motion_direction'}
+            filtered_kwargs = {k: v for k, v in kwargs.items() if k in stripes_params}
+            return self.generate_stripes(**filtered_kwargs)
         elif texture_type == 'factory_dark_stripes':
             # Filter kwargs to only include parameters that generate_factory_dark_stripes accepts
             factory_dark_stripes_params = {'stripe_width', 'orientation', 'base_color', 'stripe_color', 'motion_direction'}
@@ -428,13 +431,25 @@ class TreadmillTextureGenerator:
             kwargs.pop('motion_direction', None)
 
             if texture_type == 'noise':
-                return self.generate_noise_pattern(**kwargs)
+                # Filter kwargs to only include parameters that generate_noise_pattern accepts
+                noise_params = {'noise_scale', 'base_color'}
+                filtered_kwargs = {k: v for k, v in kwargs.items() if k in noise_params}
+                return self.generate_noise_pattern(**filtered_kwargs)
             elif texture_type == 'rubber':
-                return self.generate_rubber_pattern(**kwargs)
+                # Filter kwargs to only include parameters that generate_rubber_pattern accepts
+                rubber_params = {'bump_density', 'base_color'}
+                filtered_kwargs = {k: v for k, v in kwargs.items() if k in rubber_params}
+                return self.generate_rubber_pattern(**filtered_kwargs)
             elif texture_type == 'grid':
-                return self.generate_grid_pattern(**kwargs)
+                # Filter kwargs to only include parameters that generate_grid_pattern accepts
+                grid_params = {'grid_size', 'line_width', 'base_color', 'line_color'}
+                filtered_kwargs = {k: v for k, v in kwargs.items() if k in grid_params}
+                return self.generate_grid_pattern(**filtered_kwargs)
             elif texture_type == 'diamond_plate':
-                return self.generate_diamond_plate(**kwargs)
+                # Filter kwargs to only include parameters that generate_diamond_plate accepts
+                diamond_params = {'diamond_size', 'base_color'}
+                filtered_kwargs = {k: v for k, v in kwargs.items() if k in diamond_params}
+                return self.generate_diamond_plate(**filtered_kwargs)
             elif texture_type == 'factory_dark':
                 # Filter kwargs to only include parameters that generate_factory_dark accepts
                 factory_dark_params = {'base_color', 'texture_intensity'}
