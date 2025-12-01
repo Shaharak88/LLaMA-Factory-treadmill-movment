@@ -73,6 +73,7 @@ services:
       - ./building_dataset.py:/app/building_dataset.py
       - ./evaluate_pipeline.py:/app/evaluate_pipeline.py
       - ./evaluate_pipeline_simple.py:/app/evaluate_pipeline_simple.py
+      - ./experiment_tracker.py:/app/experiment_tracker.py
 
     # Restart policy
     restart: unless-stopped

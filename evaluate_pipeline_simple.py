@@ -166,7 +166,7 @@ class SimpleEvaluator:
                             "min_pixels": 224 * 224,
                             "max_pixels": 384 * 384
                         },
-                        {"type": "text", "text": "Is there movement in the video? Answer only with yes or no."}
+                        {"type": "text", "text": "Analyze this video. Is the treadmill belt moving or stopped?"}
                     ]
                 }
             ]
@@ -265,10 +265,10 @@ class SimpleEvaluator:
         results['accuracy'] = (results['correct'] / results['total'] * 100) if results['total'] > 0 else 0.0
 
         if len(results['y_true']) > 0:
-            # Overall metrics
-            results['f1_score'] = f1_score(results['y_true'], results['y_pred'], average='binary', zero_division=0) * 100
-            results['precision'] = precision_score(results['y_true'], results['y_pred'], average='binary', zero_division=0) * 100
-            results['recall'] = recall_score(results['y_true'], results['y_pred'], average='binary', zero_division=0) * 100
+            # Overall metrics - use macro average to account for both classes equally
+            results['f1_score'] = f1_score(results['y_true'], results['y_pred'], average='macro', zero_division=0) * 100
+            results['precision'] = precision_score(results['y_true'], results['y_pred'], average='macro', zero_division=0) * 100
+            results['recall'] = recall_score(results['y_true'], results['y_pred'], average='macro', zero_division=0) * 100
 
             # Per-class F1 scores
             f1_per_class = f1_score(results['y_true'], results['y_pred'], average=None, zero_division=0)
@@ -280,9 +280,9 @@ class SimpleEvaluator:
             for texture, tex_data in results['per_texture'].items():
                 if len(tex_data['y_true']) > 0:
                     tex_data['accuracy'] = (tex_data['correct'] / tex_data['total'] * 100)
-                    tex_data['f1_score'] = f1_score(tex_data['y_true'], tex_data['y_pred'], average='binary', zero_division=0) * 100
-                    tex_data['precision'] = precision_score(tex_data['y_true'], tex_data['y_pred'], average='binary', zero_division=0) * 100
-                    tex_data['recall'] = recall_score(tex_data['y_true'], tex_data['y_pred'], average='binary', zero_division=0) * 100
+                    tex_data['f1_score'] = f1_score(tex_data['y_true'], tex_data['y_pred'], average='macro', zero_division=0) * 100
+                    tex_data['precision'] = precision_score(tex_data['y_true'], tex_data['y_pred'], average='macro', zero_division=0) * 100
+                    tex_data['recall'] = recall_score(tex_data['y_true'], tex_data['y_pred'], average='macro', zero_division=0) * 100
 
                     # Per-class F1 for texture
                     f1_tex_class = f1_score(tex_data['y_true'], tex_data['y_pred'], average=None, zero_division=0)
@@ -294,9 +294,9 @@ class SimpleEvaluator:
             for angle, ang_data in results['per_angle'].items():
                 if len(ang_data['y_true']) > 0:
                     ang_data['accuracy'] = (ang_data['correct'] / ang_data['total'] * 100)
-                    ang_data['f1_score'] = f1_score(ang_data['y_true'], ang_data['y_pred'], average='binary', zero_division=0) * 100
-                    ang_data['precision'] = precision_score(ang_data['y_true'], ang_data['y_pred'], average='binary', zero_division=0) * 100
-                    ang_data['recall'] = recall_score(ang_data['y_true'], ang_data['y_pred'], average='binary', zero_division=0) * 100
+                    ang_data['f1_score'] = f1_score(ang_data['y_true'], ang_data['y_pred'], average='macro', zero_division=0) * 100
+                    ang_data['precision'] = precision_score(ang_data['y_true'], ang_data['y_pred'], average='macro', zero_division=0) * 100
+                    ang_data['recall'] = recall_score(ang_data['y_true'], ang_data['y_pred'], average='macro', zero_division=0) * 100
 
                     # Per-class F1 for angle
                     f1_ang_class = f1_score(ang_data['y_true'], ang_data['y_pred'], average=None, zero_division=0)
