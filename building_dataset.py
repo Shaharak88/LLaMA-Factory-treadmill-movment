@@ -340,7 +340,7 @@ class DatasetBuilder:
             else:
                 # Use provided parameters
                 config['texture_type'] = getattr(self.args, 'texture_type', 'stripes')
-                config['direction'] = getattr(self.args, 'direction', 'right')
+                config['direction'] = self.rng.choice(directions)
                 config['speed'] = self.rng.uniform(speed_min, speed_max) if is_moving else 0.0
                 config['view_angle'] = getattr(self.args, 'view_angle', 0.0)
                 config['brightness'] = getattr(self.args, 'brightness', 0.0)
