@@ -17,6 +17,21 @@
 # Author: AI-Generated
 # Date: 2025-11-30
 ################################################################################
+################################################################################
+#Important Notes!
+#Even when creating diffrent test and train datasets always use the run_experiment.sh bash command! for example: 
+#./run_experiment.sh --train-angles "0.0,15.0" --test-angles "7.0,22.0,35.0,30.0,45.0,52.0" --texture subtle_gray_stripes --epochs 2 --speed-range "0.0,14.0"
+#When you are running on the server read DEPLOYMENT.md!!!!
+# When running in the server dont EVER kill a running container/process or anything that is running!!
+# Always run this script in a container in this project!
+# Always use a unique timestamp for every new dataset we are running
+#For every change you make in this file or in this ENTIRE project : do that change, make sure no other changes are needed in the code, for every change you make document it in a log file here with the changes, and commit it and add a comment about the changes in the commit.
+# DONT EVER RUN ANY SUB SCRIPT OTHER THEN THIS run_experiment.sh script!
+#dont ever sync large model files!
+
+
+
+
 
 set -e  # Exit on error
 set -o pipefail  # Exit on pipe failure
@@ -29,7 +44,8 @@ set -o pipefail  # Exit on pipe failure
 SERVER_USER="seedoo"
 SERVER_HOST="hetzner-gpu.tail9e6e7.ts.net"
 SERVER_SSH="${SERVER_USER}@${SERVER_HOST}"
-REMOTE_APP_DIR="/app"
+REMOTE_HOST_DIR="/home/seedoo/shahar_linux_wsl/LLaMA-Factory"  # Host path for rsync
+REMOTE_APP_DIR="/app"  # Container path for docker exec
 CONTAINER_NAME="llamafactory"
 
 # Local configuration
@@ -48,7 +64,7 @@ TRAIN_DIRECTION="left,right,up,down"
 TEST_DIRECTION=""  # If empty, uses TRAIN_DIRECTION
 TRAIN_SPEED_RANGE="0.0,14.0"
 TEST_SPEED_RANGE=""  # If empty, uses TRAIN_SPEED_RANGE
-TRAIN_RESOLUTION="640,480"
+TRAIN_RESOLUTION="640x480"
 TEST_RESOLUTION=""
 TRAIN_FPS="4"
 TEST_FPS=""
@@ -60,26 +76,26 @@ TRAIN_BRIGHTNESS="1.0"
 TEST_BRIGHTNESS=""
 TRAIN_CONTRAST="1.0"
 TEST_CONTRAST=""
-TRAIN_LIGHTING_VARIATION="0.0"
+TRAIN_LIGHTING_VARIATION="none"
 TEST_LIGHTING_VARIATION=""
 TRAIN_LIGHTING_INTENSITY="1.0"
 TEST_LIGHTING_INTENSITY=""
-TRAIN_MOTION_BLUR="0.0"
+TRAIN_MOTION_BLUR="0"
 TEST_MOTION_BLUR=""
 TRAIN_CAMERA_NOISE="0.0"
 TEST_CAMERA_NOISE=""
-TRAIN_EDGE_WIDTH="5.0"
+TRAIN_EDGE_WIDTH="5"
 TEST_EDGE_WIDTH=""
 
 # Stripe parameters (for subtle_gray_stripes)
-TRAIN_STRIPE_WIDTH="20.0"
+TRAIN_STRIPE_WIDTH="20"
 TEST_STRIPE_WIDTH=""
-TRAIN_STRIPE_SPACING="20.0"
+TRAIN_STRIPE_SPACING="20"
 TEST_STRIPE_SPACING=""
-TRAIN_STRIPE_GRAY="20,21,22"
-TEST_STRIPE_GRAY="15,16,17"
-TRAIN_BG_GRAY="15,16,17"
-TEST_BG_GRAY="10,11,12"
+TRAIN_STRIPE_GRAY="20"
+TEST_STRIPE_GRAY="15"
+TRAIN_BG_GRAY="15"
+TEST_BG_GRAY="10"
 TRAIN_STRIPE_DISTANCE_VARIANCE="0.0"
 TEST_STRIPE_DISTANCE_VARIANCE=""
 
@@ -127,6 +143,7 @@ SKIP_SYNC=false
 SKIP_DATASETS=false
 RETRIEVE_MODELS=false
 VERBOSE=false
+YES_TO_ALL=false
 
 ################################################################################
 # COLOR OUTPUT
@@ -259,6 +276,10 @@ parse_args() {
                 ;;
             -d|--dry-run)
                 DRY_RUN=true
+                shift
+                ;;
+            -y|--yes)
+                YES_TO_ALL=true
                 shift
                 ;;
             --local)
@@ -464,18 +485,25 @@ step_sync_code() {
     fi
 
     log_info "Syncing from: $LOCAL_DIR"
-    log_info "Syncing to: $SERVER_SSH:$REMOTE_APP_DIR"
+    log_info "Syncing to: $SERVER_SSH:$REMOTE_HOST_DIR"
 
-    run_cmd "rsync -avz --progress \
+    # Use --checksum to ensure files are synced based on content, not just timestamps
+    # This prevents sync issues where local files have older timestamps than server files
+    run_cmd "rsync -avz --checksum --progress \
         --exclude='data/' \
         --exclude='saves/' \
+        --exclude='output/' \
+        --exclude='hf_cache/' \
         --exclude='*.mp4' \
+        --exclude='*.avi' \
+        --exclude='*.mkv' \
         --exclude='__pycache__/' \
         --exclude='.git/' \
         --exclude='experiments_log.csv' \
         --exclude='experiment_results/' \
         --exclude='evaluation_results_*/' \
-        '$LOCAL_DIR/' '$SERVER_SSH:$REMOTE_APP_DIR/'" \
+        --exclude='*.log' \
+        '$LOCAL_DIR/' '$SERVER_SSH:$REMOTE_HOST_DIR/'" \
         "Syncing code files..."
 
     log_success "Code sync complete"
@@ -537,47 +565,51 @@ step_build_datasets() {
 
     # Base python command (different for local vs remote)
     if [ "$EXECUTION_MODE" = "local" ]; then
-        local train_base_cmd="python3 $LOCAL_DIR/building_dataset.py"
+        local train_base_cmd="docker exec $CONTAINER_NAME python3 $REMOTE_APP_DIR/building_dataset.py"
     else
         local train_base_cmd="docker exec $CONTAINER_NAME python3 $REMOTE_APP_DIR/building_dataset.py"
     fi
 
     local train_cmd="$train_base_cmd \
         --dataset_name ${DATASET_NAME}_train \
-        --texture_type $TRAIN_TEXTURE_TYPE \
-        --direction $TRAIN_DIRECTION \
-        --view_angle $TRAIN_VIEW_ANGLES \
-        --speed_range $TRAIN_SPEED_RANGE \
-        --resolution $TRAIN_RESOLUTION \
-        --fps $TRAIN_FPS \
-        --duration $TRAIN_DURATION \
-        --brightness $TRAIN_BRIGHTNESS \
-        --contrast $TRAIN_CONTRAST \
-        --lighting_variation $TRAIN_LIGHTING_VARIATION \
-        --lighting_intensity $TRAIN_LIGHTING_INTENSITY \
-        --motion_blur $TRAIN_MOTION_BLUR \
-        --camera_noise $TRAIN_CAMERA_NOISE \
-        --edge_width $TRAIN_EDGE_WIDTH \
-        --stripe_width $TRAIN_STRIPE_WIDTH \
-        --stripe_spacing $TRAIN_STRIPE_SPACING \
-        --stripe_gray $TRAIN_STRIPE_GRAY \
-        --background_gray $TRAIN_BG_GRAY \
-        --stripe_distance_variance $TRAIN_STRIPE_DISTANCE_VARIANCE \
-        --vary_parameters $TRAIN_VARY_PARAMETERS"
+        --texture_type '$TRAIN_TEXTURE_TYPE' \
+        --direction '$TRAIN_DIRECTION' \
+        --view_angle '$TRAIN_VIEW_ANGLES' \
+        --speed_range '$TRAIN_SPEED_RANGE' \
+        --resolution '$TRAIN_RESOLUTION' \
+        --fps '$TRAIN_FPS' \
+        --duration '$TRAIN_DURATION' \
+        --brightness '$TRAIN_BRIGHTNESS' \
+        --contrast '$TRAIN_CONTRAST' \
+        --lighting_variation '$TRAIN_LIGHTING_VARIATION' \
+        --lighting_intensity '$TRAIN_LIGHTING_INTENSITY' \
+        --motion_blur '$TRAIN_MOTION_BLUR' \
+        --camera_noise '$TRAIN_CAMERA_NOISE' \
+        --edge_width '$TRAIN_EDGE_WIDTH' \
+        --stripe_width '$TRAIN_STRIPE_WIDTH' \
+        --stripe_spacing '$TRAIN_STRIPE_SPACING' \
+        --stripe_gray '$TRAIN_STRIPE_GRAY' \
+        --background_gray '$TRAIN_BG_GRAY' \
+        --stripe_distance_variance '$TRAIN_STRIPE_DISTANCE_VARIANCE'"
+
+    # Add vary_parameters flag if true
+    if [ "$TRAIN_VARY_PARAMETERS" = "true" ]; then
+        train_cmd="$train_cmd --vary_parameters"
+    fi
 
     # Add object parameters if specified
     if [ "$TRAIN_ADD_OBJECT" = "true" ] && [ -n "$TRAIN_OBJECT_TYPE" ]; then
-        train_cmd="$train_cmd --add_object --object_type $TRAIN_OBJECT_TYPE"
-        [ -n "$TRAIN_OBJECT_POSITION" ] && train_cmd="$train_cmd --object_position $TRAIN_OBJECT_POSITION"
-        [ -n "$TRAIN_OBJECT_SIZE" ] && train_cmd="$train_cmd --object_size $TRAIN_OBJECT_SIZE"
-        [ -n "$TRAIN_NUM_OBJECTS" ] && train_cmd="$train_cmd --num_objects $TRAIN_NUM_OBJECTS"
+        train_cmd="$train_cmd --add_object --object_type '$TRAIN_OBJECT_TYPE'"
+        [ -n "$TRAIN_OBJECT_POSITION" ] && train_cmd="$train_cmd --object_position '$TRAIN_OBJECT_POSITION'"
+        [ -n "$TRAIN_OBJECT_SIZE" ] && train_cmd="$train_cmd --object_size '$TRAIN_OBJECT_SIZE'"
+        [ -n "$TRAIN_NUM_OBJECTS" ] && train_cmd="$train_cmd --num_objects '$TRAIN_NUM_OBJECTS'"
     fi
 
     # Add blur parameters if specified
     if [ "$TRAIN_ADD_BLUR" = "true" ] && [ -n "$TRAIN_BLUR_TYPE" ]; then
-        train_cmd="$train_cmd --add_blur --blur_type $TRAIN_BLUR_TYPE"
-        [ -n "$TRAIN_BLUR_INTENSITY" ] && train_cmd="$train_cmd --blur_intensity $TRAIN_BLUR_INTENSITY"
-        [ -n "$TRAIN_RANDOM_BLUR_VARIATION" ] && train_cmd="$train_cmd --random_blur_variation $TRAIN_RANDOM_BLUR_VARIATION"
+        train_cmd="$train_cmd --add_blur --blur_type '$TRAIN_BLUR_TYPE'"
+        [ -n "$TRAIN_BLUR_INTENSITY" ] && train_cmd="$train_cmd --blur_intensity '$TRAIN_BLUR_INTENSITY'"
+        [ -n "$TRAIN_RANDOM_BLUR_VARIATION" ] && train_cmd="$train_cmd --random_blur_variation '$TRAIN_RANDOM_BLUR_VARIATION'"
     fi
 
     # Execute command (with or without SSH)
@@ -593,47 +625,51 @@ step_build_datasets() {
 
     # Base python command (different for local vs remote)
     if [ "$EXECUTION_MODE" = "local" ]; then
-        local test_base_cmd="python3 $LOCAL_DIR/building_dataset.py"
+        local test_base_cmd="docker exec $CONTAINER_NAME python3 $REMOTE_APP_DIR/building_dataset.py"
     else
         local test_base_cmd="docker exec $CONTAINER_NAME python3 $REMOTE_APP_DIR/building_dataset.py"
     fi
 
     local test_cmd="$test_base_cmd \
         --dataset_name ${DATASET_NAME}_test \
-        --texture_type $test_texture \
-        --direction $test_direction \
-        --view_angle $test_angles \
-        --speed_range $test_speed \
-        --resolution $test_resolution \
-        --fps $test_fps \
-        --duration $test_duration \
-        --brightness $test_brightness \
-        --contrast $test_contrast \
-        --lighting_variation $test_lighting_variation \
-        --lighting_intensity $test_lighting_intensity \
-        --motion_blur $test_motion_blur \
-        --camera_noise $test_camera_noise \
-        --edge_width $test_edge_width \
-        --stripe_width $test_stripe_width \
-        --stripe_spacing $test_stripe_spacing \
-        --stripe_gray $TEST_STRIPE_GRAY \
-        --background_gray $TEST_BG_GRAY \
-        --stripe_distance_variance $test_stripe_distance_variance \
-        --vary_parameters $test_vary_parameters"
+        --texture_type '$test_texture' \
+        --direction '$test_direction' \
+        --view_angle '$test_angles' \
+        --speed_range '$test_speed' \
+        --resolution '$test_resolution' \
+        --fps '$test_fps' \
+        --duration '$test_duration' \
+        --brightness '$test_brightness' \
+        --contrast '$test_contrast' \
+        --lighting_variation '$test_lighting_variation' \
+        --lighting_intensity '$test_lighting_intensity' \
+        --motion_blur '$test_motion_blur' \
+        --camera_noise '$test_camera_noise' \
+        --edge_width '$test_edge_width' \
+        --stripe_width '$test_stripe_width' \
+        --stripe_spacing '$test_stripe_spacing' \
+        --stripe_gray '$TEST_STRIPE_GRAY' \
+        --background_gray '$TEST_BG_GRAY' \
+        --stripe_distance_variance '$test_stripe_distance_variance'"
+
+    # Add vary_parameters flag if true
+    if [ "$test_vary_parameters" = "true" ]; then
+        test_cmd="$test_cmd --vary_parameters"
+    fi
 
     # Add object parameters if specified
     if [ "$test_add_object" = "true" ] && [ -n "$test_object_type" ]; then
-        test_cmd="$test_cmd --add_object --object_type $test_object_type"
-        [ -n "$test_object_position" ] && test_cmd="$test_cmd --object_position $test_object_position"
-        [ -n "$test_object_size" ] && test_cmd="$test_cmd --object_size $test_object_size"
-        [ -n "$test_num_objects" ] && test_cmd="$test_cmd --num_objects $test_num_objects"
+        test_cmd="$test_cmd --add_object --object_type '$test_object_type'"
+        [ -n "$test_object_position" ] && test_cmd="$test_cmd --object_position '$test_object_position'"
+        [ -n "$test_object_size" ] && test_cmd="$test_cmd --object_size '$test_object_size'"
+        [ -n "$test_num_objects" ] && test_cmd="$test_cmd --num_objects '$test_num_objects'"
     fi
 
     # Add blur parameters if specified
     if [ "$test_add_blur" = "true" ] && [ -n "$test_blur_type" ]; then
-        test_cmd="$test_cmd --add_blur --blur_type $test_blur_type"
-        [ -n "$test_blur_intensity" ] && test_cmd="$test_cmd --blur_intensity $test_blur_intensity"
-        [ -n "$test_random_blur_variation" ] && test_cmd="$test_cmd --random_blur_variation $test_random_blur_variation"
+        test_cmd="$test_cmd --add_blur --blur_type '$test_blur_type'"
+        [ -n "$test_blur_intensity" ] && test_cmd="$test_cmd --blur_intensity '$test_blur_intensity'"
+        [ -n "$test_random_blur_variation" ] && test_cmd="$test_cmd --random_blur_variation '$test_random_blur_variation'"
     fi
 
     # Execute command (with or without SSH)
@@ -693,23 +729,23 @@ step_run_training() {
     # Construct command with all training, evaluation, and METADATA parameters
     # Base command (different for local vs remote)
     if [ "$EXECUTION_MODE" = "local" ]; then
-        local pipeline_base_cmd="python3 $LOCAL_DIR/run_full_pipeline.py"
+        local pipeline_base_cmd="docker exec $CONTAINER_NAME python3 $REMOTE_APP_DIR/run_full_pipeline.py"
     else
         local pipeline_base_cmd="docker exec $CONTAINER_NAME python3 $REMOTE_APP_DIR/run_full_pipeline.py"
     fi
 
     local train_pipeline_cmd="$pipeline_base_cmd \
-        --dataset_name $DATASET_NAME \
+        --dataset_name '$DATASET_NAME' \
         --skip_dataset \
-        --num_train_epochs $NUM_EPOCHS \
-        --lora_rank $LORA_RANK \
-        --lora_alpha $LORA_ALPHA \
-        --learning_rate $LEARNING_RATE \
-        --per_device_train_batch_size $BATCH_SIZE \
-        --gradient_accumulation_steps $GRAD_ACCUMULATION \
-        --save_steps $SAVE_STEPS \
-        --eval_video_fps $EVAL_VIDEO_FPS \
-        --eval_video_maxlen $EVAL_VIDEO_MAXLEN \
+        --num_train_epochs '$NUM_EPOCHS' \
+        --lora_rank '$LORA_RANK' \
+        --lora_alpha '$LORA_ALPHA' \
+        --learning_rate '$LEARNING_RATE' \
+        --per_device_train_batch_size '$BATCH_SIZE' \
+        --gradient_accumulation_steps '$GRAD_ACCUMULATION' \
+        --save_steps '$SAVE_STEPS' \
+        --eval_video_fps '$EVAL_VIDEO_FPS' \
+        --eval_video_maxlen '$EVAL_VIDEO_MAXLEN' \
         --train_texture_type '$TRAIN_TEXTURE_TYPE' \
         --train_direction '$TRAIN_DIRECTION' \
         --train_view_angle '$TRAIN_VIEW_ANGLES' \
@@ -797,20 +833,20 @@ step_retrieve_results() {
 
     log_info "Retrieving experiments_log.csv..."
     run_cmd "rsync -avz --progress \
-        '$SERVER_SSH:$REMOTE_APP_DIR/experiments_log.csv' \
-        '$LOCAL_DIR/'" \
+        '$SERVER_SSH:$REMOTE_HOST_DIR/data/experiments_log.csv' \
+        '$LOCAL_DIR/data/'" \
         "Downloading CSV..."
 
     log_info "Retrieving evaluation reports..."
     run_cmd "rsync -avz --progress \
-        '$SERVER_SSH:$REMOTE_APP_DIR/evaluation_results_*/' \
+        '$SERVER_SSH:$REMOTE_HOST_DIR/evaluation_results_*/' \
         '$RESULTS_DIR/'" \
         "Downloading evaluation results..."
 
     if [ "$RETRIEVE_MODELS" = true ]; then
         log_info "Retrieving trained models..."
         run_cmd "rsync -avz --progress \
-            '$SERVER_SSH:$REMOTE_APP_DIR/saves/' \
+            '$SERVER_SSH:$REMOTE_HOST_DIR/saves/' \
             '$RESULTS_DIR/models/'" \
             "Downloading model files..."
     fi
@@ -930,8 +966,8 @@ EOF
         log_warning "DRY RUN MODE - No commands will be executed"
     fi
 
-    # Confirmation prompt (unless dry run)
-    if [ "$DRY_RUN" = false ]; then
+    # Confirmation prompt (unless dry run or --yes flag)
+    if [ "$DRY_RUN" = false ] && [ "$YES_TO_ALL" = false ]; then
         echo -e "\n${YELLOW}Proceed with experiment? (y/N)${NC} "
         read -r response
         if [[ ! "$response" =~ ^[Yy]$ ]]; then
