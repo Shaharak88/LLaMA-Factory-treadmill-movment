@@ -28,6 +28,15 @@
 #For every change you make in this file or in this ENTIRE project : do that change, make sure no other changes are needed in the code, for every change you make document it in a log file here with the changes, and commit it and add a comment about the changes in the commit.
 # DONT EVER RUN ANY SUB SCRIPT OTHER THEN THIS run_experiment.sh script!
 #dont ever sync large model files!
+#
+# HOW TO UPDATE DOCKER CONTAINER FILES (building_dataset.py, synthetic_data_generation.py):
+# The Docker container has baked-in versions of some Python files in /app/. After rsync syncs updated
+# files to the server, you need to manually copy them into the container:
+#   1. Files sync to: /home/seedoo/shahar_linux_wsl/LLaMA-Factory/
+#   2. Container runs from: /app/
+#   3. To update files in container (when building_dataset.py or synthetic_data_generation.py change):
+#      ssh seedoo@hetzner-gpu.tail9e6e7.ts.net "docker cp /home/seedoo/shahar_linux_wsl/LLaMA-Factory/building_dataset.py llamafactory:/tmp/building_dataset.py && docker cp /home/seedoo/shahar_linux_wsl/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py llamafactory:/tmp/synthetic_data_generation.py && docker exec llamafactory bash -c 'cat /tmp/building_dataset.py > /app/building_dataset.py && cat /tmp/synthetic_data_generation.py > /app/data/synthetic_treadmill/synthetic_data_generation.py && rm /tmp/building_dataset.py /tmp/synthetic_data_generation.py'"
+#   Note: We copy to /tmp first then cat to overwrite because docker cp can't overwrite locked files directly.
 
 
 
@@ -72,7 +81,7 @@ TRAIN_DURATION="12.0"
 TEST_DURATION=""
 
 # Camera/Lighting parameters
-TRAIN_BRIGHTNESS="1.0"
+TRAIN_BRIGHTNESS="0.0"
 TEST_BRIGHTNESS=""
 TRAIN_CONTRAST="1.0"
 TEST_CONTRAST=""
@@ -92,10 +101,10 @@ TRAIN_STRIPE_WIDTH="20"
 TEST_STRIPE_WIDTH=""
 TRAIN_STRIPE_SPACING="20"
 TEST_STRIPE_SPACING=""
-TRAIN_STRIPE_GRAY="20"
-TEST_STRIPE_GRAY="15"
-TRAIN_BG_GRAY="15"
-TEST_BG_GRAY="10"
+TRAIN_STRIPE_GRAY="125"
+TEST_STRIPE_GRAY="125"
+TRAIN_BG_GRAY="140"
+TEST_BG_GRAY="140"
 TRAIN_STRIPE_DISTANCE_VARIANCE="0.0"
 TEST_STRIPE_DISTANCE_VARIANCE=""
 
