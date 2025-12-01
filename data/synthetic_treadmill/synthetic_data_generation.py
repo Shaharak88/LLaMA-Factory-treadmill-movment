@@ -624,8 +624,16 @@ class ObjectPlacementGenerator:
             y = center_y
             return (x, y)
         elif position == 'random':
-            x = self.rng.randint(usable_left, usable_right)
-            y = self.rng.randint(usable_top, usable_bottom)
+            # Ensure valid bounds for randint (low must be < high)
+            if usable_right - usable_left < 2:
+                x = center_x
+            else:
+                x = self.rng.randint(usable_left, usable_right)
+
+            if usable_bottom - usable_top < 2:
+                y = center_y
+            else:
+                y = self.rng.randint(usable_top, usable_bottom)
             return (x, y)
         else:
             return (center_x, center_y)
@@ -770,22 +778,42 @@ class ObjectPlacementGenerator:
             if self.direction == 'right':
                 # Visual motion is LEFT, so start from RIGHT edge
                 x = self.width - edge_width - size_pixels
-                y = self.rng.randint(edge_height + size_pixels,
-                                    self.height - edge_height - size_pixels)
+                # Ensure valid bounds for randint
+                y_low = edge_height + size_pixels
+                y_high = self.height - edge_height - size_pixels
+                if y_high - y_low < 2:
+                    y = self.height // 2
+                else:
+                    y = self.rng.randint(y_low, y_high)
             elif self.direction == 'left':
                 # Visual motion is RIGHT, so start from LEFT edge
                 x = edge_width + size_pixels
-                y = self.rng.randint(edge_height + size_pixels,
-                                    self.height - edge_height - size_pixels)
+                # Ensure valid bounds for randint
+                y_low = edge_height + size_pixels
+                y_high = self.height - edge_height - size_pixels
+                if y_high - y_low < 2:
+                    y = self.height // 2
+                else:
+                    y = self.rng.randint(y_low, y_high)
             elif self.direction == 'down':
                 # Visual motion is UP, so start from BOTTOM edge
-                x = self.rng.randint(edge_width + size_pixels,
-                                    self.width - edge_width - size_pixels)
+                # Ensure valid bounds for randint
+                x_low = edge_width + size_pixels
+                x_high = self.width - edge_width - size_pixels
+                if x_high - x_low < 2:
+                    x = self.width // 2
+                else:
+                    x = self.rng.randint(x_low, x_high)
                 y = self.height - edge_height - size_pixels
             elif self.direction == 'up':
                 # Visual motion is DOWN, so start from TOP edge
-                x = self.rng.randint(edge_width + size_pixels,
-                                    self.width - edge_width - size_pixels)
+                # Ensure valid bounds for randint
+                x_low = edge_width + size_pixels
+                x_high = self.width - edge_width - size_pixels
+                if x_high - x_low < 2:
+                    x = self.width // 2
+                else:
+                    x = self.rng.randint(x_low, x_high)
                 y = edge_height + size_pixels
 
             # Space objects out along visual belt motion direction
@@ -1432,12 +1460,23 @@ class SyntheticVideoGenerator:
         parts = [
             f"treadmill_{video_idx:04d}",
             config['texture_type'],
+        ]
+
+        # Add stripe gray parameters for subtle_gray_stripes texture
+        if config['texture_type'] == 'subtle_gray_stripes':
+            stripe_gray = config.get('stripe_gray', 125)
+            background_gray = config.get('background_gray', 140)
+            parts.append(f"stripe{stripe_gray}")
+            parts.append(f"bg{background_gray}")
+
+        # Continue with other parameters
+        parts.extend([
             config['direction'],
             f"speed{config['speed']:.1f}",
             f"angle{config['view_angle']:.0f}",
             f"bright{config['brightness']:.2f}",
             f"contr{config['contrast']:.2f}",
-        ]
+        ])
 
         # Add object information if objects are enabled
         if config.get('add_object', False):
