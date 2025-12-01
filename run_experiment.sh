@@ -831,11 +831,25 @@ step_retrieve_results() {
     # Create results directory
     mkdir -p "$RESULTS_DIR"
 
-    log_info "Retrieving experiments_log.csv..."
-    run_cmd "rsync -avz --progress \
-        '$SERVER_SSH:$REMOTE_HOST_DIR/data/experiments_log.csv' \
-        '$LOCAL_DIR/data/'" \
-        "Downloading CSV..."
+    log_info "Retrieving new experiment results from server CSV..."
+    # Get the last line from the CSV inside the Docker container (newest experiment)
+    # Then append it to the local CSV file (don't overwrite)
+    REMOTE_CSV_TAIL=$(ssh "$SERVER_SSH" "docker exec llamafactory tail -n 1 /app/data/experiments_log.csv" 2>/dev/null)
+
+    if [ -n "$REMOTE_CSV_TAIL" ]; then
+        # Ensure local CSV exists
+        if [ ! -f "$LOCAL_DIR/data/experiments_log.csv" ]; then
+            log_warning "Local CSV does not exist, creating with header..."
+            # Get the header from the remote CSV
+            ssh "$SERVER_SSH" "docker exec llamafactory head -n 1 /app/data/experiments_log.csv" > "$LOCAL_DIR/data/experiments_log.csv"
+        fi
+
+        # Append the new experiment line to local CSV
+        echo "$REMOTE_CSV_TAIL" >> "$LOCAL_DIR/data/experiments_log.csv"
+        log_success "Appended new experiment to local CSV"
+    else
+        log_warning "Could not retrieve experiment results from server CSV"
+    fi
 
     log_info "Retrieving evaluation reports..."
     run_cmd "rsync -avz --progress \

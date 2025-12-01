@@ -151,6 +151,8 @@ class ExperimentTracker:
         # Results - Overall
         'base_model_accuracy',
         'base_model_f1_score',
+        'base_model_f1_moving',
+        'base_model_f1_stopped',
         'base_model_precision',
         'base_model_recall',
         'base_model_moving_correct',
@@ -160,6 +162,8 @@ class ExperimentTracker:
 
         'finetuned_model_accuracy',
         'finetuned_model_f1_score',
+        'finetuned_model_f1_moving',
+        'finetuned_model_f1_stopped',
         'finetuned_model_precision',
         'finetuned_model_recall',
         'finetuned_model_moving_correct',
@@ -362,6 +366,8 @@ class ExperimentTracker:
             # Results (empty initially)
             'base_model_accuracy': '',
             'base_model_f1_score': '',
+            'base_model_f1_moving': '',
+            'base_model_f1_stopped': '',
             'base_model_precision': '',
             'base_model_recall': '',
             'base_model_moving_correct': '',
@@ -371,6 +377,8 @@ class ExperimentTracker:
 
             'finetuned_model_accuracy': '',
             'finetuned_model_f1_score': '',
+            'finetuned_model_f1_moving': '',
+            'finetuned_model_f1_stopped': '',
             'finetuned_model_precision': '',
             'finetuned_model_recall': '',
             'finetuned_model_moving_correct': '',
@@ -431,6 +439,8 @@ class ExperimentTracker:
         if base_results is not None:
             updates['base_model_accuracy'] = f"{base_results.get('accuracy', 0):.2f}"
             updates['base_model_f1_score'] = f"{base_results.get('f1_score', 0):.2f}"
+            updates['base_model_f1_moving'] = f"{base_results.get('f1_moving', 0):.2f}"
+            updates['base_model_f1_stopped'] = f"{base_results.get('f1_stopped', 0):.2f}"
             updates['base_model_precision'] = f"{base_results.get('precision', 0):.2f}"
             updates['base_model_recall'] = f"{base_results.get('recall', 0):.2f}"
             updates['base_model_moving_correct'] = str(base_results.get('moving', {}).get('correct', 0))
@@ -466,6 +476,8 @@ class ExperimentTracker:
         if finetuned_results is not None:
             updates['finetuned_model_accuracy'] = f"{finetuned_results.get('accuracy', 0):.2f}"
             updates['finetuned_model_f1_score'] = f"{finetuned_results.get('f1_score', 0):.2f}"
+            updates['finetuned_model_f1_moving'] = f"{finetuned_results.get('f1_moving', 0):.2f}"
+            updates['finetuned_model_f1_stopped'] = f"{finetuned_results.get('f1_stopped', 0):.2f}"
             updates['finetuned_model_precision'] = f"{finetuned_results.get('precision', 0):.2f}"
             updates['finetuned_model_recall'] = f"{finetuned_results.get('recall', 0):.2f}"
             updates['finetuned_model_moving_correct'] = str(finetuned_results.get('moving', {}).get('correct', 0))
