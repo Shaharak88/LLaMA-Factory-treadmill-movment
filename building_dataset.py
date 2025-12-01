@@ -355,6 +355,17 @@ class DatasetBuilder:
                 config['stripe_gray'] = getattr(self.args, 'stripe_gray', 125)
                 config['background_gray'] = getattr(self.args, 'background_gray', 140)
                 config['stripe_distance_variance'] = getattr(self.args, 'stripe_distance_variance', 0.0)
+                # Object placement parameters
+                config['add_object'] = getattr(self.args, 'add_object', False)
+                config['object_type'] = getattr(self.args, 'object_type', 'box')
+                config['object_position'] = getattr(self.args, 'object_position', 'center')
+                config['object_size'] = getattr(self.args, 'object_size', 'medium')
+                config['num_objects'] = getattr(self.args, 'num_objects', 1)
+                # Camera blur parameters
+                config['add_blur'] = getattr(self.args, 'add_blur', False)
+                config['blur_type'] = getattr(self.args, 'blur_type', 'gaussian')
+                config['blur_intensity'] = getattr(self.args, 'blur_intensity', '0.3')
+                config['random_blur_variation'] = getattr(self.args, 'random_blur_variation', False)
 
             configs.append(config)
 
@@ -413,6 +424,28 @@ class DatasetBuilder:
                     cmd.extend(['--background_gray', str(config['background_gray'])])
                 if 'stripe_distance_variance' in config:
                     cmd.extend(['--stripe_distance_variance', str(config['stripe_distance_variance'])])
+
+            # Add object placement parameters if enabled
+            if config.get('add_object', False):
+                cmd.append('--add-object')
+                if 'object_type' in config:
+                    cmd.extend(['--object-type', str(config['object_type'])])
+                if 'object_position' in config:
+                    cmd.extend(['--object-position', str(config['object_position'])])
+                if 'object_size' in config:
+                    cmd.extend(['--object-size', str(config['object_size'])])
+                if 'num_objects' in config:
+                    cmd.extend(['--num-objects', str(config['num_objects'])])
+
+            # Add camera blur parameters if enabled
+            if config.get('add_blur', False):
+                cmd.append('--add-blur')
+                if 'blur_type' in config:
+                    cmd.extend(['--blur-type', str(config['blur_type'])])
+                if 'blur_intensity' in config:
+                    cmd.extend(['--blur-intensity', str(config['blur_intensity'])])
+                if config.get('random_blur_variation', False):
+                    cmd.append('--random-blur-variation')
 
             try:
                 # DEBUG: Print the actual command being run
@@ -865,6 +898,28 @@ Notes:
                        help='Background gray level (0-255) for subtle_gray_stripes (default: 140). Accepts comma-separated values (e.g., 135,140,145)')
     parser.add_argument('--stripe_distance_variance', type=str, default='0.0',
                        help='Variance (std dev) for stripe spacing in subtle_gray_stripes (default: 0.0). Accepts comma-separated values (e.g., 0.0,5.0,10.0)')
+
+    # Object placement parameters
+    parser.add_argument('--add_object', action='store_true',
+                       help='Enable object placement on treadmill belt')
+    parser.add_argument('--object_type', type=str, default='box',
+                       help='Type of object to place (default: box). Options: box, circle, random')
+    parser.add_argument('--object_position', type=str, default='center',
+                       help='Position of object on belt (default: center). Options: center, left, right, random')
+    parser.add_argument('--object_size', type=str, default='medium',
+                       help='Size of object: small/medium/large or numeric value (default: medium)')
+    parser.add_argument('--num_objects', type=int, default=1,
+                       help='Number of objects to place (default: 1)')
+
+    # Camera blur parameters
+    parser.add_argument('--add_blur', action='store_true',
+                       help='Enable camera blur effects')
+    parser.add_argument('--blur_type', type=str, default='gaussian',
+                       help='Type of blur effect (default: gaussian). Options: motion, gaussian, random')
+    parser.add_argument('--blur_intensity', type=str, default='0.3',
+                       help='Blur intensity: light/medium/heavy or 0.0-1.0 (default: 0.3)')
+    parser.add_argument('--random_blur_variation', action='store_true',
+                       help='Add random blur intensity variation across frames')
 
     args = parser.parse_args()
 
