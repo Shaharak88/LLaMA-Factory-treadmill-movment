@@ -406,6 +406,47 @@ parse_args() {
                 GRAD_ACCUMULATION="$2"
                 shift 2
                 ;;
+            # Object parameters
+            --train-add-object)
+                TRAIN_ADD_OBJECT="$2"
+                shift 2
+                ;;
+            --train-object-type)
+                TRAIN_OBJECT_TYPE="$2"
+                shift 2
+                ;;
+            --train-object-position)
+                TRAIN_OBJECT_POSITION="$2"
+                shift 2
+                ;;
+            --train-object-size)
+                TRAIN_OBJECT_SIZE="$2"
+                shift 2
+                ;;
+            --train-num-objects)
+                TRAIN_NUM_OBJECTS="$2"
+                shift 2
+                ;;
+            --test-add-object)
+                TEST_ADD_OBJECT="$2"
+                shift 2
+                ;;
+            --test-object-type)
+                TEST_OBJECT_TYPE="$2"
+                shift 2
+                ;;
+            --test-object-position)
+                TEST_OBJECT_POSITION="$2"
+                shift 2
+                ;;
+            --test-object-size)
+                TEST_OBJECT_SIZE="$2"
+                shift 2
+                ;;
+            --test-num-objects)
+                TEST_NUM_OBJECTS="$2"
+                shift 2
+                ;;
             *)
                 log_error "Unknown option: $1"
                 show_usage
