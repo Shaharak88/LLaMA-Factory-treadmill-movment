@@ -223,6 +223,28 @@ class FullPipelineRunner:
         if hasattr(self.args, 'stripe_distance_variance') and self.args.stripe_distance_variance:
             cmd.extend(['--stripe_distance_variance', str(self.args.stripe_distance_variance)])
 
+        # Add object placement parameters if provided
+        if hasattr(self.args, 'add_object') and self.args.add_object:
+            cmd.append('--add_object')
+            if hasattr(self.args, 'object_type') and self.args.object_type:
+                cmd.extend(['--object_type', str(self.args.object_type)])
+            if hasattr(self.args, 'object_position') and self.args.object_position:
+                cmd.extend(['--object_position', str(self.args.object_position)])
+            if hasattr(self.args, 'object_size') and self.args.object_size:
+                cmd.extend(['--object_size', str(self.args.object_size)])
+            if hasattr(self.args, 'num_objects') and self.args.num_objects:
+                cmd.extend(['--num_objects', str(self.args.num_objects)])
+
+        # Add camera blur parameters if provided
+        if hasattr(self.args, 'add_blur') and self.args.add_blur:
+            cmd.append('--add_blur')
+            if hasattr(self.args, 'blur_type') and self.args.blur_type:
+                cmd.extend(['--blur_type', str(self.args.blur_type)])
+            if hasattr(self.args, 'blur_intensity') and self.args.blur_intensity:
+                cmd.extend(['--blur_intensity', str(self.args.blur_intensity)])
+            if hasattr(self.args, 'random_blur_variation') and self.args.random_blur_variation:
+                cmd.append('--random_blur_variation')
+
         return cmd
 
     def step2_train_model(self) -> None:
@@ -556,6 +578,28 @@ Notes:
                               help='Background gray level (0-255) for subtle_gray_stripes (default: 140). Supports comma-separated values.')
     dataset_group.add_argument('--stripe_distance_variance', type=str, default='0.0',
                               help='Variance (std dev) for stripe spacing in subtle_gray_stripes (default: 0.0). Supports comma-separated values.')
+
+    # Object placement parameters
+    dataset_group.add_argument('--add_object', action='store_true',
+                              help='Enable object placement on treadmill belt')
+    dataset_group.add_argument('--object_type', type=str, default='box',
+                              help='Type of object to place (default: box). Options: box, circle, random')
+    dataset_group.add_argument('--object_position', type=str, default='center',
+                              help='Position of object on belt (default: center). Options: center, left, right, random')
+    dataset_group.add_argument('--object_size', type=str, default='medium',
+                              help='Size of object: small/medium/large or numeric value (default: medium)')
+    dataset_group.add_argument('--num_objects', type=int, default=1,
+                              help='Number of objects to place (default: 1)')
+
+    # Camera blur parameters
+    dataset_group.add_argument('--add_blur', action='store_true',
+                              help='Enable camera blur effects')
+    dataset_group.add_argument('--blur_type', type=str, default='gaussian',
+                              help='Type of blur effect (default: gaussian). Options: motion, gaussian, random')
+    dataset_group.add_argument('--blur_intensity', type=str, default='0.3',
+                              help='Blur intensity: light/medium/heavy or 0.0-1.0 (default: 0.3)')
+    dataset_group.add_argument('--random_blur_variation', action='store_true',
+                              help='Add random blur intensity variation across frames')
 
     # Dataset Metadata (for CSV tracking - separate train/test parameters)
     metadata_group = parser.add_argument_group('Dataset Metadata',
