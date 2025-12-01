@@ -813,8 +813,8 @@ Notes:
                        help='Output directory for videos (default: data/<dataset_name>)')
     parser.add_argument('--num_videos', type=int, default=10,
                        help='Total number of videos to generate (default: 10)')
-    parser.add_argument('--train_split', type=float, default=0.8,
-                       help='Training split ratio (default: 0.8) - for future use')
+    parser.add_argument('--train_split', type=float, default=1.0,
+                       help='Training split ratio (default: 1.0 = 100%% of data used) - for future use')
     parser.add_argument('--moving_ratio', type=float, default=0.5,
                        help='Ratio of moving videos (default: 0.5 = 50%% moving, 50%% stopped)')
     parser.add_argument('--seed', type=int, default=42,
@@ -831,10 +831,10 @@ Notes:
                        help='Speed values as comma-separated list (default: 1.0,8.0 for min,max). Can specify multiple speeds (e.g., 2.0,4.0,6.0)')
     parser.add_argument('--resolution', type=str, default='640x480',
                        help='Video resolution as WxH (default: 640x480). Accepts comma-separated values (e.g., 640x480,800x600)')
-    parser.add_argument('--fps', type=str, default='30',
-                       help='Frames per second (default: 30). Accepts comma-separated values (e.g., 15,30)')
-    parser.add_argument('--duration', type=str, default='5.0',
-                       help='Video duration in seconds (default: 5.0). Accepts comma-separated values (e.g., 3.0,5.0)')
+    parser.add_argument('--fps', type=str, default='4',
+                       help='Frames per second (default: 4). Accepts comma-separated values (e.g., 4,8,15)')
+    parser.add_argument('--duration', type=str, default='12.0',
+                       help='Video duration in seconds (default: 12.0). Accepts comma-separated values (e.g., 10.0,12.0)')
 
     # Camera/lighting parameters
     parser.add_argument('--view_angle', type=str, default='0.0',

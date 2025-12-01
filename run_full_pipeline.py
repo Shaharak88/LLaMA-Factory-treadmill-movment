@@ -64,7 +64,7 @@ class FullPipelineRunner:
         self.lora_output_dir = args.lora_output_dir
 
         # Initialize experiment tracker
-        self.tracker = ExperimentTracker(csv_path='experiments_log.csv')
+        self.tracker = ExperimentTracker(csv_path='data/experiments_log.csv')
         self.evaluation_output_dir = f'evaluation_results_{self.timestamp}'
 
     def run_command(self, cmd: List[str], description: str, timeout: int = None) -> None:
@@ -510,8 +510,8 @@ Notes:
     dataset_group = parser.add_argument_group('Dataset Generation')
     dataset_group.add_argument('--num_videos', type=int, default=100,
                               help='Total number of videos to generate (default: 100)')
-    dataset_group.add_argument('--train_split', type=float, default=0.9,
-                              help='Training split ratio (default: 0.9 = 90%% train, 10%% test)')
+    dataset_group.add_argument('--train_split', type=float, default=1.0,
+                              help='Training split ratio (default: 1.0 = 100%% of data used) - parameter not implemented')
     dataset_group.add_argument('--seed', type=int, default=42,
                               help='Random seed for reproducibility (default: 42)')
     dataset_group.add_argument('--vary_parameters', action='store_true',
@@ -524,10 +524,10 @@ Notes:
                               help='Speed range (default: 1.0,8.0). Supports comma-separated values')
     dataset_group.add_argument('--resolution', type=str, default='640x480',
                               help='Video resolution (default: 640x480)')
-    dataset_group.add_argument('--fps', type=str, default='30',
-                              help='Frames per second (default: 30)')
-    dataset_group.add_argument('--duration', type=str, default='5.0',
-                              help='Video duration in seconds (default: 5.0)')
+    dataset_group.add_argument('--fps', type=str, default='4',
+                              help='Frames per second (default: 4)')
+    dataset_group.add_argument('--duration', type=str, default='12.0',
+                              help='Video duration in seconds (default: 12.0)')
     dataset_group.add_argument('--view_angle', type=str, default='0.0',
                               help='Camera viewing angle in degrees (default: 0.0)')
     dataset_group.add_argument('--brightness', type=str, default='0.0',
@@ -582,14 +582,14 @@ Notes:
     metadata_group.add_argument('--train_background_gray', type=str, default='', help='Training background gray (for tracking)')
     metadata_group.add_argument('--train_stripe_distance_variance', type=str, default='', help='Training stripe variance (for tracking)')
     metadata_group.add_argument('--train_add_object', type=str, default='', help='Training add object flag (for tracking)')
-    metadata_group.add_argument('--train_object_type', type=str, default='', help='Training object type (for tracking)')
-    metadata_group.add_argument('--train_object_position', type=str, default='', help='Training object position (for tracking)')
-    metadata_group.add_argument('--train_object_size', type=str, default='', help='Training object size (for tracking)')
-    metadata_group.add_argument('--train_num_objects', type=str, default='', help='Training num objects (for tracking)')
-    metadata_group.add_argument('--train_add_blur', type=str, default='', help='Training add blur flag (for tracking)')
-    metadata_group.add_argument('--train_blur_type', type=str, default='', help='Training blur type (for tracking)')
-    metadata_group.add_argument('--train_blur_intensity', type=str, default='', help='Training blur intensity (for tracking)')
-    metadata_group.add_argument('--train_random_blur_variation', type=str, default='', help='Training random blur variation (for tracking)')
+    metadata_group.add_argument('--train_object_type', type=str, nargs='?', default='', help='Training object type (for tracking)')
+    metadata_group.add_argument('--train_object_position', type=str, nargs='?', default='', help='Training object position (for tracking)')
+    metadata_group.add_argument('--train_object_size', type=str, nargs='?', default='', help='Training object size (for tracking)')
+    metadata_group.add_argument('--train_num_objects', type=str, nargs='?', default='', help='Training num objects (for tracking)')
+    metadata_group.add_argument('--train_add_blur', type=str, nargs='?', default='', help='Training add blur flag (for tracking)')
+    metadata_group.add_argument('--train_blur_type', type=str, nargs='?', default='', help='Training blur type (for tracking)')
+    metadata_group.add_argument('--train_blur_intensity', type=str, nargs='?', default='', help='Training blur intensity (for tracking)')
+    metadata_group.add_argument('--train_random_blur_variation', type=str, nargs='?', default='', help='Training random blur variation (for tracking)')
     metadata_group.add_argument('--train_vary_parameters', type=str, default='', help='Training vary parameters (for tracking)')
     # Test dataset metadata
     metadata_group.add_argument('--test_texture_type', type=str, default='', help='Test texture type (for tracking)')
@@ -612,14 +612,14 @@ Notes:
     metadata_group.add_argument('--test_background_gray', type=str, default='', help='Test background gray (for tracking)')
     metadata_group.add_argument('--test_stripe_distance_variance', type=str, default='', help='Test stripe variance (for tracking)')
     metadata_group.add_argument('--test_add_object', type=str, default='', help='Test add object flag (for tracking)')
-    metadata_group.add_argument('--test_object_type', type=str, default='', help='Test object type (for tracking)')
-    metadata_group.add_argument('--test_object_position', type=str, default='', help='Test object position (for tracking)')
-    metadata_group.add_argument('--test_object_size', type=str, default='', help='Test object size (for tracking)')
-    metadata_group.add_argument('--test_num_objects', type=str, default='', help='Test num objects (for tracking)')
-    metadata_group.add_argument('--test_add_blur', type=str, default='', help='Test add blur flag (for tracking)')
-    metadata_group.add_argument('--test_blur_type', type=str, default='', help='Test blur type (for tracking)')
-    metadata_group.add_argument('--test_blur_intensity', type=str, default='', help='Test blur intensity (for tracking)')
-    metadata_group.add_argument('--test_random_blur_variation', type=str, default='', help='Test random blur variation (for tracking)')
+    metadata_group.add_argument('--test_object_type', type=str, nargs='?', default='', help='Test object type (for tracking)')
+    metadata_group.add_argument('--test_object_position', type=str, nargs='?', default='', help='Test object position (for tracking)')
+    metadata_group.add_argument('--test_object_size', type=str, nargs='?', default='', help='Test object size (for tracking)')
+    metadata_group.add_argument('--test_num_objects', type=str, nargs='?', default='', help='Test num objects (for tracking)')
+    metadata_group.add_argument('--test_add_blur', type=str, nargs='?', default='', help='Test add blur flag (for tracking)')
+    metadata_group.add_argument('--test_blur_type', type=str, nargs='?', default='', help='Test blur type (for tracking)')
+    metadata_group.add_argument('--test_blur_intensity', type=str, nargs='?', default='', help='Test blur intensity (for tracking)')
+    metadata_group.add_argument('--test_random_blur_variation', type=str, nargs='?', default='', help='Test random blur variation (for tracking)')
     metadata_group.add_argument('--test_vary_parameters', type=str, default='', help='Test vary parameters (for tracking)')
 
     # Model configuration
