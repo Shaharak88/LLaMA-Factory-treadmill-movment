@@ -76,7 +76,7 @@ python generate_local_video_report.py data/YOUR_DATASET_metadata_*.csv
 Or just double-click: **`GENERATE_VIDEO_REPORT.bat`**
 
 ### Step 3: View Report
-Double-click the generated HTML file (e.g., `_exp_20251201_172008_train_local_report.html`)
+Double-click the generated HTML file in `analytics/reports/` directory (e.g., `analytics/reports/_exp_20251201_172008_train_enhanced_report.html`)
 
 Videos will play directly in your browser!
 
@@ -92,7 +92,7 @@ Videos will play directly in your browser!
 ### Data Files
 - **`data/*_metadata_*.csv`** - Metadata CSV files
 - **`data/videos/{dataset}/`** - Downloaded video files
-- **`*_local_report.html`** - Generated HTML reports
+- **`analytics/reports/*_enhanced_report.html`** - Generated HTML reports (auto-created in analytics/reports/)
 
 ---
 
@@ -180,17 +180,17 @@ python generate_local_video_report.py data/metadata.csv --output my_report.html
 
 ```
 ======================================================================
-📹 GENERATE LOCAL VIDEO REPORT WITH ABSOLUTE PATHS
+📹 GENERATE ENHANCED VIDEO REPORT
 ======================================================================
 Input CSV: data/_exp_20251201_172008_train_metadata_20251202_123827.csv
-Output HTML: _exp_20251201_172008_train_local_report.html
+Output HTML: analytics/reports/_exp_20251201_172008_train_enhanced_report.html
 ======================================================================
 
 📋 Loading metadata...
 📊 Analyzing dataset...
 🎨 Generating HTML report...
 
-✅ Generated: _exp_20251201_172008_train_local_report.html
+✅ Generated: analytics/reports/_exp_20251201_172008_train_enhanced_report.html
 
 📹 Video Statistics:
    Total: 9
@@ -200,12 +200,12 @@ Output HTML: _exp_20251201_172008_train_local_report.html
 ======================================================================
 ✅ COMPLETE!
 ======================================================================
-📄 Report: _exp_20251201_172008_train_local_report.html
+📄 Report: analytics/reports/_exp_20251201_172008_train_enhanced_report.html
 ======================================================================
 
 🎬 TO VIEW THE REPORT:
 
-   Simply double-click the file: _exp_20251201_172008_train_local_report.html
+   Simply double-click the file: analytics/reports/_exp_20251201_172008_train_enhanced_report.html
    Or open it in your browser directly
 
    The videos will play using absolute file:// paths
@@ -237,7 +237,7 @@ python generate_local_video_report.py data/*_metadata_*.csv
 
 ### View Report:
 ```
-Double-click: *_local_report.html
+Double-click: analytics/reports/*_enhanced_report.html
 ```
 
 That's it! 🎉
