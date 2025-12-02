@@ -1728,8 +1728,8 @@ def generate_varied_configs(base_config: dict, num_videos: int) -> list:
         # Vary view angle (-30 to 30)
         config['view_angle'] = rng.uniform(-30, 30)
 
-        # Vary brightness (-0.2 to 0.2)
-        config['brightness'] = rng.uniform(-0.2, 0.2)
+        # Vary brightness (-0.1 to 0.2) - range adjusted to prevent dark textures from becoming invisible
+        config['brightness'] = rng.uniform(-0.1, 0.2)
 
         # Vary contrast (0.7 to 1.3)
         config['contrast'] = rng.uniform(0.7, 1.3)
@@ -1763,8 +1763,10 @@ def main():
     args = parse_arguments()
 
     # Validate and cap brightness/contrast to prevent extreme values
+    # MIN_BRIGHTNESS set to -0.1 to prevent videos from becoming too dark/invisible
+    # (testing showed brightness=-0.2 makes factory_dark textures completely black)
     MAX_BRIGHTNESS = 0.3
-    MIN_BRIGHTNESS = -0.3
+    MIN_BRIGHTNESS = -0.1
     MAX_CONTRAST = 1.5
     MIN_CONTRAST = 0.6
 

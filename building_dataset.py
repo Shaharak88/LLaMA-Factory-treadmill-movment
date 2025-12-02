@@ -330,7 +330,8 @@ class DatasetBuilder:
                 config['direction'] = self.rng.choice(directions)
                 config['speed'] = self.rng.uniform(speed_min, speed_max) if is_moving else 0.0
                 config['view_angle'] = self.rng.uniform(-30, 30)
-                config['brightness'] = self.rng.uniform(-0.2, 0.2)
+                # Brightness range changed from -0.2 to -0.1 to prevent dark textures from becoming invisible
+                config['brightness'] = self.rng.uniform(-0.1, 0.2)
                 config['contrast'] = self.rng.uniform(0.7, 1.3)
                 config['lighting_variation'] = self.rng.choice(lighting_types)
                 config['lighting_intensity'] = self.rng.uniform(0.3, 0.8)
