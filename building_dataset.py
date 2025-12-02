@@ -660,7 +660,8 @@ class DatasetBuilder:
                 "content_tag": "content",
                 "user_tag": "user",
                 "assistant_tag": "assistant"
-            }
+            },
+            "media_dir": str(self.output_dir)
         }
 
         # Write updated dataset_info.json
