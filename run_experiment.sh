@@ -223,6 +223,28 @@ EXPERIMENT PARAMETERS:
     --test-bg-gray VALS     Test background gray (default: 10,11,12)
     --test-stripe-gray V    Test stripe gray (default: 15,16,17)
 
+    # Object placement parameters
+    --train-add-object BOOL Train: Enable object placement (true/false, default: false)
+    --train-object-type T   Train: Object type (box/circle/random, default: box)
+    --train-object-position Train: Object position (center/left/right/random)
+    --train-object-size S   Train: Object size (small/medium/large or numeric)
+    --train-num-objects N   Train: Number of objects (default: 1)
+    --test-add-object BOOL  Test: Enable object placement (true/false, default: false)
+    --test-object-type T    Test: Object type (box/circle/random, default: box)
+    --test-object-position  Test: Object position (center/left/right/random)
+    --test-object-size S    Test: Object size (small/medium/large or numeric)
+    --test-num-objects N    Test: Number of objects (default: 1)
+
+    # Camera blur parameters
+    --train-add-blur BOOL   Train: Enable camera blur (true/false, default: false)
+    --train-blur-type T     Train: Blur type (motion/gaussian/random, default: gaussian)
+    --train-blur-intensity  Train: Blur intensity (light/medium/heavy or 0.0-1.0)
+    --train-random-blur-variation  Train: Random blur variation (true/false)
+    --test-add-blur BOOL    Test: Enable camera blur (true/false, default: false)
+    --test-blur-type T      Test: Blur type (motion/gaussian/random, default: gaussian)
+    --test-blur-intensity   Test: Blur intensity (light/medium/heavy or 0.0-1.0)
+    --test-random-blur-variation   Test: Random blur variation (true/false)
+
     # Common parameters (both train and test)
     --texture TYPE          Set both train and test texture (shortcut)
     --angles ANGLES         Set both train and test angles (shortcut)
@@ -454,6 +476,39 @@ parse_args() {
                 ;;
             --test-num-objects)
                 TEST_NUM_OBJECTS="$2"
+                shift 2
+                ;;
+            # Blur parameters
+            --train-add-blur)
+                TRAIN_ADD_BLUR="$2"
+                shift 2
+                ;;
+            --train-blur-type)
+                TRAIN_BLUR_TYPE="$2"
+                shift 2
+                ;;
+            --train-blur-intensity)
+                TRAIN_BLUR_INTENSITY="$2"
+                shift 2
+                ;;
+            --train-random-blur-variation)
+                TRAIN_RANDOM_BLUR_VARIATION="$2"
+                shift 2
+                ;;
+            --test-add-blur)
+                TEST_ADD_BLUR="$2"
+                shift 2
+                ;;
+            --test-blur-type)
+                TEST_BLUR_TYPE="$2"
+                shift 2
+                ;;
+            --test-blur-intensity)
+                TEST_BLUR_INTENSITY="$2"
+                shift 2
+                ;;
+            --test-random-blur-variation)
+                TEST_RANDOM_BLUR_VARIATION="$2"
                 shift 2
                 ;;
             *)
