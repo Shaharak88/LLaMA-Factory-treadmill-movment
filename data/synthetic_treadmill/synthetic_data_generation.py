@@ -1784,6 +1784,20 @@ def main():
         print(f"WARNING: Contrast {args.contrast} below minimum {MIN_CONTRAST}. Capping to {MIN_CONTRAST}.")
         args.contrast = MIN_CONTRAST
 
+    # Validate and cap edge_width to prevent overlay covering entire frame
+    # edge_width is a percentage of frame width (valid range: 0.05 to 0.2 = 5% to 20%)
+    # Values >= 1.0 would cover entire frame with dark overlay (bug that caused invisible videos)
+    MAX_EDGE_WIDTH = 0.2
+    MIN_EDGE_WIDTH = 0.05
+
+    if args.edge_width > MAX_EDGE_WIDTH:
+        print(f"WARNING: edge_width {args.edge_width} exceeds maximum {MAX_EDGE_WIDTH} (20% of frame). Capping to {MAX_EDGE_WIDTH}.")
+        print(f"         Note: edge_width >= 1.0 would cover entire frame with overlay, making videos invisible!")
+        args.edge_width = MAX_EDGE_WIDTH
+    elif args.edge_width < MIN_EDGE_WIDTH:
+        print(f"WARNING: edge_width {args.edge_width} below minimum {MIN_EDGE_WIDTH} (5% of frame). Capping to {MIN_EDGE_WIDTH}.")
+        args.edge_width = MIN_EDGE_WIDTH
+
     # Parse resolution and color
     width, height = parse_resolution(args.resolution)
     bg_color = parse_color(args.background_color)
