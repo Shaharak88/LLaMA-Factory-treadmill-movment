@@ -1123,10 +1123,7 @@ def main():
     if args.output is None:
         csv_basename = os.path.basename(args.metadata_csv)
         csv_name = csv_basename.replace('_metadata', '').replace('.csv', '')
-        # Create analytics/reports directory if it doesn't exist
-        reports_dir = "analytics/reports"
-        os.makedirs(reports_dir, exist_ok=True)
-        args.output = f"{reports_dir}/{csv_name}_enhanced_report.html"
+        args.output = f"{csv_name}_enhanced_report.html"
 
     print("=" * 70)
     print("📹 GENERATE ENHANCED VIDEO REPORT")
