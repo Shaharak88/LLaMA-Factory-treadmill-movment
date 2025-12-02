@@ -1762,6 +1762,26 @@ def main():
     # Parse arguments
     args = parse_arguments()
 
+    # Validate and cap brightness/contrast to prevent extreme values
+    MAX_BRIGHTNESS = 0.3
+    MIN_BRIGHTNESS = -0.3
+    MAX_CONTRAST = 1.5
+    MIN_CONTRAST = 0.6
+
+    if args.brightness > MAX_BRIGHTNESS:
+        print(f"WARNING: Brightness {args.brightness} exceeds maximum {MAX_BRIGHTNESS}. Capping to {MAX_BRIGHTNESS}.")
+        args.brightness = MAX_BRIGHTNESS
+    elif args.brightness < MIN_BRIGHTNESS:
+        print(f"WARNING: Brightness {args.brightness} below minimum {MIN_BRIGHTNESS}. Capping to {MIN_BRIGHTNESS}.")
+        args.brightness = MIN_BRIGHTNESS
+
+    if args.contrast > MAX_CONTRAST:
+        print(f"WARNING: Contrast {args.contrast} exceeds maximum {MAX_CONTRAST}. Capping to {MAX_CONTRAST}.")
+        args.contrast = MAX_CONTRAST
+    elif args.contrast < MIN_CONTRAST:
+        print(f"WARNING: Contrast {args.contrast} below minimum {MIN_CONTRAST}. Capping to {MIN_CONTRAST}.")
+        args.contrast = MIN_CONTRAST
+
     # Parse resolution and color
     width, height = parse_resolution(args.resolution)
     bg_color = parse_color(args.background_color)
