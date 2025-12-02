@@ -340,8 +340,21 @@ class DatasetBuilder:
             else:
                 # Use provided parameters
                 config['texture_type'] = getattr(self.args, 'texture_type', 'stripes')
-                config['direction'] = getattr(self.args, 'direction', 'right')
-                config['speed'] = self.rng.uniform(speed_min, speed_max) if is_moving else 0.0
+                # Parse comma-separated directions and cycle through them deterministically
+                direction_str = getattr(self.args, 'direction', 'right')
+                if ',' in direction_str:
+                    direction_list = [d.strip() for d in direction_str.split(',')]
+                    config['direction'] = direction_list[i % len(direction_list)]
+                else:
+                    config['direction'] = direction_str
+                # Cycle through speed values deterministically (no randomness)
+                if is_moving:
+                    # Create evenly spaced speed values
+                    num_speed_steps = max(count, 4)  # At least 4 different speeds
+                    speed_step = (speed_max - speed_min) / num_speed_steps
+                    config['speed'] = speed_min + (i % num_speed_steps) * speed_step
+                else:
+                    config['speed'] = 0.0
                 config['view_angle'] = getattr(self.args, 'view_angle', 0.0)
                 config['brightness'] = getattr(self.args, 'brightness', 0.0)
                 config['contrast'] = getattr(self.args, 'contrast', 1.0)
@@ -599,12 +612,12 @@ class DatasetBuilder:
             Dict: Dataset entry
         """
         # Simple, compact prompts and responses
-        user_prompt = "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+        user_prompt = "<video>Is there movement in the video? Answer only with yes or no."
 
         if is_moving:
-            assistant_response = "The treadmill belt is moving."
+            assistant_response = "yes"
         else:
-            assistant_response = "The treadmill belt is stopped."
+            assistant_response = "no"
 
         return {
             "messages": [
