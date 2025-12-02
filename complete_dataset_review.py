@@ -308,6 +308,84 @@ def download_videos(dataset_name: str, server: str, remote_base: str,
 
 
 # ============================================================================
+# STEP 2.5: CONVERT VIDEOS TO H264 CODEC
+# ============================================================================
+
+def convert_videos_to_h264(video_dir: str, parallel_jobs: int = 8) -> None:
+    """Convert all videos in directory from mpeg4 to h264 codec for browser compatibility."""
+    video_files = list(Path(video_dir).glob('*.mp4'))
+
+    if not video_files:
+        print("\n⚠️  No videos to convert")
+        return
+
+    print(f"\n🎬 Converting videos to H.264 codec...")
+    print(f"   Directory: {video_dir}")
+    print(f"   Videos: {len(video_files)}")
+    print(f"   Parallel jobs: {parallel_jobs}")
+
+    # Check if conversion is needed
+    sample_file = video_files[0]
+    result = subprocess.run(
+        ['ffprobe', '-v', 'error', '-select_streams', 'v:0',
+         '-show_entries', 'stream=codec_name', '-of',
+         'default=noprint_wrappers=1:nokey=1', str(sample_file)],
+        capture_output=True, text=True
+    )
+
+    if result.stdout.strip() == 'h264':
+        print("   ✅ Videos already in H.264 format")
+        return
+
+    print(f"   Converting from {result.stdout.strip()} to h264...")
+
+    # Create temp directory for converted videos
+    temp_dir = Path(video_dir).parent / f"{Path(video_dir).name}_h264_temp"
+    temp_dir.mkdir(exist_ok=True)
+
+    # Convert videos in parallel
+    converted_count = 0
+    failed_count = 0
+
+    for i, video_file in enumerate(video_files, 1):
+        output_file = temp_dir / video_file.name
+
+        cmd = [
+            'ffmpeg', '-i', str(video_file),
+            '-c:v', 'libx264', '-preset', 'fast', '-crf', '23',
+            '-pix_fmt', 'yuv420p', '-c:a', 'copy',
+            str(output_file), '-y', '-loglevel', 'error'
+        ]
+
+        result = subprocess.run(cmd, capture_output=True, text=True)
+
+        if result.returncode == 0 and output_file.exists():
+            converted_count += 1
+            print(f"   [{i}/{len(video_files)}] ✅ {video_file.name}")
+        else:
+            failed_count += 1
+            print(f"   [{i}/{len(video_files)}] ❌ {video_file.name}")
+
+    if converted_count > 0:
+        # Replace original videos with converted ones
+        print(f"\n   Replacing original videos...")
+        for video_file in video_files:
+            video_file.unlink()
+
+        for converted_file in temp_dir.glob('*.mp4'):
+            converted_file.rename(Path(video_dir) / converted_file.name)
+
+        temp_dir.rmdir()
+        print(f"   ✅ Converted {converted_count}/{len(video_files)} videos to H.264")
+
+        if failed_count > 0:
+            print(f"   ⚠️  Failed to convert {failed_count} videos")
+    else:
+        print(f"\n   ❌ Conversion failed for all videos")
+        temp_dir.rmdir()
+
+
+# ============================================================================
 # STEP 3: GENERATE INTERACTIVE HTML REPORT
 # ============================================================================
 
@@ -995,7 +1073,34 @@ def main():
         print("\n⏭️  Skipping download")
         local_video_path = os.path.join(args.video_dir, args.dataset_name)
 
-    # Step 3: Generate HTML report
+    # Step 2.5: Convert videos to H.264 for browser compatibility
+    convert_videos_to_h264(local_video_path)
+
+    # Step 3: Call enhanced report generation
+    print(f"\n📊 Generating enhanced video report...")
+    try:
+        import sys
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        from generate_enhanced_video_report import main as generate_enhanced_report
+
+        # Find the metadata CSV
+        csv_files = list(Path(args.metadata_dir).glob(f"{args.dataset_name}_metadata_*.csv"))
+        if csv_files:
+            # Sort by modification time and get the most recent
+            csv_files.sort(key=lambda x: x.stat().st_mtime, reverse=True)
+            metadata_csv = str(csv_files[0])
+
+            # Generate enhanced report
+            sys.argv = ['generate_enhanced_video_report.py', metadata_csv]
+            generate_enhanced_report()
+            print(f"   ✅ Enhanced report generated")
+        else:
+            print(f"   ⚠️  No metadata CSV found, skipping enhanced report")
+    except Exception as e:
+        print(f"   ⚠️  Could not generate enhanced report: {e}")
+        print(f"   Falling back to basic report")
+
+    # Step 4: Generate basic HTML report (fallback)
     output_dir = os.path.dirname(os.path.abspath(args.output))
     local_video_abs = os.path.abspath(local_video_path)
     video_url = os.path.relpath(local_video_abs, output_dir)
