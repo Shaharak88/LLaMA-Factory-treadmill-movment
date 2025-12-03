@@ -166,7 +166,7 @@ class SimpleEvaluator:
                             "min_pixels": 224 * 224,
                             "max_pixels": 384 * 384
                         },
-                        {"type": "text", "text": "Analyze this video. Is the treadmill belt moving or stopped?"}
+                        {"type": "text", "text": "Is there movement in the video? Answer only with yes or no."}
                     ]
                 }
             ]
@@ -309,36 +309,27 @@ class SimpleEvaluator:
     def _is_moving(self, text: str) -> bool:
         """
         Determine if text indicates moving.
-        Searches for yes/no answers as well as legacy moving/stopped keywords.
+        Only checks for yes/no answers to match the training format.
         """
         text = text.lower().strip()
 
-        # Primary: Check for yes/no answers (new format)
-        # Look for "yes" indicating movement
+        # Check for "yes" indicating movement (primary check)
         if text.startswith('yes') or text == 'yes' or text == 'yes.':
             return True
 
-        # Look for "no" indicating stopped
+        # Check for "no" indicating stopped (primary check)
         if text.startswith('no') or text == 'no' or text == 'no.':
             return False
 
-        # Also check for yes/no anywhere in the response (more robust)
-        # But avoid false positives like "yes, the belt is stopped"
+        # Check for yes/no anywhere in the response (more robust)
         if 'yes' in text and 'no' not in text:
-            # Make sure it's not "yes, stopped" or similar
-            if 'stopped' not in text and 'stationary' not in text:
-                return True
+            return True
 
         if 'no' in text and 'yes' not in text:
             return False
 
-        # Fallback: Legacy keywords for backward compatibility
-        if 'moving' in text and 'not moving' not in text and 'stopped' not in text:
-            return True
-        if 'stopped' in text or 'stationary' in text or 'not moving' in text:
-            return False
-
         # Default to stopped if completely unclear
+        logger.warning(f"Ambiguous answer (defaulting to 'no'): '{text}'")
         return False
 
     def generate_report(self, base_results, lora_results=None):
