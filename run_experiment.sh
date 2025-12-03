@@ -153,6 +153,7 @@ SKIP_DATASETS=false
 RETRIEVE_MODELS=false
 VERBOSE=false
 YES_TO_ALL=false
+DATASET_NAME=""  # Can be set via --dataset-name to reuse existing datasets
 
 ################################################################################
 # COLOR OUTPUT
@@ -203,6 +204,8 @@ OPTIONS:
     --local                 Run on local PC (default: run on remote server)
     --skip-sync             Skip syncing code to server
     --skip-datasets         Skip dataset generation (use existing datasets)
+    --dataset-name NAME     Specify existing dataset name (e.g., _exp_20251202_194605)
+                            Use with --skip-datasets to train on existing datasets
     --retrieve-models       Also retrieve trained model files
     -v, --verbose           Verbose output
 
@@ -285,8 +288,9 @@ EXAMPLES:
        --test-angles "0.0,22.5,52.0" \
        --epochs 5
 
-    # Skip dataset generation (use existing)
-    $0 --skip-datasets
+    # Reuse existing dataset with different training parameters
+    $0 --skip-datasets --dataset-name "_exp_20251202_194605" \
+       --epochs 7 --batch-size 14 --grad-accum 1
 
     # Dry run to see what would happen
     $0 --dry-run
@@ -324,6 +328,10 @@ parse_args() {
             --skip-datasets)
                 SKIP_DATASETS=true
                 shift
+                ;;
+            --dataset-name)
+                DATASET_NAME="$2"
+                shift 2
                 ;;
             --retrieve-models)
                 RETRIEVE_MODELS=true
@@ -616,6 +624,13 @@ step_sync_code() {
 
 step_build_datasets() {
     log_step "STEP 2: Building datasets"
+
+    # If dataset name is already provided, skip generation
+    if [ -n "$DATASET_NAME" ]; then
+        log_warning "Using existing dataset: $DATASET_NAME"
+        log_info "Skipping dataset generation (dataset name provided via --dataset-name)"
+        return 0
+    fi
 
     if [ "$SKIP_DATASETS" = true ]; then
         log_warning "Skipping dataset generation (--skip-datasets)"
@@ -1048,6 +1063,14 @@ EOF
         cat << EOF
 Server: $SERVER_SSH
 Container: $CONTAINER_NAME
+
+EOF
+    fi
+
+    # Show dataset name if provided
+    if [ -n "$DATASET_NAME" ]; then
+        cat << EOF
+Dataset: $DATASET_NAME (existing - reusing)
 
 EOF
     fi
