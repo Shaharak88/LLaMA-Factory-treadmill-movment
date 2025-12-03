@@ -342,27 +342,37 @@ class SimpleEvaluator:
     def _is_moving(self, text: str) -> bool:
         """
         Determine if text indicates moving.
-        Only checks for yes/no answers to match the training format.
+        Searches for yes/no answers (for yesno eval method and ground truth labels)
+        as well as moving/stopped keywords (for moving_stopped eval method).
         """
         text = text.lower().strip()
 
-        # Check for "yes" indicating movement (primary check)
+        # Primary: Check for yes/no answers (yesno format and ground truth labels)
+        # Look for "yes" indicating movement
         if text.startswith('yes') or text == 'yes' or text == 'yes.':
             return True
 
-        # Check for "no" indicating stopped (primary check)
+        # Look for "no" indicating stopped
         if text.startswith('no') or text == 'no' or text == 'no.':
             return False
 
-        # Check for yes/no anywhere in the response (more robust)
+        # Also check for yes/no anywhere in the response (more robust)
+        # But avoid false positives like "yes, the belt is stopped"
         if 'yes' in text and 'no' not in text:
-            return True
+            # Make sure it's not "yes, stopped" or similar
+            if 'stopped' not in text and 'stationary' not in text:
+                return True
 
         if 'no' in text and 'yes' not in text:
             return False
 
+        # Fallback: Check for moving/stopped keywords (for moving_stopped eval method)
+        if 'moving' in text and 'not moving' not in text and 'stopped' not in text:
+            return True
+        if 'stopped' in text or 'stationary' in text or 'not moving' in text:
+            return False
+
         # Default to stopped if completely unclear
-        logger.warning(f"Ambiguous answer (defaulting to 'no'): '{text}'")
         return False
 
     def save_per_video_csv(self, results: Dict, model_name: str) -> None:
