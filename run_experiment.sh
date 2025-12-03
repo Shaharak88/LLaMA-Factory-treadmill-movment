@@ -161,6 +161,7 @@ EXECUTION_MODE="remote"  # "local" or "remote"
 DRY_RUN=false
 SKIP_SYNC=false
 SKIP_DATASETS=false
+SKIP_TRAINING=false
 RETRIEVE_MODELS=false
 VERBOSE=false
 YES_TO_ALL=false
@@ -217,6 +218,7 @@ OPTIONS:
     --local                 Run on local PC (default: run on remote server)
     --skip-sync             Skip syncing code to server
     --skip-datasets         Skip dataset generation (use existing datasets)
+    --skip-training         Skip model training (only run evaluation on existing model)
     --dataset-name NAME     Specify existing dataset name (e.g., _exp_20251202_194605)
                             Use with --skip-datasets to train on existing datasets
     --retrieve-models       Also retrieve trained model files
@@ -307,6 +309,10 @@ EXAMPLES:
     $0 --skip-datasets --dataset-name "_exp_20251202_194605" \
        --epochs 7 --batch-size 14 --grad-accum 1
 
+    # Re-evaluate existing model with different evaluation method (skip training)
+    $0 --skip-datasets --skip-training --dataset-name "_exp_20251202_194605" \
+       --eval-method moving_stopped
+
     # Dry run to see what would happen
     $0 --dry-run
 
@@ -342,6 +348,10 @@ parse_args() {
                 ;;
             --skip-datasets)
                 SKIP_DATASETS=true
+                shift
+                ;;
+            --skip-training)
+                SKIP_TRAINING=true
                 shift
                 ;;
             --dataset-name)
@@ -895,6 +905,11 @@ step_run_training() {
         train_pipeline_cmd="$train_pipeline_cmd --use_dora"
     fi
 
+    # Add skip_training flag if enabled
+    if [ "$SKIP_TRAINING" = true ]; then
+        train_pipeline_cmd="$train_pipeline_cmd --skip_training"
+    fi
+
     # Add eval_method parameter
     train_pipeline_cmd="$train_pipeline_cmd --eval_method '$EVAL_METHOD'"
 
@@ -1129,13 +1144,13 @@ Common:
   FPS: $FPS
   Duration: $DURATION seconds
 
-Training:
+Training:$([ "$SKIP_TRAINING" = true ] && echo " SKIPPED (using existing model)" || echo "
   Adapter Type: $([ "$USE_DORA" = true ] && echo "DoRA" || echo "LoRA")
   Epochs: $NUM_EPOCHS
   LoRA Rank: $LORA_RANK / Alpha: $LORA_ALPHA
   Learning Rate: $LEARNING_RATE
   Batch Size: $BATCH_SIZE
-  Gradient Accumulation: $GRAD_ACCUMULATION
+  Gradient Accumulation: $GRAD_ACCUMULATION")
 EOF
 
     if [ "$DRY_RUN" = true ]; then
