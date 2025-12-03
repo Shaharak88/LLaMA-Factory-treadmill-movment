@@ -19,7 +19,7 @@
 ################################################################################
 ################################################################################
 #Important Notes!
-#Even when creating diffrent test and train datasets always use the run_experiment.sh bash command! for example: 
+#Even when creating diffrent test and train datasets always use the run_experiment.sh bash command! for example:
 #./run_experiment.sh --train-angles "0.0,15.0" --test-angles "7.0,22.0,35.0,30.0,45.0,52.0" --texture subtle_gray_stripes --epochs 2 --speed-range "0.0,14.0"
 #When you are running on the server read DEPLOYMENT.md!!!!
 # When running in the server dont EVER kill a running container/process or anything that is running!!
@@ -28,6 +28,12 @@
 #For every change you make in this file or in this ENTIRE project : do that change, make sure no other changes are needed in the code, for every change you make document it in a log file here with the changes, and commit it and add a comment about the changes in the commit.
 # DONT EVER RUN ANY SUB SCRIPT OTHER THEN THIS run_experiment.sh script!
 #dont ever sync large model files!
+#
+# PARAMETER NAMING CLARIFICATION:
+# - Command line flag: --train-speed (not --train-speed-range)
+# - Command line flag: --test-speed (not --test-speed-range)
+# - Internal variable names: TRAIN_SPEED_RANGE / TEST_SPEED_RANGE
+# - Example: ./run_experiment.sh --train-speed "0.0,14.0" --test-speed "0.0,14.0"
 #
 # HOW TO UPDATE DOCKER CONTAINER FILES (building_dataset.py, synthetic_data_generation.py):
 # The Docker container has baked-in versions of some Python files in /app/. After rsync syncs updated
