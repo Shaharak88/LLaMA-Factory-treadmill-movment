@@ -166,6 +166,7 @@ VERBOSE=false
 YES_TO_ALL=false
 USE_DORA=false
 DATASET_NAME=""  # Can be set via --dataset-name to reuse existing datasets
+EVAL_METHOD="yesno"  # Evaluation method: "yesno" or "moving_stopped"
 
 ################################################################################
 # COLOR OUTPUT
@@ -220,6 +221,7 @@ OPTIONS:
                             Use with --skip-datasets to train on existing datasets
     --retrieve-models       Also retrieve trained model files
     --use-dora              Use DoRA (Weight-Decomposed LoRA) instead of standard LoRA
+    --eval-method METHOD    Evaluation method: "yesno" or "moving_stopped" (default: yesno)
     -v, --verbose           Verbose output
 
 EXPERIMENT PARAMETERS:
@@ -353,6 +355,10 @@ parse_args() {
             --use-dora)
                 USE_DORA=true
                 shift
+                ;;
+            --eval-method)
+                EVAL_METHOD="$2"
+                shift 2
                 ;;
             -v|--verbose)
                 VERBOSE=true
@@ -888,6 +894,9 @@ step_run_training() {
     if [ "$USE_DORA" = true ]; then
         train_pipeline_cmd="$train_pipeline_cmd --use_dora"
     fi
+
+    # Add eval_method parameter
+    train_pipeline_cmd="$train_pipeline_cmd --eval_method '$EVAL_METHOD'"
 
     train_pipeline_cmd="$train_pipeline_cmd \
         --train_texture_type '$TRAIN_TEXTURE_TYPE' \

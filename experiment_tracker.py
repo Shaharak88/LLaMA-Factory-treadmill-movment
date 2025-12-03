@@ -132,6 +132,7 @@ class ExperimentTracker:
         'eval_steps',
 
         # Evaluation configuration
+        'eval_method',
         'eval_max_new_tokens',
         'eval_batch_size',
         'eval_video_fps',
@@ -348,6 +349,7 @@ class ExperimentTracker:
             'eval_steps': getattr(args, 'eval_steps', ''),
 
             # Evaluation configuration
+            'eval_method': getattr(args, 'eval_method', 'yesno'),
             'eval_max_new_tokens': getattr(args, 'eval_max_new_tokens', ''),
             'eval_batch_size': getattr(args, 'eval_batch_size', ''),
             'eval_video_fps': getattr(args, 'eval_video_fps', ''),

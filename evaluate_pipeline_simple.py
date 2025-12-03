@@ -22,6 +22,7 @@ from qwen_vl_utils import process_vision_info
 from peft import PeftModel
 from sklearn.metrics import f1_score, precision_score, recall_score, classification_report
 import re
+import csv
 from collections import defaultdict
 
 # Configure logging
@@ -62,15 +63,28 @@ class SimpleEvaluator:
         # Pattern: treadmill_XXXX_<texture>_<direction>_speed<X.X>_angle<X>_...
         # Capture texture (can have underscores) until we hit a known direction
         # Directions: left, right, up, down
-        match = re.search(r'treadmill_\d+_(.+?)_(left|right|up|down)_speed[\d.]+_angle(\d+)', filename)
+        match = re.search(r'treadmill_\d+_(.+?)_(left|right|up|down)_speed([\d.]+)_angle(\d+)', filename)
 
         if match:
             texture = match.group(1)
-            angle = f"angle{match.group(3)}"
-            return {'texture': texture, 'angle': angle}
+            speed = match.group(3)
+            angle = f"angle{match.group(4)}"
+            return {'texture': texture, 'angle': angle, 'speed': speed}
         else:
             logger.warning(f"Could not parse metadata from filename: {filename}")
-            return {'texture': 'unknown', 'angle': 'unknown'}
+            return {'texture': 'unknown', 'angle': 'unknown', 'speed': 'unknown'}
+
+    def get_evaluation_prompt(self) -> str:
+        """
+        Get the evaluation prompt based on eval_method.
+
+        Returns:
+            str: The prompt to use for evaluation
+        """
+        if self.args.eval_method == 'moving_stopped':
+            return "Is the treadmill belt moving or stopped?"
+        else:  # default: yesno
+            return "Is there movement in the video? Answer only with yes or no."
 
     def load_model(self, model_path: str, adapter_path: str = None):
         """Load model and processor."""
@@ -117,6 +131,11 @@ class SimpleEvaluator:
     def evaluate(self, model, processor, data: List[Dict], model_name: str) -> Dict:
         """Run evaluation loop."""
         logger.info(f"Evaluating {model_name} on {len(data)} samples...")
+        logger.info(f"Using evaluation method: {self.args.eval_method}")
+
+        # Get the prompt for this evaluation method
+        evaluation_prompt = self.get_evaluation_prompt()
+        logger.info(f"Evaluation prompt: '{evaluation_prompt}'")
 
         results = {
             'total': 0,
@@ -141,7 +160,9 @@ class SimpleEvaluator:
                 'correct': 0, 'total': 0,
                 'moving': {'total': 0, 'correct': 0},
                 'stopped': {'total': 0, 'correct': 0}
-            })
+            }),
+            # Per-video CSV data
+            'per_video_data': []
         }
         
         for i, item in enumerate(data):
@@ -154,7 +175,7 @@ class SimpleEvaluator:
             gt_text = assistant_msg['content']
             is_moving_gt = self._is_moving(gt_text)
             
-            # Prepare input
+            # Prepare input with dynamic prompt based on eval_method
             messages = [
                 {
                     "role": "user",
@@ -166,7 +187,7 @@ class SimpleEvaluator:
                             "min_pixels": 224 * 224,
                             "max_pixels": 384 * 384
                         },
-                        {"type": "text", "text": "Is there movement in the video? Answer only with yes or no."}
+                        {"type": "text", "text": evaluation_prompt}
                     ]
                 }
             ]
@@ -202,10 +223,11 @@ class SimpleEvaluator:
             is_moving_pred = self._is_moving(output_text)
             is_correct = (is_moving_gt == is_moving_pred)
 
-            # Parse metadata
+            # Parse metadata (includes speed now)
             metadata = self.parse_video_metadata(video_rel_path)
             texture = metadata['texture']
             angle = metadata['angle']
+            speed = metadata['speed']
 
             # VERBOSE LOGGING: Print EVERY video prediction
             video_filename = Path(video_rel_path).name
@@ -216,7 +238,7 @@ class SimpleEvaluator:
             logger.info(f"      Ground Truth: {gt_label}")
             logger.info(f"      Model Output: '{output_text}'")
             logger.info(f"      Predicted:    {pred_label}")
-            logger.info(f"      Texture: {texture}, Angle: {angle}")
+            logger.info(f"      Texture: {texture}, Angle: {angle}, Speed: {speed}")
             logger.info(f"")
 
             # Labels for F1 calculation: 1 = moving, 0 = stopped
@@ -258,7 +280,18 @@ class SimpleEvaluator:
                 'correct': is_correct,
                 'output': output_text,
                 'texture': texture,
-                'angle': angle
+                'angle': angle,
+                'speed': speed
+            })
+
+            # Store per-video data for CSV export
+            results['per_video_data'].append({
+                'video_path': video_rel_path,
+                'prediction': 'moving' if is_moving_pred else 'stopped',
+                'label': 'moving' if is_moving_gt else 'stopped',
+                'speed': speed,
+                'correct': is_correct,
+                'model_output': output_text
             })
 
         # Calculate overall accuracy and F1 scores
@@ -331,6 +364,26 @@ class SimpleEvaluator:
         # Default to stopped if completely unclear
         logger.warning(f"Ambiguous answer (defaulting to 'no'): '{text}'")
         return False
+
+    def save_per_video_csv(self, results: Dict, model_name: str) -> None:
+        """
+        Save per-video predictions to CSV file.
+
+        Args:
+            results: Evaluation results dictionary containing per_video_data
+            model_name: Name of the model (e.g., "base" or "finetuned")
+        """
+        csv_path = self.output_dir / f"per_video_predictions_{model_name}_{self.timestamp}.csv"
+
+        logger.info(f"Saving per-video predictions to: {csv_path}")
+
+        with open(csv_path, 'w', newline='', encoding='utf-8') as f:
+            fieldnames = ['video_path', 'prediction', 'label', 'speed', 'correct', 'model_output']
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(results['per_video_data'])
+
+        logger.info(f"  Saved {len(results['per_video_data'])} video predictions")
 
     def generate_report(self, base_results, lora_results=None):
         """Generate text report."""
@@ -428,20 +481,22 @@ class SimpleEvaluator:
     def run(self):
         try:
             data = self.load_test_data()
-            
+
             # Evaluate Base Model
             logger.info("--- Evaluating Base Model ---")
             base_model, processor = self.load_model(self.args.model_name_or_path)
             base_results = self.evaluate(base_model, processor, data, "Base Model")
+            self.save_per_video_csv(base_results, "base")
             del base_model
             torch.cuda.empty_cache()
-            
+
             lora_results = None
             if self.args.adapter_name_or_path:
                 logger.info("--- Evaluating LoRA Model ---")
                 lora_model, _ = self.load_model(self.args.model_name_or_path, self.args.adapter_name_or_path)
                 lora_results = self.evaluate(lora_model, processor, data, "LoRA Model")
-                
+                self.save_per_video_csv(lora_results, "finetuned")
+
             self.generate_report(base_results, lora_results)
             
         except Exception as e:
@@ -455,6 +510,9 @@ def parse_arguments():
     parser.add_argument('--test_dataset', type=str, required=True)
     parser.add_argument('--dataset_dir', type=str, default='data')
     parser.add_argument('--output_dir', type=str, default='evaluation_results')
+    parser.add_argument('--eval_method', type=str, default='yesno',
+                       choices=['yesno', 'moving_stopped'],
+                       help='Evaluation method: "yesno" or "moving_stopped" (default: yesno)')
     # Ignored arguments for compatibility
     parser.add_argument('--template', type=str, default='qwen2_vl')
     parser.add_argument('--max_new_tokens', type=int, default=128)
@@ -464,7 +522,7 @@ def parse_arguments():
     parser.add_argument('--image_max_pixels', type=int)
     parser.add_argument('--image_min_pixels', type=int)
     parser.add_argument('--gpu_memory_utilization', type=float)
-    
+
     return parser.parse_args()
 
 if __name__ == '__main__':

@@ -379,7 +379,8 @@ seed: {self.args.seed}
             '--test_dataset', self.test_dataset_name,
             '--dataset_dir', 'data',
             '--template', self.args.template,
-            '--output_dir', self.evaluation_output_dir
+            '--output_dir', self.evaluation_output_dir,
+            '--eval_method', self.args.eval_method
         ]
 
         # Add inference parameters
@@ -720,6 +721,9 @@ Notes:
 
     # Evaluation arguments
     eval_group = parser.add_argument_group('Evaluation Configuration')
+    eval_group.add_argument('--eval_method', type=str, default='yesno',
+                           choices=['yesno', 'moving_stopped'],
+                           help='Evaluation method: "yesno" or "moving_stopped" (default: yesno)')
     eval_group.add_argument('--eval_max_new_tokens', type=int, default=128,
                            help='Max new tokens for evaluation (default: 128)')
     eval_group.add_argument('--eval_batch_size', type=int, default=1024,
