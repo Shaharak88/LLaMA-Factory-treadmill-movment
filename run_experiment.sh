@@ -164,6 +164,7 @@ SKIP_DATASETS=false
 RETRIEVE_MODELS=false
 VERBOSE=false
 YES_TO_ALL=false
+USE_DORA=false
 DATASET_NAME=""  # Can be set via --dataset-name to reuse existing datasets
 
 ################################################################################
@@ -218,6 +219,7 @@ OPTIONS:
     --dataset-name NAME     Specify existing dataset name (e.g., _exp_20251202_194605)
                             Use with --skip-datasets to train on existing datasets
     --retrieve-models       Also retrieve trained model files
+    --use-dora              Use DoRA (Weight-Decomposed LoRA) instead of standard LoRA
     -v, --verbose           Verbose output
 
 EXPERIMENT PARAMETERS:
@@ -346,6 +348,10 @@ parse_args() {
                 ;;
             --retrieve-models)
                 RETRIEVE_MODELS=true
+                shift
+                ;;
+            --use-dora)
+                USE_DORA=true
                 shift
                 ;;
             -v|--verbose)
@@ -876,7 +882,14 @@ step_run_training() {
         --gradient_accumulation_steps '$GRAD_ACCUMULATION' \
         --save_steps '$SAVE_STEPS' \
         --eval_video_fps '$EVAL_VIDEO_FPS' \
-        --eval_video_maxlen '$EVAL_VIDEO_MAXLEN' \
+        --eval_video_maxlen '$EVAL_VIDEO_MAXLEN'"
+
+    # Add use_dora flag if enabled
+    if [ "$USE_DORA" = true ]; then
+        train_pipeline_cmd="$train_pipeline_cmd --use_dora"
+    fi
+
+    train_pipeline_cmd="$train_pipeline_cmd \
         --train_texture_type '$TRAIN_TEXTURE_TYPE' \
         --train_direction '$TRAIN_DIRECTION' \
         --train_view_angle '$TRAIN_VIEW_ANGLES' \
@@ -1108,6 +1121,7 @@ Common:
   Duration: $DURATION seconds
 
 Training:
+  Adapter Type: $([ "$USE_DORA" = true ] && echo "DoRA" || echo "LoRA")
   Epochs: $NUM_EPOCHS
   LoRA Rank: $LORA_RANK / Alpha: $LORA_ALPHA
   Learning Rate: $LEARNING_RATE

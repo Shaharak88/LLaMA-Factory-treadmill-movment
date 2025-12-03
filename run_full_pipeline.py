@@ -292,6 +292,9 @@ class FullPipelineRunner:
 
         config_path = self.project_root / "examples" / "train_qlora" / f"qwen25vl_lora_pipeline_{self.timestamp}.yaml"
 
+        # Build use_dora line conditionally
+        use_dora_line = "use_dora: true" if self.args.use_dora else ""
+
         config_content = f"""### Model Configuration
 model_name_or_path: {self.args.model_name_or_path}
 
@@ -303,6 +306,7 @@ lora_target: all
 lora_rank: {self.args.lora_rank}
 lora_alpha: {self.args.lora_alpha}
 lora_dropout: {self.args.lora_dropout}
+{use_dora_line}
 
 ### Dataset Configuration
 dataset: {self.train_dataset_name}
@@ -685,6 +689,8 @@ Notes:
                             help='LoRA alpha (default: 16)')
     train_group.add_argument('--lora_dropout', type=float, default=0.05,
                             help='LoRA dropout (default: 0.05)')
+    train_group.add_argument('--use_dora', action='store_true', default=False,
+                            help='Use DoRA (Weight-Decomposed LoRA) instead of standard LoRA (default: False)')
     train_group.add_argument('--cutoff_len', type=int, default=8192,
                             help='Cutoff length (default: 8192)')
     train_group.add_argument('--per_device_train_batch_size', type=int, default=1,

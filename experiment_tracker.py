@@ -114,6 +114,7 @@ class ExperimentTracker:
         'lora_rank',
         'lora_alpha',
         'lora_dropout',
+        'use_dora',
         'cutoff_len',
 
         # Training hyperparameters
@@ -329,6 +330,7 @@ class ExperimentTracker:
             'lora_rank': getattr(args, 'lora_rank', ''),
             'lora_alpha': getattr(args, 'lora_alpha', ''),
             'lora_dropout': getattr(args, 'lora_dropout', ''),
+            'use_dora': getattr(args, 'use_dora', False),
             'cutoff_len': getattr(args, 'cutoff_len', ''),
 
             # Training hyperparameters
