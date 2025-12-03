@@ -114,14 +114,12 @@ class ExperimentTracker:
         'lora_rank',
         'lora_alpha',
         'lora_dropout',
-        'use_dora',
         'cutoff_len',
 
         # Training hyperparameters
         'per_device_train_batch_size',
         'gradient_accumulation_steps',
         'learning_rate',
-        'num_train_epochs',
         'lr_scheduler_type',
         'warmup_ratio',
         'bf16',
@@ -181,7 +179,11 @@ class ExperimentTracker:
 
         # Manual notes
         'notes_1',
-        'notes_2'
+        'notes_2',
+
+        # Key training parameters (for easy reference)
+        'use_dora',
+        'num_train_epochs'
     ]
 
     def __init__(self, csv_path: str = 'experiments_log.csv'):
