@@ -35,6 +35,11 @@
 # - Internal variable names: TRAIN_SPEED_RANGE / TEST_SPEED_RANGE
 # - Example: ./run_experiment.sh --train-speed "0.0,14.0" --test-speed "0.0,14.0"
 #
+# AUTO-CONFIRMATION:
+# - The script prompts for confirmation before running (y/N prompt)
+# - To skip the prompt and auto-confirm, add -y or --yes flag at the end
+# - Example: ./run_experiment.sh --train-speed "0.0,14.0" --epochs 7 -y
+#
 # HOW TO UPDATE DOCKER CONTAINER FILES (building_dataset.py, synthetic_data_generation.py):
 # The Docker container has baked-in versions of some Python files in /app/. After rsync syncs updated
 # files to the server, you need to manually copy them into the container:
