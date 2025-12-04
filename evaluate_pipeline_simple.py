@@ -37,17 +37,33 @@ class SimpleEvaluator:
     def __init__(self, args: argparse.Namespace):
         self.args = args
         self.project_root = Path(__file__).parent
-        self.output_dir = Path(args.output_dir)
-        self.output_dir.mkdir(parents=True, exist_ok=True)
         self.timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-        # Load dataset info
+        # Load dataset info first to get test dataset folder name
         self.dataset_info_path = self.project_root / args.dataset_dir / "dataset_info.json"
         if not self.dataset_info_path.exists():
             raise FileNotFoundError(f"dataset_info.json not found at {self.dataset_info_path}")
 
         with open(self.dataset_info_path, 'r') as f:
             self.dataset_info = json.load(f)
+
+        # Create timestamped evaluation folder inside the test dataset directory
+        if args.test_dataset in self.dataset_info:
+            # Extract test dataset folder from file_name (e.g., "_exp_20251203_153238_test.json" -> "_exp_20251203_153238_test")
+            test_file = self.dataset_info[args.test_dataset]["file_name"]
+            test_folder = test_file.replace('.json', '')
+            test_dataset_dir = self.project_root / args.dataset_dir / test_folder
+
+            # Create timestamped evaluation folder inside test dataset directory
+            eval_folder_name = f"eval_{self.timestamp}"
+            self.output_dir = test_dataset_dir / eval_folder_name
+            self.output_dir.mkdir(parents=True, exist_ok=True)
+            logger.info(f"Created evaluation output directory: {self.output_dir}")
+        else:
+            # Fallback to original behavior if dataset not found (shouldn't happen)
+            self.output_dir = Path(args.output_dir)
+            self.output_dir.mkdir(parents=True, exist_ok=True)
+            logger.warning(f"Test dataset '{args.test_dataset}' not found in dataset_info.json, using default output_dir")
 
     def parse_video_metadata(self, video_path: str) -> Dict[str, str]:
         """
@@ -414,16 +430,164 @@ class SimpleEvaluator:
             f.write(f"MODEL: {model_display_name}\n")
             f.write("="*70 + "\n\n")
 
-            # Write each video's prediction
+            # Write each video's prediction with EXACT model output
             for video_data in results['per_video_data']:
                 video_name = Path(video_data['video_path']).name
                 f.write(f"Video: {video_name}\n")
-                f.write(f"Prediction: {video_data['prediction']}\n")
-                f.write(f"Label: {video_data['label']}\n")
+                f.write(f"Label (Ground Truth): {video_data['label']}\n")
                 f.write(f"Speed: {video_data['speed']}\n")
+                f.write(f"Model Output (Exact): {video_data['model_output']}\n")
+                f.write(f"Parsed Prediction: {video_data['prediction']}\n")
+                f.write(f"Correct: {video_data['correct']}\n")
                 f.write("-"*70 + "\n\n")
 
         logger.info(f"  Saved {len(results['per_video_data'])} video predictions to text log")
+
+    def save_evaluation_metadata(self) -> None:
+        """
+        Save comprehensive evaluation metadata including all parameters and settings.
+        This file documents every aspect of the evaluation run.
+        """
+        metadata_path = self.output_dir / f"evaluation_metadata_{self.timestamp}.txt"
+
+        logger.info(f"Saving evaluation metadata to: {metadata_path}")
+
+        with open(metadata_path, 'w', encoding='utf-8') as f:
+            f.write("="*80 + "\n")
+            f.write("EVALUATION METADATA - COMPLETE CONFIGURATION\n")
+            f.write("="*80 + "\n\n")
+
+            # Timestamp information
+            f.write("TIMESTAMP INFORMATION:\n")
+            f.write(f"  Evaluation Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write(f"  Timestamp ID: {self.timestamp}\n\n")
+
+            # Model configuration
+            f.write("MODEL CONFIGURATION:\n")
+            f.write(f"  Base Model Path: {self.args.model_name_or_path}\n")
+            f.write(f"  Adapter Path: {self.args.adapter_name_or_path if self.args.adapter_name_or_path else 'None (Base Model Only)'}\n")
+            f.write(f"  Template: {self.args.template}\n\n")
+
+            # Dataset configuration
+            f.write("DATASET CONFIGURATION:\n")
+            f.write(f"  Test Dataset Name: {self.args.test_dataset}\n")
+            f.write(f"  Dataset Directory: {self.args.dataset_dir}\n")
+            if self.args.test_dataset in self.dataset_info:
+                test_info = self.dataset_info[self.args.test_dataset]
+                f.write(f"  Dataset File: {test_info['file_name']}\n")
+                if 'formatting' in test_info:
+                    f.write(f"  Dataset Formatting: {test_info['formatting']}\n")
+                if 'columns' in test_info:
+                    f.write(f"  Dataset Columns: {test_info['columns']}\n")
+            f.write(f"  Dataset Info Path: {self.dataset_info_path}\n\n")
+
+            # Evaluation configuration
+            f.write("EVALUATION CONFIGURATION:\n")
+            f.write(f"  Evaluation Method: {self.args.eval_method}\n")
+            f.write(f"  Evaluation Prompt: \"{self.get_evaluation_prompt()}\"\n")
+            f.write(f"  Max New Tokens: {self.args.max_new_tokens}\n")
+            f.write(f"  Batch Size: {self.args.batch_size}\n\n")
+
+            # Video processing configuration
+            f.write("VIDEO PROCESSING CONFIGURATION:\n")
+            f.write(f"  Video FPS: {self.args.video_fps}\n")
+            f.write(f"  Video Max Length: {self.args.video_maxlen}\n")
+            if self.args.image_max_pixels:
+                f.write(f"  Image Max Pixels: {self.args.image_max_pixels}\n")
+            if self.args.image_min_pixels:
+                f.write(f"  Image Min Pixels: {self.args.image_min_pixels}\n")
+            f.write(f"  Min Pixels (hardcoded): 224 * 224 = {224*224}\n")
+            f.write(f"  Max Pixels (hardcoded): 384 * 384 = {384*384}\n")
+            f.write(f"  FPS (hardcoded in inference): 4.0\n\n")
+
+            # Quantization configuration
+            f.write("QUANTIZATION CONFIGURATION:\n")
+            f.write(f"  Load in 4-bit: True\n")
+            f.write(f"  4-bit Compute Dtype: torch.float16\n")
+            f.write(f"  4-bit Use Double Quant: True\n")
+            f.write(f"  4-bit Quant Type: nf4\n\n")
+
+            # GPU configuration
+            f.write("GPU CONFIGURATION:\n")
+            if self.args.gpu_memory_utilization:
+                f.write(f"  GPU Memory Utilization: {self.args.gpu_memory_utilization}\n")
+            else:
+                f.write(f"  GPU Memory Utilization: Not specified (auto)\n")
+            f.write(f"  Device Map: auto\n")
+            f.write(f"  Low CPU Memory Usage: True\n\n")
+
+            # Output configuration
+            f.write("OUTPUT CONFIGURATION:\n")
+            f.write(f"  Output Directory: {self.output_dir}\n")
+            f.write(f"  Project Root: {self.project_root}\n\n")
+
+            # Inference configuration
+            f.write("INFERENCE CONFIGURATION:\n")
+            f.write(f"  Sampling: False (do_sample=False, deterministic greedy decoding)\n")
+            f.write(f"  Trust Remote Code: True\n\n")
+
+            # Parsing logic information
+            f.write("PARSING LOGIC:\n")
+            f.write(f"  Evaluation Method: {self.args.eval_method}\n")
+            if self.args.eval_method == 'yesno':
+                f.write("  Expected Model Responses: 'yes' (moving) or 'no' (stopped)\n")
+                f.write("  Parsing Strategy: Check for 'yes'/'no' keywords (case-insensitive)\n")
+            else:  # moving_stopped
+                f.write("  Expected Model Responses: 'The treadmill belt is moving.' or 'The treadmill belt is stopped.'\n")
+                f.write("  Parsing Strategy: Check for 'moving'/'stopped' keywords (case-insensitive)\n")
+            f.write("  Fallback: Default to 'stopped' if parsing is ambiguous\n\n")
+
+            # Git information (if available)
+            try:
+                import subprocess
+                git_branch = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD'],
+                                                   cwd=self.project_root,
+                                                   stderr=subprocess.DEVNULL).decode().strip()
+                git_commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'],
+                                                    cwd=self.project_root,
+                                                    stderr=subprocess.DEVNULL).decode().strip()
+                git_status = subprocess.check_output(['git', 'status', '--short'],
+                                                    cwd=self.project_root,
+                                                    stderr=subprocess.DEVNULL).decode().strip()
+
+                f.write("GIT INFORMATION:\n")
+                f.write(f"  Branch: {git_branch}\n")
+                f.write(f"  Commit: {git_commit}\n")
+                if git_status:
+                    f.write(f"  Status: MODIFIED (uncommitted changes present)\n")
+                    f.write(f"  Modified Files:\n")
+                    for line in git_status.split('\n')[:10]:  # Show first 10 modified files
+                        f.write(f"    {line}\n")
+                else:
+                    f.write(f"  Status: CLEAN (no uncommitted changes)\n")
+                f.write("\n")
+            except:
+                f.write("GIT INFORMATION:\n")
+                f.write("  Not available\n\n")
+
+            # System information
+            f.write("SYSTEM INFORMATION:\n")
+            f.write(f"  Python Version: {sys.version.split()[0]}\n")
+            f.write(f"  PyTorch Version: {torch.__version__}\n")
+            f.write(f"  CUDA Available: {torch.cuda.is_available()}\n")
+            if torch.cuda.is_available():
+                f.write(f"  CUDA Version: {torch.version.cuda}\n")
+                f.write(f"  GPU Count: {torch.cuda.device_count()}\n")
+                for i in range(torch.cuda.device_count()):
+                    f.write(f"  GPU {i}: {torch.cuda.get_device_name(i)}\n")
+            f.write("\n")
+
+            # Command line arguments (complete record)
+            f.write("COMMAND LINE ARGUMENTS (COMPLETE):\n")
+            for arg, value in vars(self.args).items():
+                f.write(f"  --{arg}: {value}\n")
+            f.write("\n")
+
+            f.write("="*80 + "\n")
+            f.write("END OF METADATA\n")
+            f.write("="*80 + "\n")
+
+        logger.info(f"  Saved complete evaluation metadata")
 
     def generate_report(self, base_results, lora_results=None):
         """Generate text report."""
@@ -520,6 +684,9 @@ class SimpleEvaluator:
 
     def run(self):
         try:
+            # Save evaluation metadata first
+            self.save_evaluation_metadata()
+
             data = self.load_test_data()
 
             # Evaluate Base Model
@@ -540,7 +707,12 @@ class SimpleEvaluator:
                 self.save_predictions_text_log(lora_results, "finetuned", "Fine-Tuned Model")
 
             self.generate_report(base_results, lora_results)
-            
+
+            logger.info("\n" + "="*80)
+            logger.info(f"EVALUATION COMPLETE!")
+            logger.info(f"All outputs saved to: {self.output_dir}")
+            logger.info("="*80 + "\n")
+
         except Exception as e:
             logger.error(f"Evaluation failed: {e}", exc_info=True)
             sys.exit(1)
