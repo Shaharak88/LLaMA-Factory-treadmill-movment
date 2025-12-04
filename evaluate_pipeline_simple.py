@@ -365,37 +365,63 @@ class SimpleEvaluator:
     def _is_moving(self, text: str) -> bool:
         """
         Determine if text indicates moving.
-        Searches for yes/no answers (for yesno eval method and ground truth labels)
-        as well as moving/stopped keywords (for moving_stopped eval method).
+        Handles multiple response formats:
+        - Yes/No format: "yes" (moving) or "no" (stopped)
+        - Moving/Stopped format: "moving", "stopped", "stationary"
+        - Negations: "not moving", "isn't moving", "is not moving"
+        - Complete sentences: "The treadmill belt is moving/stopped/stationary"
+
+        This function must correctly parse responses from both evaluation methods
+        (yesno and moving_stopped) as well as ground truth labels.
         """
         text = text.lower().strip()
 
-        # Primary: Check for yes/no answers (yesno format and ground truth labels)
-        # Look for "yes" indicating movement
-        if text.startswith('yes') or text == 'yes' or text == 'yes.':
-            return True
+        # First, check for explicit negative indicators (highest priority)
+        # These override everything else
+        negative_indicators = [
+            'not moving',
+            'isn\'t moving',
+            'is not moving',
+            'stopped',
+            'stationary',
+            'not in motion',
+            'no movement'
+        ]
+        for indicator in negative_indicators:
+            if indicator in text:
+                return False
 
-        # Look for "no" indicating stopped
+        # Check for "no" response (from yes/no format)
+        # Only if we haven't already found negative indicators
         if text.startswith('no') or text == 'no' or text == 'no.':
             return False
 
-        # Also check for yes/no anywhere in the response (more robust)
-        # But avoid false positives like "yes, the belt is stopped"
-        if 'yes' in text and 'no' not in text:
-            # Make sure it's not "yes, stopped" or similar
-            if 'stopped' not in text and 'stationary' not in text:
+        # More flexible "no" detection, but avoid "no" within words
+        if ' no ' in f' {text} ' or text.endswith(' no'):
+            return False
+
+        # Now check for positive indicators (moving)
+        # "moving" keyword (most common for moving_stopped eval method)
+        if 'moving' in text:
+            return True
+
+        # "yes" response (from yes/no format)
+        if text.startswith('yes') or text == 'yes' or text == 'yes.':
+            return True
+
+        # More flexible "yes" detection
+        if ' yes ' in f' {text} ' or text.endswith(' yes'):
+            return True
+
+        # Check for motion-related keywords
+        motion_keywords = ['in motion', 'is moving', 'belt is moving', 'movement']
+        for keyword in motion_keywords:
+            if keyword in text:
                 return True
 
-        if 'no' in text and 'yes' not in text:
-            return False
-
-        # Fallback: Check for moving/stopped keywords (for moving_stopped eval method)
-        if 'moving' in text and 'not moving' not in text and 'stopped' not in text:
-            return True
-        if 'stopped' in text or 'stationary' in text or 'not moving' in text:
-            return False
-
-        # Default to stopped if completely unclear
+        # Default to stopped if completely ambiguous
+        # This is safer than defaulting to moving
+        logger.warning(f"Ambiguous response, defaulting to 'stopped': '{text}'")
         return False
 
     def save_per_video_csv(self, results: Dict, model_name: str) -> None:
