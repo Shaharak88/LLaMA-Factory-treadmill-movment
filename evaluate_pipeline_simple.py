@@ -48,21 +48,28 @@ class SimpleEvaluator:
             self.dataset_info = json.load(f)
 
         # Create timestamped evaluation folder inside the test dataset directory
+        # AND also create the legacy output_dir for backward compatibility
         if args.test_dataset in self.dataset_info:
             # Extract test dataset folder from file_name (e.g., "_exp_20251203_153238_test.json" -> "_exp_20251203_153238_test")
             test_file = self.dataset_info[args.test_dataset]["file_name"]
             test_folder = test_file.replace('.json', '')
             test_dataset_dir = self.project_root / args.dataset_dir / test_folder
 
-            # Create timestamped evaluation folder inside test dataset directory
+            # Create timestamped evaluation folder inside test dataset directory (primary location)
             eval_folder_name = f"eval_{self.timestamp}"
             self.output_dir = test_dataset_dir / eval_folder_name
             self.output_dir.mkdir(parents=True, exist_ok=True)
             logger.info(f"Created evaluation output directory: {self.output_dir}")
+
+            # ALSO create the legacy output_dir for backward compatibility with experiment tracker
+            self.legacy_output_dir = Path(args.output_dir)
+            self.legacy_output_dir.mkdir(parents=True, exist_ok=True)
+            logger.info(f"Legacy output directory (for tracker compatibility): {self.legacy_output_dir}")
         else:
             # Fallback to original behavior if dataset not found (shouldn't happen)
             self.output_dir = Path(args.output_dir)
             self.output_dir.mkdir(parents=True, exist_ok=True)
+            self.legacy_output_dir = self.output_dir  # Same location
             logger.warning(f"Test dataset '{args.test_dataset}' not found in dataset_info.json, using default output_dir")
 
     def parse_video_metadata(self, video_path: str) -> Dict[str, str]:
@@ -590,31 +597,126 @@ class SimpleEvaluator:
         logger.info(f"  Saved complete evaluation metadata")
 
     def generate_report(self, base_results, lora_results=None):
-        """Generate text report."""
+        """Generate text report in both primary and legacy locations."""
+        report_content = self._generate_report_content(base_results, lora_results)
+
+        # Save to primary location (inside test dataset folder)
         report_path = self.output_dir / f"evaluation_report_{self.timestamp}.txt"
-        
         with open(report_path, 'w', encoding='utf-8') as f:
-            f.write("="*70 + "\n")
-            f.write("TREADMILL MOTION DETECTION - SIMPLE EVALUATION REPORT\n")
-            f.write("="*70 + "\n\n")
-            
-            f.write(f"Date: {datetime.now()}\n")
-            f.write(f"Dataset: {self.args.test_dataset}\n\n")
-            
-            self._write_results(f, "BASE MODEL", base_results)
-            
-            if lora_results:
-                self._write_results(f, "FINE-TUNED MODEL", lora_results)
-                
-                f.write("="*70 + "\n")
-                f.write("COMPARISON\n")
-                f.write("="*70 + "\n")
-                imp = lora_results['accuracy'] - base_results['accuracy']
-                f.write(f"Improvement: {imp:+.2f}%\n")
-                
+            f.write(report_content)
         logger.info(f"Report saved to {report_path}")
-        with open(report_path, 'r') as f:
-            print(f.read())
+
+        # ALSO save to legacy location for experiment tracker compatibility
+        if hasattr(self, 'legacy_output_dir') and self.legacy_output_dir != self.output_dir:
+            legacy_report_path = self.legacy_output_dir / f"evaluation_report_{self.timestamp}.txt"
+            with open(legacy_report_path, 'w', encoding='utf-8') as f:
+                f.write(report_content)
+            logger.info(f"Report also saved to legacy location: {legacy_report_path}")
+
+        # Print report
+        print(report_content)
+
+    def _generate_report_content(self, base_results, lora_results=None) -> str:
+        """Generate report content as a string."""
+        lines = []
+        lines.append("="*70)
+        lines.append("TREADMILL MOTION DETECTION - SIMPLE EVALUATION REPORT")
+        lines.append("="*70)
+        lines.append("")
+        lines.append(f"Date: {datetime.now()}")
+        lines.append(f"Dataset: {self.args.test_dataset}")
+        lines.append("")
+
+        # Base model section
+        lines.extend(self._format_results("BASE MODEL", base_results))
+
+        # Fine-tuned model section
+        if lora_results:
+            lines.extend(self._format_results("FINE-TUNED MODEL", lora_results))
+            lines.append("="*70)
+            lines.append("COMPARISON")
+            lines.append("="*70)
+            imp = lora_results['accuracy'] - base_results['accuracy']
+            lines.append(f"Improvement: {imp:+.2f}%")
+
+        return "\n".join(lines)
+
+    def _format_results(self, title: str, results: dict) -> list:
+        """Format results section as list of lines."""
+        lines = []
+        lines.append(f"{title}")
+        lines.append("=" * len(title))
+        lines.append("")
+
+        # Overall metrics
+        lines.append("OVERALL METRICS:")
+        lines.append(f"  Accuracy:  {results['accuracy']:.2f}% ({results['correct']}/{results['total']})")
+        if 'f1_score' in results:
+            lines.append(f"  F1 Score:  {results['f1_score']:.2f}%")
+            lines.append(f"  Precision: {results['precision']:.2f}%")
+            lines.append(f"  Recall:    {results['recall']:.2f}%")
+
+        # Per-class metrics
+        lines.append("")
+        lines.append("PER-CLASS METRICS:")
+        moving_line = f"  Moving:  {results['moving']['correct']}/{results['moving']['total']}"
+        if 'f1_moving' in results:
+            moving_acc = (results['moving']['correct'] / results['moving']['total'] * 100) if results['moving']['total'] > 0 else 0
+            moving_line += f" (Acc: {moving_acc:.2f}%, F1: {results['f1_moving']:.2f}%)"
+        lines.append(moving_line)
+
+        stopped_line = f"  Stopped: {results['stopped']['correct']}/{results['stopped']['total']}"
+        if 'f1_stopped' in results:
+            stopped_acc = (results['stopped']['correct'] / results['stopped']['total'] * 100) if results['stopped']['total'] > 0 else 0
+            stopped_line += f" (Acc: {stopped_acc:.2f}%, F1: {results['f1_stopped']:.2f}%)"
+        lines.append(stopped_line)
+        lines.append("")
+
+        # Per-texture breakdown
+        if 'per_texture' in results and len(results['per_texture']) > 0:
+            lines.append("PER-TEXTURE BREAKDOWN:")
+            for texture in sorted(results['per_texture'].keys()):
+                tex_data = results['per_texture'][texture]
+                lines.append(f"  {texture}:")
+                lines.append(f"    Total: {tex_data['total']} videos")
+                lines.append(f"    Accuracy: {tex_data.get('accuracy', 0):.2f}% ({tex_data['correct']}/{tex_data['total']})")
+                if 'f1_score' in tex_data:
+                    lines.append(f"    F1 Score: {tex_data['f1_score']:.2f}%")
+                    lines.append(f"    Precision: {tex_data['precision']:.2f}%")
+                    lines.append(f"    Recall: {tex_data['recall']:.2f}%")
+                moving_line = f"    Moving: {tex_data['moving']['correct']}/{tex_data['moving']['total']}"
+                if 'f1_moving' in tex_data:
+                    moving_line += f" (F1: {tex_data['f1_moving']:.2f}%)"
+                lines.append(moving_line)
+                stopped_line = f"    Stopped: {tex_data['stopped']['correct']}/{tex_data['stopped']['total']}"
+                if 'f1_stopped' in tex_data:
+                    stopped_line += f" (F1: {tex_data['f1_stopped']:.2f}%)"
+                lines.append(stopped_line)
+                lines.append("")
+
+        # Per-angle breakdown
+        if 'per_angle' in results and len(results['per_angle']) > 0:
+            lines.append("PER-ANGLE BREAKDOWN:")
+            for angle in sorted(results['per_angle'].keys()):
+                ang_data = results['per_angle'][angle]
+                lines.append(f"  {angle}:")
+                lines.append(f"    Total: {ang_data['total']} videos")
+                lines.append(f"    Accuracy: {ang_data.get('accuracy', 0):.2f}% ({ang_data['correct']}/{ang_data['total']})")
+                if 'f1_score' in ang_data:
+                    lines.append(f"    F1 Score: {ang_data['f1_score']:.2f}%")
+                    lines.append(f"    Precision: {ang_data['precision']:.2f}%")
+                    lines.append(f"    Recall: {ang_data['recall']:.2f}%")
+                moving_line = f"    Moving: {ang_data['moving']['correct']}/{ang_data['moving']['total']}"
+                if 'f1_moving' in ang_data:
+                    moving_line += f" (F1: {ang_data['f1_moving']:.2f}%)"
+                lines.append(moving_line)
+                stopped_line = f"    Stopped: {ang_data['stopped']['correct']}/{ang_data['stopped']['total']}"
+                if 'f1_stopped' in ang_data:
+                    stopped_line += f" (F1: {ang_data['f1_stopped']:.2f}%)"
+                lines.append(stopped_line)
+                lines.append("")
+
+        return lines
 
     def _write_results(self, f, title, results):
         f.write(f"{title}\n")
