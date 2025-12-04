@@ -151,7 +151,7 @@ class SimpleEvaluator:
             
         return data
 
-    def evaluate(self, model, processor, data: List[Dict], model_name: str) -> Dict:
+    def evaluate(self, model, processor, data: List[Dict], model_name: str, base_model_path: str, adapter_path: str = None) -> Dict:
         """Run evaluation loop."""
         logger.info(f"Evaluating {model_name} on {len(data)} samples...")
         logger.info(f"Using evaluation method: {self.args.eval_method}")
@@ -159,6 +159,29 @@ class SimpleEvaluator:
         # Get the prompt for this evaluation method
         evaluation_prompt = self.get_evaluation_prompt()
         logger.info(f"Evaluation prompt: '{evaluation_prompt}'")
+
+        # Open live evaluation log file
+        model_name_for_file = "base" if "Base" in model_name else "finetuned"
+        live_log_path = self.output_dir / f"live_evaluation_log_{model_name_for_file}_{self.timestamp}.txt"
+        live_log_file = open(live_log_path, 'w', encoding='utf-8')
+
+        # Write header to log file and print to console
+        header_lines = [
+            "=" * 80,
+            f"MODEL: {model_name}",
+            f"BASE MODEL PATH: {base_model_path}"
+        ]
+        if adapter_path:
+            header_lines.append(f"ADAPTER PATH: {adapter_path}")
+        header_lines.extend([
+            "=" * 80,
+            ""
+        ])
+
+        header_text = "\n".join(header_lines)
+        print(header_text)
+        live_log_file.write(header_text + "\n")
+        live_log_file.flush()
 
         results = {
             'total': 0,
@@ -252,17 +275,35 @@ class SimpleEvaluator:
             angle = metadata['angle']
             speed = metadata['speed']
 
-            # VERBOSE LOGGING: Print EVERY video prediction
+            # LIVE LOGGING: Print AND write to file for EVERY video
+            # Take classification directly from eval script's _is_moving() logic
             video_filename = Path(video_rel_path).name
-            gt_label = "MOVING (yes)" if is_moving_gt else "STOPPED (no)"
-            pred_label = "MOVING (yes)" if is_moving_pred else "STOPPED (no)"
-            status_icon = "✓" if is_correct else "✗"
-            logger.info(f"  [{i+1}/{len(data)}] {status_icon} {video_filename}")
-            logger.info(f"      Ground Truth: {gt_label}")
-            logger.info(f"      Model Output: '{output_text}'")
-            logger.info(f"      Predicted:    {pred_label}")
-            logger.info(f"      Texture: {texture}, Angle: {angle}, Speed: {speed}")
-            logger.info(f"")
+            gt_label = "moving" if is_moving_gt else "stopped"
+            parsed_classification = "moving" if is_moving_pred else "stopped"
+            status_icon = "✓ CORRECT" if is_correct else "✗ INCORRECT"
+
+            # Build the log entry (works for BOTH yesno and moving_stopped eval methods)
+            log_lines = [
+                f"[{i+1}/{len(data)}] {status_icon}",
+                f"Video Name: {video_filename}",
+                f"Video Path (Relative): {video_rel_path}",
+                f"Video Path (Absolute): {video_path}",
+                f"Speed: {speed}",
+                f"Label (Ground Truth): {gt_label}",
+                f"Model Answer (Raw): {output_text}",
+                f"Parsed Classification: {parsed_classification}",
+                "-" * 80,
+                ""
+            ]
+
+            log_text = "\n".join(log_lines)
+
+            # Print to console
+            print(log_text)
+
+            # Write to file
+            live_log_file.write(log_text + "\n")
+            live_log_file.flush()  # Ensure immediate write to disk
 
             # Labels for F1 calculation: 1 = moving, 0 = stopped
             y_true_label = 1 if is_moving_gt else 0
@@ -360,6 +401,13 @@ class SimpleEvaluator:
                         ang_data['f1_stopped'] = f1_ang_class[0] * 100
                         ang_data['f1_moving'] = f1_ang_class[1] * 100
 
+        # Close live evaluation log file with completion message
+        completion_msg = f"\n{'='*80}\nEvaluation complete! Log saved to: {live_log_path}\n{'='*80}\n"
+        print(completion_msg)
+        live_log_file.write(completion_msg)
+        live_log_file.close()
+        logger.info(f"Live evaluation log saved to: {live_log_path}")
+
         return results
 
     def _is_moving(self, text: str) -> bool:
@@ -443,44 +491,6 @@ class SimpleEvaluator:
             writer.writerows(results['per_video_data'])
 
         logger.info(f"  Saved {len(results['per_video_data'])} video predictions")
-
-    def save_predictions_text_log(self, results: Dict, model_name: str, model_display_name: str) -> None:
-        """
-        Save per-video predictions to a simple text file.
-
-        Args:
-            results: Evaluation results dictionary containing per_video_data
-            model_name: Name of the model for filename (e.g., "base" or "finetuned")
-            model_display_name: Display name of the model (e.g., "Base Model" or "Fine-Tuned Model")
-        """
-        txt_path = self.output_dir / f"predictions_log_{model_name}_{self.timestamp}.txt"
-
-        logger.info(f"Saving predictions text log to: {txt_path}")
-
-        with open(txt_path, 'w', encoding='utf-8') as f:
-            # Write header with clear model identification
-            f.write("="*70 + "\n")
-            f.write(f"MODEL: {model_display_name}\n")
-            # Add adapter path information for fine-tuned models
-            if model_name == "finetuned" and self.args.adapter_name_or_path:
-                adapter_path = self.args.adapter_name_or_path
-                adapter_name = Path(adapter_path).name if '/' in adapter_path else adapter_path
-                f.write(f"ADAPTER PATH: {adapter_path}\n")
-                f.write(f"ADAPTER NAME: {adapter_name}\n")
-            f.write("="*70 + "\n\n")
-
-            # Write each video's prediction with EXACT model output
-            for video_data in results['per_video_data']:
-                video_name = Path(video_data['video_path']).name
-                f.write(f"Video: {video_name}\n")
-                f.write(f"Label (Ground Truth): {video_data['label']}\n")
-                f.write(f"Speed: {video_data['speed']}\n")
-                f.write(f"Model Output (Exact): {video_data['model_output']}\n")
-                f.write(f"Parsed Prediction: {video_data['prediction']}\n")
-                f.write(f"Correct: {video_data['correct']}\n")
-                f.write("-"*70 + "\n\n")
-
-        logger.info(f"  Saved {len(results['per_video_data'])} video predictions to text log")
 
     def save_evaluation_metadata(self) -> None:
         """
@@ -832,9 +842,8 @@ class SimpleEvaluator:
             # Evaluate Base Model
             logger.info("--- Evaluating Base Model ---")
             base_model, processor = self.load_model(self.args.model_name_or_path)
-            base_results = self.evaluate(base_model, processor, data, "Base Model")
+            base_results = self.evaluate(base_model, processor, data, "Base Model", self.args.model_name_or_path)
             self.save_per_video_csv(base_results, "base")
-            self.save_predictions_text_log(base_results, "base", "Base Model")
             del base_model
             torch.cuda.empty_cache()
 
@@ -842,9 +851,8 @@ class SimpleEvaluator:
             if self.args.adapter_name_or_path:
                 logger.info("--- Evaluating LoRA Model ---")
                 lora_model, _ = self.load_model(self.args.model_name_or_path, self.args.adapter_name_or_path)
-                lora_results = self.evaluate(lora_model, processor, data, "LoRA Model")
+                lora_results = self.evaluate(lora_model, processor, data, "Fine-Tuned Model (LoRA)", self.args.model_name_or_path, self.args.adapter_name_or_path)
                 self.save_per_video_csv(lora_results, "finetuned")
-                self.save_predictions_text_log(lora_results, "finetuned", "Fine-Tuned Model")
 
             self.generate_report(base_results, lora_results)
 
