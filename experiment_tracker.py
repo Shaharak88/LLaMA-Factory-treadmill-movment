@@ -181,6 +181,10 @@ class ExperimentTracker:
         'notes_1',
         'notes_2',
 
+        # Model information (for tracking and re-evaluation)
+        'model_path',
+        'model_name',
+
         # Key training parameters (for easy reference)
         'use_dora',
         'num_train_epochs'
@@ -399,7 +403,11 @@ class ExperimentTracker:
 
             # Manual notes (empty)
             'notes_1': '',
-            'notes_2': ''
+            'notes_2': '',
+
+            # Model information
+            'model_path': getattr(args, 'eval_model_path', '') or getattr(args, 'lora_output_dir', ''),
+            'model_name': getattr(args, 'model_name', '')
         }
 
         # Write to CSV

@@ -435,6 +435,12 @@ class SimpleEvaluator:
             # Write header with clear model identification
             f.write("="*70 + "\n")
             f.write(f"MODEL: {model_display_name}\n")
+            # Add adapter path information for fine-tuned models
+            if model_name == "finetuned" and self.args.adapter_name_or_path:
+                adapter_path = self.args.adapter_name_or_path
+                adapter_name = Path(adapter_path).name if '/' in adapter_path else adapter_path
+                f.write(f"ADAPTER PATH: {adapter_path}\n")
+                f.write(f"ADAPTER NAME: {adapter_name}\n")
             f.write("="*70 + "\n\n")
 
             # Write each video's prediction with EXACT model output
@@ -625,6 +631,12 @@ class SimpleEvaluator:
         lines.append("")
         lines.append(f"Date: {datetime.now()}")
         lines.append(f"Dataset: {self.args.test_dataset}")
+        # Add adapter information if evaluating a fine-tuned model
+        if lora_results and self.args.adapter_name_or_path:
+            adapter_path = self.args.adapter_name_or_path
+            adapter_name = Path(adapter_path).name if '/' in adapter_path else adapter_path
+            lines.append(f"Fine-Tuned Model Adapter Path: {adapter_path}")
+            lines.append(f"Fine-Tuned Model Adapter Name: {adapter_name}")
         lines.append("")
 
         # Base model section

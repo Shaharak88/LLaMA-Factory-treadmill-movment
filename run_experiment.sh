@@ -168,6 +168,8 @@ YES_TO_ALL=false
 USE_DORA=false
 DATASET_NAME=""  # Can be set via --dataset-name to reuse existing datasets
 EVAL_METHOD="yesno"  # Evaluation method: "yesno" or "moving_stopped"
+MODEL_NAME=""  # Custom name for the trained model (optional)
+EVAL_MODEL_PATH=""  # Path to existing model for re-evaluation (used with --skip-training)
 
 ################################################################################
 # COLOR OUTPUT
@@ -224,6 +226,9 @@ OPTIONS:
     --retrieve-models       Also retrieve trained model files
     --use-dora              Use DoRA (Weight-Decomposed LoRA) instead of standard LoRA
     --eval-method METHOD    Evaluation method: "yesno" or "moving_stopped" (default: yesno)
+    --model-name NAME       Custom name for the trained model (saves to saves/<NAME>)
+    --eval-model-path PATH  Path to existing model for re-evaluation (use with --skip-training)
+                            Example: saves/my_custom_model
     -v, --verbose           Verbose output
 
 EXPERIMENT PARAMETERS:
@@ -368,6 +373,14 @@ parse_args() {
                 ;;
             --eval-method)
                 EVAL_METHOD="$2"
+                shift 2
+                ;;
+            --model-name)
+                MODEL_NAME="$2"
+                shift 2
+                ;;
+            --eval-model-path)
+                EVAL_MODEL_PATH="$2"
                 shift 2
                 ;;
             -v|--verbose)
@@ -908,6 +921,16 @@ step_run_training() {
     # Add skip_training flag if enabled
     if [ "$SKIP_TRAINING" = true ]; then
         train_pipeline_cmd="$train_pipeline_cmd --skip_training"
+    fi
+
+    # Add model_name if provided
+    if [ -n "$MODEL_NAME" ]; then
+        train_pipeline_cmd="$train_pipeline_cmd --model_name '$MODEL_NAME'"
+    fi
+
+    # Add eval_model_path if provided (for re-evaluation with existing model)
+    if [ -n "$EVAL_MODEL_PATH" ]; then
+        train_pipeline_cmd="$train_pipeline_cmd --eval_model_path '$EVAL_MODEL_PATH'"
     fi
 
     # Add eval_method parameter

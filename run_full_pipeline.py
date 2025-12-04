@@ -60,8 +60,17 @@ class FullPipelineRunner:
         self.train_dataset_name = f"{args.dataset_name}_train"
         self.test_dataset_name = f"{args.dataset_name}_test"
 
-        # Training output
-        self.lora_output_dir = args.lora_output_dir
+        # Training output - use eval_model_path if provided (for skip-training), otherwise use lora_output_dir
+        # For training: use custom model_name if provided, otherwise use default lora_output_dir
+        if hasattr(args, 'eval_model_path') and args.eval_model_path:
+            # Re-evaluation mode: use the specified model path
+            self.lora_output_dir = args.eval_model_path
+        elif hasattr(args, 'model_name') and args.model_name:
+            # Training mode with custom name
+            self.lora_output_dir = f"saves/{args.model_name}"
+        else:
+            # Default training mode
+            self.lora_output_dir = args.lora_output_dir
 
         # Initialize experiment tracker
         self.tracker = ExperimentTracker(csv_path='data/experiments_log.csv')
@@ -684,6 +693,10 @@ Notes:
     train_group.add_argument('--lora_output_dir', type=str,
                             default='saves/qwen2vl-treadmill-lora-pipeline',
                             help='LoRA output directory (default: saves/qwen2vl-treadmill-lora-pipeline)')
+    train_group.add_argument('--model_name', type=str, default='',
+                            help='Custom model name for the trained model (will be saved as saves/<model_name>). If not provided, uses lora_output_dir.')
+    train_group.add_argument('--eval_model_path', type=str, default='',
+                            help='Path to existing model to evaluate when using --skip_training (e.g., saves/my_model or saves/qwen2vl-treadmill-lora-pipeline). Only used with --skip_training flag.')
     train_group.add_argument('--lora_rank', type=int, default=8,
                             help='LoRA rank (default: 8)')
     train_group.add_argument('--lora_alpha', type=int, default=16,
