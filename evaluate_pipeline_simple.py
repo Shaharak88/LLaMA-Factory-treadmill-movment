@@ -395,6 +395,36 @@ class SimpleEvaluator:
 
         logger.info(f"  Saved {len(results['per_video_data'])} video predictions")
 
+    def save_predictions_text_log(self, results: Dict, model_name: str, model_display_name: str) -> None:
+        """
+        Save per-video predictions to a simple text file.
+
+        Args:
+            results: Evaluation results dictionary containing per_video_data
+            model_name: Name of the model for filename (e.g., "base" or "finetuned")
+            model_display_name: Display name of the model (e.g., "Base Model" or "Fine-Tuned Model")
+        """
+        txt_path = self.output_dir / f"predictions_log_{model_name}_{self.timestamp}.txt"
+
+        logger.info(f"Saving predictions text log to: {txt_path}")
+
+        with open(txt_path, 'w', encoding='utf-8') as f:
+            # Write header with clear model identification
+            f.write("="*70 + "\n")
+            f.write(f"MODEL: {model_display_name}\n")
+            f.write("="*70 + "\n\n")
+
+            # Write each video's prediction
+            for video_data in results['per_video_data']:
+                video_name = Path(video_data['video_path']).name
+                f.write(f"Video: {video_name}\n")
+                f.write(f"Prediction: {video_data['prediction']}\n")
+                f.write(f"Label: {video_data['label']}\n")
+                f.write(f"Speed: {video_data['speed']}\n")
+                f.write("-"*70 + "\n\n")
+
+        logger.info(f"  Saved {len(results['per_video_data'])} video predictions to text log")
+
     def generate_report(self, base_results, lora_results=None):
         """Generate text report."""
         report_path = self.output_dir / f"evaluation_report_{self.timestamp}.txt"
@@ -497,6 +527,7 @@ class SimpleEvaluator:
             base_model, processor = self.load_model(self.args.model_name_or_path)
             base_results = self.evaluate(base_model, processor, data, "Base Model")
             self.save_per_video_csv(base_results, "base")
+            self.save_predictions_text_log(base_results, "base", "Base Model")
             del base_model
             torch.cuda.empty_cache()
 
@@ -506,6 +537,7 @@ class SimpleEvaluator:
                 lora_model, _ = self.load_model(self.args.model_name_or_path, self.args.adapter_name_or_path)
                 lora_results = self.evaluate(lora_model, processor, data, "LoRA Model")
                 self.save_per_video_csv(lora_results, "finetuned")
+                self.save_predictions_text_log(lora_results, "finetuned", "Fine-Tuned Model")
 
             self.generate_report(base_results, lora_results)
             
