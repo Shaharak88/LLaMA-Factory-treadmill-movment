@@ -447,6 +447,12 @@ class ExperimentReportGenerator:
         report_filename = f"{dataset_name}_dual_report_{timestamp}.html"
         report_path = self.reports_dir / report_filename
 
+        # Calculate relative paths from HTML report to video directories
+        # (same logic as dual_dataset_review.py for browser compatibility)
+        output_dir = os.path.dirname(str(report_path.resolve()))
+        train_video_url = os.path.relpath(str(train_video_dir.resolve()), output_dir)
+        test_video_url = os.path.relpath(str(test_video_dir.resolve()), output_dir)
+
         # Create HTML report
         html_content = self._build_comprehensive_html_report(
             performance_html=performance_html,
@@ -457,8 +463,8 @@ class ExperimentReportGenerator:
             train_groups=train_groups,
             test_groups=test_groups,
             comparison_plots=comparison_plots,
-            train_video_dir=train_video_dir,
-            test_video_dir=test_video_dir,
+            train_video_dir=train_video_url,
+            test_video_dir=test_video_url,
             dataset_name=dataset_name
         )
 
@@ -483,8 +489,8 @@ class ExperimentReportGenerator:
         train_groups: Dict,
         test_groups: Dict,
         comparison_plots: Dict,
-        train_video_dir: Path,
-        test_video_dir: Path,
+        train_video_dir: str,
+        test_video_dir: str,
         dataset_name: str
     ) -> str:
         """Build complete comprehensive HTML report with all analytics and model performance."""
