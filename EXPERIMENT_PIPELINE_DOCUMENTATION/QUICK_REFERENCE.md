@@ -1,0 +1,262 @@
+# Quick Reference Guide - Experiment Pipeline Documentation
+
+**Purpose:** This quick reference provides concise summaries of each documentation file in this folder, helping you quickly identify which document to read for specific information.
+
+---
+
+## File Summaries
+
+### **README.md** - Documentation Hub & Navigation
+**What's in it:**
+- Executive summary for managers/stakeholders showing business value (65% → 95% accuracy improvement)
+- Complete navigation system organized by user role (first-time users, developers, analysts, managers)
+- Documentation philosophy and standards
+- Glossary of key terms (LoRA, DoRA, quantization, etc.)
+- Complete file structure reference showing where everything lives
+- Common workflows and troubleshooting guide
+- Quick command reference for all major operations
+
+**When to read it:** First stop for navigation, understanding structure, or finding quick commands.
+
+---
+
+### **00_OVERVIEW.md** - Big Picture Architecture
+**What's in it:**
+- High-level purpose: automated pipeline for training Qwen2.5-VL to detect treadmill motion
+- 5-stage architecture diagram (Orchestration → Data → Training → Evaluation → Reporting)
+- Execution flow from user command to final report
+- Key design decisions (why Docker, why rsync, why CSV tracking)
+- Common use cases (run full experiment, skip dataset generation, change eval method)
+- Output locations on GPU server and local machine
+
+**When to read it:** Understanding the overall system architecture before diving into specifics.
+
+---
+
+### **01_ORCHESTRATION.md** - Main Script (run_experiment.sh)
+**What's in it:**
+- Complete breakdown of `run_experiment.sh` - the main entry point
+- 6-stage flow: code sync → dataset generation → training → results retrieval → report generation
+- Detailed explanation of rsync parameters and what gets synced/excluded
+- Docker parameters for GPU access and volume mounting
+- Dataset parameters (texture, angle, speed, distance) and their effects
+- Training parameters (epochs, learning rate, batch size, LoRA config)
+- How to customize parameters and skip stages
+- SSH configuration and remote server setup
+
+**When to read it:** Modifying experiment parameters, understanding remote execution, troubleshooting sync issues.
+
+---
+
+### **02_DATA_GENERATION.md** - Video Creation with Blender
+**What's in it:**
+- Two-part system: `building_dataset.py` (orchestrator) + `synthetic_data_generation.py` (Blender renderer)
+- Complete parameter guide: textures, speeds, angles, distances, center randomization, lighting, motion blur
+- How videos are generated using Blender's 3D rendering engine
+- Treadmill geometry creation (belt surface, enclosure, materials)
+- Texture generation (procedural stripes, custom images, animation)
+- Camera and lighting setup for realistic rendering
+- Metadata tracking in CSV files
+- Filename encoding scheme (all parameters in filename)
+- JSON dataset formatting for LLaMA-Factory
+
+**When to read it:** Generating custom datasets, understanding video parameters, troubleshooting video quality issues.
+
+---
+
+### **03_TRAINING.md** - Model Fine-Tuning Pipeline
+**What's in it:**
+- `run_full_pipeline.py` orchestration of training, evaluation, and tracking
+- Complete training parameter reference (LoRA rank, alpha, dropout, learning rate)
+- Dynamic YAML config generation from command-line arguments
+- How LLaMA-Factory executes training with 4-bit quantization
+- LoRA adapter initialization and why only 10-20M parameters are trainable
+- Training loop internals (forward pass, loss calculation, gradient accumulation)
+- Optimization techniques (gradient checkpointing, flash attention, mixed precision)
+- Output structure (adapter_config.json, adapter_model.bin files)
+- Common training issues (OOM, slow training, not learning, overfitting)
+
+**When to read it:** Modifying training hyperparameters, troubleshooting training issues, understanding LoRA fine-tuning.
+
+---
+
+### **04_EVALUATION.md** - Model Performance Testing
+**What's in it:**
+- `evaluate_pipeline_simple.py` architecture and evaluation loop
+- Two evaluation methods: "yesno" vs "moving_stopped" prompts
+- Step-by-step inference process (load video → preprocess → generate → parse → compare)
+- Video processing parameters (fps=4.0, min/max pixels)
+- Response parsing logic with priority order (negative indicators → "no" → positive indicators)
+- Comprehensive metrics calculation (accuracy, F1, precision, recall, per-class, per-texture, per-angle)
+- Output files: live logs, per-video CSVs, evaluation reports
+- Report generation format and structure
+- Common evaluation issues (inconsistent predictions, parsing failures, low performance)
+
+**When to read it:** Understanding metrics, debugging evaluation errors, interpreting model outputs.
+
+---
+
+### **05_REPORTING.md** - Interactive HTML Reports
+**What's in it:**
+- `generate_experiment_report.py` report generation system
+- Required input data (evaluation reports, per-video CSVs, video files)
+- HTML report structure (metrics section, charts, per-texture/angle breakdowns, video grid)
+- Interactive features (filtering, video playback, color-coded badges)
+- Video path handling (relative paths for browser compatibility)
+- Video preview grid with predictions and metadata
+- Report customization (CSS styling, adding sections)
+- Advanced features (video comparison, error analysis, interactive filtering)
+
+**When to read it:** Customizing report appearance, adding new report sections, troubleshooting video display issues.
+
+---
+
+### **06_EXPERIMENT_TRACKING.md** - CSV-Based Experiment Logging
+**What's in it:**
+- `experiment_tracker.py` class and `experiments_log.csv` structure
+- 196-column CSV schema covering every experiment aspect
+- Column categories: metadata, dataset config, train/test parameters, model config, LoRA, training hyperparameters, evaluation config, results
+- Usage workflow (start experiment → update status → log results → finalize)
+- Helper function `parse_evaluation_results()` for extracting metrics from reports
+- Querying experiments with Pandas, Excel, SQL
+- Example analyses (parameter effects, generalization, training duration, failures)
+- Best practices (backups, manual notes, validation, archiving)
+
+**When to read it:** Analyzing experiment results, comparing experiments, understanding what gets tracked.
+
+---
+
+## Finding Specific Information
+
+| I want to know about... | Read this file... | Section... |
+|-------------------------|-------------------|------------|
+| Overall system flow | 00_OVERVIEW.md | Architecture |
+| Running an experiment | 01_ORCHESTRATION.md | Script Structure |
+| Dataset parameters | 02_DATA_GENERATION.md | Part 1: building_dataset.py |
+| Video generation | 02_DATA_GENERATION.md | Part 2: synthetic_data_generation.py |
+| LoRA configuration | 03_TRAINING.md | Argument Parsing |
+| Training loop details | 03_TRAINING.md | Part 2: Training with LLaMA-Factory |
+| Evaluation metrics | 04_EVALUATION.md | Metrics Calculation |
+| Response parsing | 04_EVALUATION.md | Response Parsing |
+| HTML report structure | 05_REPORTING.md | HTML Report Structure |
+| Video display issues | 05_REPORTING.md | Video Path Handling |
+| What gets logged | 06_EXPERIMENT_TRACKING.md | CSV Structure |
+| Querying experiments | 06_EXPERIMENT_TRACKING.md | Querying Experiments |
+| Troubleshooting | All files | Common Issues sections |
+
+---
+
+## Document Size Reference
+
+| File | Lines | Complexity | Time to Read |
+|------|-------|------------|--------------|
+| README.md | 494 | ★☆☆☆☆ | 10 min |
+| 00_OVERVIEW.md | 157 | ★☆☆☆☆ | 8 min |
+| 01_ORCHESTRATION.md | 357 | ★★★☆☆ | 20 min |
+| 02_DATA_GENERATION.md | 802 | ★★★★☆ | 40 min |
+| 03_TRAINING.md | 736 | ★★★★★ | 40 min |
+| 04_EVALUATION.md | 801 | ★★★★★ | 45 min |
+| 05_REPORTING.md | 566 | ★★★☆☆ | 30 min |
+| 06_EXPERIMENT_TRACKING.md | 555 | ★★★☆☆ | 30 min |
+
+**Estimated total reading time: ~4 hours**
+
+---
+
+## Quick Decision Tree
+
+**START HERE:**
+
+1. **Never used the pipeline before?**
+   - Read: README.md → 00_OVERVIEW.md → 01_ORCHESTRATION.md
+   - Then run: `./run_experiment.sh`
+
+2. **Want to change experiment parameters?**
+   - Dataset parameters → 02_DATA_GENERATION.md (Section: Parameter Guide)
+   - Training parameters → 03_TRAINING.md (Section: Argument Parsing)
+   - Evaluation parameters → 04_EVALUATION.md (Section: Evaluation Prompts)
+
+3. **Need to understand results?**
+   - Metrics meaning → 04_EVALUATION.md (Section: Metrics Calculation)
+   - Comparing experiments → 06_EXPERIMENT_TRACKING.md (Section: Querying Experiments)
+   - Report customization → 05_REPORTING.md (Section: Report Customization)
+
+4. **Something broke?**
+   - Check relevant file's "Common Issues" section
+   - Example: Training OOM → 03_TRAINING.md (Section: Common Training Issues)
+
+5. **Want to analyze trends?**
+   - Read: 06_EXPERIMENT_TRACKING.md (Section: Example Analyses)
+   - Use: Pandas, Excel, or SQL on experiments_log.csv
+
+---
+
+## Key Takeaways by File
+
+### 00_OVERVIEW.md
+- **Key Insight:** 5-stage pipeline (Orchestration → Data → Training → Eval → Reporting)
+- **Critical Info:** Code syncs to GPU server, runs in Docker, downloads results back
+
+### 01_ORCHESTRATION.md
+- **Key Insight:** `run_experiment.sh` orchestrates everything via SSH + Docker
+- **Critical Info:** Edit this file to change experiment parameters (angle, texture, epochs, etc.)
+
+### 02_DATA_GENERATION.md
+- **Key Insight:** Blender generates synthetic videos with full parameter control
+- **Critical Info:** All parameters encoded in filename for easy identification
+- **New Feature (2025-12-07):** Center randomization allows treadmill to be positioned randomly in frame (with 30% min visibility) while maintaining position consistency across all frames in a video
+
+### 03_TRAINING.md
+- **Key Insight:** LoRA fine-tunes only 10-20M parameters (not full 7B model)
+- **Critical Info:** 4-bit quantization enables training on consumer GPUs
+
+### 04_EVALUATION.md
+- **Key Insight:** Evaluates both base and fine-tuned models with comprehensive metrics
+- **Critical Info:** Response parsing logic determines if model predicts "moving" or "stopped"
+
+### 05_REPORTING.md
+- **Key Insight:** Generates interactive HTML with video players and metrics
+- **Critical Info:** Uses relative paths so reports work when opened directly in browser
+
+### 06_EXPERIMENT_TRACKING.md
+- **Key Insight:** 196-column CSV logs everything for complete reproducibility
+- **Critical Info:** Query with Pandas/Excel to analyze experiment trends
+
+---
+
+## Most Common Tasks & Where to Look
+
+**Task:** Run first experiment
+**Files:** README.md → 00_OVERVIEW.md → 01_ORCHESTRATION.md
+**Action:** `./run_experiment.sh`
+
+**Task:** Change camera angle from 0° to 52°
+**File:** 01_ORCHESTRATION.md (Section: Stage 2 parameters)
+**Action:** Edit `--train_view_angle "0"` and `--test_view_angle "52"`
+
+**Task:** Train for more epochs
+**File:** 01_ORCHESTRATION.md (Section: Stage 3 parameters)
+**Action:** Edit `--num_train_epochs 20`
+
+**Task:** Understand why accuracy is only 70%
+**File:** 04_EVALUATION.md (Section: Common Evaluation Issues)
+**Action:** Check live log files to see actual model outputs
+
+**Task:** Find best experiment from last week
+**File:** 06_EXPERIMENT_TRACKING.md (Section: Querying Experiments)
+**Action:** Use Pandas to sort by `finetuned_model_accuracy`
+
+**Task:** Customize HTML report colors
+**File:** 05_REPORTING.md (Section: Report Customization)
+**Action:** Edit CSS in `generate_experiment_report.py`
+
+**Task:** Generate videos with randomized treadmill position
+**File:** 02_DATA_GENERATION.md (Section: Parameter Guide)
+**Action:** Use `--center_randomization randomized` with `--distance` parameter
+**Example:** `--distance 2.0,3.0 --center_randomization none,randomized` (generates all 4 combinations)
+
+---
+
+**Total Documentation:** 8 files, ~4,468 lines, comprehensive coverage of entire pipeline
+
+**Last Updated:** 2025-12-07
