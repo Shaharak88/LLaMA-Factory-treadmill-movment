@@ -185,6 +185,165 @@ class ExperimentReportGenerator:
 
         return metadata_path
 
+    def find_evaluation_results(self, dataset_name: str) -> Optional[Dict[str, Path]]:
+        """
+        Find evaluation result CSV files for a dataset.
+
+        Looks for eval_* folders in the dataset directory and finds the most recent
+        per_video_predictions CSV files for both base and finetuned models.
+
+        Args:
+            dataset_name: Name of dataset (e.g., "_exp_20251207_143033_test")
+
+        Returns:
+            Dict with 'base' and 'finetuned' paths to CSV files, or None if not found
+        """
+        dataset_dir = self.local_data_dir / dataset_name
+
+        if not dataset_dir.exists():
+            return None
+
+        # Find all eval_* folders
+        eval_folders = list(dataset_dir.glob('eval_*'))
+
+        if not eval_folders:
+            logger.warning(f"No evaluation folders found in {dataset_dir}")
+            return None
+
+        # Get the most recent eval folder
+        latest_eval_folder = max(eval_folders, key=lambda p: p.stat().st_mtime)
+        logger.info(f"Found evaluation folder: {latest_eval_folder}")
+
+        # Look for prediction CSV files
+        base_csvs = list(latest_eval_folder.glob('per_video_predictions_base_*.csv'))
+        finetuned_csvs = list(latest_eval_folder.glob('per_video_predictions_finetuned_*.csv'))
+
+        if not base_csvs or not finetuned_csvs:
+            logger.warning(f"Prediction CSV files not found in {latest_eval_folder}")
+            return None
+
+        # Get the most recent of each
+        base_csv = max(base_csvs, key=lambda p: p.stat().st_mtime)
+        finetuned_csv = max(finetuned_csvs, key=lambda p: p.stat().st_mtime)
+
+        logger.info(f"✓ Found base predictions: {base_csv.name}")
+        logger.info(f"✓ Found finetuned predictions: {finetuned_csv.name}")
+
+        return {
+            'base': base_csv,
+            'finetuned': finetuned_csv
+        }
+
+    def download_evaluation_results(self, dataset_name: str) -> Optional[Dict[str, Path]]:
+        """
+        Download evaluation results from server if not present locally.
+
+        Args:
+            dataset_name: Name of dataset
+
+        Returns:
+            Dict with 'base' and 'finetuned' paths to CSV files, or None if download failed
+        """
+        logger.info(f"Downloading evaluation results for {dataset_name} from server...")
+
+        # Remote path to dataset folder
+        remote_dataset_path = f"{self.server}:{self.remote_base}/{dataset_name}/"
+        local_dataset_path = self.local_data_dir / dataset_name
+        local_dataset_path.mkdir(parents=True, exist_ok=True)
+
+        # Use rsync to download eval_* folders
+        import subprocess
+        rsync_cmd = [
+            'rsync', '-avz', '--progress',
+            '--include=eval_*/',
+            '--include=eval_*/per_video_predictions_*.csv',
+            '--exclude=*',
+            remote_dataset_path,
+            str(local_dataset_path)
+        ]
+
+        try:
+            result = subprocess.run(rsync_cmd, check=True, capture_output=True, text=True)
+            logger.info("✓ Download complete")
+
+            # Now try to find the evaluation results
+            return self.find_evaluation_results(dataset_name)
+
+        except subprocess.CalledProcessError as e:
+            logger.error(f"Failed to download evaluation results: {e}")
+            logger.error(f"stdout: {e.stdout}")
+            logger.error(f"stderr: {e.stderr}")
+            return None
+
+    def ensure_evaluation_results(self, dataset_name: str) -> Optional[Dict[str, Path]]:
+        """
+        Ensure evaluation results are available locally. Download if needed.
+
+        Args:
+            dataset_name: Name of dataset
+
+        Returns:
+            Dict with 'base' and 'finetuned' paths to CSV files, or None if not available
+        """
+        # First, check if results exist locally
+        results = self.find_evaluation_results(dataset_name)
+
+        if results:
+            return results
+
+        # If not, try to download from server
+        logger.info(f"Evaluation results not found locally, attempting download...")
+        return self.download_evaluation_results(dataset_name)
+
+    def load_prediction_data(self, csv_paths: Dict[str, Path]) -> Dict[str, Dict]:
+        """
+        Load per-video prediction data from CSV files.
+
+        Args:
+            csv_paths: Dict with 'base' and 'finetuned' paths to CSV files
+
+        Returns:
+            Dict mapping video_filename -> {
+                'label': ground truth,
+                'base_raw': base model raw output,
+                'base_eval': base model evaluated prediction,
+                'finetuned_raw': finetuned model raw output,
+                'finetuned_eval': finetuned model evaluated prediction
+            }
+        """
+        prediction_data = {}
+
+        # Load base model predictions
+        logger.info(f"Loading base model predictions from {csv_paths['base']}")
+        with open(csv_paths['base'], 'r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                video_path = row['video_path']
+                # Extract just the filename from the path for matching
+                video_filename = Path(video_path).name
+                prediction_data[video_filename] = {
+                    'label': row['label'],
+                    'base_raw': row['model_output'],
+                    'base_eval': row['prediction']
+                }
+
+        # Load finetuned model predictions
+        logger.info(f"Loading finetuned model predictions from {csv_paths['finetuned']}")
+        with open(csv_paths['finetuned'], 'r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                video_path = row['video_path']
+                # Extract just the filename from the path for matching
+                video_filename = Path(video_path).name
+                if video_filename in prediction_data:
+                    prediction_data[video_filename]['finetuned_raw'] = row['model_output']
+                    prediction_data[video_filename]['finetuned_eval'] = row['prediction']
+                else:
+                    logger.warning(f"Video {video_filename} in finetuned CSV but not in base CSV")
+
+        logger.info(f"✓ Loaded predictions for {len(prediction_data)} videos")
+        return prediction_data
+
     def extract_non_default_params(self, experiment: Dict) -> Dict[str, any]:
         """
         Extract only non-default hyperparameter values from experiment.
@@ -425,6 +584,15 @@ class ExperimentReportGenerator:
         test_video_dir = self.ensure_videos_downloaded(test_dataset)
         test_metadata_csv = self.get_metadata(test_dataset)
 
+        # Load evaluation results (predictions) for test dataset
+        logger.info("\n=== LOADING EVALUATION RESULTS ===")
+        test_prediction_data = {}
+        test_eval_csvs = self.ensure_evaluation_results(test_dataset)
+        if test_eval_csvs:
+            test_prediction_data = self.load_prediction_data(test_eval_csvs)
+        else:
+            logger.warning("⚠️  No evaluation results found for test dataset. Per-video predictions will not be displayed.")
+
         # Load and analyze metadata
         logger.info("\n=== ANALYZING DATASETS ===")
         train_metadata = load_metadata(train_metadata_csv)
@@ -465,7 +633,8 @@ class ExperimentReportGenerator:
             comparison_plots=comparison_plots,
             train_video_dir=train_video_url,
             test_video_dir=test_video_url,
-            dataset_name=dataset_name
+            dataset_name=dataset_name,
+            test_prediction_data=test_prediction_data
         )
 
         with open(report_path, 'w', encoding='utf-8') as f:
@@ -491,7 +660,8 @@ class ExperimentReportGenerator:
         comparison_plots: Dict,
         train_video_dir: str,
         test_video_dir: str,
-        dataset_name: str
+        dataset_name: str,
+        test_prediction_data: Dict[str, Dict] = None
     ) -> str:
         """Build complete comprehensive HTML report with all analytics and model performance."""
 
@@ -500,6 +670,7 @@ class ExperimentReportGenerator:
         test_metadata_json = json.dumps(test_metadata, indent=2)
         train_stats_json = json.dumps(train_stats, indent=2)
         test_stats_json = json.dumps(test_stats, indent=2)
+        test_prediction_data_json = json.dumps(test_prediction_data if test_prediction_data else {}, indent=2)
 
         # Sample videos (max 5 per group)
         train_samples = {}
@@ -984,6 +1155,7 @@ class ExperimentReportGenerator:
         const testSamples = {test_samples_json};
         const trainVideoBaseUrl = '{train_video_dir}';
         const testVideoBaseUrl = '{test_video_dir}';
+        const testPredictionData = {test_prediction_data_json};
 
         function switchTab(event, tabName) {{
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -999,8 +1171,44 @@ class ExperimentReportGenerator:
             }}
         }}
 
-        function renderVideoCard(video, baseUrl) {{
+        function renderVideoCard(video, baseUrl, isTestVideo = false) {{
             const videoUrl = baseUrl ? `${{baseUrl}}/${{video.video_name}}` : video.video_name;
+
+            // Get prediction data for test videos
+            let predictionsHtml = '';
+            if (isTestVideo && testPredictionData) {{
+                // Use just the filename to look up predictions
+                const predictions = testPredictionData[video.video_name];
+
+                if (predictions) {{
+                    predictionsHtml = `
+                        <div style="margin-top: 15px; padding: 15px; background: #e8f5e9; border-radius: 8px; border-left: 4px solid #4caf50;">
+                            <h5 style="margin: 0 0 10px 0; color: #2e7d32; font-size: 0.95em;">📊 Model Predictions</h5>
+                            <div style="display: grid; gap: 8px; font-size: 0.85em;">
+                                <div style="padding: 8px; background: white; border-radius: 4px;">
+                                    <span style="font-weight: 600; color: #1976d2;">Ground Truth:</span>
+                                    <span style="color: #1976d2; font-weight: bold; text-transform: uppercase;">${{predictions.label}}</span>
+                                </div>
+                                <div style="padding: 8px; background: white; border-radius: 4px;">
+                                    <div style="font-weight: 600; color: #f57c00; margin-bottom: 4px;">Base Model:</div>
+                                    <div style="padding-left: 10px;">
+                                        <div style="margin-bottom: 3px;"><span style="font-weight: 500;">Raw:</span> <span style="color: #666;">${{predictions.base_raw}}</span></div>
+                                        <div><span style="font-weight: 500;">Evaluated:</span> <span style="color: #f57c00; font-weight: bold; text-transform: uppercase;">${{predictions.base_eval}}</span></div>
+                                    </div>
+                                </div>
+                                <div style="padding: 8px; background: white; border-radius: 4px;">
+                                    <div style="font-weight: 600; color: #388e3c; margin-bottom: 4px;">Fine-Tuned Model:</div>
+                                    <div style="padding-left: 10px;">
+                                        <div style="margin-bottom: 3px;"><span style="font-weight: 500;">Raw:</span> <span style="color: #666;">${{predictions.finetuned_raw}}</span></div>
+                                        <div><span style="font-weight: 500;">Evaluated:</span> <span style="color: #388e3c; font-weight: bold; text-transform: uppercase;">${{predictions.finetuned_eval}}</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }}
+            }}
+
             return `
                 <div class="video-card">
                     <video controls preload="metadata">
@@ -1021,6 +1229,7 @@ class ExperimentReportGenerator:
                         <div class="metadata-item"><span class="metadata-label">Resolution:</span><span class="metadata-value">${{video.resolution || 'N/A'}}</span></div>
                         <div class="metadata-item"><span class="metadata-label">Seed:</span><span class="metadata-value">${{video.seed || 'N/A'}}</span></div>
                     </div>
+                    ${{predictionsHtml}}
                 </div>
             `;
         }}
@@ -1145,7 +1354,7 @@ class ExperimentReportGenerator:
             container.innerHTML = html;
         }}
 
-        function renderGroupTab(tabId, categoryName, samples, videoBaseUrl) {{
+        function renderGroupTab(tabId, categoryName, samples, videoBaseUrl, isTestVideo = false) {{
             const container = document.getElementById(tabId);
             const categoryData = samples[categoryName];
             let html = `<h2>${{categoryName.charAt(0).toUpperCase() + categoryName.slice(1)}} Groups</h2>`;
@@ -1156,7 +1365,7 @@ class ExperimentReportGenerator:
                         <span>${{videos.length}} samples</span>
                     </div>
                     <div class="video-grid">
-                        ${{videos.map(video => renderVideoCard(video, videoBaseUrl)).join('')}}
+                        ${{videos.map(video => renderVideoCard(video, videoBaseUrl, isTestVideo)).join('')}}
                     </div>
                 `;
             }}
@@ -1167,7 +1376,8 @@ class ExperimentReportGenerator:
             const metadata = dataset === 'train' ? trainMetadata : testMetadata;
             const baseUrl = dataset === 'train' ? trainVideoBaseUrl : testVideoBaseUrl;
             const gridId = dataset === 'train' ? 'trainAllVideosGrid' : 'testAllVideosGrid';
-            document.getElementById(gridId).innerHTML = metadata.map(video => renderVideoCard(video, baseUrl)).join('');
+            const isTestVideo = dataset === 'test';
+            document.getElementById(gridId).innerHTML = metadata.map(video => renderVideoCard(video, baseUrl, isTestVideo)).join('');
         }}
 
         function filterTrainVideos() {{
@@ -1189,23 +1399,23 @@ class ExperimentReportGenerator:
             renderDistributionCharts(trainStats, 'train-distribution-charts');
             renderRepresentationAlerts(trainStats, 'train-representation-alerts');
             renderDefaultsTable(trainMetadata, 'train-defaults-table');
-            renderGroupTab('train-texture', 'texture', trainSamples, trainVideoBaseUrl);
-            renderGroupTab('train-direction', 'direction', trainSamples, trainVideoBaseUrl);
-            renderGroupTab('train-speed', 'speed_range', trainSamples, trainVideoBaseUrl);
-            renderGroupTab('train-angle', 'angle', trainSamples, trainVideoBaseUrl);
-            renderGroupTab('train-objects', 'objects', trainSamples, trainVideoBaseUrl);
-            renderGroupTab('train-blur', 'blur', trainSamples, trainVideoBaseUrl);
+            renderGroupTab('train-texture', 'texture', trainSamples, trainVideoBaseUrl, false);
+            renderGroupTab('train-direction', 'direction', trainSamples, trainVideoBaseUrl, false);
+            renderGroupTab('train-speed', 'speed_range', trainSamples, trainVideoBaseUrl, false);
+            renderGroupTab('train-angle', 'angle', trainSamples, trainVideoBaseUrl, false);
+            renderGroupTab('train-objects', 'objects', trainSamples, trainVideoBaseUrl, false);
+            renderGroupTab('train-blur', 'blur', trainSamples, trainVideoBaseUrl, false);
 
             // Test dataset
             renderDistributionCharts(testStats, 'test-distribution-charts');
             renderRepresentationAlerts(testStats, 'test-representation-alerts');
             renderDefaultsTable(testMetadata, 'test-defaults-table');
-            renderGroupTab('test-texture', 'texture', testSamples, testVideoBaseUrl);
-            renderGroupTab('test-direction', 'direction', testSamples, testVideoBaseUrl);
-            renderGroupTab('test-speed', 'speed_range', testSamples, testVideoBaseUrl);
-            renderGroupTab('test-angle', 'angle', testSamples, testVideoBaseUrl);
-            renderGroupTab('test-objects', 'objects', testSamples, testVideoBaseUrl);
-            renderGroupTab('test-blur', 'blur', testSamples, testVideoBaseUrl);
+            renderGroupTab('test-texture', 'texture', testSamples, testVideoBaseUrl, true);
+            renderGroupTab('test-direction', 'direction', testSamples, testVideoBaseUrl, true);
+            renderGroupTab('test-speed', 'speed_range', testSamples, testVideoBaseUrl, true);
+            renderGroupTab('test-angle', 'angle', testSamples, testVideoBaseUrl, true);
+            renderGroupTab('test-objects', 'objects', testSamples, testVideoBaseUrl, true);
+            renderGroupTab('test-blur', 'blur', testSamples, testVideoBaseUrl, true);
         }});
     </script>
 </body>
