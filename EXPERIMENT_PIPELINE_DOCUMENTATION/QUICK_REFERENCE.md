@@ -263,9 +263,10 @@
 **Action:** Open HTML report, click "Failure Analysis" tab - shows which features significantly affect accuracy with video examples
 
 **Task:** Generate videos with randomized treadmill position
-**File:** 02_DATA_GENERATION.md (Section: Parameter Guide)
-**Action:** Use `--center_randomization randomized` with `--distance` parameter
-**Example:** `--distance 2.0,3.0 --center_randomization none,randomized` (generates all 4 combinations)
+**File:** 01_ORCHESTRATION.md (Section: Experiment Parameters) or 02_DATA_GENERATION.md
+**Action:** Use `--train-center-randomization` and `--test-center-randomization` flags (0=none, 1=randomized)
+**Example via run_experiment.sh:** `--train-center-randomization "0,1"` (generates both centered and randomized combinations)
+**Example direct building_dataset.py:** `--center_randomization none,randomized`
 
 ---
 

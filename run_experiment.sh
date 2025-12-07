@@ -108,6 +108,8 @@ TRAIN_EDGE_WIDTH="0.1"  # Fixed: was "5" (500%!), now 0.1 (10% - normal edge wid
 TEST_EDGE_WIDTH=""
 TRAIN_DISTANCE="1.0"  # Distance factor: 1.0 = normal size, >1.0 = smaller/further away
 TEST_DISTANCE=""
+TRAIN_CENTER_RANDOMIZATION="0"  # Center randomization: 0 = none (centered), 1 = randomized position
+TEST_CENTER_RANDOMIZATION=""
 
 # Stripe parameters (for subtle_gray_stripes)
 TRAIN_STRIPE_WIDTH="10"
@@ -249,6 +251,12 @@ EXPERIMENT PARAMETERS:
     --test-speed SPEEDS     Test speed range (default: same as train)
     --test-bg-gray VALS     Test background gray (default: 10,11,12)
     --test-stripe-gray V    Test stripe gray (default: 15,16,17)
+
+    # Center randomization parameters
+    --train-center-randomization VAL  Train: Center randomization (0=none, 1=randomized, default: 0)
+                                      Accepts comma-separated values (e.g., 0,1) for combinations
+    --test-center-randomization VAL   Test: Center randomization (0=none, 1=randomized)
+                                      If not specified, uses train value
 
     # Object placement parameters
     --train-add-object BOOL Train: Enable object placement (true/false, default: false)
@@ -469,6 +477,14 @@ parse_args() {
                 TEST_DISTANCE="$2"
                 shift 2
                 ;;
+            --train-center-randomization)
+                TRAIN_CENTER_RANDOMIZATION="$2"
+                shift 2
+                ;;
+            --test-center-randomization)
+                TEST_CENTER_RANDOMIZATION="$2"
+                shift 2
+                ;;
             --fps)
                 FPS="$2"
                 shift 2
@@ -636,6 +652,30 @@ generate_dataset_name() {
     echo "${texture_short}_exp_${timestamp}"
 }
 
+convert_center_randomization() {
+    # Convert 0/1 values to none/randomized for building_dataset.py
+    # Supports comma-separated values like "0,1" -> "none,randomized"
+    local input="$1"
+    local result=""
+
+    # Split by comma and convert each value
+    IFS=',' read -ra VALUES <<< "$input"
+    for val in "${VALUES[@]}"; do
+        if [ -n "$result" ]; then
+            result="$result,"
+        fi
+        if [ "$val" = "0" ]; then
+            result="${result}none"
+        elif [ "$val" = "1" ]; then
+            result="${result}randomized"
+        else
+            # Pass through other values unchanged (for backward compatibility)
+            result="${result}${val}"
+        fi
+    done
+    echo "$result"
+}
+
 ################################################################################
 # MAIN WORKFLOW STEPS
 ################################################################################
@@ -709,6 +749,7 @@ step_build_datasets() {
     local test_camera_noise="${TEST_CAMERA_NOISE:-$TRAIN_CAMERA_NOISE}"
     local test_edge_width="${TEST_EDGE_WIDTH:-$TRAIN_EDGE_WIDTH}"
     local test_distance="${TEST_DISTANCE:-$TRAIN_DISTANCE}"
+    local test_center_randomization="${TEST_CENTER_RANDOMIZATION:-$TRAIN_CENTER_RANDOMIZATION}"
     local test_stripe_width="${TEST_STRIPE_WIDTH:-$TRAIN_STRIPE_WIDTH}"
     local test_stripe_spacing="${TEST_STRIPE_SPACING:-$TRAIN_STRIPE_SPACING}"
     local test_stripe_distance_variance="${TEST_STRIPE_DISTANCE_VARIANCE:-$TRAIN_STRIPE_DISTANCE_VARIANCE}"
@@ -764,6 +805,7 @@ step_build_datasets() {
         --camera_noise '$TRAIN_CAMERA_NOISE' \
         --edge_width '$TRAIN_EDGE_WIDTH' \
         --distance '$TRAIN_DISTANCE' \
+        --center_randomization '$(convert_center_randomization "$TRAIN_CENTER_RANDOMIZATION")' \
         --stripe_width '$TRAIN_STRIPE_WIDTH' \
         --stripe_spacing '$TRAIN_STRIPE_SPACING' \
         --stripe_gray '$TRAIN_STRIPE_GRAY' \
@@ -825,6 +867,7 @@ step_build_datasets() {
         --camera_noise '$test_camera_noise' \
         --edge_width '$test_edge_width' \
         --distance '$test_distance' \
+        --center_randomization '$(convert_center_randomization "$test_center_randomization")' \
         --stripe_width '$test_stripe_width' \
         --stripe_spacing '$test_stripe_spacing' \
         --stripe_gray '$TEST_STRIPE_GRAY' \
@@ -890,6 +933,7 @@ step_run_training() {
     local test_camera_noise="${TEST_CAMERA_NOISE:-$TRAIN_CAMERA_NOISE}"
     local test_edge_width="${TEST_EDGE_WIDTH:-$TRAIN_EDGE_WIDTH}"
     local test_distance="${TEST_DISTANCE:-$TRAIN_DISTANCE}"
+    local test_center_randomization="${TEST_CENTER_RANDOMIZATION:-$TRAIN_CENTER_RANDOMIZATION}"
     local test_stripe_width="${TEST_STRIPE_WIDTH:-$TRAIN_STRIPE_WIDTH}"
     local test_stripe_spacing="${TEST_STRIPE_SPACING:-$TRAIN_STRIPE_SPACING}"
     local test_stripe_gray="${TEST_STRIPE_GRAY}"
@@ -966,6 +1010,7 @@ step_run_training() {
         --train_camera_noise '$TRAIN_CAMERA_NOISE' \
         --train_edge_width '$TRAIN_EDGE_WIDTH' \
         --train_distance '$TRAIN_DISTANCE' \
+        --train_center_randomization '$TRAIN_CENTER_RANDOMIZATION' \
         --train_stripe_width '$TRAIN_STRIPE_WIDTH' \
         --train_stripe_spacing '$TRAIN_STRIPE_SPACING' \
         --train_stripe_gray '$TRAIN_STRIPE_GRAY' \
@@ -996,6 +1041,7 @@ step_run_training() {
         --test_camera_noise '$test_camera_noise' \
         --test_edge_width '$test_edge_width' \
         --test_distance '$test_distance' \
+        --test_center_randomization '$test_center_randomization' \
         --test_stripe_width '$test_stripe_width' \
         --test_stripe_spacing '$test_stripe_spacing' \
         --test_stripe_gray '$test_stripe_gray' \
