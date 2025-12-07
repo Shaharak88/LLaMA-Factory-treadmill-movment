@@ -187,7 +187,10 @@ class ExperimentTracker:
 
         # Key training parameters (for easy reference)
         'use_dora',
-        'num_train_epochs'
+        'num_train_epochs',
+
+        # Dataset comparison report (HTML link)
+        'dataset_comparison_report'
     ]
 
     def __init__(self, csv_path: str = 'experiments_log.csv'):
@@ -413,7 +416,10 @@ class ExperimentTracker:
             # This fixes the bug where CSV logged wrong paths like saves/qwen2vl-treadmill-lora-pipeline
             # instead of the actual saves/{model_name} path
             'model_path': actual_model_path or getattr(args, 'eval_model_path', '') or getattr(args, 'lora_output_dir', ''),
-            'model_name': getattr(args, 'model_name', '')
+            'model_name': getattr(args, 'model_name', ''),
+
+            # Dataset comparison report (empty initially, filled after evaluation)
+            'dataset_comparison_report': ''
         }
 
         # Write to CSV
@@ -602,6 +608,20 @@ class ExperimentTracker:
             writer.writeheader()
             writer.writerows(rows)
 
+    def update_dataset_comparison_report(self, report_path: str) -> None:
+        """
+        Update the dataset comparison report HTML link.
+
+        Args:
+            report_path: Relative or absolute path to the HTML report
+        """
+        if self.current_experiment_id is None:
+            logger.warning("[TRACKER] No active experiment to update")
+            return
+
+        self._update_column(self.current_experiment_id, 'dataset_comparison_report', report_path)
+        logger.info(f"[TRACKER] Updated dataset comparison report: {report_path}")
+
     def finalize_experiment(self) -> None:
         """Mark experiment as complete."""
         if self.current_experiment_id is None:
@@ -681,7 +701,8 @@ def parse_evaluation_results(output_dir: str) -> tuple[Optional[Dict], Optional[
             texture_section = re.search(r'PER-TEXTURE BREAKDOWN:(.*?)(?:PER-ANGLE|COMPARISON|$)', section_text, re.DOTALL)
             if texture_section:
                 results['per_texture'] = {}
-                texture_blocks = re.finditer(r'(\w+(?:_\w+)*):\s*\n\s*Total:\s*(\d+).*?\n\s*Accuracy:\s*([\d.]+)%\s*\((\d+)/\d+\)(?:.*?F1 Score:\s*([\d.]+)%)?', texture_section.group(1), re.DOTALL)
+                # Fixed regex: added \s* at start to match leading whitespace before texture name
+                texture_blocks = re.finditer(r'\s*(\w+(?:_\w+)*):\s*\n\s*Total:\s*(\d+).*?\n\s*Accuracy:\s*([\d.]+)%\s*\((\d+)/\d+\)(?:.*?F1 Score:\s*([\d.]+)%)?', texture_section.group(1), re.DOTALL)
                 for match in texture_blocks:
                     tex_name = match.group(1)
                     results['per_texture'][tex_name] = {
@@ -695,7 +716,8 @@ def parse_evaluation_results(output_dir: str) -> tuple[Optional[Dict], Optional[
             angle_section = re.search(r'PER-ANGLE BREAKDOWN:(.*?)(?:COMPARISON|$)', section_text, re.DOTALL)
             if angle_section:
                 results['per_angle'] = {}
-                angle_blocks = re.finditer(r'(angle\d+):\s*\n\s*Total:\s*(\d+).*?\n\s*Accuracy:\s*([\d.]+)%\s*\((\d+)/\d+\)(?:.*?F1 Score:\s*([\d.]+)%)?', angle_section.group(1), re.DOTALL)
+                # Fixed regex: added \s* at start to match leading whitespace before angle name
+                angle_blocks = re.finditer(r'\s*(angle\d+):\s*\n\s*Total:\s*(\d+).*?\n\s*Accuracy:\s*([\d.]+)%\s*\((\d+)/\d+\)(?:.*?F1 Score:\s*([\d.]+)%)?', angle_section.group(1), re.DOTALL)
                 for match in angle_blocks:
                     ang_name = match.group(1)
                     results['per_angle'][ang_name] = {

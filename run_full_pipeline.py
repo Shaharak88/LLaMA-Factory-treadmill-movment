@@ -575,6 +575,74 @@ seed: {self.args.seed}
         logger.info(f"Model Evaluated: {Path(self.lora_output_dir).absolute()}")
         logger.info("="*70 + "\n")
 
+    def step4_generate_dataset_comparison_report(self) -> None:
+        """
+        Step 4: Generate dataset comparison HTML report with model performance metrics.
+
+        This step:
+        1. Checks if dataset videos are already downloaded locally
+        2. If not, downloads them from the server
+        3. Extracts model performance metrics from CSV
+        4. Generates enhanced HTML report with visualizations
+        5. Updates CSV with report link
+        """
+        logger.info("\n" + "#"*70)
+        logger.info("# STEP 4: GENERATE DATASET COMPARISON REPORT")
+        logger.info("#"*70)
+
+        # Build command to run report generator
+        cmd = [
+            'python3',
+            str(self.project_root / 'generate_experiment_report.py'),
+            '--dataset-name', self.args.dataset_name,
+            '--csv-path', str(self.tracker.csv_path)
+        ]
+
+        try:
+            # Run the report generator
+            logger.info(f"\nGenerating dataset comparison report for: {self.args.dataset_name}")
+            result = subprocess.run(
+                cmd,
+                cwd=str(self.project_root),
+                capture_output=True,
+                text=True,
+                check=True
+            )
+
+            # Parse output to get report path
+            output_lines = result.stdout.strip().split('\n')
+            report_path = None
+            for line in output_lines:
+                if 'Report generated:' in line:
+                    # Extract path from output
+                    report_path = line.split('Report generated:')[1].strip()
+                    break
+
+            if report_path:
+                # Update CSV with report link
+                self.tracker.update_dataset_comparison_report(report_path)
+                logger.info(f"\n✅ Dataset comparison report generated: {report_path}")
+            else:
+                logger.warning("\n⚠️  Could not extract report path from output")
+
+            # Print output from report generator
+            logger.info("\n--- Report Generator Output ---")
+            logger.info(result.stdout)
+            logger.info("--- End Output ---\n")
+
+        except subprocess.CalledProcessError as e:
+            logger.error(f"\n❌ Failed to generate dataset comparison report")
+            logger.error(f"Error: {e}")
+            if e.stdout:
+                logger.error(f"STDOUT: {e.stdout}")
+            if e.stderr:
+                logger.error(f"STDERR: {e.stderr}")
+            # Don't fail the entire pipeline if report generation fails
+            logger.warning("Continuing without dataset comparison report...")
+        except Exception as e:
+            logger.error(f"\n❌ Unexpected error generating report: {e}")
+            logger.warning("Continuing without dataset comparison report...")
+
     def run(self) -> None:
         """Execute the complete pipeline."""
         try:
@@ -605,6 +673,12 @@ seed: {self.args.seed}
                 self.step3_evaluate_models()
             else:
                 logger.info("\n### Skipping evaluation (--skip_evaluation) ###")
+
+            # Step 4: Generate dataset comparison report
+            if not self.args.skip_evaluation:  # Only generate report if we ran evaluation
+                self.step4_generate_dataset_comparison_report()
+            else:
+                logger.info("\n### Skipping dataset comparison report (no evaluation run) ###")
 
             logger.info("\n" + "="*70)
             logger.info("[OK] FULL PIPELINE COMPLETED SUCCESSFULLY")
