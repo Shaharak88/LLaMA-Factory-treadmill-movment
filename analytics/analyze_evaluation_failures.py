@@ -237,7 +237,243 @@ def print_feature_analysis(data: dict, feature_name: str, label_filter: str = No
 
 
 # =============================================================================
-# Main Analysis
+# Module API for Integration
+# =============================================================================
+
+def analyze_predictions(csv_path: str, p_threshold: float = 0.01) -> dict:
+    """
+    Analyze per-video predictions and return structured results.
+
+    This function can be called from other modules (like generate_experiment_report.py)
+    to get analysis results as structured data for HTML report generation.
+
+    Args:
+        csv_path: Path to per-video predictions CSV file
+        p_threshold: P-value threshold for significance (default: 0.01)
+
+    Returns:
+        Dictionary with analysis results:
+        {
+            'row_count': int,
+            'accuracy_by_feature': {
+                'distance': [{'value': x, 'label': y, 'correct': n, 'total': m, 'accuracy': pct}, ...],
+                'angle': [...],
+                'stripe': [...],
+                'bg': [...]
+            },
+            'chi2_tests': [
+                {'feature': name, 'chi2': value, 'p_value': p, 'significant': bool},
+                ...
+            ],
+            'fisher_tests': [
+                {'feature': name, 'val1': v1, 'val2': v2, 'acc1': a1, 'acc2': a2, 'p_value': p, 'significant': bool},
+                ...
+            ],
+            'significant_factors': [str, ...],
+            'conclusion': str,
+            'failed_videos': [
+                {'video_path': path, 'label': label, 'prediction': pred, 'distance': d, 'angle': a, ...},
+                ...
+            ]
+        }
+
+    Raises:
+        FileNotFoundError: If CSV file doesn't exist
+        ValueError: If required features can't be extracted from video paths
+    """
+    if not Path(csv_path).exists():
+        raise FileNotFoundError(f"CSV file not found: {csv_path}")
+
+    # Data structures for aggregation by feature
+    by_distance = defaultdict(lambda: {'total': 0, 'correct': 0})
+    by_angle = defaultdict(lambda: {'total': 0, 'correct': 0})
+    by_stripe = defaultdict(lambda: {'total': 0, 'correct': 0})
+    by_bg = defaultdict(lambda: {'total': 0, 'correct': 0})
+    by_label = defaultdict(lambda: {'total': 0, 'correct': 0})
+
+    # Store failed videos for examples
+    failed_videos = []
+    all_rows = []
+
+    # Read and parse CSV
+    row_count = 0
+    with open(csv_path, 'r') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            row_count += 1
+            features = extract_all_features(row['video_path'])
+            label = row['label']
+            correct = row['correct'] == 'True'
+            prediction = row.get('prediction', '')
+
+            dist = features['distance']
+            angle = features['angle']
+            stripe = features['stripe']
+            bg = features['bg']
+            speed = features['speed']
+
+            # Skip rows where features couldn't be extracted (with warning)
+            if dist is None or angle is None or stripe is None or bg is None:
+                continue
+
+            # Store row data
+            row_data = {
+                'video_path': row['video_path'],
+                'label': label,
+                'prediction': prediction,
+                'correct': correct,
+                'distance': dist,
+                'angle': angle,
+                'stripe': stripe,
+                'bg': bg,
+                'speed': speed,
+                'model_output': row.get('model_output', '')
+            }
+            all_rows.append(row_data)
+
+            # Store failed videos
+            if not correct:
+                failed_videos.append(row_data)
+
+            # Aggregate by individual feature + label
+            by_distance[(dist, label)]['total'] += 1
+            by_distance[(dist, label)]['correct'] += int(correct)
+
+            by_angle[(angle, label)]['total'] += 1
+            by_angle[(angle, label)]['correct'] += int(correct)
+
+            by_stripe[(stripe, label)]['total'] += 1
+            by_stripe[(stripe, label)]['correct'] += int(correct)
+
+            by_bg[(bg, label)]['total'] += 1
+            by_bg[(bg, label)]['correct'] += int(correct)
+
+            by_label[label]['total'] += 1
+            by_label[label]['correct'] += int(correct)
+
+    # Build accuracy by feature data
+    def build_accuracy_list(data_dict):
+        result = []
+        for key in sorted(data_dict.keys()):
+            val, label = key
+            d = data_dict[key]
+            if d['total'] > 0:
+                acc = (d['correct'] / d['total']) * 100
+                result.append({
+                    'value': val,
+                    'label': label,
+                    'correct': d['correct'],
+                    'total': d['total'],
+                    'accuracy': round(acc, 2)
+                })
+        return result
+
+    accuracy_by_feature = {
+        'distance': build_accuracy_list(by_distance),
+        'angle': build_accuracy_list(by_angle),
+        'stripe': build_accuracy_list(by_stripe),
+        'bg': build_accuracy_list(by_bg)
+    }
+
+    # Run statistical tests
+    chi2_tests = []
+    feature_tests = [
+        ("Distance", by_distance, None),
+        ("Distance (moving)", by_distance, "moving"),
+        ("Distance (stopped)", by_distance, "stopped"),
+        ("Angle", by_angle, None),
+        ("Angle (moving)", by_angle, "moving"),
+        ("Stripe", by_stripe, None),
+        ("BG", by_bg, None),
+    ]
+
+    significant_results = []
+
+    for name, data, label_filter in feature_tests:
+        chi2, p_value, skip_reason = compute_chi2_test(data, label_filter)
+        if chi2 is not None:
+            is_sig = p_value < p_threshold
+            chi2_tests.append({
+                'feature': name,
+                'chi2': round(chi2, 2),
+                'p_value': p_value,
+                'significant': is_sig
+            })
+            if is_sig:
+                significant_results.append(('chi2', name, chi2, p_value))
+        else:
+            chi2_tests.append({
+                'feature': name,
+                'chi2': None,
+                'p_value': None,
+                'significant': False,
+                'skip_reason': skip_reason
+            })
+
+    # Run pairwise Fisher tests
+    fisher_tests = []
+    pairwise_tests = [
+        ("Distance", by_distance, None),
+        ("Distance (moving)", by_distance, "moving"),
+        ("Angle", by_angle, None),
+        ("Stripe", by_stripe, None),
+        ("BG", by_bg, None),
+    ]
+
+    for name, data, label_filter in pairwise_tests:
+        pairwise_results = compute_pairwise_fisher(data, label_filter)
+        for val1, val2, p_value, acc1, acc2, n1, n2 in pairwise_results:
+            is_sig = p_value < p_threshold
+            fisher_tests.append({
+                'feature': name,
+                'val1': val1,
+                'val2': val2,
+                'acc1': round(acc1, 1),
+                'acc2': round(acc2, 1),
+                'n1': n1,
+                'n2': n2,
+                'p_value': p_value,
+                'significant': is_sig
+            })
+            if is_sig:
+                significant_results.append(('fisher', name, val1, val2, p_value, acc1, acc2))
+
+    # Build significant factors list
+    significant_factors = []
+    for result in significant_results:
+        if result[0] == 'chi2':
+            significant_factors.append(f"{result[1]}: Chi2={result[2]:.2f}, p={result[3]:.2e}")
+        else:
+            significant_factors.append(f"{result[1]}: {result[2]} vs {result[3]} ({result[5]:.1f}% vs {result[6]:.1f}%), p={result[4]:.2e}")
+
+    # Build conclusion
+    distance_sig = any(r[1].startswith('Distance') for r in significant_results if r[0] == 'chi2')
+    other_sig = any(not r[1].startswith('Distance') for r in significant_results)
+
+    if distance_sig and not other_sig:
+        conclusion = "DISTANCE is the ONLY statistically significant factor affecting model accuracy. Other features (angle, stripe, bg) show NO significant effect."
+    elif significant_results:
+        conclusion = "Multiple significant factors found affecting model accuracy."
+    else:
+        conclusion = "No statistically significant differences detected in any feature."
+
+    # Sort failed videos by distance (descending) to show worst failures first
+    failed_videos.sort(key=lambda x: (x['distance'] if x['distance'] else 0), reverse=True)
+
+    return {
+        'row_count': row_count,
+        'accuracy_by_feature': accuracy_by_feature,
+        'chi2_tests': chi2_tests,
+        'fisher_tests': fisher_tests,
+        'significant_factors': significant_factors,
+        'conclusion': conclusion,
+        'failed_videos': failed_videos[:50],  # Limit to 50 examples
+        'p_threshold': p_threshold
+    }
+
+
+# =============================================================================
+# Main Analysis (CLI)
 # =============================================================================
 
 def main():

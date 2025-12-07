@@ -34,6 +34,7 @@ import logging
 
 # Import functions from dual_dataset_review.py
 sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).parent / "analytics"))
 from dual_dataset_review import (
     extract_metadata,
     download_videos,
@@ -45,6 +46,15 @@ from dual_dataset_review import (
     generate_categorical_comparison
 )
 from experiment_tracker import ExperimentTracker
+
+# Import failure analysis function (optional - gracefully handle if scipy not available)
+try:
+    from analytics.analyze_evaluation_failures import analyze_predictions
+    FAILURE_ANALYSIS_AVAILABLE = True
+except ImportError:
+    FAILURE_ANALYSIS_AVAILABLE = False
+    logger = logging.getLogger(__name__)
+    logger.warning("Failure analysis not available (scipy not installed)")
 
 logging.basicConfig(
     level=logging.INFO,
@@ -398,6 +408,195 @@ class ExperimentReportGenerator:
         words = param.replace('_', ' ').split()
         return ' '.join(word.capitalize() for word in words)
 
+    def generate_failure_analysis_tab_html(self, analysis_results: Dict, test_video_dir: str) -> str:
+        """
+        Generate HTML for failure analysis tab content.
+
+        Args:
+            analysis_results: Dictionary from analyze_predictions() function
+            test_video_dir: Relative path to test video directory for video playback
+
+        Returns:
+            HTML string for failure analysis tab content
+        """
+        if not analysis_results:
+            return '<div class="alert alert-warning"><h3>⚠️ Failure Analysis Not Available</h3><p>Could not run failure analysis. Ensure evaluation results are available.</p></div>'
+
+        # Build accuracy by distance table
+        distance_rows = ""
+        for item in analysis_results.get('accuracy_by_feature', {}).get('distance', []):
+            acc_class = "high-acc" if item['accuracy'] >= 80 else ("mid-acc" if item['accuracy'] >= 50 else "low-acc")
+            distance_rows += f"""
+                <tr class="{acc_class}">
+                    <td>{item['value']}</td>
+                    <td>{item['label']}</td>
+                    <td>{item['correct']}</td>
+                    <td>{item['total']}</td>
+                    <td><strong>{item['accuracy']:.1f}%</strong></td>
+                </tr>
+            """
+
+        # Build chi-squared tests table
+        chi2_rows = ""
+        for test in analysis_results.get('chi2_tests', []):
+            sig_class = "significant" if test.get('significant') else ""
+            sig_marker = "✓ YES" if test.get('significant') else "no"
+            chi2_val = f"{test['chi2']:.2f}" if test['chi2'] is not None else "N/A"
+            p_val = f"{test['p_value']:.2e}" if test['p_value'] is not None else test.get('skip_reason', 'N/A')
+            chi2_rows += f"""
+                <tr class="{sig_class}">
+                    <td>{test['feature']}</td>
+                    <td>{chi2_val}</td>
+                    <td>{p_val}</td>
+                    <td><strong>{sig_marker}</strong></td>
+                </tr>
+            """
+
+        # Build significant Fisher tests table (only significant ones)
+        fisher_rows = ""
+        sig_fisher_tests = [t for t in analysis_results.get('fisher_tests', []) if t.get('significant')]
+        for test in sig_fisher_tests[:20]:  # Limit to 20 rows
+            fisher_rows += f"""
+                <tr class="significant">
+                    <td>{test['feature']}</td>
+                    <td>{test['val1']}</td>
+                    <td>{test['val2']}</td>
+                    <td>{test['acc1']:.1f}%</td>
+                    <td>{test['acc2']:.1f}%</td>
+                    <td>{test['p_value']:.2e}</td>
+                </tr>
+            """
+
+        if not fisher_rows:
+            fisher_rows = '<tr><td colspan="6" style="text-align: center; color: #666;">No significant pairwise differences found</td></tr>'
+
+        # Build significant factors list
+        sig_factors_html = ""
+        for factor in analysis_results.get('significant_factors', []):
+            sig_factors_html += f'<li class="sig-factor">{factor}</li>'
+
+        if not sig_factors_html:
+            sig_factors_html = '<li style="color: #666;">No statistically significant factors found</li>'
+
+        # Build failed videos examples (up to 12)
+        failed_videos = analysis_results.get('failed_videos', [])[:12]
+        failed_videos_html = ""
+        for video in failed_videos:
+            video_filename = Path(video['video_path']).name
+            video_url = f"{test_video_dir}/{video_filename}"
+            failed_videos_html += f"""
+                <div class="failed-video-card">
+                    <video controls preload="metadata">
+                        <source src="{video_url}" type="video/mp4">
+                        Your browser does not support video.
+                    </video>
+                    <div class="failed-video-info">
+                        <div class="failed-badge">FAILED</div>
+                        <div class="video-detail"><span class="label">Label:</span> <span class="value truth">{video['label']}</span></div>
+                        <div class="video-detail"><span class="label">Predicted:</span> <span class="value predicted">{video['prediction']}</span></div>
+                        <div class="video-detail"><span class="label">Distance:</span> <span class="value">{video['distance']}</span></div>
+                        <div class="video-detail"><span class="label">Angle:</span> <span class="value">{video['angle']}°</span></div>
+                        <div class="video-detail"><span class="label">Model Output:</span> <span class="value model-output">{video['model_output'][:100]}...</span></div>
+                    </div>
+                </div>
+            """
+
+        conclusion = analysis_results.get('conclusion', 'No conclusion available.')
+        p_threshold = analysis_results.get('p_threshold', 0.01)
+        row_count = analysis_results.get('row_count', 0)
+
+        html = f'''
+        <h2>🔬 Statistical Failure Analysis</h2>
+        <p style="color: #495057; margin-bottom: 20px;">
+            Analyzed <strong>{row_count}</strong> predictions using statistical significance testing (p &lt; {p_threshold}).
+        </p>
+
+        <!-- Conclusion Box -->
+        <div class="conclusion-box">
+            <h3>📊 Key Finding</h3>
+            <p>{conclusion}</p>
+        </div>
+
+        <!-- Significant Factors -->
+        <div class="analysis-section">
+            <h3>🎯 Statistically Significant Factors</h3>
+            <ul class="sig-factors-list">
+                {sig_factors_html}
+            </ul>
+        </div>
+
+        <!-- Accuracy by Distance -->
+        <div class="analysis-section">
+            <h3>📏 Accuracy by Distance</h3>
+            <p class="section-desc">Shows how model accuracy varies with camera distance from the treadmill.</p>
+            <table class="analysis-table">
+                <thead>
+                    <tr>
+                        <th>Distance</th>
+                        <th>Label</th>
+                        <th>Correct</th>
+                        <th>Total</th>
+                        <th>Accuracy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {distance_rows}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Chi-Squared Tests -->
+        <div class="analysis-section">
+            <h3>📈 Chi-Squared Tests (Feature Significance)</h3>
+            <p class="section-desc">Tests whether accuracy differs significantly across feature values. Significant results (p &lt; {p_threshold}) indicate the feature affects model accuracy.</p>
+            <table class="analysis-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Chi²</th>
+                        <th>p-value</th>
+                        <th>Significant</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {chi2_rows}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pairwise Fisher Tests -->
+        <div class="analysis-section">
+            <h3>🔍 Significant Pairwise Comparisons (Fisher's Exact Test)</h3>
+            <p class="section-desc">Compares accuracy between specific pairs of feature values. Only significant differences shown (p &lt; {p_threshold}).</p>
+            <table class="analysis-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Value 1</th>
+                        <th>Value 2</th>
+                        <th>Acc 1</th>
+                        <th>Acc 2</th>
+                        <th>p-value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {fisher_rows}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Failed Video Examples -->
+        <div class="analysis-section">
+            <h3>🎬 Failed Prediction Examples</h3>
+            <p class="section-desc">Sample videos where the model made incorrect predictions, sorted by distance (furthest first).</p>
+            <div class="failed-videos-grid">
+                {failed_videos_html if failed_videos_html else '<p style="color: #666;">No failed predictions found.</p>'}
+            </div>
+        </div>
+        '''
+
+        return html
+
     def generate_model_performance_tab_html(self, experiment: Dict) -> str:
         """
         Generate HTML for model performance tab content.
@@ -600,9 +799,23 @@ class ExperimentReportGenerator:
         # Load evaluation results (predictions) for test dataset
         logger.info("\n=== LOADING EVALUATION RESULTS ===")
         test_prediction_data = {}
+        failure_analysis_results = None
         test_eval_csvs = self.ensure_evaluation_results(test_dataset)
         if test_eval_csvs:
             test_prediction_data = self.load_prediction_data(test_eval_csvs)
+
+            # Run failure analysis on finetuned predictions
+            if FAILURE_ANALYSIS_AVAILABLE:
+                logger.info("\n=== RUNNING FAILURE ANALYSIS ===")
+                try:
+                    failure_analysis_results = analyze_predictions(str(test_eval_csvs['finetuned']))
+                    logger.info(f"✓ Failure analysis complete: {failure_analysis_results['row_count']} predictions analyzed")
+                    logger.info(f"  Conclusion: {failure_analysis_results['conclusion'][:80]}...")
+                except Exception as e:
+                    logger.warning(f"⚠️  Failure analysis failed: {e}")
+                    failure_analysis_results = None
+            else:
+                logger.warning("⚠️  Failure analysis not available (scipy not installed)")
         else:
             logger.warning("⚠️  No evaluation results found for test dataset. Per-video predictions will not be displayed.")
 
@@ -634,9 +847,13 @@ class ExperimentReportGenerator:
         train_video_url = os.path.relpath(str(train_video_dir.resolve()), output_dir)
         test_video_url = os.path.relpath(str(test_video_dir.resolve()), output_dir)
 
+        # Generate failure analysis HTML
+        failure_analysis_html = self.generate_failure_analysis_tab_html(failure_analysis_results, test_video_url)
+
         # Create HTML report
         html_content = self._build_comprehensive_html_report(
             performance_html=performance_html,
+            failure_analysis_html=failure_analysis_html,
             train_metadata=train_metadata,
             test_metadata=test_metadata,
             train_stats=train_stats,
@@ -664,6 +881,7 @@ class ExperimentReportGenerator:
     def _build_comprehensive_html_report(
         self,
         performance_html: str,
+        failure_analysis_html: str,
         train_metadata: List[Dict],
         test_metadata: List[Dict],
         train_stats: Dict,
@@ -676,7 +894,7 @@ class ExperimentReportGenerator:
         dataset_name: str,
         test_prediction_data: Dict[str, Dict] = None
     ) -> str:
-        """Build complete comprehensive HTML report with all analytics and model performance."""
+        """Build complete comprehensive HTML report with all analytics, model performance, and failure analysis."""
 
         # Prepare JSON data
         train_metadata_json = json.dumps(train_metadata, indent=2)
@@ -1018,6 +1236,160 @@ class ExperimentReportGenerator:
             .video-grid {{ grid-template-columns: 1fr; }}
             .stats-grid {{ grid-template-columns: 1fr; }}
         }}
+
+        /* Failure Analysis Tab Styles */
+        .tab.failure-analysis-tab {{
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.15) 0%, rgba(253, 126, 20, 0.15) 100%);
+            font-weight: 600;
+        }}
+        .conclusion-box {{
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }}
+        .conclusion-box h3 {{
+            margin: 0 0 10px 0;
+            font-size: 1.3em;
+        }}
+        .conclusion-box p {{
+            margin: 0;
+            font-size: 1.1em;
+            line-height: 1.5;
+        }}
+        .analysis-section {{
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-left: 4px solid #667eea;
+        }}
+        .analysis-section h3 {{
+            color: #667eea;
+            margin: 0 0 15px 0;
+            font-size: 1.2em;
+        }}
+        .section-desc {{
+            color: #6c757d;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+        }}
+        .sig-factors-list {{
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }}
+        .sig-factor {{
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.1) 0%, rgba(253, 126, 20, 0.1) 100%);
+            padding: 12px 18px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #dc3545;
+            font-family: monospace;
+            font-size: 0.95em;
+        }}
+        .analysis-table {{
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }}
+        .analysis-table th {{
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+        }}
+        .analysis-table td {{
+            padding: 10px 15px;
+            border-bottom: 1px solid #dee2e6;
+        }}
+        .analysis-table tr:last-child td {{
+            border-bottom: none;
+        }}
+        .analysis-table tr.high-acc td {{
+            background: rgba(40, 167, 69, 0.1);
+        }}
+        .analysis-table tr.mid-acc td {{
+            background: rgba(255, 193, 7, 0.1);
+        }}
+        .analysis-table tr.low-acc td {{
+            background: rgba(220, 53, 69, 0.1);
+        }}
+        .analysis-table tr.significant td {{
+            background: rgba(220, 53, 69, 0.15);
+            font-weight: 500;
+        }}
+        .failed-videos-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }}
+        .failed-video-card {{
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 2px solid #dc3545;
+        }}
+        .failed-video-card video {{
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            background: #000;
+        }}
+        .failed-video-info {{
+            position: relative;
+        }}
+        .failed-badge {{
+            position: absolute;
+            top: -25px;
+            right: 0;
+            background: #dc3545;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: bold;
+        }}
+        .video-detail {{
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9em;
+        }}
+        .video-detail:last-child {{
+            border-bottom: none;
+        }}
+        .video-detail .label {{
+            color: #6c757d;
+            font-weight: 500;
+        }}
+        .video-detail .value {{
+            font-weight: 600;
+        }}
+        .video-detail .value.truth {{
+            color: #28a745;
+        }}
+        .video-detail .value.predicted {{
+            color: #dc3545;
+        }}
+        .video-detail .value.model-output {{
+            font-family: monospace;
+            font-size: 0.85em;
+            color: #6c757d;
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }}
     </style>
 </head>
 <body>
@@ -1031,6 +1403,7 @@ class ExperimentReportGenerator:
 
         <div class="tabs">
             <button class="tab performance-tab active" onclick="switchTab(event, 'performance')">🎯 Model Performance</button>
+            <button class="tab failure-analysis-tab" onclick="switchTab(event, 'failure-analysis')">🔬 Failure Analysis</button>
 
             <button class="tab train-tab" onclick="switchTab(event, 'train-overview')">🔵 Train: Overview</button>
             <button class="tab train-tab" onclick="switchTab(event, 'train-defaults')">🔵 Train: Defaults</button>
@@ -1058,6 +1431,11 @@ class ExperimentReportGenerator:
         <!-- MODEL PERFORMANCE TAB -->
         <div id="performance" class="tab-content active">
             {performance_html}
+        </div>
+
+        <!-- FAILURE ANALYSIS TAB -->
+        <div id="failure-analysis" class="tab-content">
+            {failure_analysis_html}
         </div>
 
         <!-- TRAIN TABS -->
