@@ -72,9 +72,138 @@ class FullPipelineRunner:
             # Default training mode
             self.lora_output_dir = args.lora_output_dir
 
+        # CRITICAL: Validate model paths to prevent overwrites
+        self._validate_model_paths()
+
+        # Print exact paths for transparency
+        self._print_model_configuration()
+
         # Initialize experiment tracker
         self.tracker = ExperimentTracker(csv_path='data/experiments_log.csv')
         self.evaluation_output_dir = f'evaluation_results_{self.timestamp}'
+
+    def _validate_model_paths(self) -> None:
+        """
+        Validate model path requirements to prevent overwrites.
+
+        This method enforces critical safety rules:
+        1. Training mode MUST have --model-name (prevents overwriting default path)
+        2. Model name MUST be unique (prevents overwriting existing models)
+        3. Evaluation-only mode MUST have --eval-model-path
+        4. Eval path MUST exist and contain a valid model
+
+        Raises:
+            ValueError: If validation fails
+        """
+        # Rule 1: Training mode REQUIRES model_name
+        if not self.args.skip_training:
+            if not hasattr(self.args, 'model_name') or not self.args.model_name:
+                raise ValueError(
+                    "\n" + "="*70 + "\n"
+                    "ERROR: --model-name is REQUIRED when training a new model!\n"
+                    "="*70 + "\n"
+                    "This ensures your model won't overwrite existing models.\n\n"
+                    "Usage:\n"
+                    "  --model-name my_experiment_v1\n\n"
+                    "The model will be saved to: saves/<model-name>/\n"
+                    "="*70
+                )
+
+            # Rule 2: Check if model already exists (prevent overwrites)
+            model_path = Path(self.lora_output_dir)
+            if model_path.exists():
+                # Check if it has actual model files
+                adapter_files = list(model_path.glob("adapter_*.safetensors")) + \
+                               list(model_path.glob("adapter_*.bin")) + \
+                               list(model_path.glob("adapter_model.*"))
+                if adapter_files:
+                    raise ValueError(
+                        "\n" + "="*70 + "\n"
+                        f"ERROR: Model '{self.args.model_name}' already exists!\n"
+                        "="*70 + "\n"
+                        f"Path: {model_path.absolute()}\n"
+                        f"Found {len(adapter_files)} adapter file(s):\n" +
+                        "\n".join(f"  - {f.name}" for f in adapter_files[:5]) +
+                        (f"\n  ... and {len(adapter_files)-5} more" if len(adapter_files) > 5 else "") + "\n\n"
+                        "This would OVERWRITE the existing model!\n\n"
+                        "Solutions:\n"
+                        "  1. Use a different --model-name (recommended)\n"
+                        "  2. Delete the existing model directory first\n"
+                        "  3. Use --skip-training --eval-model-path to re-evaluate this model\n"
+                        "="*70
+                    )
+                logger.info(f"Model directory exists but no adapter files found. Will use for training.")
+
+        # Rule 3: Evaluation-only mode REQUIRES eval_model_path
+        if self.args.skip_training:
+            if not hasattr(self.args, 'eval_model_path') or not self.args.eval_model_path:
+                raise ValueError(
+                    "\n" + "="*70 + "\n"
+                    "ERROR: --eval-model-path is REQUIRED when using --skip-training!\n"
+                    "="*70 + "\n"
+                    "You must specify which model to evaluate.\n\n"
+                    "Usage:\n"
+                    "  --skip-training --eval-model-path saves/my_trained_model\n\n"
+                    "Available models can be found in the saves/ directory.\n"
+                    "="*70
+                )
+
+            # Rule 4: Verify model exists
+            model_path = Path(self.lora_output_dir)
+            if not model_path.exists():
+                raise ValueError(
+                    "\n" + "="*70 + "\n"
+                    f"ERROR: Model path does not exist!\n"
+                    "="*70 + "\n"
+                    f"Path: {model_path.absolute()}\n\n"
+                    "Cannot evaluate non-existent model.\n\n"
+                    "Solutions:\n"
+                    "  1. Check the path is correct\n"
+                    "  2. List available models: ls -la saves/\n"
+                    "  3. Train the model first (remove --skip-training)\n"
+                    "="*70
+                )
+
+            # Verify model has adapter files
+            adapter_files = list(model_path.glob("adapter_*.safetensors")) + \
+                           list(model_path.glob("adapter_*.bin")) + \
+                           list(model_path.glob("adapter_model.*"))
+            if not adapter_files:
+                raise ValueError(
+                    "\n" + "="*70 + "\n"
+                    f"ERROR: No adapter files found in model directory!\n"
+                    "="*70 + "\n"
+                    f"Path: {model_path.absolute()}\n\n"
+                    "This directory does not contain a trained model.\n\n"
+                    "Solutions:\n"
+                    "  1. Check you specified the correct model path\n"
+                    "  2. Train a model first (remove --skip-training)\n"
+                    "  3. Verify the model trained successfully\n"
+                    "="*70
+                )
+
+            logger.info(f"Found valid model with {len(adapter_files)} adapter file(s) at: {model_path.absolute()}")
+
+    def _print_model_configuration(self) -> None:
+        """Print model path configuration for user visibility."""
+        logger.info("\n" + "="*70)
+        logger.info("MODEL PATH CONFIGURATION")
+        logger.info("="*70)
+        logger.info(f"Model save/load path: {Path(self.lora_output_dir).absolute()}")
+
+        if hasattr(self.args, 'model_name') and self.args.model_name:
+            logger.info(f"Model name: {self.args.model_name}")
+        else:
+            logger.info(f"Model name: (using default path)")
+
+        if self.args.skip_training:
+            logger.info(f"Mode: EVALUATION ONLY (--skip-training)")
+            logger.info(f"Evaluating existing model at: {self.lora_output_dir}")
+        else:
+            logger.info(f"Mode: TRAINING + EVALUATION")
+            logger.info(f"New model will be saved to: {self.lora_output_dir}")
+
+        logger.info("="*70 + "\n")
 
     def run_command(self, cmd: List[str], description: str, timeout: int = None) -> None:
         """
@@ -376,6 +505,16 @@ seed: {self.args.seed}
         logger.info("# STEP 3: MODEL EVALUATION")
         logger.info("#"*70)
 
+        # Print exact paths being used
+        logger.info("\n" + "="*70)
+        logger.info("EVALUATION PATHS")
+        logger.info("="*70)
+        logger.info(f"Model being evaluated: {Path(self.lora_output_dir).absolute()}")
+        logger.info(f"Test dataset: {self.test_dataset_name}")
+        logger.info(f"Output directory: {Path(self.evaluation_output_dir).absolute()}")
+        logger.info(f"CSV log file: {self.tracker.csv_path.absolute()}")
+        logger.info("="*70 + "\n")
+
         # Update tracker status
         self.tracker.update_status('evaluation', 'in_progress')
 
@@ -420,6 +559,22 @@ seed: {self.args.seed}
         # Update tracker status
         self.tracker.update_status('evaluation', 'completed')
 
+        # Print final paths where results are saved
+        logger.info("\n" + "="*70)
+        logger.info("EVALUATION COMPLETE - RESULTS SAVED TO:")
+        logger.info("="*70)
+        logger.info(f"CSV Log: {self.tracker.csv_path.absolute()}")
+
+        # Find the actual evaluation report file
+        eval_reports = list(Path(self.evaluation_output_dir).glob('evaluation_report_*.txt'))
+        if eval_reports:
+            logger.info(f"Text Report: {max(eval_reports, key=lambda p: p.stat().st_mtime).absolute()}")
+        else:
+            logger.info(f"Text Report: {Path(self.evaluation_output_dir).absolute()}/evaluation_report_*.txt")
+
+        logger.info(f"Model Evaluated: {Path(self.lora_output_dir).absolute()}")
+        logger.info("="*70 + "\n")
+
     def run(self) -> None:
         """Execute the complete pipeline."""
         try:
@@ -429,8 +584,8 @@ seed: {self.args.seed}
             logger.info(f"Run timestamp: {self.timestamp}")
             logger.info(f"Configuration: {vars(self.args)}")
 
-            # Start experiment tracking
-            experiment_id = self.tracker.start_experiment(self.args)
+            # Start experiment tracking (pass actual calculated model path)
+            experiment_id = self.tracker.start_experiment(self.args, actual_model_path=self.lora_output_dir)
             logger.info(f"Experiment ID: {experiment_id}")
 
             # Step 1: Generate datasets

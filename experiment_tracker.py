@@ -235,12 +235,14 @@ class ExperimentTracker:
             logger.warning(f"Error reading experiment IDs: {e}, defaulting to 1")
             return 1
 
-    def start_experiment(self, args) -> int:
+    def start_experiment(self, args, actual_model_path: str = None) -> int:
         """
         Start a new experiment and log initial parameters.
 
         Args:
             args: Command-line arguments from argparse
+            actual_model_path: The actual calculated model path (overrides args.lora_output_dir)
+                              This ensures we log the real path, not the default argument value
 
         Returns:
             int: Experiment ID
@@ -333,7 +335,8 @@ class ExperimentTracker:
             'template': getattr(args, 'template', ''),
 
             # LoRA configuration
-            'lora_output_dir': getattr(args, 'lora_output_dir', ''),
+            # Use actual_model_path for lora_output_dir as well (fixes CSV logging bug)
+            'lora_output_dir': actual_model_path or getattr(args, 'lora_output_dir', ''),
             'lora_rank': getattr(args, 'lora_rank', ''),
             'lora_alpha': getattr(args, 'lora_alpha', ''),
             'lora_dropout': getattr(args, 'lora_dropout', ''),
@@ -406,7 +409,10 @@ class ExperimentTracker:
             'notes_2': '',
 
             # Model information
-            'model_path': getattr(args, 'eval_model_path', '') or getattr(args, 'lora_output_dir', ''),
+            # CRITICAL FIX: Use actual_model_path (calculated path) instead of args (default value)
+            # This fixes the bug where CSV logged wrong paths like saves/qwen2vl-treadmill-lora-pipeline
+            # instead of the actual saves/{model_name} path
+            'model_path': actual_model_path or getattr(args, 'eval_model_path', '') or getattr(args, 'lora_output_dir', ''),
             'model_name': getattr(args, 'model_name', '')
         }
 
