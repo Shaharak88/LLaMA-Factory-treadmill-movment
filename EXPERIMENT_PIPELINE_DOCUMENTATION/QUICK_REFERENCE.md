@@ -106,8 +106,13 @@
 - Video preview grid with predictions and metadata
 - Report customization (CSS styling, adding sections)
 - Advanced features (video comparison, error analysis, interactive filtering)
+- **NEW (2025-12-07):** Statistical Failure Analysis tab with:
+  - Dynamic feature extraction from filenames (auto-detects dist, angle, blur, object, etc.)
+  - Chi-squared and Fisher's exact tests for statistical significance
+  - Per-feature failure examples grouped by worst-performing values
+  - Automatic conclusions identifying which features affect model accuracy
 
-**When to read it:** Customizing report appearance, adding new report sections, troubleshooting video display issues.
+**When to read it:** Customizing report appearance, adding new report sections, troubleshooting video display issues, **understanding why a model fails on specific features**.
 
 ---
 
@@ -140,6 +145,8 @@
 | Response parsing | 04_EVALUATION.md | Response Parsing |
 | HTML report structure | 05_REPORTING.md | HTML Report Structure |
 | Video display issues | 05_REPORTING.md | Video Path Handling |
+| **Why model fails on specific features** | 05_REPORTING.md | Statistical Failure Analysis Tab |
+| **Statistical significance testing** | 05_REPORTING.md | Statistical Failure Analysis Tab |
 | What gets logged | 06_EXPERIMENT_TRACKING.md | CSV Structure |
 | Querying experiments | 06_EXPERIMENT_TRACKING.md | Querying Experiments |
 | Troubleshooting | All files | Common Issues sections |
@@ -217,6 +224,7 @@
 ### 05_REPORTING.md
 - **Key Insight:** Generates interactive HTML with video players and metrics
 - **Critical Info:** Uses relative paths so reports work when opened directly in browser
+- **New Feature (2025-12-07):** Failure Analysis tab automatically identifies which features (dist, angle, blur, etc.) significantly affect model accuracy using Chi-squared tests, with video examples grouped by worst-performing values
 
 ### 06_EXPERIMENT_TRACKING.md
 - **Key Insight:** 196-column CSV logs everything for complete reproducibility
@@ -250,6 +258,10 @@
 **File:** 05_REPORTING.md (Section: Report Customization)
 **Action:** Edit CSS in `generate_experiment_report.py`
 
+**Task:** Understand why model fails at certain distances/angles
+**File:** 05_REPORTING.md (Section: Statistical Failure Analysis Tab)
+**Action:** Open HTML report, click "Failure Analysis" tab - shows which features significantly affect accuracy with video examples
+
 **Task:** Generate videos with randomized treadmill position
 **File:** 02_DATA_GENERATION.md (Section: Parameter Guide)
 **Action:** Use `--center_randomization randomized` with `--distance` parameter
@@ -257,6 +269,6 @@
 
 ---
 
-**Total Documentation:** 8 files, ~4,468 lines, comprehensive coverage of entire pipeline
+**Total Documentation:** 8 files, ~4,600 lines, comprehensive coverage of entire pipeline
 
-**Last Updated:** 2025-12-07
+**Last Updated:** 2025-12-07 (Added Statistical Failure Analysis documentation)
