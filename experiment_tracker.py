@@ -683,19 +683,26 @@ def parse_evaluation_results(output_dir: str) -> tuple[Optional[Dict], Optional[
                 results['recall'] = float(rec_match.group(1))
 
             # Per-class metrics
-            moving_match = re.search(r'Moving:\s*(\d+)/(\d+)', section_text)
+            # Fixed: Now captures F1 scores from format "Moving: X/Y (Acc: ZZ%, F1: AA%)"
+            moving_match = re.search(r'Moving:\s*(\d+)/(\d+)(?:.*?F1:\s*([\d.]+)%)?', section_text)
             if moving_match:
                 results['moving'] = {
                     'correct': int(moving_match.group(1)),
                     'total': int(moving_match.group(2))
                 }
+                # Extract F1 score if present
+                if moving_match.group(3):
+                    results['f1_moving'] = float(moving_match.group(3))
 
-            stopped_match = re.search(r'Stopped:\s*(\d+)/(\d+)', section_text)
+            stopped_match = re.search(r'Stopped:\s*(\d+)/(\d+)(?:.*?F1:\s*([\d.]+)%)?', section_text)
             if stopped_match:
                 results['stopped'] = {
                     'correct': int(stopped_match.group(1)),
                     'total': int(stopped_match.group(2))
                 }
+                # Extract F1 score if present
+                if stopped_match.group(3):
+                    results['f1_stopped'] = float(stopped_match.group(3))
 
             # Per-texture breakdown
             texture_section = re.search(r'PER-TEXTURE BREAKDOWN:(.*?)(?:PER-ANGLE|COMPARISON|$)', section_text, re.DOTALL)
