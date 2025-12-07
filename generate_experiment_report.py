@@ -236,7 +236,9 @@ class ExperimentReportGenerator:
 
     def download_evaluation_results(self, dataset_name: str) -> Optional[Dict[str, Path]]:
         """
-        Download evaluation results from server if not present locally.
+        Download evaluation results from server container.
+
+        Uses docker cp via SSH to copy eval folders from container to local.
 
         Args:
             dataset_name: Name of dataset
@@ -244,34 +246,45 @@ class ExperimentReportGenerator:
         Returns:
             Dict with 'base' and 'finetuned' paths to CSV files, or None if download failed
         """
-        logger.info(f"Downloading evaluation results for {dataset_name} from server...")
+        logger.info(f"Downloading evaluation results for {dataset_name} from server container...")
 
-        # Remote path to dataset folder
-        remote_dataset_path = f"{self.server}:{self.remote_base}/{dataset_name}/"
         local_dataset_path = self.local_data_dir / dataset_name
         local_dataset_path.mkdir(parents=True, exist_ok=True)
 
-        # Use rsync to download eval_* folders
         import subprocess
-        rsync_cmd = [
-            'rsync', '-avz', '--progress',
-            '--include=eval_*/',
-            '--include=eval_*/per_video_predictions_*.csv',
-            '--exclude=*',
-            remote_dataset_path,
-            str(local_dataset_path)
-        ]
+        import tempfile
 
+        # Step 1: Find eval folders in container
+        find_cmd = f"ssh {self.server} 'docker exec {self.docker_container} find /app/data/{dataset_name} -type d -name \"eval_*\" -maxdepth 1'"
         try:
-            result = subprocess.run(rsync_cmd, check=True, capture_output=True, text=True)
-            logger.info("✓ Download complete")
+            result = subprocess.run(find_cmd, shell=True, capture_output=True, text=True, check=True)
+            eval_folders = [line.strip() for line in result.stdout.strip().split('\n') if line.strip()]
 
-            # Now try to find the evaluation results
+            if not eval_folders:
+                logger.warning(f"No eval folders found in container for {dataset_name}")
+                return None
+
+            logger.info(f"Found {len(eval_folders)} eval folder(s) in container")
+
+            # Step 2: For each eval folder, docker cp it
+            for container_path in eval_folders:
+                eval_folder_name = os.path.basename(container_path)
+
+                # Docker cp from container to temp location on server, then rsync to local
+                # Simpler: use docker cp with output redirection
+                local_eval_path = local_dataset_path / eval_folder_name
+
+                # Create a temp dir on server, docker cp to it, then rsync
+                cp_cmd = f"ssh {self.server} 'docker cp {self.docker_container}:{container_path} /tmp/{eval_folder_name} && tar czf - -C /tmp {eval_folder_name} && rm -rf /tmp/{eval_folder_name}' | tar xzf - -C {local_dataset_path}"
+
+                subprocess.run(cp_cmd, shell=True, check=True, capture_output=True)
+                logger.info(f"  ✓ Downloaded {eval_folder_name}")
+
+            logger.info("✓ Download complete")
             return self.find_evaluation_results(dataset_name)
 
         except subprocess.CalledProcessError as e:
             logger.error(f"Failed to download evaluation results: {e}")
-            logger.error(f"stdout: {e.stdout}")
             logger.error(f"stderr: {e.stderr}")
             return None
 
