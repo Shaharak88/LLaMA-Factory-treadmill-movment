@@ -56,42 +56,57 @@ import numpy as np
 # Feature Extraction
 # =============================================================================
 
+# Features to skip in analysis (not experimental parameters)
+SKIP_FEATURES = {'seed', 'treadmill', 'x', 'mp'}
+
+
 def extract_all_features(path: str) -> dict:
     """
-    Extract all experimental features from a video filename.
+    Dynamically extract ALL experimental features from a video filename.
+
+    Automatically detects patterns like: name123, name12.34
+    Uses the exact feature names from the filename (e.g., 'dist' not 'distance').
 
     Args:
         path: Video file path containing encoded feature values
 
     Returns:
-        Dictionary with keys: distance, angle, stripe, bg, speed
-        Values are None if feature cannot be extracted
+        Dictionary with feature names as keys (exactly as in filename)
+        and their numeric values.
 
     Example:
         >>> extract_all_features("treadmill_stripe226_bg120_left_speed14.0_angle30_dist5.0.mp4")
-        {'distance': 5.0, 'angle': 30, 'stripe': 226, 'bg': 120, 'speed': 14.0}
+        {'stripe': 226, 'bg': 120, 'speed': 14.0, 'angle': 30, 'dist': 5.0}
+
+        >>> extract_all_features("video_blur0.5_object1_contr1.2.mp4")
+        {'blur': 0.5, 'object': 1, 'contr': 1.2}
     """
     features = {}
 
-    # Distance (e.g., dist1.0, dist5.0)
-    match = re.search(r'dist(\d+\.\d+)', path)
-    features['distance'] = float(match.group(1)) if match else None
+    # Pattern: word characters followed by number (int or float)
+    # Matches: dist5.0, angle30, stripe226, blur0.5, object1, contr1.00
+    # The (?<![a-zA-Z]) ensures we don't match partial words
+    pattern = r'(?<![a-zA-Z])([a-zA-Z]+)(\d+\.?\d*)'
 
-    # Angle (e.g., angle0, angle30)
-    match = re.search(r'angle(\d+)', path)
-    features['angle'] = int(match.group(1)) if match else None
+    for match in re.finditer(pattern, path):
+        key = match.group(1).lower()
+        value_str = match.group(2)
 
-    # Stripe gray value (e.g., stripe226, stripe229)
-    match = re.search(r'stripe(\d+)', path)
-    features['stripe'] = int(match.group(1)) if match else None
+        # Skip non-experimental features
+        if key in SKIP_FEATURES:
+            continue
 
-    # Background gray value (e.g., bg120, bg124)
-    match = re.search(r'bg(\d+)', path)
-    features['bg'] = int(match.group(1)) if match else None
+        # Skip if value string is empty
+        if not value_str:
+            continue
 
-    # Speed (e.g., speed0.0, speed14.0)
-    match = re.search(r'speed(\d+\.\d+)', path)
-    features['speed'] = float(match.group(1)) if match else None
+        # Convert to float or int
+        if '.' in value_str:
+            value = float(value_str)
+        else:
+            value = int(value_str)
+
+        features[key] = value
 
     return features
 
@@ -244,54 +259,30 @@ def analyze_predictions(csv_path: str, p_threshold: float = 0.01) -> dict:
     """
     Analyze per-video predictions and return structured results.
 
-    This function can be called from other modules (like generate_experiment_report.py)
-    to get analysis results as structured data for HTML report generation.
+    This function dynamically extracts ALL features from video filenames
+    and performs statistical analysis on each. Feature names are taken
+    exactly as they appear in filenames (e.g., 'dist' not 'distance').
 
     Args:
         csv_path: Path to per-video predictions CSV file
         p_threshold: P-value threshold for significance (default: 0.01)
 
     Returns:
-        Dictionary with analysis results:
-        {
-            'row_count': int,
-            'accuracy_by_feature': {
-                'distance': [{'value': x, 'label': y, 'correct': n, 'total': m, 'accuracy': pct}, ...],
-                'angle': [...],
-                'stripe': [...],
-                'bg': [...]
-            },
-            'chi2_tests': [
-                {'feature': name, 'chi2': value, 'p_value': p, 'significant': bool},
-                ...
-            ],
-            'fisher_tests': [
-                {'feature': name, 'val1': v1, 'val2': v2, 'acc1': a1, 'acc2': a2, 'p_value': p, 'significant': bool},
-                ...
-            ],
-            'significant_factors': [str, ...],
-            'conclusion': str,
-            'failed_videos': [
-                {'video_path': path, 'label': label, 'prediction': pred, 'distance': d, 'angle': a, ...},
-                ...
-            ]
-        }
+        Dictionary with analysis results including accuracy breakdowns,
+        statistical tests, significant factors, and failed video examples
+        grouped by significant features.
 
     Raises:
         FileNotFoundError: If CSV file doesn't exist
-        ValueError: If required features can't be extracted from video paths
     """
     if not Path(csv_path).exists():
         raise FileNotFoundError(f"CSV file not found: {csv_path}")
 
-    # Data structures for aggregation by feature
-    by_distance = defaultdict(lambda: {'total': 0, 'correct': 0})
-    by_angle = defaultdict(lambda: {'total': 0, 'correct': 0})
-    by_stripe = defaultdict(lambda: {'total': 0, 'correct': 0})
-    by_bg = defaultdict(lambda: {'total': 0, 'correct': 0})
-    by_label = defaultdict(lambda: {'total': 0, 'correct': 0})
+    # Dynamic data structures - will be populated based on features found
+    by_feature = defaultdict(lambda: defaultdict(lambda: {'total': 0, 'correct': 0}))
+    all_features_found = set()
 
-    # Store failed videos for examples
+    # Store all rows and failed videos
     failed_videos = []
     all_rows = []
 
@@ -306,27 +297,16 @@ def analyze_predictions(csv_path: str, p_threshold: float = 0.01) -> dict:
             correct = row['correct'] == 'True'
             prediction = row.get('prediction', '')
 
-            dist = features['distance']
-            angle = features['angle']
-            stripe = features['stripe']
-            bg = features['bg']
-            speed = features['speed']
+            # Track all features found
+            all_features_found.update(features.keys())
 
-            # Skip rows where features couldn't be extracted (with warning)
-            if dist is None or angle is None or stripe is None or bg is None:
-                continue
-
-            # Store row data
+            # Store row data with all extracted features
             row_data = {
                 'video_path': row['video_path'],
                 'label': label,
                 'prediction': prediction,
                 'correct': correct,
-                'distance': dist,
-                'angle': angle,
-                'stripe': stripe,
-                'bg': bg,
-                'speed': speed,
+                'features': features,
                 'model_output': row.get('model_output', '')
             }
             all_rows.append(row_data)
@@ -335,23 +315,12 @@ def analyze_predictions(csv_path: str, p_threshold: float = 0.01) -> dict:
             if not correct:
                 failed_videos.append(row_data)
 
-            # Aggregate by individual feature + label
-            by_distance[(dist, label)]['total'] += 1
-            by_distance[(dist, label)]['correct'] += int(correct)
+            # Aggregate by each feature + label dynamically
+            for feat_name, feat_value in features.items():
+                by_feature[feat_name][(feat_value, label)]['total'] += 1
+                by_feature[feat_name][(feat_value, label)]['correct'] += int(correct)
 
-            by_angle[(angle, label)]['total'] += 1
-            by_angle[(angle, label)]['correct'] += int(correct)
-
-            by_stripe[(stripe, label)]['total'] += 1
-            by_stripe[(stripe, label)]['correct'] += int(correct)
-
-            by_bg[(bg, label)]['total'] += 1
-            by_bg[(bg, label)]['correct'] += int(correct)
-
-            by_label[label]['total'] += 1
-            by_label[label]['correct'] += int(correct)
-
-    # Build accuracy by feature data
+    # Build accuracy by feature data (dynamic)
     def build_accuracy_list(data_dict):
         result = []
         for key in sorted(data_dict.keys()):
@@ -368,64 +337,62 @@ def analyze_predictions(csv_path: str, p_threshold: float = 0.01) -> dict:
                 })
         return result
 
-    accuracy_by_feature = {
-        'distance': build_accuracy_list(by_distance),
-        'angle': build_accuracy_list(by_angle),
-        'stripe': build_accuracy_list(by_stripe),
-        'bg': build_accuracy_list(by_bg)
-    }
+    accuracy_by_feature = {}
+    for feat_name in sorted(all_features_found):
+        accuracy_by_feature[feat_name] = build_accuracy_list(by_feature[feat_name])
 
-    # Run statistical tests
+    # Run statistical tests dynamically for each feature
     chi2_tests = []
-    feature_tests = [
-        ("Distance", by_distance, None),
-        ("Distance (moving)", by_distance, "moving"),
-        ("Distance (stopped)", by_distance, "stopped"),
-        ("Angle", by_angle, None),
-        ("Angle (moving)", by_angle, "moving"),
-        ("Stripe", by_stripe, None),
-        ("BG", by_bg, None),
-    ]
+    significant_chi2_features = []  # Track which features are significant
 
-    significant_results = []
+    for feat_name in sorted(all_features_found):
+        data = by_feature[feat_name]
 
-    for name, data, label_filter in feature_tests:
-        chi2, p_value, skip_reason = compute_chi2_test(data, label_filter)
+        # Test overall (all labels)
+        chi2, p_value, skip_reason = compute_chi2_test(data, None)
         if chi2 is not None:
             is_sig = p_value < p_threshold
             chi2_tests.append({
-                'feature': name,
+                'feature': feat_name,
                 'chi2': round(chi2, 2),
                 'p_value': p_value,
                 'significant': is_sig
             })
             if is_sig:
-                significant_results.append(('chi2', name, chi2, p_value))
+                significant_chi2_features.append(feat_name)
         else:
             chi2_tests.append({
-                'feature': name,
+                'feature': feat_name,
                 'chi2': None,
                 'p_value': None,
                 'significant': False,
                 'skip_reason': skip_reason
             })
 
-    # Run pairwise Fisher tests
-    fisher_tests = []
-    pairwise_tests = [
-        ("Distance", by_distance, None),
-        ("Distance (moving)", by_distance, "moving"),
-        ("Angle", by_angle, None),
-        ("Stripe", by_stripe, None),
-        ("BG", by_bg, None),
-    ]
+        # Test for moving only
+        chi2, p_value, skip_reason = compute_chi2_test(data, "moving")
+        if chi2 is not None:
+            is_sig = p_value < p_threshold
+            chi2_tests.append({
+                'feature': f"{feat_name} (moving)",
+                'chi2': round(chi2, 2),
+                'p_value': p_value,
+                'significant': is_sig
+            })
+            if is_sig and feat_name not in significant_chi2_features:
+                significant_chi2_features.append(feat_name)
 
-    for name, data, label_filter in pairwise_tests:
-        pairwise_results = compute_pairwise_fisher(data, label_filter)
+    # Run pairwise Fisher tests dynamically
+    fisher_tests = []
+    for feat_name in sorted(all_features_found):
+        data = by_feature[feat_name]
+
+        # Test overall
+        pairwise_results = compute_pairwise_fisher(data, None)
         for val1, val2, p_value, acc1, acc2, n1, n2 in pairwise_results:
             is_sig = p_value < p_threshold
             fisher_tests.append({
-                'feature': name,
+                'feature': feat_name,
                 'val1': val1,
                 'val2': val2,
                 'acc1': round(acc1, 1),
@@ -435,39 +402,113 @@ def analyze_predictions(csv_path: str, p_threshold: float = 0.01) -> dict:
                 'p_value': p_value,
                 'significant': is_sig
             })
-            if is_sig:
-                significant_results.append(('fisher', name, val1, val2, p_value, acc1, acc2))
 
-    # Build significant factors list
+        # Test for moving only
+        pairwise_results = compute_pairwise_fisher(data, "moving")
+        for val1, val2, p_value, acc1, acc2, n1, n2 in pairwise_results:
+            is_sig = p_value < p_threshold
+            fisher_tests.append({
+                'feature': f"{feat_name} (moving)",
+                'val1': val1,
+                'val2': val2,
+                'acc1': round(acc1, 1),
+                'acc2': round(acc2, 1),
+                'n1': n1,
+                'n2': n2,
+                'p_value': p_value,
+                'significant': is_sig
+            })
+
+    # Build significant factors list from chi2 tests
     significant_factors = []
-    for result in significant_results:
-        if result[0] == 'chi2':
-            significant_factors.append(f"{result[1]}: Chi2={result[2]:.2f}, p={result[3]:.2e}")
-        else:
-            significant_factors.append(f"{result[1]}: {result[2]} vs {result[3]} ({result[5]:.1f}% vs {result[6]:.1f}%), p={result[4]:.2e}")
+    for test in chi2_tests:
+        if test['significant']:
+            significant_factors.append(
+                f"{test['feature']}: Chi2={test['chi2']:.2f}, p={test['p_value']:.2e}"
+            )
 
-    # Build conclusion
-    distance_sig = any(r[1].startswith('Distance') for r in significant_results if r[0] == 'chi2')
-    other_sig = any(not r[1].startswith('Distance') for r in significant_results)
+    # Build dynamic conclusion based on significant features
+    sig_base_features = [f for f in significant_chi2_features]  # Features without "(moving)" suffix
 
-    if distance_sig and not other_sig:
-        conclusion = "DISTANCE is the ONLY statistically significant factor affecting model accuracy. Other features (angle, stripe, bg) show NO significant effect."
-    elif significant_results:
-        conclusion = "Multiple significant factors found affecting model accuracy."
-    else:
+    if len(sig_base_features) == 0:
         conclusion = "No statistically significant differences detected in any feature."
+    elif len(sig_base_features) == 1:
+        conclusion = f"{sig_base_features[0].upper()} is the ONLY statistically significant factor affecting model accuracy. Other features show NO significant effect."
+    else:
+        features_str = ", ".join(sig_base_features[:-1]) + " and " + sig_base_features[-1]
+        conclusion = f"Multiple significant factors found: {features_str.upper()} all affect model accuracy."
 
-    # Sort failed videos by distance (descending) to show worst failures first
-    failed_videos.sort(key=lambda x: (x['distance'] if x['distance'] else 0), reverse=True)
+    # Group failed videos by significant features for examples
+    failed_by_feature = {}
+    for feat_name in significant_chi2_features:
+        failed_by_feature[feat_name] = defaultdict(list)
+        for video in failed_videos:
+            feat_value = video['features'].get(feat_name)
+            if feat_value is not None:
+                failed_by_feature[feat_name][feat_value].append(video)
+
+    # For each significant feature, get worst performing values (lowest accuracy)
+    worst_values_by_feature = {}
+    for feat_name in significant_chi2_features:
+        # Get accuracy for each value of this feature
+        value_accuracies = []
+        for item in accuracy_by_feature.get(feat_name, []):
+            # Combine moving and stopped for overall accuracy per value
+            pass
+        # Sort by accuracy ascending to get worst values
+        feat_acc = accuracy_by_feature.get(feat_name, [])
+        # Group by value and compute overall accuracy
+        by_value = defaultdict(lambda: {'correct': 0, 'total': 0})
+        for item in feat_acc:
+            by_value[item['value']]['correct'] += item['correct']
+            by_value[item['value']]['total'] += item['total']
+
+        value_accs = []
+        for val, counts in by_value.items():
+            if counts['total'] > 0:
+                acc = (counts['correct'] / counts['total']) * 100
+                value_accs.append((val, acc, counts['total']))
+
+        # Sort by accuracy (worst first)
+        value_accs.sort(key=lambda x: x[1])
+        worst_values_by_feature[feat_name] = value_accs[:3]  # Top 3 worst values
+
+    # Build examples for each significant feature
+    significant_feature_examples = {}
+    for feat_name in significant_chi2_features:
+        examples = []
+        worst_values = worst_values_by_feature.get(feat_name, [])
+        for val, acc, total in worst_values:
+            # Get up to 4 failed videos for this value
+            failed_for_value = failed_by_feature[feat_name].get(val, [])[:4]
+            if failed_for_value:
+                examples.append({
+                    'value': val,
+                    'accuracy': round(acc, 1),
+                    'total': total,
+                    'videos': failed_for_value
+                })
+        significant_feature_examples[feat_name] = examples
+
+    # Sort all failed videos by first significant feature value (descending)
+    if significant_chi2_features:
+        sort_feat = significant_chi2_features[0]
+        failed_videos.sort(
+            key=lambda x: (x['features'].get(sort_feat, 0) if x['features'].get(sort_feat) else 0),
+            reverse=True
+        )
 
     return {
         'row_count': row_count,
+        'features_found': sorted(all_features_found),
         'accuracy_by_feature': accuracy_by_feature,
         'chi2_tests': chi2_tests,
         'fisher_tests': fisher_tests,
         'significant_factors': significant_factors,
+        'significant_features': significant_chi2_features,
+        'significant_feature_examples': significant_feature_examples,
         'conclusion': conclusion,
-        'failed_videos': failed_videos[:50],  # Limit to 50 examples
+        'failed_videos': failed_videos[:50],
         'p_threshold': p_threshold
     }
 

@@ -422,18 +422,51 @@ class ExperimentReportGenerator:
         if not analysis_results:
             return '<div class="alert alert-warning"><h3>⚠️ Failure Analysis Not Available</h3><p>Could not run failure analysis. Ensure evaluation results are available.</p></div>'
 
-        # Build accuracy by distance table
-        distance_rows = ""
-        for item in analysis_results.get('accuracy_by_feature', {}).get('distance', []):
-            acc_class = "high-acc" if item['accuracy'] >= 80 else ("mid-acc" if item['accuracy'] >= 50 else "low-acc")
-            distance_rows += f"""
-                <tr class="{acc_class}">
-                    <td>{item['value']}</td>
-                    <td>{item['label']}</td>
-                    <td>{item['correct']}</td>
-                    <td>{item['total']}</td>
-                    <td><strong>{item['accuracy']:.1f}%</strong></td>
-                </tr>
+        # Get features found and significant features
+        features_found = analysis_results.get('features_found', [])
+        significant_features = analysis_results.get('significant_features', [])
+
+        # Build accuracy tables for ALL features dynamically
+        accuracy_tables_html = ""
+        for feat_name in features_found:
+            feat_data = analysis_results.get('accuracy_by_feature', {}).get(feat_name, [])
+            if not feat_data:
+                continue
+
+            is_significant = feat_name in significant_features
+            sig_badge = ' <span class="sig-badge">SIGNIFICANT</span>' if is_significant else ''
+
+            rows = ""
+            for item in feat_data:
+                acc_class = "high-acc" if item['accuracy'] >= 80 else ("mid-acc" if item['accuracy'] >= 50 else "low-acc")
+                rows += f"""
+                    <tr class="{acc_class}">
+                        <td>{item['value']}</td>
+                        <td>{item['label']}</td>
+                        <td>{item['correct']}</td>
+                        <td>{item['total']}</td>
+                        <td><strong>{item['accuracy']:.1f}%</strong></td>
+                    </tr>
+                """
+
+            accuracy_tables_html += f"""
+            <div class="analysis-section {'significant-section' if is_significant else ''}">
+                <h3>📏 Accuracy by {feat_name}{sig_badge}</h3>
+                <table class="analysis-table">
+                    <thead>
+                        <tr>
+                            <th>{feat_name}</th>
+                            <th>Label</th>
+                            <th>Correct</th>
+                            <th>Total</th>
+                            <th>Accuracy</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {rows}
+                    </tbody>
+                </table>
+            </div>
             """
 
         # Build chi-squared tests table
@@ -478,37 +511,123 @@ class ExperimentReportGenerator:
         if not sig_factors_html:
             sig_factors_html = '<li style="color: #666;">No statistically significant factors found</li>'
 
-        # Build failed videos examples (up to 12)
-        failed_videos = analysis_results.get('failed_videos', [])[:12]
-        failed_videos_html = ""
-        for video in failed_videos:
-            video_filename = Path(video['video_path']).name
-            video_url = f"{test_video_dir}/{video_filename}"
-            failed_videos_html += f"""
-                <div class="failed-video-card">
-                    <video controls preload="metadata">
-                        <source src="{video_url}" type="video/mp4">
-                        Your browser does not support video.
-                    </video>
-                    <div class="failed-video-info">
-                        <div class="failed-badge">FAILED</div>
-                        <div class="video-detail"><span class="label">Label:</span> <span class="value truth">{video['label']}</span></div>
-                        <div class="video-detail"><span class="label">Predicted:</span> <span class="value predicted">{video['prediction']}</span></div>
-                        <div class="video-detail"><span class="label">Distance:</span> <span class="value">{video['distance']}</span></div>
-                        <div class="video-detail"><span class="label">Angle:</span> <span class="value">{video['angle']}°</span></div>
-                        <div class="video-detail"><span class="label">Model Output:</span> <span class="value model-output">{video['model_output'][:100]}...</span></div>
+        # Build examples for EACH significant feature
+        significant_examples_html = ""
+        sig_feature_examples = analysis_results.get('significant_feature_examples', {})
+
+        for feat_name in significant_features:
+            examples = sig_feature_examples.get(feat_name, [])
+            if not examples:
+                continue
+
+            feature_examples_html = f"""
+            <div class="analysis-section significant-section">
+                <h3>🎬 Failed Examples by {feat_name.upper()} (Worst Performing Values)</h3>
+                <p class="section-desc">Videos where the model failed, grouped by {feat_name} values with lowest accuracy.</p>
+            """
+
+            for example in examples:
+                value = example['value']
+                accuracy = example['accuracy']
+                total = example['total']
+                videos = example['videos']
+
+                feature_examples_html += f"""
+                <div class="feature-value-group">
+                    <div class="feature-value-header">
+                        <span class="feature-value-label">{feat_name} = {value}</span>
+                        <span class="feature-value-acc">Accuracy: {accuracy}% ({total} samples)</span>
+                    </div>
+                    <div class="failed-videos-grid">
+                """
+
+                for video in videos:
+                    video_filename = Path(video['video_path']).name
+                    video_url = f"{test_video_dir}/{video_filename}"
+                    features = video.get('features', {})
+
+                    # Build feature details dynamically
+                    feature_details = ""
+                    for f_name, f_value in sorted(features.items()):
+                        highlight = "highlight" if f_name == feat_name else ""
+                        feature_details += f'<div class="video-detail {highlight}"><span class="label">{f_name}:</span> <span class="value">{f_value}</span></div>'
+
+                    model_output = video.get('model_output', '')[:80]
+                    feature_examples_html += f"""
+                        <div class="failed-video-card">
+                            <video controls preload="metadata">
+                                <source src="{video_url}" type="video/mp4">
+                                Your browser does not support video.
+                            </video>
+                            <div class="failed-video-info">
+                                <div class="failed-badge">FAILED</div>
+                                <div class="video-detail"><span class="label">Label:</span> <span class="value truth">{video['label']}</span></div>
+                                <div class="video-detail"><span class="label">Predicted:</span> <span class="value predicted">{video['prediction']}</span></div>
+                                {feature_details}
+                                <div class="video-detail"><span class="label">Output:</span> <span class="value model-output">{model_output}...</span></div>
+                            </div>
+                        </div>
+                    """
+
+                feature_examples_html += """
                     </div>
                 </div>
-            """
+                """
+
+            feature_examples_html += "</div>"
+            significant_examples_html += feature_examples_html
+
+        # Build general failed videos if no significant features
+        general_failed_html = ""
+        if not significant_features:
+            failed_videos = analysis_results.get('failed_videos', [])[:12]
+            for video in failed_videos:
+                video_filename = Path(video['video_path']).name
+                video_url = f"{test_video_dir}/{video_filename}"
+                features = video.get('features', {})
+
+                feature_details = ""
+                for f_name, f_value in sorted(features.items()):
+                    feature_details += f'<div class="video-detail"><span class="label">{f_name}:</span> <span class="value">{f_value}</span></div>'
+
+                model_output = video.get('model_output', '')[:80]
+                general_failed_html += f"""
+                    <div class="failed-video-card">
+                        <video controls preload="metadata">
+                            <source src="{video_url}" type="video/mp4">
+                            Your browser does not support video.
+                        </video>
+                        <div class="failed-video-info">
+                            <div class="failed-badge">FAILED</div>
+                            <div class="video-detail"><span class="label">Label:</span> <span class="value truth">{video['label']}</span></div>
+                            <div class="video-detail"><span class="label">Predicted:</span> <span class="value predicted">{video['prediction']}</span></div>
+                            {feature_details}
+                            <div class="video-detail"><span class="label">Output:</span> <span class="value model-output">{model_output}...</span></div>
+                        </div>
+                    </div>
+                """
+
+            if general_failed_html:
+                general_failed_html = f"""
+                <div class="analysis-section">
+                    <h3>🎬 Failed Prediction Examples</h3>
+                    <p class="section-desc">Sample videos where the model made incorrect predictions.</p>
+                    <div class="failed-videos-grid">
+                        {general_failed_html}
+                    </div>
+                </div>
+                """
 
         conclusion = analysis_results.get('conclusion', 'No conclusion available.')
         p_threshold = analysis_results.get('p_threshold', 0.01)
         row_count = analysis_results.get('row_count', 0)
+        features_str = ", ".join(features_found) if features_found else "none"
 
         html = f'''
         <h2>🔬 Statistical Failure Analysis</h2>
         <p style="color: #495057; margin-bottom: 20px;">
-            Analyzed <strong>{row_count}</strong> predictions using statistical significance testing (p &lt; {p_threshold}).
+            Analyzed <strong>{row_count}</strong> predictions using statistical significance testing (p &lt; {p_threshold}).<br>
+            <span style="font-size: 0.9em;">Features detected from filenames: <code>{features_str}</code></span>
         </p>
 
         <!-- Conclusion Box -->
@@ -523,26 +642,6 @@ class ExperimentReportGenerator:
             <ul class="sig-factors-list">
                 {sig_factors_html}
             </ul>
-        </div>
-
-        <!-- Accuracy by Distance -->
-        <div class="analysis-section">
-            <h3>📏 Accuracy by Distance</h3>
-            <p class="section-desc">Shows how model accuracy varies with camera distance from the treadmill.</p>
-            <table class="analysis-table">
-                <thead>
-                    <tr>
-                        <th>Distance</th>
-                        <th>Label</th>
-                        <th>Correct</th>
-                        <th>Total</th>
-                        <th>Accuracy</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {distance_rows}
-                </tbody>
-            </table>
         </div>
 
         <!-- Chi-Squared Tests -->
@@ -585,14 +684,14 @@ class ExperimentReportGenerator:
             </table>
         </div>
 
-        <!-- Failed Video Examples -->
-        <div class="analysis-section">
-            <h3>🎬 Failed Prediction Examples</h3>
-            <p class="section-desc">Sample videos where the model made incorrect predictions, sorted by distance (furthest first).</p>
-            <div class="failed-videos-grid">
-                {failed_videos_html if failed_videos_html else '<p style="color: #666;">No failed predictions found.</p>'}
-            </div>
-        </div>
+        <!-- Accuracy Tables for All Features -->
+        {accuracy_tables_html}
+
+        <!-- Examples for Each Significant Feature -->
+        {significant_examples_html}
+
+        <!-- General Failed Examples (if no significant features) -->
+        {general_failed_html}
         '''
 
         return html
@@ -1389,6 +1488,58 @@ class ExperimentReportGenerator:
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+        }}
+        .video-detail.highlight {{
+            background: rgba(220, 53, 69, 0.15);
+            border-radius: 4px;
+            padding: 6px 8px;
+            margin: 2px -8px;
+        }}
+        .video-detail.highlight .label {{
+            color: #dc3545;
+            font-weight: 700;
+        }}
+        .sig-badge {{
+            background: #dc3545;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: bold;
+            margin-left: 10px;
+            vertical-align: middle;
+        }}
+        .significant-section {{
+            border-left: 4px solid #dc3545;
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.05) 0%, rgba(253, 126, 20, 0.05) 100%);
+        }}
+        .feature-value-group {{
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }}
+        .feature-value-header {{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #dee2e6;
+        }}
+        .feature-value-label {{
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #dc3545;
+            background: rgba(220, 53, 69, 0.1);
+            padding: 6px 15px;
+            border-radius: 20px;
+        }}
+        .feature-value-acc {{
+            font-size: 0.95em;
+            color: #6c757d;
+            font-weight: 500;
         }}
     </style>
 </head>
