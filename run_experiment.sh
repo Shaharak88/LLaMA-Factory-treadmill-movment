@@ -1064,6 +1064,54 @@ step_retrieve_results() {
     fi
 }
 
+step_generate_html_report() {
+    log_step "PHASE 5: GENERATE DATASET COMPARISON HTML REPORT"
+
+    log_info "Generating HTML report for dataset: $DATASET_NAME"
+
+    # Run generate_experiment_report.py locally
+    # This script will:
+    # 1. Check if videos are already downloaded locally
+    # 2. If not, download them from server
+    # 3. Extract model performance metrics from CSV
+    # 4. Generate HTML report with visualizations
+    # 5. Update CSV with report link
+
+    local report_cmd="python3 $LOCAL_DIR/generate_experiment_report.py \
+        --dataset-name '$DATASET_NAME' \
+        --csv-path '$LOCAL_DIR/data/experiments_log.csv'"
+
+    log_info "Running: $report_cmd"
+
+    if [ "$DRY_RUN" = true ]; then
+        log_info "[DRY RUN] Would run: $report_cmd"
+        return 0
+    fi
+
+    # Execute the report generator
+    if eval "$report_cmd"; then
+        log_success "HTML report generated successfully"
+
+        # Try to find the generated report
+        local report_file=$(find "$LOCAL_DIR/analytics/reports" -name "*${DATASET_NAME}*dual_report*.html" -type f -printf '%T@ %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2-)
+
+        if [ -n "$report_file" ]; then
+            log_success "Report location: $report_file"
+
+            # Optionally open the report in browser
+            if command -v xdg-open &> /dev/null; then
+                log_info "Opening report in browser..."
+                xdg-open "$report_file" &
+            elif command -v open &> /dev/null; then
+                log_info "Opening report in browser..."
+                open "$report_file" &
+            fi
+        fi
+    else
+        log_warning "Failed to generate HTML report (non-critical, continuing...)"
+    fi
+}
+
 step_show_summary() {
     log_step "EXPERIMENT SUMMARY"
 
@@ -1197,6 +1245,7 @@ EOF
     step_build_datasets
     step_run_training
     step_retrieve_results
+    step_generate_html_report
 
     END_TIME=$(date +%s)
     ELAPSED=$((END_TIME - START_TIME))

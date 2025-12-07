@@ -37,6 +37,7 @@ from dual_dataset_review import (
     generate_pdf_plot,
     generate_categorical_comparison
 )
+from experiment_tracker import ExperimentTracker
 
 logging.basicConfig(
     level=logging.INFO,
@@ -630,6 +631,11 @@ def main():
 
     # Generate report
     report_path = generator.generate_dual_report(experiment)
+
+    # Update CSV with report link
+    tracker = ExperimentTracker(csv_path=args.csv_path)
+    tracker.current_experiment_id = experiment.get('experiment_id')
+    tracker.update_dataset_comparison_report(report_path)
 
     print(f"\n✅ Report generated: {report_path}")
     print(f"\nTo view: Open {report_path} in your browser")
