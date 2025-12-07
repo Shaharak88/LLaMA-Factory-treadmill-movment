@@ -1215,6 +1215,54 @@ class CameraEffectsProcessor:
 
         return noisy
 
+    def apply_distance_scaling(self, frame: np.ndarray, distance: float,
+                               background_color: Tuple[int, int, int] = (50, 50, 50)) -> np.ndarray:
+        """
+        Apply distance scaling to make treadmill appear smaller and further away.
+
+        Scales down the treadmill content and centers it in the frame, with a
+        background fill around it to simulate distance/depth.
+
+        Args:
+            frame: Input frame
+            distance: Distance factor (1.0 = no scaling, >1.0 = further away/smaller)
+            background_color: RGB color for background fill around scaled content
+
+        Returns:
+            numpy.ndarray: Frame with distance scaling applied
+        """
+        if distance <= 1.0:
+            return frame
+
+        h, w = frame.shape[:2]
+
+        # Calculate scale factor (inverse of distance)
+        scale = 1.0 / distance
+
+        # Calculate new dimensions
+        new_w = int(w * scale)
+        new_h = int(h * scale)
+
+        # Ensure minimum size
+        new_w = max(new_w, 10)
+        new_h = max(new_h, 10)
+
+        # Resize frame
+        scaled_frame = cv2.resize(frame, (new_w, new_h), interpolation=cv2.INTER_LINEAR)
+
+        # Create background with specified color
+        result = np.ones((h, w, 3), dtype=np.uint8)
+        result[:, :] = background_color
+
+        # Calculate position to center the scaled frame
+        x_offset = (w - new_w) // 2
+        y_offset = (h - new_h) // 2
+
+        # Place scaled frame in center
+        result[y_offset:y_offset + new_h, x_offset:x_offset + new_w] = scaled_frame
+
+        return result
+
     def apply_belt_enclosure(self, frame: np.ndarray,
                             edge_width_percent: float = 0.1,
                             enclosure_color: Tuple[int, int, int] = (40, 40, 40),
@@ -1450,6 +1498,13 @@ class SyntheticVideoGenerator:
             # Apply camera noise
             frame = self.effects.apply_camera_noise(frame, self.config['camera_noise'])
 
+            # Apply distance scaling (makes treadmill appear smaller and further away)
+            frame = self.effects.apply_distance_scaling(
+                frame,
+                distance=self.config.get('distance', 1.0),
+                background_color=(50, 50, 50)
+            )
+
             # Write frame (convert RGB to BGR for OpenCV)
             frame_bgr = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
             out.write(frame_bgr)
@@ -1489,6 +1544,7 @@ class SyntheticVideoGenerator:
             config['direction'],
             f"speed{config['speed']:.1f}",
             f"angle{config['view_angle']:.0f}",
+            f"dist{config.get('distance', 1.0):.1f}",
             f"bright{config['brightness']:.2f}",
             f"contr{config['contrast']:.2f}",
         ])
@@ -1620,6 +1676,8 @@ Examples:
                        help='Camera sensor noise level, 0.0 to 1.0 (default: 0.0)')
     parser.add_argument('--edge_width', type=float, default=0.1,
                        help='Belt enclosure edge width as percentage, 0.05 to 0.2 (default: 0.1)')
+    parser.add_argument('--distance', type=float, default=1.0,
+                       help='Distance factor: 1.0 = normal size, >1.0 = smaller/further (default: 1.0)')
 
     # Object placement parameters
     parser.add_argument('--add-object', action='store_true',
@@ -1833,6 +1891,7 @@ def main():
         'motion_blur': args.motion_blur,
         'camera_noise': args.camera_noise,
         'edge_width': args.edge_width,
+        'distance': args.distance,
         'seed': args.seed,
         'background_color': bg_color,
         'stripe_width': stripe_width,

@@ -345,6 +345,9 @@ class FullPipelineRunner:
         if self.args.edge_width:
             cmd.extend(['--edge_width', str(self.args.edge_width)])
 
+        if hasattr(self.args, 'distance') and self.args.distance:
+            cmd.extend(['--distance', str(self.args.distance)])
+
         # Add subtle_gray_stripes specific parameters if provided
         if hasattr(self.args, 'stripe_width') and self.args.stripe_width:
             cmd.extend(['--stripe_width', str(self.args.stripe_width)])
@@ -735,6 +738,8 @@ Notes:
                               help='Camera noise level (default: 0.0)')
     dataset_group.add_argument('--edge_width', type=str, default='0.1',
                               help='Belt edge width (default: 0.1)')
+    dataset_group.add_argument('--distance', type=str, default='1.0',
+                              help='Distance factor: 1.0 = normal, >1.0 = smaller/further (default: 1.0)')
 
     # Subtle gray stripes parameters (for subtle_gray_stripes texture type)
     dataset_group.add_argument('--stripe_width', type=str, default='10',
@@ -789,6 +794,7 @@ Notes:
     metadata_group.add_argument('--train_motion_blur', type=str, default='', help='Training motion blur (for tracking)')
     metadata_group.add_argument('--train_camera_noise', type=str, default='', help='Training camera noise (for tracking)')
     metadata_group.add_argument('--train_edge_width', type=str, default='', help='Training edge width (for tracking)')
+    metadata_group.add_argument('--train_distance', type=str, default='', help='Training distance factor (for tracking)')
     metadata_group.add_argument('--train_stripe_width', type=str, default='', help='Training stripe width (for tracking)')
     metadata_group.add_argument('--train_stripe_spacing', type=str, default='', help='Training stripe spacing (for tracking)')
     metadata_group.add_argument('--train_stripe_gray', type=str, default='', help='Training stripe gray (for tracking)')
@@ -819,6 +825,7 @@ Notes:
     metadata_group.add_argument('--test_motion_blur', type=str, default='', help='Test motion blur (for tracking)')
     metadata_group.add_argument('--test_camera_noise', type=str, default='', help='Test camera noise (for tracking)')
     metadata_group.add_argument('--test_edge_width', type=str, default='', help='Test edge width (for tracking)')
+    metadata_group.add_argument('--test_distance', type=str, default='', help='Test distance factor (for tracking)')
     metadata_group.add_argument('--test_stripe_width', type=str, default='', help='Test stripe width (for tracking)')
     metadata_group.add_argument('--test_stripe_spacing', type=str, default='', help='Test stripe spacing (for tracking)')
     metadata_group.add_argument('--test_stripe_gray', type=str, default='', help='Test stripe gray (for tracking)')

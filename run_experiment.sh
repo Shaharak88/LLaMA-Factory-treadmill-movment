@@ -106,6 +106,8 @@ TRAIN_CAMERA_NOISE="0.0"
 TEST_CAMERA_NOISE=""
 TRAIN_EDGE_WIDTH="0.1"  # Fixed: was "5" (500%!), now 0.1 (10% - normal edge width)
 TEST_EDGE_WIDTH=""
+TRAIN_DISTANCE="1.0"  # Distance factor: 1.0 = normal size, >1.0 = smaller/further away
+TEST_DISTANCE=""
 
 # Stripe parameters (for subtle_gray_stripes)
 TRAIN_STRIPE_WIDTH="10"
@@ -459,6 +461,14 @@ parse_args() {
                 TEST_STRIPE_GRAY="$2"
                 shift 2
                 ;;
+            --train-distance)
+                TRAIN_DISTANCE="$2"
+                shift 2
+                ;;
+            --test-distance)
+                TEST_DISTANCE="$2"
+                shift 2
+                ;;
             --fps)
                 FPS="$2"
                 shift 2
@@ -698,6 +708,7 @@ step_build_datasets() {
     local test_motion_blur="${TEST_MOTION_BLUR:-$TRAIN_MOTION_BLUR}"
     local test_camera_noise="${TEST_CAMERA_NOISE:-$TRAIN_CAMERA_NOISE}"
     local test_edge_width="${TEST_EDGE_WIDTH:-$TRAIN_EDGE_WIDTH}"
+    local test_distance="${TEST_DISTANCE:-$TRAIN_DISTANCE}"
     local test_stripe_width="${TEST_STRIPE_WIDTH:-$TRAIN_STRIPE_WIDTH}"
     local test_stripe_spacing="${TEST_STRIPE_SPACING:-$TRAIN_STRIPE_SPACING}"
     local test_stripe_distance_variance="${TEST_STRIPE_DISTANCE_VARIANCE:-$TRAIN_STRIPE_DISTANCE_VARIANCE}"
@@ -752,6 +763,7 @@ step_build_datasets() {
         --motion_blur '$TRAIN_MOTION_BLUR' \
         --camera_noise '$TRAIN_CAMERA_NOISE' \
         --edge_width '$TRAIN_EDGE_WIDTH' \
+        --distance '$TRAIN_DISTANCE' \
         --stripe_width '$TRAIN_STRIPE_WIDTH' \
         --stripe_spacing '$TRAIN_STRIPE_SPACING' \
         --stripe_gray '$TRAIN_STRIPE_GRAY' \
@@ -812,6 +824,7 @@ step_build_datasets() {
         --motion_blur '$test_motion_blur' \
         --camera_noise '$test_camera_noise' \
         --edge_width '$test_edge_width' \
+        --distance '$test_distance' \
         --stripe_width '$test_stripe_width' \
         --stripe_spacing '$test_stripe_spacing' \
         --stripe_gray '$TEST_STRIPE_GRAY' \
@@ -876,6 +889,7 @@ step_run_training() {
     local test_motion_blur="${TEST_MOTION_BLUR:-$TRAIN_MOTION_BLUR}"
     local test_camera_noise="${TEST_CAMERA_NOISE:-$TRAIN_CAMERA_NOISE}"
     local test_edge_width="${TEST_EDGE_WIDTH:-$TRAIN_EDGE_WIDTH}"
+    local test_distance="${TEST_DISTANCE:-$TRAIN_DISTANCE}"
     local test_stripe_width="${TEST_STRIPE_WIDTH:-$TRAIN_STRIPE_WIDTH}"
     local test_stripe_spacing="${TEST_STRIPE_SPACING:-$TRAIN_STRIPE_SPACING}"
     local test_stripe_gray="${TEST_STRIPE_GRAY}"
@@ -951,6 +965,7 @@ step_run_training() {
         --train_motion_blur '$TRAIN_MOTION_BLUR' \
         --train_camera_noise '$TRAIN_CAMERA_NOISE' \
         --train_edge_width '$TRAIN_EDGE_WIDTH' \
+        --train_distance '$TRAIN_DISTANCE' \
         --train_stripe_width '$TRAIN_STRIPE_WIDTH' \
         --train_stripe_spacing '$TRAIN_STRIPE_SPACING' \
         --train_stripe_gray '$TRAIN_STRIPE_GRAY' \
@@ -980,6 +995,7 @@ step_run_training() {
         --test_motion_blur '$test_motion_blur' \
         --test_camera_noise '$test_camera_noise' \
         --test_edge_width '$test_edge_width' \
+        --test_distance '$test_distance' \
         --test_stripe_width '$test_stripe_width' \
         --test_stripe_spacing '$test_stripe_spacing' \
         --test_stripe_gray '$test_stripe_gray' \

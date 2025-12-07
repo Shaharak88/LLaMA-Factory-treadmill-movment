@@ -172,6 +172,7 @@ class DatasetBuilder:
         motion_blurs = self._parse_parameter_values(self.args.motion_blur, int)
         camera_noises = self._parse_parameter_values(self.args.camera_noise, float)
         edge_widths = self._parse_parameter_values(self.args.edge_width, float)
+        distances = self._parse_parameter_values(self.args.distance, float) if hasattr(self.args, 'distance') else [1.0]
 
         # Parse subtle_gray_stripes parameters
         stripe_widths = self._parse_parameter_values(self.args.stripe_width, int) if hasattr(self.args, 'stripe_width') else [10]
@@ -207,6 +208,7 @@ class DatasetBuilder:
             motion_blurs,
             camera_noises,
             edge_widths,
+            distances,
             stripe_widths,
             stripe_spacings,
             stripe_grays,
@@ -221,7 +223,7 @@ class DatasetBuilder:
         for idx, combo in enumerate(all_combinations):
             (texture, direction, speed, fps, duration, resolution, view_angle,
              brightness, contrast, lighting_var, lighting_int, motion_blur,
-             camera_noise, edge_width, stripe_width, stripe_spacing, stripe_gray,
+             camera_noise, edge_width, distance, stripe_width, stripe_spacing, stripe_gray,
              background_gray, stripe_distance_variance) = combo
 
             config = {
@@ -242,6 +244,7 @@ class DatasetBuilder:
                 'motion_blur': motion_blur,
                 'camera_noise': camera_noise,
                 'edge_width': edge_width,
+                'distance': distance,
                 'stripe_width': stripe_width,
                 'stripe_spacing': stripe_spacing,
                 'stripe_gray': stripe_gray,
@@ -364,6 +367,7 @@ class DatasetBuilder:
                 config['motion_blur'] = getattr(self.args, 'motion_blur', 0)
                 config['camera_noise'] = getattr(self.args, 'camera_noise', 0.0)
                 config['edge_width'] = getattr(self.args, 'edge_width', 0.1)
+                config['distance'] = getattr(self.args, 'distance', 1.0)
                 config['stripe_width'] = getattr(self.args, 'stripe_width', 10)
                 config['stripe_spacing'] = getattr(self.args, 'stripe_spacing', 60)
                 config['stripe_gray'] = getattr(self.args, 'stripe_gray', 125)
@@ -421,6 +425,7 @@ class DatasetBuilder:
                 '--motion_blur', str(config['motion_blur']),
                 '--camera_noise', str(config['camera_noise']),
                 '--edge_width', str(config['edge_width']),
+                '--distance', str(config.get('distance', 1.0)),
                 '--resolution', config['resolution'],
                 '--fps', str(config['fps']),
                 '--duration', str(config['duration'])
@@ -901,6 +906,8 @@ Notes:
                        help='Camera noise level (default: 0.0). Accepts comma-separated values (e.g., 0.0,0.1,0.2)')
     parser.add_argument('--edge_width', type=str, default='0.1',
                        help='Belt enclosure edge width as percentage (default: 0.1). Accepts comma-separated values (e.g., 0.05,0.1,0.15)')
+    parser.add_argument('--distance', type=str, default='1.0',
+                       help='Distance factor: 1.0 = normal size, >1.0 = smaller/further (default: 1.0). Accepts comma-separated values (e.g., 1.0,2.0,3.0)')
 
     # Subtle gray stripes parameters (for subtle_gray_stripes texture type)
     parser.add_argument('--stripe_width', type=str, default='10',
