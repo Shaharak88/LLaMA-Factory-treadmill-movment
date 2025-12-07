@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 """
-Generate Experiment Report with Model Performance Metrics
+Generate Experiment Report with Full Dataset Analytics and Model Performance
 
 This script:
 1. Checks if dataset videos are already downloaded
 2. If not, downloads and processes videos using dual_dataset_review.py logic
 3. Extracts model performance metrics (F1, accuracy, hyperparameters) from CSV
-4. Generates enhanced HTML report with model performance section
+4. Generates comprehensive HTML report with:
+   - All train/test dataset analytics (overview, defaults, grouped views)
+   - Distribution comparison plots
+   - Model performance metrics tab
+   - Interactive video playback
 
 Usage:
     python3 generate_experiment_report.py --experiment-id <id> --csv-path <path>
@@ -16,13 +20,16 @@ Or:
 """
 
 import argparse
+import base64
 import csv
 import json
 import os
 import sys
+from io import BytesIO
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any
+from collections import defaultdict, Counter
 import logging
 
 # Import functions from dual_dataset_review.py
@@ -47,7 +54,7 @@ logger = logging.getLogger(__name__)
 
 
 class ExperimentReportGenerator:
-    """Generate experiment report with model performance metrics."""
+    """Generate comprehensive experiment report with full dataset analytics and model performance."""
 
     # Default hyperparameter values (for filtering non-default values)
     DEFAULT_PARAMS = {
@@ -219,15 +226,15 @@ class ExperimentReportGenerator:
         words = param.replace('_', ' ').split()
         return ' '.join(word.capitalize() for word in words)
 
-    def generate_model_performance_html(self, experiment: Dict) -> str:
+    def generate_model_performance_tab_html(self, experiment: Dict) -> str:
         """
-        Generate HTML for model performance section.
+        Generate HTML for model performance tab content.
 
         Args:
             experiment: Experiment row from CSV
 
         Returns:
-            HTML string for model performance section
+            HTML string for model performance tab content
         """
         # Extract metrics
         base_acc = experiment.get('base_model_accuracy', 'N/A')
@@ -255,137 +262,157 @@ class ExperimentReportGenerator:
             '''
 
         html = f'''
-        <div class="model-performance-section">
-            <h3>🎯 Model Performance Metrics</h3>
+        <h2>🎯 Model Performance Metrics</h2>
 
-            <div class="metrics-grid">
-                <div class="metric-card base-model">
-                    <h4>Base Model</h4>
-                    <div class="metric-row">
-                        <span class="metric-label">Accuracy:</span>
-                        <span class="metric-value">{base_acc}%</span>
-                    </div>
-                    <div class="metric-row">
-                        <span class="metric-label">F1 Score:</span>
-                        <span class="metric-value">{base_f1}%</span>
-                    </div>
+        <div class="metrics-grid">
+            <div class="metric-card base-model">
+                <h4>Base Model</h4>
+                <div class="metric-row">
+                    <span class="metric-label">Accuracy:</span>
+                    <span class="metric-value">{base_acc}%</span>
                 </div>
-
-                <div class="metric-card finetuned-model">
-                    <h4>Fine-Tuned Model</h4>
-                    <div class="metric-row">
-                        <span class="metric-label">Accuracy:</span>
-                        <span class="metric-value">{ft_acc}%</span>
-                    </div>
-                    <div class="metric-row">
-                        <span class="metric-label">F1 Score:</span>
-                        <span class="metric-value">{ft_f1}%</span>
-                    </div>
+                <div class="metric-row">
+                    <span class="metric-label">F1 Score:</span>
+                    <span class="metric-value">{base_f1}%</span>
                 </div>
             </div>
 
-            {params_html}
+            <div class="metric-card finetuned-model">
+                <h4>Fine-Tuned Model</h4>
+                <div class="metric-row">
+                    <span class="metric-label">Accuracy:</span>
+                    <span class="metric-value">{ft_acc}%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">F1 Score:</span>
+                    <span class="metric-value">{ft_f1}%</span>
+                </div>
+            </div>
         </div>
 
-        <style>
-            .model-performance-section {{
-                background: white;
-                padding: 30px;
-                margin-bottom: 30px;
-                border-radius: 12px;
-                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            }}
-            .model-performance-section h3 {{
-                margin-bottom: 20px;
-                color: #667eea;
-                font-size: 1.8em;
-            }}
-            .metrics-grid {{
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-                gap: 20px;
-                margin-bottom: 25px;
-            }}
-            .metric-card {{
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
-                padding: 25px;
-                border-radius: 10px;
-                box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-            }}
-            .metric-card h4 {{
-                margin: 0 0 15px 0;
-                font-size: 1.3em;
-                opacity: 0.95;
-            }}
-            .metric-row {{
-                display: flex;
-                justify-content: space-between;
-                padding: 8px 0;
-                font-size: 1.1em;
-            }}
-            .metric-label {{
-                font-weight: 500;
-                opacity: 0.9;
-            }}
-            .metric-value {{
-                font-weight: bold;
-                font-size: 1.2em;
-            }}
-            .hyperparams-section {{
-                background: #f8f9fa;
-                padding: 20px;
-                border-radius: 8px;
-                border-left: 4px solid #667eea;
-            }}
-            .hyperparams-section h4 {{
-                margin: 0 0 15px 0;
-                color: #667eea;
-                font-size: 1.2em;
-            }}
-            .params-grid {{
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                gap: 12px;
-            }}
-            .param-item {{
-                background: white;
-                padding: 10px 15px;
-                border-radius: 6px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }}
-            .param-label {{
-                font-weight: 600;
-                color: #495057;
-                font-size: 0.9em;
-            }}
-            .param-value {{
-                color: #667eea;
-                font-weight: bold;
-                font-size: 1em;
-            }}
-        </style>
+        {params_html}
         '''
 
         return html
 
+    def generate_comparison_plots(self, train_metadata: List[Dict],
+                                 test_metadata: List[Dict]) -> Dict[str, str]:
+        """
+        Generate comparison plots for continuous and categorical variables.
+
+        Args:
+            train_metadata: Training dataset metadata
+            test_metadata: Test dataset metadata
+
+        Returns:
+            Dict of plot_name -> base64 encoded image
+        """
+        plots = {}
+
+        logger.info("\n🎨 Generating comparison charts...")
+
+        # Speed distribution
+        try:
+            train_speeds = [float(v['speed']) for v in train_metadata
+                          if v.get('speed', '').replace('.', '').replace('-', '').isdigit()]
+            test_speeds = [float(v['speed']) for v in test_metadata
+                         if v.get('speed', '').replace('.', '').replace('-', '').isdigit()]
+            if train_speeds and test_speeds:
+                plots['speed'] = generate_pdf_plot(train_speeds, test_speeds, 'Speed', 'Speed (units/sec)')
+                logger.info("   ✅ Speed distribution plot")
+        except Exception as e:
+            logger.warning(f"   ⚠️  Speed plot failed: {e}")
+            plots['speed'] = ""
+
+        # Angle distribution
+        try:
+            train_angles = [float(v['angle']) for v in train_metadata
+                          if v.get('angle', '').replace('.', '').replace('-', '').isdigit()]
+            test_angles = [float(v['angle']) for v in test_metadata
+                         if v.get('angle', '').replace('.', '').replace('-', '').isdigit()]
+            if train_angles and test_angles:
+                plots['angle'] = generate_pdf_plot(train_angles, test_angles, 'View Angle', 'Angle (degrees)')
+                logger.info("   ✅ Angle distribution plot")
+        except Exception as e:
+            logger.warning(f"   ⚠️  Angle plot failed: {e}")
+            plots['angle'] = ""
+
+        # Check for subtle gray textures
+        train_textures = [v.get('texture', '') for v in train_metadata]
+        test_textures = [v.get('texture', '') for v in test_metadata]
+        has_subtle_gray = any('subtle' in t.lower() and 'gray' in t.lower()
+                            for t in train_textures + test_textures)
+
+        if has_subtle_gray:
+            # Stripe gray distribution
+            try:
+                train_stripe = [float(v['stripe_contrast']) for v in train_metadata
+                              if v.get('stripe_contrast', 'N/A') not in ['N/A', '']
+                              and v.get('stripe_contrast', '').replace('.', '').isdigit()]
+                test_stripe = [float(v['stripe_contrast']) for v in test_metadata
+                             if v.get('stripe_contrast', 'N/A') not in ['N/A', '']
+                             and v.get('stripe_contrast', '').replace('.', '').isdigit()]
+                if train_stripe and test_stripe:
+                    plots['stripe_gray'] = generate_pdf_plot(train_stripe, test_stripe,
+                                                            'Stripe Gray Values', 'Gray Value')
+                    logger.info("   ✅ Stripe gray distribution plot")
+            except Exception as e:
+                logger.warning(f"   ⚠️  Stripe gray plot failed: {e}")
+
+            # Background gray distribution
+            try:
+                train_bg = [float(v['background_contrast']) for v in train_metadata
+                          if v.get('background_contrast', 'N/A') not in ['N/A', '']
+                          and v.get('background_contrast', '').replace('.', '').isdigit()]
+                test_bg = [float(v['background_contrast']) for v in test_metadata
+                         if v.get('background_contrast', 'N/A') not in ['N/A', '']
+                         and v.get('background_contrast', '').replace('.', '').isdigit()]
+                if train_bg and test_bg:
+                    plots['background_gray'] = generate_pdf_plot(train_bg, test_bg,
+                                                                'Background Gray Values', 'Gray Value')
+                    logger.info("   ✅ Background gray distribution plot")
+            except Exception as e:
+                logger.warning(f"   ⚠️  Background gray plot failed: {e}")
+
+        # Texture comparison (categorical)
+        try:
+            train_texture_counter = Counter([v.get('texture', 'unknown') for v in train_metadata])
+            test_texture_counter = Counter([v.get('texture', 'unknown') for v in test_metadata])
+            plots['texture'] = generate_categorical_comparison(train_texture_counter,
+                                                              test_texture_counter, 'Texture')
+            logger.info("   ✅ Texture comparison chart")
+        except Exception as e:
+            logger.warning(f"   ⚠️  Texture comparison failed: {e}")
+            plots['texture'] = ""
+
+        # Direction comparison (categorical)
+        try:
+            train_direction_counter = Counter([v.get('direction', 'unknown') for v in train_metadata])
+            test_direction_counter = Counter([v.get('direction', 'unknown') for v in test_metadata])
+            plots['direction'] = generate_categorical_comparison(train_direction_counter,
+                                                                test_direction_counter, 'Direction')
+            logger.info("   ✅ Direction comparison chart")
+        except Exception as e:
+            logger.warning(f"   ⚠️  Direction comparison failed: {e}")
+            plots['direction'] = ""
+
+        return plots
+
     def generate_dual_report(self, experiment: Dict) -> str:
         """
-        Generate dual dataset comparison report with model performance.
+        Generate comprehensive dual dataset report with full analytics and model performance.
 
         Args:
             experiment: Experiment row from CSV
 
         Returns:
-            Path to generated HTML report
+            Path to generated HTML report (as file:// URL)
         """
         train_dataset = experiment.get('train_dataset_name', '')
         test_dataset = experiment.get('test_dataset_name', '')
         dataset_name = experiment.get('dataset_name', '')
 
-        logger.info(f"Generating report for experiment: {dataset_name}")
+        logger.info(f"Generating comprehensive report for experiment: {dataset_name}")
         logger.info(f"  Train: {train_dataset}")
         logger.info(f"  Test: {test_dataset}")
 
@@ -399,7 +426,7 @@ class ExperimentReportGenerator:
         test_metadata_csv = self.get_metadata(test_dataset)
 
         # Load and analyze metadata
-        logger.info("\n=== GENERATING REPORT ===")
+        logger.info("\n=== ANALYZING DATASETS ===")
         train_metadata = load_metadata(train_metadata_csv)
         test_metadata = load_metadata(test_metadata_csv)
 
@@ -410,18 +437,18 @@ class ExperimentReportGenerator:
         test_groups = group_videos(test_metadata)
 
         # Generate comparison plots
-        comparison_plots = self._generate_comparison_plots(train_metadata, test_metadata)
+        comparison_plots = self.generate_comparison_plots(train_metadata, test_metadata)
 
         # Generate model performance HTML
-        performance_html = self.generate_model_performance_html(experiment)
+        performance_html = self.generate_model_performance_tab_html(experiment)
 
-        # Generate full HTML report (incorporating dual_dataset_review logic)
+        # Generate full HTML report
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         report_filename = f"{dataset_name}_dual_report_{timestamp}.html"
         report_path = self.reports_dir / report_filename
 
-        # Create HTML report with model performance section at the top
-        html_content = self._build_html_report(
+        # Create HTML report
+        html_content = self._build_comprehensive_html_report(
             performance_html=performance_html,
             train_metadata=train_metadata,
             test_metadata=test_metadata,
@@ -440,68 +467,118 @@ class ExperimentReportGenerator:
 
         logger.info(f"\n✅ Report generated: {report_path}")
 
-        # Return relative path from project root
-        return str(report_path.relative_to(self.project_root))
+        # Return as file:// URL
+        absolute_path = report_path.resolve()
+        file_url = f"file://{absolute_path}"
 
-    def _generate_comparison_plots(self, train_metadata: List[Dict],
-                                   test_metadata: List[Dict]) -> Dict[str, str]:
-        """Generate comparison plots for continuous and categorical variables."""
-        plots = {}
+        return file_url
 
-        # Speed comparison (continuous)
-        train_speeds = [float(v['speed']) for v in train_metadata if v.get('speed')]
-        test_speeds = [float(v['speed']) for v in test_metadata if v.get('speed')]
+    def _build_comprehensive_html_report(
+        self,
+        performance_html: str,
+        train_metadata: List[Dict],
+        test_metadata: List[Dict],
+        train_stats: Dict,
+        test_stats: Dict,
+        train_groups: Dict,
+        test_groups: Dict,
+        comparison_plots: Dict,
+        train_video_dir: Path,
+        test_video_dir: Path,
+        dataset_name: str
+    ) -> str:
+        """Build complete comprehensive HTML report with all analytics and model performance."""
 
-        if train_speeds and test_speeds:
-            plots['speed'] = generate_pdf_plot(train_speeds, test_speeds, 'Speed', 'Speed (units/s)')
+        # Prepare JSON data
+        train_metadata_json = json.dumps(train_metadata, indent=2)
+        test_metadata_json = json.dumps(test_metadata, indent=2)
+        train_stats_json = json.dumps(train_stats, indent=2)
+        test_stats_json = json.dumps(test_stats, indent=2)
 
-        # Angle comparison (continuous)
-        train_angles = [float(v['angle']) for v in train_metadata if v.get('angle')]
-        test_angles = [float(v['angle']) for v in test_metadata if v.get('angle')]
+        # Sample videos (max 5 per group)
+        train_samples = {}
+        for category, category_groups in train_groups.items():
+            train_samples[category] = {}
+            for group_name, group_videos in category_groups.items():
+                train_samples[category][group_name] = group_videos[:5]
+        train_samples_json = json.dumps(train_samples, indent=2)
 
-        if train_angles and test_angles:
-            plots['angle'] = generate_pdf_plot(train_angles, test_angles, 'View Angle', 'Angle (degrees)')
+        test_samples = {}
+        for category, category_groups in test_groups.items():
+            test_samples[category] = {}
+            for group_name, group_videos in category_groups.items():
+                test_samples[category][group_name] = group_videos[:5]
+        test_samples_json = json.dumps(test_samples, indent=2)
 
-        # Direction comparison (categorical)
-        from collections import Counter
-        train_directions = Counter(v['direction'] for v in train_metadata if v.get('direction'))
-        test_directions = Counter(v['direction'] for v in test_metadata if v.get('direction'))
+        # Calculate train/test ratio
+        train_count = len(train_metadata)
+        test_count = len(test_metadata)
+        ratio = f"{train_count/test_count:.2f}" if test_count > 0 else "N/A"
 
-        if train_directions and test_directions:
-            plots['direction'] = generate_categorical_comparison(train_directions, test_directions, 'Direction')
-
-        # Texture comparison (categorical)
-        train_textures = Counter(v['texture'] for v in train_metadata if v.get('texture'))
-        test_textures = Counter(v['texture'] for v in test_metadata if v.get('texture'))
-
-        if train_textures and test_textures:
-            plots['texture'] = generate_categorical_comparison(train_textures, test_textures, 'Texture')
-
-        return plots
-
-    def _build_html_report(self, performance_html: str, train_metadata: List[Dict],
-                          test_metadata: List[Dict], train_stats: Dict, test_stats: Dict,
-                          train_groups: Dict, test_groups: Dict, comparison_plots: Dict,
-                          train_video_dir: Path, test_video_dir: Path, dataset_name: str) -> str:
-        """Build complete HTML report."""
-
-        # Build comparison plots HTML
-        plots_html = ""
-        for plot_name, plot_data in comparison_plots.items():
-            plots_html += f'''
-            <div class="comparison-plot">
-                <h4>{plot_name.capitalize()} Distribution Comparison</h4>
-                <img src="{plot_data}" alt="{plot_name} comparison" style="max-width: 100%; height: auto;">
+        # Build comparison tab HTML
+        comparison_html = f"""
+            <div class="stats-comparison-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                <div class="stat-card">
+                    <h3>Train Videos</h3>
+                    <div class="value">{train_count}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Test Videos</h3>
+                    <div class="value">{test_count}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Train/Test Ratio</h3>
+                    <div class="value">{ratio}</div>
+                </div>
             </div>
-            '''
 
-        # Build the full HTML (simplified version - full implementation would include all tabs from dual_dataset_review)
-        html = f'''<!DOCTYPE html>
+            <div class="pdf-plot" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <h3 style="color: #667eea; margin-bottom: 15px;">Speed Distribution (PDF)</h3>
+                <img src="{comparison_plots.get('speed', '')}" style="width: 100%; max-width: 900px; display: block; margin: 0 auto;">
+            </div>
+
+            <div class="pdf-plot" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <h3 style="color: #667eea; margin-bottom: 15px;">Angle Distribution (PDF)</h3>
+                <img src="{comparison_plots.get('angle', '')}" style="width: 100%; max-width: 900px; display: block; margin: 0 auto;">
+            </div>
+        """
+
+        # Add conditional gray value plots
+        if comparison_plots.get('stripe_gray'):
+            comparison_html += f"""
+            <div class="pdf-plot" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <h3 style="color: #667eea; margin-bottom: 15px;">Stripe Gray Values Distribution (PDF)</h3>
+                <img src="{comparison_plots['stripe_gray']}" style="width: 100%; max-width: 900px; display: block; margin: 0 auto;">
+            </div>
+            """
+
+        if comparison_plots.get('background_gray'):
+            comparison_html += f"""
+            <div class="pdf-plot" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <h3 style="color: #667eea; margin-bottom: 15px;">Background Gray Values Distribution (PDF)</h3>
+                <img src="{comparison_plots['background_gray']}" style="width: 100%; max-width: 900px; display: block; margin: 0 auto;">
+            </div>
+            """
+
+        comparison_html += f"""
+            <div class="categorical-comparison" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <h3 style="color: #667eea; margin-bottom: 15px;">Texture Distribution Comparison</h3>
+                <img src="{comparison_plots.get('texture', '')}" style="width: 100%; max-width: 900px; display: block; margin: 0 auto;">
+            </div>
+
+            <div class="categorical-comparison" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <h3 style="color: #667eea; margin-bottom: 15px;">Direction Distribution Comparison</h3>
+                <img src="{comparison_plots.get('direction', '')}" style="width: 100%; max-width: 900px; display: block; margin: 0 auto;">
+            </div>
+        """
+
+        # Build complete HTML
+        html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experiment Report - {dataset_name}</title>
+    <title>Comprehensive Experiment Report - {dataset_name}</title>
     <style>
         * {{ margin: 0; padding: 0; box-sizing: border-box; }}
         body {{
@@ -512,7 +589,7 @@ class ExperimentReportGenerator:
             padding: 20px;
         }}
         .container {{
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             background: white;
             border-radius: 12px;
@@ -526,74 +603,607 @@ class ExperimentReportGenerator:
             text-align: center;
         }}
         header h1 {{ font-size: 2.5em; margin-bottom: 10px; }}
-        .content {{
-            padding: 30px;
-        }}
-        .comparison-plot {{
-            margin: 30px 0;
-            padding: 20px;
+        header .experiment-name {{ font-size: 1.2em; opacity: 0.9; font-family: monospace; }}
+        .tabs {{
+            display: flex;
             background: #f8f9fa;
-            border-radius: 8px;
+            border-bottom: 2px solid #dee2e6;
+            overflow-x: auto;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }}
-        .comparison-plot h4 {{
-            margin-bottom: 15px;
-            color: #667eea;
+        .tab {{
+            padding: 15px 20px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 0.9em;
+            font-weight: 500;
+            color: #495057;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }}
+        .tab:hover {{ background: rgba(102, 126, 234, 0.1); color: #667eea; }}
+        .tab.active {{ background: white; color: #667eea; border-bottom: 3px solid #667eea; }}
+        .tab.performance-tab {{ background: linear-gradient(135deg, rgba(255, 193, 7, 0.15) 0%, rgba(255, 152, 0, 0.15) 100%); font-weight: 600; }}
+        .tab.train-tab {{ border-left: 3px solid #667eea; }}
+        .tab.test-tab {{ border-left: 3px solid #764ba2; }}
+        .tab.comparison-tab {{ background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%); font-weight: 600; }}
+        .tab-content {{ padding: 30px; display: none; }}
+        .tab-content.active {{ display: block; }}
+        .stats-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }}
+        .stat-card {{
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }}
+        .stat-card h3 {{ font-size: 1em; opacity: 0.9; margin-bottom: 10px; }}
+        .stat-card .value {{ font-size: 2.5em; font-weight: bold; }}
+
+        /* Model Performance Styles */
+        .metrics-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }}
+        .metric-card {{
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }}
+        .metric-card h4 {{
+            margin: 0 0 15px 0;
             font-size: 1.3em;
+            opacity: 0.95;
         }}
-        .dataset-section {{
-            margin: 30px 0;
+        .metric-row {{
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 1.1em;
+        }}
+        .metric-label {{
+            font-weight: 500;
+            opacity: 0.9;
+        }}
+        .metric-value {{
+            font-weight: bold;
+            font-size: 1.2em;
+        }}
+        .hyperparams-section {{
+            background: #f8f9fa;
             padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }}
+        .hyperparams-section h4 {{
+            margin: 0 0 15px 0;
+            color: #667eea;
+            font-size: 1.2em;
+        }}
+        .params-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }}
+        .param-item {{
+            background: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }}
+        .param-label {{
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.9em;
+        }}
+        .param-value {{
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1em;
+        }}
+
+        .distribution-chart {{
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }}
+        .distribution-chart h3 {{ margin-bottom: 15px; color: #667eea; }}
+        .bar-item {{
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }}
+        .bar-label {{
+            width: 150px;
+            font-size: 0.9em;
+            color: #495057;
+        }}
+        .bar {{
+            flex: 1;
+            height: 25px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            position: relative;
+            margin-right: 10px;
+        }}
+        .bar-value {{
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 0.85em;
+            font-weight: bold;
+        }}
+        .alert {{
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }}
+        .alert-warning {{
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            color: #856404;
+        }}
+        .alert-info {{
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            color: #0c5460;
+        }}
+        .video-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }}
+        .video-card {{
             background: #f8f9fa;
             border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
         }}
-        .dataset-section h3 {{
-            color: #667eea;
+        .video-card:hover {{ transform: translateY(-5px); }}
+        .video-card video {{
+            width: 100%;
+            border-radius: 8px;
             margin-bottom: 15px;
+            background: #000;
         }}
-        .stats-item {{
-            padding: 8px 0;
-            border-bottom: 1px solid #dee2e6;
+        .video-card h4 {{
+            font-size: 0.9em;
+            color: #667eea;
+            margin-bottom: 10px;
+            word-break: break-all;
         }}
-        .stats-item:last-child {{
-            border-bottom: none;
+        .video-metadata {{
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            font-size: 0.85em;
+        }}
+        .metadata-item {{
+            display: flex;
+            justify-content: space-between;
+            padding: 5px;
+            background: white;
+            border-radius: 4px;
+        }}
+        .metadata-label {{ font-weight: 600; color: #495057; }}
+        .metadata-value {{ color: #667eea; }}
+        .group-header {{
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0 15px 0;
+            display: flex;
+            justify-content: space-between;
+        }}
+        .search-box {{
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1em;
+            margin-bottom: 20px;
+        }}
+        .search-box:focus {{ outline: none; border-color: #667eea; }}
+        @media (max-width: 768px) {{
+            .video-grid {{ grid-template-columns: 1fr; }}
+            .stats-grid {{ grid-template-columns: 1fr; }}
         }}
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>📊 Experiment Report</h1>
-            <p>Dataset: {dataset_name}</p>
+            <h1>📊 Comprehensive Experiment Report</h1>
+            <p class="experiment-name">{dataset_name}</p>
             <p>Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
+            <p>Train: {train_count} videos | Test: {test_count} videos</p>
         </header>
 
-        <div class="content">
+        <div class="tabs">
+            <button class="tab performance-tab active" onclick="switchTab(event, 'performance')">🎯 Model Performance</button>
+
+            <button class="tab train-tab" onclick="switchTab(event, 'train-overview')">🔵 Train: Overview</button>
+            <button class="tab train-tab" onclick="switchTab(event, 'train-defaults')">🔵 Train: Defaults</button>
+            <button class="tab train-tab" onclick="switchTab(event, 'train-texture')">🔵 Train: Texture</button>
+            <button class="tab train-tab" onclick="switchTab(event, 'train-direction')">🔵 Train: Direction</button>
+            <button class="tab train-tab" onclick="switchTab(event, 'train-speed')">🔵 Train: Speed</button>
+            <button class="tab train-tab" onclick="switchTab(event, 'train-angle')">🔵 Train: Angle</button>
+            <button class="tab train-tab" onclick="switchTab(event, 'train-objects')">🔵 Train: Objects</button>
+            <button class="tab train-tab" onclick="switchTab(event, 'train-blur')">🔵 Train: Blur</button>
+            <button class="tab train-tab" onclick="switchTab(event, 'train-all')">🔵 Train: All Videos</button>
+
+            <button class="tab test-tab" onclick="switchTab(event, 'test-overview')">🟣 Test: Overview</button>
+            <button class="tab test-tab" onclick="switchTab(event, 'test-defaults')">🟣 Test: Defaults</button>
+            <button class="tab test-tab" onclick="switchTab(event, 'test-texture')">🟣 Test: Texture</button>
+            <button class="tab test-tab" onclick="switchTab(event, 'test-direction')">🟣 Test: Direction</button>
+            <button class="tab test-tab" onclick="switchTab(event, 'test-speed')">🟣 Test: Speed</button>
+            <button class="tab test-tab" onclick="switchTab(event, 'test-angle')">🟣 Test: Angle</button>
+            <button class="tab test-tab" onclick="switchTab(event, 'test-objects')">🟣 Test: Objects</button>
+            <button class="tab test-tab" onclick="switchTab(event, 'test-blur')">🟣 Test: Blur</button>
+            <button class="tab test-tab" onclick="switchTab(event, 'test-all')">🟣 Test: All Videos</button>
+
+            <button class="tab comparison-tab" onclick="switchTab(event, 'comparison')">📊 Distribution Comparison</button>
+        </div>
+
+        <!-- MODEL PERFORMANCE TAB -->
+        <div id="performance" class="tab-content active">
             {performance_html}
+        </div>
 
-            <div class="dataset-section">
-                <h3>📈 Dataset Comparison Plots</h3>
-                {plots_html}
+        <!-- TRAIN TABS -->
+        <div id="train-overview" class="tab-content">
+            <h2>📊 Train Dataset - Statistical Overview</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Videos</h3>
+                    <div class="value">{train_stats['total_videos']}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Unique Textures</h3>
+                    <div class="value">{train_stats['distributions'].get('texture', {}).get('unique_values', 0) if 'texture' in train_stats['distributions'] else 0}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Directions</h3>
+                    <div class="value">{train_stats['distributions'].get('direction', {}).get('unique_values', 0) if 'direction' in train_stats['distributions'] else 0}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Speed Variations</h3>
+                    <div class="value">{train_stats['distributions'].get('speed', {}).get('unique_values', 0) if 'speed' in train_stats['distributions'] else 0}</div>
+                </div>
             </div>
+            <div id="train-distribution-charts"></div>
+            <div id="train-representation-alerts"></div>
+        </div>
 
-            <div class="dataset-section">
-                <h3>📋 Training Dataset Overview</h3>
-                <div class="stats-item">Total Videos: {train_stats['total_videos']}</div>
-                <div class="stats-item">Video Directory: {train_video_dir}</div>
-            </div>
+        <div id="train-defaults" class="tab-content">
+            <h2>📋 Train Dataset - Defaults & Common Values</h2>
+            <p style="margin-bottom: 20px; color: #495057;">Most common value for each parameter.</p>
+            <div id="train-defaults-table"></div>
+        </div>
 
-            <div class="dataset-section">
-                <h3>📋 Test Dataset Overview</h3>
-                <div class="stats-item">Total Videos: {test_stats['total_videos']}</div>
-                <div class="stats-item">Video Directory: {test_video_dir}</div>
-            </div>
+        <div id="train-texture" class="tab-content"></div>
+        <div id="train-direction" class="tab-content"></div>
+        <div id="train-speed" class="tab-content"></div>
+        <div id="train-angle" class="tab-content"></div>
+        <div id="train-objects" class="tab-content"></div>
+        <div id="train-blur" class="tab-content"></div>
 
-            <div class="dataset-section">
-                <p><em>Note: Full dataset visualization with video playback available in dual_dataset_review.py</em></p>
+        <div id="train-all" class="tab-content">
+            <h2>Train: All Videos</h2>
+            <input type="text" class="search-box" id="trainSearchBox"
+                   placeholder="Search by name, texture, direction, speed..."
+                   onkeyup="filterTrainVideos()">
+            <div id="trainAllVideosGrid" class="video-grid"></div>
+        </div>
+
+        <!-- TEST TABS -->
+        <div id="test-overview" class="tab-content">
+            <h2>📊 Test Dataset - Statistical Overview</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Videos</h3>
+                    <div class="value">{test_stats['total_videos']}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Unique Textures</h3>
+                    <div class="value">{test_stats['distributions'].get('texture', {}).get('unique_values', 0) if 'texture' in test_stats['distributions'] else 0}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Directions</h3>
+                    <div class="value">{test_stats['distributions'].get('direction', {}).get('unique_values', 0) if 'direction' in test_stats['distributions'] else 0}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Speed Variations</h3>
+                    <div class="value">{test_stats['distributions'].get('speed', {}).get('unique_values', 0) if 'speed' in test_stats['distributions'] else 0}</div>
+                </div>
             </div>
+            <div id="test-distribution-charts"></div>
+            <div id="test-representation-alerts"></div>
+        </div>
+
+        <div id="test-defaults" class="tab-content">
+            <h2>📋 Test Dataset - Defaults & Common Values</h2>
+            <p style="margin-bottom: 20px; color: #495057;">Most common value for each parameter.</p>
+            <div id="test-defaults-table"></div>
+        </div>
+
+        <div id="test-texture" class="tab-content"></div>
+        <div id="test-direction" class="tab-content"></div>
+        <div id="test-speed" class="tab-content"></div>
+        <div id="test-angle" class="tab-content"></div>
+        <div id="test-objects" class="tab-content"></div>
+        <div id="test-blur" class="tab-content"></div>
+
+        <div id="test-all" class="tab-content">
+            <h2>Test: All Videos</h2>
+            <input type="text" class="search-box" id="testSearchBox"
+                   placeholder="Search by name, texture, direction, speed..."
+                   onkeyup="filterTestVideos()">
+            <div id="testAllVideosGrid" class="video-grid"></div>
+        </div>
+
+        <!-- COMPARISON TAB -->
+        <div id="comparison" class="tab-content">
+            <h2>📊 Train vs Test Distribution Comparison</h2>
+            {comparison_html}
         </div>
     </div>
+
+    <script>
+        const trainMetadata = {train_metadata_json};
+        const testMetadata = {test_metadata_json};
+        const trainStats = {train_stats_json};
+        const testStats = {test_stats_json};
+        const trainSamples = {train_samples_json};
+        const testSamples = {test_samples_json};
+        const trainVideoBaseUrl = '{train_video_dir}';
+        const testVideoBaseUrl = '{test_video_dir}';
+
+        function switchTab(event, tabName) {{
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+
+            // Lazy load videos
+            if (tabName === 'train-all' && !document.getElementById('trainAllVideosGrid').innerHTML) {{
+                renderAllVideos('train');
+            }} else if (tabName === 'test-all' && !document.getElementById('testAllVideosGrid').innerHTML) {{
+                renderAllVideos('test');
+            }}
+        }}
+
+        function renderVideoCard(video, baseUrl) {{
+            const videoUrl = baseUrl ? `${{baseUrl}}/${{video.video_name}}` : video.video_name;
+            return `
+                <div class="video-card">
+                    <video controls preload="metadata">
+                        <source src="${{videoUrl}}" type="video/mp4">
+                        Your browser does not support video.
+                    </video>
+                    <h4>${{video.video_name}}</h4>
+                    <div class="video-metadata">
+                        <div class="metadata-item"><span class="metadata-label">Index:</span><span class="metadata-value">${{video.index || 'N/A'}}</span></div>
+                        <div class="metadata-item"><span class="metadata-label">Texture:</span><span class="metadata-value">${{video.texture || 'N/A'}}</span></div>
+                        <div class="metadata-item"><span class="metadata-label">Direction:</span><span class="metadata-value">${{video.direction || 'N/A'}}</span></div>
+                        <div class="metadata-item"><span class="metadata-label">Speed:</span><span class="metadata-value">${{video.speed || 'N/A'}}</span></div>
+                        <div class="metadata-item"><span class="metadata-label">Angle:</span><span class="metadata-value">${{video.angle || 'N/A'}}°</span></div>
+                        <div class="metadata-item"><span class="metadata-label">Brightness:</span><span class="metadata-value">${{video.brightness || 'N/A'}}</span></div>
+                        <div class="metadata-item"><span class="metadata-label">Contrast:</span><span class="metadata-value">${{video.contrast || 'N/A'}}</span></div>
+                        <div class="metadata-item"><span class="metadata-label">Stripe Gray:</span><span class="metadata-value">${{video.stripe_contrast || 'N/A'}}</span></div>
+                        <div class="metadata-item"><span class="metadata-label">Background Gray:</span><span class="metadata-value">${{video.background_contrast || 'N/A'}}</span></div>
+                        <div class="metadata-item"><span class="metadata-label">Resolution:</span><span class="metadata-value">${{video.resolution || 'N/A'}}</span></div>
+                        <div class="metadata-item"><span class="metadata-label">Seed:</span><span class="metadata-value">${{video.seed || 'N/A'}}</span></div>
+                    </div>
+                </div>
+            `;
+        }}
+
+        function renderDistributionCharts(stats, containerId) {{
+            const container = document.getElementById(containerId);
+            for (const [param, data] of Object.entries(stats.distributions)) {{
+                const chartDiv = document.createElement('div');
+                chartDiv.className = 'distribution-chart';
+                const counts = data.counts;
+                const maxCount = Math.max(...Object.values(counts));
+                let barsHtml = '';
+                for (const [value, count] of Object.entries(counts)) {{
+                    const width = (count / maxCount) * 100;
+                    barsHtml += `
+                        <div class="bar-item">
+                            <div class="bar-label">${{value || 'empty'}}</div>
+                            <div class="bar" style="width: ${{width}}%">
+                                <span class="bar-value">${{count}}</span>
+                            </div>
+                        </div>
+                    `;
+                }}
+                chartDiv.innerHTML = `
+                    <h3>${{param.charAt(0).toUpperCase() + param.slice(1)}} Distribution</h3>
+                    <div>${{barsHtml}}</div>
+                `;
+                container.appendChild(chartDiv);
+            }}
+        }}
+
+        function renderRepresentationAlerts(stats, containerId) {{
+            const container = document.getElementById(containerId);
+            if (stats.under_represented.length > 0) {{
+                const div = document.createElement('div');
+                div.className = 'alert alert-warning';
+                div.innerHTML = `
+                    <h3>⚠️ Under-represented Groups</h3>
+                    <ul>
+                        ${{stats.under_represented.map(item =>
+                            `<li><strong>${{item.parameter}}: ${{item.value}}</strong> - ${{item.count}} videos (expected ~${{item.expected}})</li>`
+                        ).join('')}}
+                    </ul>
+                `;
+                container.appendChild(div);
+            }}
+            if (stats.over_represented.length > 0) {{
+                const div = document.createElement('div');
+                div.className = 'alert alert-info';
+                div.innerHTML = `
+                    <h3>📈 Over-represented Groups</h3>
+                    <ul>
+                        ${{stats.over_represented.map(item =>
+                            `<li><strong>${{item.parameter}}: ${{item.value}}</strong> - ${{item.count}} videos (expected ~${{item.expected}})</li>`
+                        ).join('')}}
+                    </ul>
+                `;
+                container.appendChild(div);
+            }}
+        }}
+
+        function renderDefaultsTable(metadata, containerId) {{
+            const container = document.getElementById(containerId);
+            const fields = ['index', 'texture', 'direction', 'speed', 'angle', 'brightness', 'contrast',
+                'stripe_contrast', 'background_contrast', 'object_enabled', 'object_type',
+                'num_objects', 'object_size', 'object_position', 'blur_enabled', 'blur_type',
+                'blur_intensity', 'blur_variation', 'resolution', 'seed'];
+            const defaults = {{}};
+            fields.forEach(field => {{
+                const counter = {{}};
+                metadata.forEach(video => {{
+                    const value = video[field] || 'N/A';
+                    counter[value] = (counter[value] || 0) + 1;
+                }});
+                let maxCount = 0, mostCommon = 'N/A';
+                for (const [value, count] of Object.entries(counter)) {{
+                    if (count > maxCount) {{
+                        maxCount = count;
+                        mostCommon = value;
+                    }}
+                }}
+                defaults[field] = {{
+                    value: mostCommon,
+                    count: maxCount,
+                    percentage: ((maxCount / metadata.length) * 100).toFixed(1)
+                }};
+            }});
+            let html = `
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                                <th style="padding: 15px; text-align: left;">Parameter</th>
+                                <th style="padding: 15px; text-align: left;">Most Common Value</th>
+                                <th style="padding: 15px; text-align: center;">Count</th>
+                                <th style="padding: 15px; text-align: center;">Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            fields.forEach((field, i) => {{
+                const bg = i % 2 === 0 ? '#ffffff' : '#f8f9fa';
+                const def = defaults[field];
+                html += `
+                    <tr style="background: ${{bg}};">
+                        <td style="padding: 12px; font-weight: 600; border-bottom: 1px solid #dee2e6;">
+                            ${{field.replace(/_/g, ' ').replace(/\\b\\w/g, l => l.toUpperCase())}}
+                        </td>
+                        <td style="padding: 12px; color: #667eea; font-family: monospace; border-bottom: 1px solid #dee2e6;">
+                            ${{def.value}}
+                        </td>
+                        <td style="padding: 12px; text-align: center; border-bottom: 1px solid #dee2e6;">
+                            ${{def.count}}
+                        </td>
+                        <td style="padding: 12px; text-align: center; border-bottom: 1px solid #dee2e6;">
+                            ${{def.percentage}}%
+                        </td>
+                    </tr>
+                `;
+            }});
+            html += '</tbody></table></div>';
+            container.innerHTML = html;
+        }}
+
+        function renderGroupTab(tabId, categoryName, samples, videoBaseUrl) {{
+            const container = document.getElementById(tabId);
+            const categoryData = samples[categoryName];
+            let html = `<h2>${{categoryName.charAt(0).toUpperCase() + categoryName.slice(1)}} Groups</h2>`;
+            for (const [groupName, videos] of Object.entries(categoryData)) {{
+                html += `
+                    <div class="group-header">
+                        <h3>${{groupName}}</h3>
+                        <span>${{videos.length}} samples</span>
+                    </div>
+                    <div class="video-grid">
+                        ${{videos.map(video => renderVideoCard(video, videoBaseUrl)).join('')}}
+                    </div>
+                `;
+            }}
+            container.innerHTML = html;
+        }}
+
+        function renderAllVideos(dataset) {{
+            const metadata = dataset === 'train' ? trainMetadata : testMetadata;
+            const baseUrl = dataset === 'train' ? trainVideoBaseUrl : testVideoBaseUrl;
+            const gridId = dataset === 'train' ? 'trainAllVideosGrid' : 'testAllVideosGrid';
+            document.getElementById(gridId).innerHTML = metadata.map(video => renderVideoCard(video, baseUrl)).join('');
+        }}
+
+        function filterTrainVideos() {{
+            const search = document.getElementById('trainSearchBox').value.toLowerCase();
+            document.querySelectorAll('#trainAllVideosGrid .video-card').forEach(card => {{
+                card.style.display = card.textContent.toLowerCase().includes(search) ? 'block' : 'none';
+            }});
+        }}
+
+        function filterTestVideos() {{
+            const search = document.getElementById('testSearchBox').value.toLowerCase();
+            document.querySelectorAll('#testAllVideosGrid .video-card').forEach(card => {{
+                card.style.display = card.textContent.toLowerCase().includes(search) ? 'block' : 'none';
+            }});
+        }}
+
+        window.addEventListener('DOMContentLoaded', () => {{
+            // Train dataset
+            renderDistributionCharts(trainStats, 'train-distribution-charts');
+            renderRepresentationAlerts(trainStats, 'train-representation-alerts');
+            renderDefaultsTable(trainMetadata, 'train-defaults-table');
+            renderGroupTab('train-texture', 'texture', trainSamples, trainVideoBaseUrl);
+            renderGroupTab('train-direction', 'direction', trainSamples, trainVideoBaseUrl);
+            renderGroupTab('train-speed', 'speed_range', trainSamples, trainVideoBaseUrl);
+            renderGroupTab('train-angle', 'angle', trainSamples, trainVideoBaseUrl);
+            renderGroupTab('train-objects', 'objects', trainSamples, trainVideoBaseUrl);
+            renderGroupTab('train-blur', 'blur', trainSamples, trainVideoBaseUrl);
+
+            // Test dataset
+            renderDistributionCharts(testStats, 'test-distribution-charts');
+            renderRepresentationAlerts(testStats, 'test-representation-alerts');
+            renderDefaultsTable(testMetadata, 'test-defaults-table');
+            renderGroupTab('test-texture', 'texture', testSamples, testVideoBaseUrl);
+            renderGroupTab('test-direction', 'direction', testSamples, testVideoBaseUrl);
+            renderGroupTab('test-speed', 'speed_range', testSamples, testVideoBaseUrl);
+            renderGroupTab('test-angle', 'angle', testSamples, testVideoBaseUrl);
+            renderGroupTab('test-objects', 'objects', testSamples, testVideoBaseUrl);
+            renderGroupTab('test-blur', 'blur', testSamples, testVideoBaseUrl);
+        }});
+    </script>
 </body>
-</html>'''
+</html>"""
 
         return html
 
@@ -601,7 +1211,7 @@ class ExperimentReportGenerator:
 def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(
-        description='Generate experiment report with model performance metrics'
+        description='Generate comprehensive experiment report with full analytics and model performance'
     )
 
     parser.add_argument('--experiment-id', type=int,
@@ -629,18 +1239,19 @@ def main():
         logger.error(f"Experiment not found in CSV")
         sys.exit(1)
 
-    # Generate report
-    report_path = generator.generate_dual_report(experiment)
+    # Generate comprehensive report
+    report_url = generator.generate_dual_report(experiment)
 
-    # Update CSV with report link
+    # Update CSV with report link (as file:// URL)
     tracker = ExperimentTracker(csv_path=args.csv_path)
     tracker.current_experiment_id = experiment.get('experiment_id')
-    tracker.update_dataset_comparison_report(report_path)
+    tracker.update_dataset_comparison_report(report_url)
 
-    print(f"\n✅ Report generated: {report_path}")
-    print(f"\nTo view: Open {report_path} in your browser")
+    print(f"\n✅ Comprehensive report generated!")
+    print(f"\nReport URL: {report_url}")
+    print(f"\nTo view: Click the link or paste it in your browser")
 
-    return report_path
+    return report_url
 
 
 if __name__ == '__main__':
