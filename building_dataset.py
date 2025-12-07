@@ -173,6 +173,7 @@ class DatasetBuilder:
         camera_noises = self._parse_parameter_values(self.args.camera_noise, float)
         edge_widths = self._parse_parameter_values(self.args.edge_width, float)
         distances = self._parse_parameter_values(self.args.distance, float) if hasattr(self.args, 'distance') else [1.0]
+        center_randomizations = self._parse_parameter_values(self.args.center_randomization, str) if hasattr(self.args, 'center_randomization') else ['none']
 
         # Parse subtle_gray_stripes parameters
         stripe_widths = self._parse_parameter_values(self.args.stripe_width, int) if hasattr(self.args, 'stripe_width') else [10]
@@ -209,6 +210,7 @@ class DatasetBuilder:
             camera_noises,
             edge_widths,
             distances,
+            center_randomizations,
             stripe_widths,
             stripe_spacings,
             stripe_grays,
@@ -223,7 +225,7 @@ class DatasetBuilder:
         for idx, combo in enumerate(all_combinations):
             (texture, direction, speed, fps, duration, resolution, view_angle,
              brightness, contrast, lighting_var, lighting_int, motion_blur,
-             camera_noise, edge_width, distance, stripe_width, stripe_spacing, stripe_gray,
+             camera_noise, edge_width, distance, center_randomization, stripe_width, stripe_spacing, stripe_gray,
              background_gray, stripe_distance_variance) = combo
 
             config = {
@@ -245,6 +247,7 @@ class DatasetBuilder:
                 'camera_noise': camera_noise,
                 'edge_width': edge_width,
                 'distance': distance,
+                'center_randomization': center_randomization,
                 'stripe_width': stripe_width,
                 'stripe_spacing': stripe_spacing,
                 'stripe_gray': stripe_gray,
@@ -266,7 +269,8 @@ class DatasetBuilder:
 
         # Check if we're in combination mode (any parameter has comma)
         if (',' in str(self.args.texture_type) or ',' in str(self.args.view_angle) or
-            ',' in str(self.args.background_gray) or ',' in str(self.args.stripe_gray)):
+            ',' in str(self.args.background_gray) or ',' in str(self.args.stripe_gray) or
+            ',' in str(self.args.center_randomization)):
             all_configs = self._generate_all_combinations()
             # Separate moving and stopped
             moving_configs = [c for c in all_configs if c['is_moving']]
@@ -368,6 +372,7 @@ class DatasetBuilder:
                 config['camera_noise'] = getattr(self.args, 'camera_noise', 0.0)
                 config['edge_width'] = getattr(self.args, 'edge_width', 0.1)
                 config['distance'] = getattr(self.args, 'distance', 1.0)
+                config['center_randomization'] = getattr(self.args, 'center_randomization', 'none')
                 config['stripe_width'] = getattr(self.args, 'stripe_width', 10)
                 config['stripe_spacing'] = getattr(self.args, 'stripe_spacing', 60)
                 config['stripe_gray'] = getattr(self.args, 'stripe_gray', 125)
@@ -426,6 +431,7 @@ class DatasetBuilder:
                 '--camera_noise', str(config['camera_noise']),
                 '--edge_width', str(config['edge_width']),
                 '--distance', str(config.get('distance', 1.0)),
+                '--center_randomization', str(config.get('center_randomization', 'none')),
                 '--resolution', config['resolution'],
                 '--fps', str(config['fps']),
                 '--duration', str(config['duration'])
@@ -908,6 +914,8 @@ Notes:
                        help='Belt enclosure edge width as percentage (default: 0.1). Accepts comma-separated values (e.g., 0.05,0.1,0.15)')
     parser.add_argument('--distance', type=str, default='1.0',
                        help='Distance factor: 1.0 = normal size, >1.0 = smaller/further (default: 1.0). Accepts comma-separated values (e.g., 1.0,2.0,3.0)')
+    parser.add_argument('--center_randomization', type=str, default='none',
+                       help='Center of mass randomization: none,randomized (default: none). Accepts comma-separated values (e.g., none,randomized). When randomized, treadmill position is randomized with min 30%% visible')
 
     # Subtle gray stripes parameters (for subtle_gray_stripes texture type)
     parser.add_argument('--stripe_width', type=str, default='10',

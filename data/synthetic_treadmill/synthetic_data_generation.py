@@ -1216,17 +1216,19 @@ class CameraEffectsProcessor:
         return noisy
 
     def apply_distance_scaling(self, frame: np.ndarray, distance: float,
-                               background_color: Tuple[int, int, int] = (50, 50, 50)) -> np.ndarray:
+                               background_color: Tuple[int, int, int] = (50, 50, 50),
+                               offset: Optional[Tuple[int, int]] = None) -> np.ndarray:
         """
         Apply distance scaling to make treadmill appear smaller and further away.
 
-        Scales down the treadmill content and centers it in the frame, with a
-        background fill around it to simulate distance/depth.
+        Scales down the treadmill content and positions it in the frame (centered or at specified offset),
+        with a background fill around it to simulate distance/depth.
 
         Args:
             frame: Input frame
             distance: Distance factor (1.0 = no scaling, >1.0 = further away/smaller)
             background_color: RGB color for background fill around scaled content
+            offset: Optional (x_offset, y_offset) tuple for positioning. If None, frame is centered.
 
         Returns:
             numpy.ndarray: Frame with distance scaling applied
@@ -1254,14 +1256,78 @@ class CameraEffectsProcessor:
         result = np.ones((h, w, 3), dtype=np.uint8)
         result[:, :] = background_color
 
-        # Calculate position to center the scaled frame
-        x_offset = (w - new_w) // 2
-        y_offset = (h - new_h) // 2
+        # Calculate position for the scaled frame
+        if offset is not None:
+            # Use provided offset
+            x_offset, y_offset = offset
+        else:
+            # Center the scaled frame (default behavior)
+            x_offset = (w - new_w) // 2
+            y_offset = (h - new_h) // 2
 
-        # Place scaled frame in center
-        result[y_offset:y_offset + new_h, x_offset:x_offset + new_w] = scaled_frame
+        # Calculate visible region of scaled frame
+        # Source coordinates (what part of scaled_frame to use)
+        src_x1 = max(0, -x_offset)
+        src_y1 = max(0, -y_offset)
+        src_x2 = min(new_w, w - x_offset)
+        src_y2 = min(new_h, h - y_offset)
+
+        # Destination coordinates (where to place in result)
+        dst_x1 = max(0, x_offset)
+        dst_y1 = max(0, y_offset)
+        dst_x2 = dst_x1 + (src_x2 - src_x1)
+        dst_y2 = dst_y1 + (src_y2 - src_y1)
+
+        # Place visible portion of scaled frame
+        if src_x2 > src_x1 and src_y2 > src_y1:
+            result[dst_y1:dst_y2, dst_x1:dst_x2] = scaled_frame[src_y1:src_y2, src_x1:src_x2]
 
         return result
+
+    def calculate_random_offset(self, distance: float) -> Tuple[int, int]:
+        """
+        Calculate a random offset for distance scaling that ensures at least 30% visibility.
+
+        Args:
+            distance: Distance factor for scaling
+
+        Returns:
+            Tuple[int, int]: (x_offset, y_offset) for positioning the scaled frame
+        """
+        if distance <= 1.0:
+            return (0, 0)
+
+        h, w = self.height, self.width
+
+        # Calculate scale factor and new dimensions
+        scale = 1.0 / distance
+        new_w = int(w * scale)
+        new_h = int(h * scale)
+
+        # Ensure minimum size
+        new_w = max(new_w, 10)
+        new_h = max(new_h, 10)
+
+        # Calculate the minimum visible area required (30% of scaled frame)
+        min_visible_w = int(new_w * 0.3)
+        min_visible_h = int(new_h * 0.3)
+
+        # Calculate valid offset ranges to ensure at least 30% is visible
+        min_x_offset = -(new_w - min_visible_w)
+        max_x_offset = w - min_visible_w
+
+        min_y_offset = -(new_h - min_visible_h)
+        max_y_offset = h - min_visible_h
+
+        # Ensure valid ranges
+        min_x_offset = min(min_x_offset, max_x_offset)
+        min_y_offset = min(min_y_offset, max_y_offset)
+
+        # Random offset within valid range
+        x_offset = self.rng.randint(min_x_offset, max_x_offset + 1)
+        y_offset = self.rng.randint(min_y_offset, max_y_offset + 1)
+
+        return (x_offset, y_offset)
 
     def apply_belt_enclosure(self, frame: np.ndarray,
                             edge_width_percent: float = 0.1,
@@ -1439,6 +1505,12 @@ class SyntheticVideoGenerator:
                 edge_width_percent=self.config.get('edge_width', 0.1)
             )
 
+        # Calculate random offset once for entire video if center randomization is enabled
+        distance_offset = None
+        if self.config.get('center_randomization', 'none') == 'randomized':
+            distance_offset = self.effects.calculate_random_offset(self.config.get('distance', 1.0))
+            print(f"  Using randomized center offset: ({distance_offset[0]}, {distance_offset[1]})")
+
         # Generate frames
         print("  Step 3/4: Generating frames...")
         for frame_idx in range(self.num_frames):
@@ -1499,10 +1571,12 @@ class SyntheticVideoGenerator:
             frame = self.effects.apply_camera_noise(frame, self.config['camera_noise'])
 
             # Apply distance scaling (makes treadmill appear smaller and further away)
+            # Use the pre-calculated offset (same for all frames in this video)
             frame = self.effects.apply_distance_scaling(
                 frame,
                 distance=self.config.get('distance', 1.0),
-                background_color=(50, 50, 50)
+                background_color=(50, 50, 50),
+                offset=distance_offset
             )
 
             # Write frame (convert RGB to BGR for OpenCV)
@@ -1545,6 +1619,13 @@ class SyntheticVideoGenerator:
             f"speed{config['speed']:.1f}",
             f"angle{config['view_angle']:.0f}",
             f"dist{config.get('distance', 1.0):.1f}",
+        ])
+
+        # Add center randomization if enabled
+        if config.get('center_randomization', 'none') == 'randomized':
+            parts.append('centerrand')
+
+        parts.extend([
             f"bright{config['brightness']:.2f}",
             f"contr{config['contrast']:.2f}",
         ])
@@ -1678,6 +1759,9 @@ Examples:
                        help='Belt enclosure edge width as percentage, 0.05 to 0.2 (default: 0.1)')
     parser.add_argument('--distance', type=float, default=1.0,
                        help='Distance factor: 1.0 = normal size, >1.0 = smaller/further (default: 1.0)')
+    parser.add_argument('--center_randomization', type=str, default='none',
+                       choices=['none', 'randomized'],
+                       help='Center of mass randomization: none = centered, randomized = random position with min 30%% visible (default: none)')
 
     # Object placement parameters
     parser.add_argument('--add-object', action='store_true',
@@ -1892,6 +1976,7 @@ def main():
         'camera_noise': args.camera_noise,
         'edge_width': args.edge_width,
         'distance': args.distance,
+        'center_randomization': args.center_randomization,
         'seed': args.seed,
         'background_color': bg_color,
         'stripe_width': stripe_width,
