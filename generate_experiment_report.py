@@ -96,8 +96,8 @@ class ExperimentReportGenerator:
         Get experiment row from CSV by experiment_id or dataset_name.
 
         Args:
-            experiment_id: Experiment ID to find
-            dataset_name: Dataset name to find
+            experiment_id: Experiment ID to find (unique, returns immediately)
+            dataset_name: Dataset name to find (returns LAST match, most recent experiment)
 
         Returns:
             Dict with experiment data or None if not found
@@ -108,13 +108,14 @@ class ExperimentReportGenerator:
 
         with open(self.csv_path, 'r', encoding='utf-8') as f:
             reader = csv.DictReader(f)
+            last_match = None
             for row in reader:
                 if experiment_id and row.get('experiment_id') == str(experiment_id):
-                    return row
+                    return row  # experiment_id is unique, return immediately
                 if dataset_name and row.get('dataset_name') == dataset_name:
-                    return row
+                    last_match = row  # Keep searching for later matches (most recent)
 
-        return None
+        return last_match
 
     def check_videos_downloaded(self, dataset_name: str) -> bool:
         """

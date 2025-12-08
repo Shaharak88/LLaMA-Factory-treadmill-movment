@@ -1085,11 +1085,46 @@ step_retrieve_results() {
     mkdir -p "$RESULTS_DIR"
 
     log_info "Retrieving new experiment results from server CSV..."
-    # Get the last line from the CSV inside the Docker container (newest experiment)
-    # Then append it to the local CSV file (don't overwrite)
-    REMOTE_CSV_TAIL=$(ssh "$SERVER_SSH" "docker exec llamafactory tail -n 1 /app/data/experiments_log.csv" 2>/dev/null)
 
-    if [ -n "$REMOTE_CSV_TAIL" ]; then
+    # Get the experiment_id of the newest row (the one we just created)
+    # Using Python to properly handle CSV with quoted fields containing commas
+    EXPERIMENT_ID=$(ssh "$SERVER_SSH" "docker exec llamafactory python3 -c \"
+import csv
+with open('/app/data/experiments_log.csv') as f:
+    rows = list(csv.DictReader(f))
+    if rows:
+        print(rows[-1]['experiment_id'])
+\"" 2>/dev/null)
+
+    if [ -z "$EXPERIMENT_ID" ]; then
+        log_error "Could not get experiment_id from server CSV"
+        return 1
+    fi
+
+    log_info "Retrieved experiment_id: $EXPERIMENT_ID"
+
+    # Get the specific row by experiment_id using Python (handles CSV with quoted fields correctly)
+    REMOTE_CSV_ROW=$(ssh "$SERVER_SSH" "docker exec llamafactory python3 -c \"
+import csv
+import sys
+with open('/app/data/experiments_log.csv') as f:
+    reader = csv.reader(f)
+    header = next(reader)
+    for row in reader:
+        if row[0] == '$EXPERIMENT_ID':
+            # Output CSV row with proper quoting for fields containing commas
+            output = []
+            for field in row:
+                if ',' in field or '\"' in field or '\\n' in field:
+                    output.append('\"' + field.replace('\"', '\"\"') + '\"')
+                else:
+                    output.append(field)
+            print(','.join(output))
+            sys.exit(0)
+sys.exit(1)
+\"" 2>/dev/null)
+
+    if [ -n "$REMOTE_CSV_ROW" ]; then
         # Ensure local CSV exists
         if [ ! -f "$LOCAL_DIR/data/experiments_log.csv" ]; then
             log_warning "Local CSV does not exist, creating with header..."
@@ -1098,8 +1133,8 @@ step_retrieve_results() {
         fi
 
         # Append the new experiment line to local CSV
-        echo "$REMOTE_CSV_TAIL" >> "$LOCAL_DIR/data/experiments_log.csv"
-        log_success "Appended new experiment to local CSV"
+        echo "$REMOTE_CSV_ROW" >> "$LOCAL_DIR/data/experiments_log.csv"
+        log_success "Appended experiment $EXPERIMENT_ID to local CSV"
     else
         log_warning "Could not retrieve experiment results from server CSV"
     fi
@@ -1139,9 +1174,20 @@ step_generate_html_report() {
     # 4. Generate HTML report with visualizations
     # 5. Update CSV with report link
 
-    local report_cmd="python3 $LOCAL_DIR/generate_experiment_report.py \
-        --dataset-name '$DATASET_NAME' \
-        --csv-path '$LOCAL_DIR/data/experiments_log.csv'"
+    # Use experiment_id if available (set by step_retrieve_results in REMOTE mode)
+    # Fall back to dataset_name for LOCAL mode or if experiment_id not set
+    local report_cmd
+    if [ -n "$EXPERIMENT_ID" ]; then
+        log_info "Using experiment_id: $EXPERIMENT_ID for report generation"
+        report_cmd="python3 $LOCAL_DIR/generate_experiment_report.py \
+            --experiment-id '$EXPERIMENT_ID' \
+            --csv-path '$LOCAL_DIR/data/experiments_log.csv'"
+    else
+        log_info "Using dataset_name: $DATASET_NAME for report generation (experiment_id not available)"
+        report_cmd="python3 $LOCAL_DIR/generate_experiment_report.py \
+            --dataset-name '$DATASET_NAME' \
+            --csv-path '$LOCAL_DIR/data/experiments_log.csv'"
+    fi
 
     log_info "Running: $report_cmd"
 

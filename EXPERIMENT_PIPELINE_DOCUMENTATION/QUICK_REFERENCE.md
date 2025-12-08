@@ -207,6 +207,7 @@
 ### 01_ORCHESTRATION.md
 - **Key Insight:** `run_experiment.sh` orchestrates everything via SSH + Docker
 - **Critical Info:** Edit this file to change experiment parameters (angle, texture, epochs, etc.)
+- **New Feature (2025-12-08):** CSV sync now uses `experiment_id` instead of `tail -n 1`. This fixes issues when running multiple evaluations on the same dataset with different models/eval methods. The experiment_id is unique and ensures the correct CSV row is synced and used for HTML report generation.
 
 ### 02_DATA_GENERATION.md
 - **Key Insight:** Blender generates synthetic videos with full parameter control
@@ -225,6 +226,7 @@
 - **Key Insight:** Generates interactive HTML with video players and metrics
 - **Critical Info:** Uses relative paths so reports work when opened directly in browser
 - **New Feature (2025-12-07):** Failure Analysis tab automatically identifies which features (dist, angle, blur, etc.) significantly affect model accuracy using Chi-squared tests, with video examples grouped by worst-performing values
+- **Fix (2025-12-08):** `get_experiment_from_csv()` now returns the LAST match when searching by dataset_name (most recent experiment), not the first match. This ensures correct report generation when multiple experiments use the same dataset.
 
 ### 06_EXPERIMENT_TRACKING.md
 - **Key Insight:** 196-column CSV logs everything for complete reproducibility
@@ -265,11 +267,37 @@
 **Task:** Generate videos with randomized treadmill position
 **File:** 01_ORCHESTRATION.md (Section: Experiment Parameters) or 02_DATA_GENERATION.md
 **Action:** Use `--train-center-randomization` and `--test-center-randomization` flags (0=none, 1=randomized)
+**Important:** Center randomization only works when `distance > 1.0`. At distance=1.0, the treadmill fills the entire frame leaving no room for position offset.
 **Example via run_experiment.sh:** `--train-center-randomization "0,1"` (generates both centered and randomized combinations)
 **Example direct building_dataset.py:** `--center_randomization none,randomized`
+
+**Example full experiment command with center randomization:**
+```bash
+./run_experiment.sh \
+  --test-angles "0.0,30.0" \
+  --test-speed "0.0,14.0" \
+  --test-texture "subtle_gray_stripes" \
+  --test-direction "left" \
+  --test-distance "1.0" \
+  --test-stripe-gray "226,227,228,229" \
+  --test-bg-gray "120,121,122,123" \
+  --test-center-randomization "0,1" \
+  --train-angles "0.0" \
+  --train-speed "0.0,14.0" \
+  --train-texture "subtle_gray_stripes" \
+  --train-direction "left" \
+  --train-distance "1.0" \
+  --train-stripe-gray "226" \
+  --train-bg-gray "120" \
+  --train-center-randomization "0" \
+  --skip-training \
+  --eval-model-path "saves/dist_gen_1to10_left_gray_dora_dec7" \
+  --epochs 1 \
+  -y
+```
 
 ---
 
 **Total Documentation:** 8 files, ~4,600 lines, comprehensive coverage of entire pipeline
 
-**Last Updated:** 2025-12-07 (Added Statistical Failure Analysis documentation)
+**Last Updated:** 2025-12-08 (Fixed CSV sync to use experiment_id for correct row retrieval)
