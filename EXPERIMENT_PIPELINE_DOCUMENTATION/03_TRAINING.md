@@ -95,8 +95,55 @@ parser.add_argument('--no_quantization', action='store_true',
 | `lora+` | `loraplus_lr_ratio: 16.0` | LoRA with learning rate ratio | When you want different LR for B matrix |
 | `dora` | `use_dora: true` | Weight-Decomposed LoRA | Better generalization, slightly slower |
 | `rslora` | `use_rslora: true` | Rank Stabilization LoRA | More stable training at high ranks |
-| `pissa` | `pissa_init: true` | PiSSA SVD initialization | Better initialization for LoRA weights |
 | `oft` | `finetuning_type: oft` | Orthogonal Fine-Tuning | Different approach, preserves orthogonality |
+
+> **Note:** `pissa` (PiSSA SVD initialization) is **NOT SUPPORTED** by our pipeline. It requires running `scripts/pissa_init.py` before training when using quantization, which is incompatible with our automated workflow.
+
+---
+
+### Multi-Adapter Comparison Script (NEW - 2025-12-08)
+
+To compare all adapters on the same dataset, use `run_all_adapters.sh`:
+
+**Location:** `/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/run_all_adapters.sh`
+
+**Supported Adapters:** lora, lora+, dora, rslora, oft
+
+**How It Works:**
+1. First adapter builds the dataset (or uses existing if `--dataset-name` provided)
+2. Subsequent adapters reuse the same dataset (`--skip-datasets` automatically added)
+3. Each adapter gets its own experiment entry in CSV and HTML report
+4. All training parameters (epochs, batch-size, learning-rate) are shared across adapters
+
+**Basic Usage:**
+```bash
+# Run all 5 adapters with new dataset
+./run_all_adapters.sh --epochs 7 --batch-size 14 --no-quantization -y
+
+# Run all adapters on existing dataset
+./run_all_adapters.sh --dataset-name "_exp_20251207_172213" \
+    --epochs 7 --no-quantization -y
+
+# Run specific adapters only
+./run_all_adapters.sh --adapters "lora,dora,oft" \
+    --epochs 7 --batch-size 14 -y
+
+# Run with custom model name base (creates: mymodel_lora, mymodel_dora, etc.)
+./run_all_adapters.sh --model-name "mymodel" --epochs 5 -y
+```
+
+**Arguments:**
+| Argument | Description | Default |
+|----------|-------------|---------|
+| `--adapters` | Comma-separated list of adapters | `lora,lora+,dora,rslora,oft` |
+| `--dataset-name` | Use existing dataset instead of generating new | (generate new) |
+| `--model-name` | Base name for models (adapter suffix added) | (auto-generated) |
+| All `run_experiment.sh` args | Passed through to each experiment | - |
+
+**Output:**
+- Creates one experiment per adapter in `experiments_log.csv`
+- Generates separate HTML report for each adapter
+- Prints summary at end showing success/failure for each adapter
 
 **Command examples:**
 ```bash

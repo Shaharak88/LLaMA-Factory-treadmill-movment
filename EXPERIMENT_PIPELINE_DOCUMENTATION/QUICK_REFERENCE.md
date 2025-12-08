@@ -140,6 +140,7 @@
 | Dataset parameters | 02_DATA_GENERATION.md | Part 1: building_dataset.py |
 | Video generation | 02_DATA_GENERATION.md | Part 2: synthetic_data_generation.py |
 | LoRA configuration | 03_TRAINING.md | Argument Parsing |
+| **Multi-adapter comparison** | 03_TRAINING.md | Multi-Adapter Comparison |
 | Training loop details | 03_TRAINING.md | Part 2: Training with LLaMA-Factory |
 | Evaluation metrics | 04_EVALUATION.md | Metrics Calculation |
 | Response parsing | 04_EVALUATION.md | Response Parsing |
@@ -224,9 +225,13 @@
   - `lora+` - LoRA with learning rate ratio (loraplus_lr_ratio: 16.0)
   - `dora` - Weight-Decomposed LoRA
   - `rslora` - Rank Stabilization LoRA
-  - `pissa` - PiSSA initialization (SVD-based)
   - `oft` - Orthogonal Fine-Tuning (different finetuning_type)
+  - ~~`pissa`~~ - **NOT SUPPORTED** (requires special initialization script)
 - **New Option (2025-12-08):** `--no-quantization` flag disables 4-bit quantization for full precision training
+- **New Script (2025-12-08):** `run_all_adapters.sh` - Run all adapters sequentially for comparison
+  - Builds dataset once, reuses for all adapters
+  - Supports: lora, lora+, dora, rslora, oft
+  - Usage: `./run_all_adapters.sh --epochs 7 --no-quantization -y`
 
 ### 04_EVALUATION.md
 - **Key Insight:** Evaluates both base and fine-tuned models with comprehensive metrics
@@ -260,7 +265,8 @@
 
 **Task:** Change adapter type (LoRA variant)
 **File:** 03_TRAINING.md (Section: Adapter Types)
-**Action:** Use `--adapter-type <type>` where type is one of: lora, lora+, dora, rslora, pissa, oft
+**Action:** Use `--adapter-type <type>` where type is one of: lora, lora+, dora, rslora, oft
+**Note:** PiSSA is NOT supported because it requires special initialization (scripts/pissa_init.py)
 **Examples:**
 ```bash
 # Use DoRA adapter
@@ -272,15 +278,38 @@
 # Use rsLoRA adapter
 ./run_experiment.sh --adapter-type rslora --epochs 5
 
-# Use PiSSA adapter
-./run_experiment.sh --adapter-type pissa --epochs 5
-
 # Use OFT adapter
 ./run_experiment.sh --adapter-type oft --epochs 5
 
 # Disable quantization (full precision)
 ./run_experiment.sh --adapter-type dora --no-quantization --epochs 5
 ```
+
+**Task:** Compare ALL adapters on the same dataset (NEW!)
+**File:** 03_TRAINING.md (Section: Multi-Adapter Comparison)
+**Action:** Use `./run_all_adapters.sh` - runs all adapters sequentially with same dataset
+**Supported adapters:** lora, lora+, dora, rslora, oft (NOT pissa - requires special init)
+**Examples:**
+```bash
+# Run all 5 adapters with new dataset
+./run_all_adapters.sh --epochs 7 --batch-size 14 --no-quantization -y
+
+# Run all adapters on existing dataset
+./run_all_adapters.sh --dataset-name "_exp_20251207_172213" \
+    --epochs 7 --no-quantization -y
+
+# Run specific adapters only
+./run_all_adapters.sh --adapters "lora,dora,oft" \
+    --epochs 7 --batch-size 14 -y
+
+# Run with custom model name base (creates: mymodel_lora, mymodel_dora, etc.)
+./run_all_adapters.sh --model-name "mymodel" --epochs 5 -y
+```
+**How it works:**
+- First adapter: builds dataset (unless --dataset-name provided)
+- Subsequent adapters: reuse the same dataset (--skip-datasets automatically)
+- Each adapter gets its own CSV entry and HTML report
+- All training parameters (epochs, batch-size, learning-rate) shared across adapters
 
 **Task:** Understand why accuracy is only 70%
 **File:** 04_EVALUATION.md (Section: Common Evaluation Issues)
@@ -347,4 +376,4 @@
 
 **Total Documentation:** 8 files, ~4,600 lines, comprehensive coverage of entire pipeline
 
-**Last Updated:** 2025-12-08 (Added multi-adapter support: lora, lora+, dora, rslora, pissa, oft)
+**Last Updated:** 2025-12-08 (Added run_all_adapters.sh for multi-adapter comparison; PiSSA excluded due to special init requirements)
