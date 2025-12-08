@@ -1103,28 +1103,35 @@ with open('/app/data/experiments_log.csv') as f:
 
     log_info "Retrieved experiment_id: $EXPERIMENT_ID"
 
-    # Get the specific row by experiment_id using Python (handles CSV with quoted fields correctly)
-    REMOTE_CSV_ROW=$(ssh "$SERVER_SSH" "docker exec llamafactory python3 -c \"
+    # Get the specific row by experiment_id using Python with base64 encoding
+    # This avoids shell escaping issues when passing Python code through SSH
+    # The Python script handles CSV fields with commas, quotes, and newlines correctly
+    local GET_ROW_SCRIPT=$(cat << 'PYSCRIPT'
 import csv
 import sys
+exp_id = sys.argv[1]
 with open('/app/data/experiments_log.csv') as f:
     reader = csv.reader(f)
     header = next(reader)
     for row in reader:
-        if row[0] == '$EXPERIMENT_ID':
-            # Output CSV row with proper quoting for fields containing commas
+        if row[0] == exp_id:
             output = []
             for field in row:
-                if ',' in field or '\"' in field or '\\n' in field:
-                    output.append('\"' + field.replace('\"', '\"\"') + '\"')
+                if ',' in field or '"' in field or '\n' in field:
+                    output.append('"' + field.replace('"', '""') + '"')
                 else:
                     output.append(field)
             print(','.join(output))
             sys.exit(0)
 sys.exit(1)
-\"" 2>/dev/null)
+PYSCRIPT
+)
+    local ENCODED_SCRIPT=$(echo "$GET_ROW_SCRIPT" | base64 -w 0)
 
-    if [ -n "$REMOTE_CSV_ROW" ]; then
+    REMOTE_CSV_ROW=$(ssh "$SERVER_SSH" "docker exec llamafactory bash -c 'echo $ENCODED_SCRIPT | base64 -d | python3 - $EXPERIMENT_ID'" 2>&1)
+    local ROW_EXIT_CODE=$?
+
+    if [ $ROW_EXIT_CODE -eq 0 ] && [ -n "$REMOTE_CSV_ROW" ]; then
         # Ensure local CSV exists
         if [ ! -f "$LOCAL_DIR/data/experiments_log.csv" ]; then
             log_warning "Local CSV does not exist, creating with header..."
@@ -1132,11 +1139,25 @@ sys.exit(1)
             ssh "$SERVER_SSH" "docker exec llamafactory head -n 1 /app/data/experiments_log.csv" > "$LOCAL_DIR/data/experiments_log.csv"
         fi
 
-        # Append the new experiment line to local CSV
-        echo "$REMOTE_CSV_ROW" >> "$LOCAL_DIR/data/experiments_log.csv"
-        log_success "Appended experiment $EXPERIMENT_ID to local CSV"
+        # Check if this experiment_id already exists in local CSV
+        if grep -q "^$EXPERIMENT_ID," "$LOCAL_DIR/data/experiments_log.csv" 2>/dev/null; then
+            log_info "Experiment $EXPERIMENT_ID already exists in local CSV, updating..."
+            # Remove the existing row and add the new one
+            # Create temp file without the old row, then append the new row
+            grep -v "^$EXPERIMENT_ID," "$LOCAL_DIR/data/experiments_log.csv" > "$LOCAL_DIR/data/experiments_log.csv.tmp"
+            mv "$LOCAL_DIR/data/experiments_log.csv.tmp" "$LOCAL_DIR/data/experiments_log.csv"
+            echo "$REMOTE_CSV_ROW" >> "$LOCAL_DIR/data/experiments_log.csv"
+            log_success "Updated experiment $EXPERIMENT_ID in local CSV"
+        else
+            # Append the new experiment line to local CSV
+            echo "$REMOTE_CSV_ROW" >> "$LOCAL_DIR/data/experiments_log.csv"
+            log_success "Appended experiment $EXPERIMENT_ID to local CSV"
+        fi
     else
-        log_warning "Could not retrieve experiment results from server CSV"
+        log_warning "Could not retrieve experiment row from server CSV (exit code: $ROW_EXIT_CODE)"
+        if [ -n "$REMOTE_CSV_ROW" ]; then
+            log_warning "Error output: $REMOTE_CSV_ROW"
+        fi
     fi
 
     log_info "Retrieving evaluation reports..."
