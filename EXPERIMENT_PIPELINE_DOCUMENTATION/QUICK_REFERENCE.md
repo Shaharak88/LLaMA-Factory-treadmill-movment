@@ -208,6 +208,8 @@
 - **Key Insight:** `run_experiment.sh` orchestrates everything via SSH + Docker
 - **Critical Info:** Edit this file to change experiment parameters (angle, texture, epochs, etc.)
 - **New Feature (2025-12-08):** CSV sync now uses `experiment_id` instead of `tail -n 1`. This fixes issues when running multiple evaluations on the same dataset with different models/eval methods. The experiment_id is unique and ensures the correct CSV row is synced and used for HTML report generation.
+- **Technical Fix (2025-12-08):** CSV row retrieval now uses base64-encoded Python scripts to avoid shell escaping issues when passing code through SSH. This prevents silent failures where the experiment_id was retrieved but row data was not appended to local CSV.
+- **Re-evaluation Support:** When syncing an experiment that already exists in local CSV (same experiment_id), the script now updates the existing row instead of duplicating it.
 
 ### 02_DATA_GENERATION.md
 - **Key Insight:** Blender generates synthetic videos with full parameter control
@@ -259,6 +261,19 @@
 **Task:** Customize HTML report colors
 **File:** 05_REPORTING.md (Section: Report Customization)
 **Action:** Edit CSS in `generate_experiment_report.py`
+
+**Task:** Re-evaluate existing dataset with a different model
+**File:** 01_ORCHESTRATION.md (Section: Skip Stages)
+**Action:** Use `--skip-datasets --skip-training --dataset-name "_exp_YYYYMMDD_HHMMSS" --eval-model-path "saves/your_model"`
+**Example:**
+```bash
+./run_experiment.sh \
+  --skip-datasets --skip-training \
+  --dataset-name "_exp_20251207_172213" \
+  --eval-model-path "saves/dist_gen_1to10_left_gray_dora_dec7" \
+  --eval-method "moving_stopped" -y
+```
+**Note:** This creates a new experiment (new experiment_id) but reuses the existing dataset. The pipeline syncs the correct row by experiment_id and generates a new HTML report.
 
 **Task:** Understand why model fails at certain distances/angles
 **File:** 05_REPORTING.md (Section: Statistical Failure Analysis Tab)

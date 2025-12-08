@@ -259,14 +259,18 @@ rsync -avz --progress \
 The experiment CSV sync uses `experiment_id` to ensure the correct row is retrieved:
 
 1. After pipeline execution, the script queries the server for the newest `experiment_id`
-2. Uses Python's CSV module (inside Docker) to handle quoted fields with commas correctly
-3. Retrieves the specific row by `experiment_id` (unique identifier)
-4. Appends that row to the local CSV
+2. Uses base64-encoded Python scripts to avoid shell escaping issues when passing code through SSH
+3. Retrieves the specific row by `experiment_id` (unique identifier) using Python's CSV module
+4. If the experiment already exists locally, updates the row; otherwise appends it
+
+**Technical Details:**
+The row retrieval uses a heredoc with single-quoted delimiter (`'PYSCRIPT'`) to prevent shell expansion, then base64-encodes the Python script before sending via SSH. This avoids complex escaping of quotes, commas, and newlines that would otherwise corrupt the Python code when interpreted by nested shells (local bash → SSH → remote bash → docker exec → Python).
 
 This approach fixes issues when:
 - Running multiple evaluations on the same dataset with different models
 - Running with different eval_method (yesno vs moving_stopped) on same dataset
 - The server has accumulated experiments that weren't synced locally
+- Re-evaluating the same experiment_id (updates local row instead of duplicating)
 
 The `experiment_id` is then passed to the HTML report generator to ensure the correct experiment is reported.
 
