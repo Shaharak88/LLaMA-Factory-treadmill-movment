@@ -190,7 +190,8 @@ class ExperimentTracker:
         'model_name',
 
         # Key training parameters (for easy reference)
-        'use_dora',
+        'use_dora',  # Kept for backward compatibility
+        'adapter_type',  # New: lora, lora+, dora, rslora, pissa, oft
         'num_train_epochs',
 
         # Dataset comparison report (HTML link)
@@ -351,7 +352,8 @@ class ExperimentTracker:
             'lora_rank': getattr(args, 'lora_rank', ''),
             'lora_alpha': getattr(args, 'lora_alpha', ''),
             'lora_dropout': getattr(args, 'lora_dropout', ''),
-            'use_dora': getattr(args, 'use_dora', False),
+            'use_dora': getattr(args, 'adapter_type', 'lora') == 'dora',  # Backward compatible
+            'adapter_type': getattr(args, 'adapter_type', 'lora'),
             'cutoff_len': getattr(args, 'cutoff_len', ''),
 
             # Training hyperparameters

@@ -433,8 +433,43 @@ class FullPipelineRunner:
 
         config_path = self.project_root / "examples" / "train_qlora" / f"qwen25vl_lora_pipeline_{self.timestamp}.yaml"
 
-        # Build use_dora line conditionally
-        use_dora_line = "use_dora: true" if self.args.use_dora else ""
+        # Determine finetuning type and adapter-specific lines
+        adapter_type = self.args.adapter_type
+        finetuning_type = "lora"  # default for most adapters
+        adapter_lines = ""
+
+        if adapter_type == 'dora':
+            adapter_lines = "use_dora: true"
+        elif adapter_type == 'lora+':
+            adapter_lines = "loraplus_lr_ratio: 16.0"
+        elif adapter_type == 'rslora':
+            adapter_lines = "use_rslora: true"
+        elif adapter_type == 'pissa':
+            adapter_lines = "pissa_init: true\npissa_iter: 16"
+        elif adapter_type == 'oft':
+            finetuning_type = "oft"
+        # 'lora' uses defaults (no extra lines needed)
+
+        logger.info(f"  Adapter type: {adapter_type} (finetuning_type: {finetuning_type})")
+
+        # Build LoRA configuration (only for non-OFT adapters)
+        if adapter_type != 'oft':
+            lora_config = f"""lora_target: all
+lora_rank: {self.args.lora_rank}
+lora_alpha: {self.args.lora_alpha}
+lora_dropout: {self.args.lora_dropout}"""
+        else:
+            # OFT doesn't use LoRA parameters
+            lora_config = ""
+
+        # Build quantization section (conditional)
+        if self.args.no_quantization:
+            quantization_section = "# Quantization disabled (full precision)"
+            logger.info("  Quantization: disabled (full precision)")
+        else:
+            quantization_section = f"""quantization_bit: {self.args.quantization_bit}
+quantization_method: bitsandbytes"""
+            logger.info(f"  Quantization: {self.args.quantization_bit}-bit (bitsandbytes)")
 
         config_content = f"""### Model Configuration
 model_name_or_path: {self.args.model_name_or_path}
@@ -442,12 +477,9 @@ model_name_or_path: {self.args.model_name_or_path}
 ### Method Configuration
 stage: sft
 do_train: true
-finetuning_type: lora
-lora_target: all
-lora_rank: {self.args.lora_rank}
-lora_alpha: {self.args.lora_alpha}
-lora_dropout: {self.args.lora_dropout}
-{use_dora_line}
+finetuning_type: {finetuning_type}
+{lora_config}
+{adapter_lines}
 
 ### Dataset Configuration
 dataset: {self.train_dataset_name}
@@ -482,8 +514,7 @@ save_strategy: "steps"
 logging_strategy: "steps"
 
 ### Memory Optimization
-quantization_bit: {self.args.quantization_bit}
-quantization_method: bitsandbytes
+{quantization_section}
 gradient_checkpointing: true
 ddp_timeout: 180000000
 
@@ -867,8 +898,11 @@ Notes:
                             help='LoRA alpha (default: 16)')
     train_group.add_argument('--lora_dropout', type=float, default=0.05,
                             help='LoRA dropout (default: 0.05)')
-    train_group.add_argument('--use_dora', action='store_true', default=False,
-                            help='Use DoRA (Weight-Decomposed LoRA) instead of standard LoRA (default: False)')
+    train_group.add_argument('--adapter_type', type=str, default='lora',
+                            choices=['lora', 'lora+', 'dora', 'rslora', 'pissa', 'oft'],
+                            help='Adapter type: lora, lora+, dora, rslora, pissa, oft (default: lora)')
+    train_group.add_argument('--no_quantization', action='store_true', default=False,
+                            help='Disable 4-bit quantization (use full precision adapters)')
     train_group.add_argument('--cutoff_len', type=int, default=8192,
                             help='Cutoff length (default: 8192)')
     train_group.add_argument('--per_device_train_batch_size', type=int, default=1,

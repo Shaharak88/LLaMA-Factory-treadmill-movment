@@ -169,7 +169,8 @@ SKIP_TRAINING=false
 RETRIEVE_MODELS=false
 VERBOSE=false
 YES_TO_ALL=false
-USE_DORA=false
+ADAPTER_TYPE="lora"  # Adapter type: lora, lora+, dora, rslora, pissa, oft
+NO_QUANTIZATION=false  # If true, disable 4-bit quantization
 DATASET_NAME=""  # Can be set via --dataset-name to reuse existing datasets
 EVAL_METHOD="yesno"  # Evaluation method: "yesno" or "moving_stopped"
 MODEL_NAME=""  # Custom name for the trained model (optional)
@@ -228,7 +229,8 @@ OPTIONS:
     --dataset-name NAME     Specify existing dataset name (e.g., _exp_20251202_194605)
                             Use with --skip-datasets to train on existing datasets
     --retrieve-models       Also retrieve trained model files
-    --use-dora              Use DoRA (Weight-Decomposed LoRA) instead of standard LoRA
+    --adapter-type TYPE     Adapter type: lora, lora+, dora, rslora, pissa, oft (default: lora)
+    --no-quantization       Disable 4-bit quantization (use full precision adapters)
     --eval-method METHOD    Evaluation method: "yesno" or "moving_stopped" (default: yesno)
     --model-name NAME       Custom name for the trained model (saves to saves/<NAME>)
     --eval-model-path PATH  Path to existing model for re-evaluation (use with --skip-training)
@@ -377,8 +379,22 @@ parse_args() {
                 RETRIEVE_MODELS=true
                 shift
                 ;;
-            --use-dora)
-                USE_DORA=true
+            --adapter-type)
+                ADAPTER_TYPE="$2"
+                # Validate adapter type
+                case "$ADAPTER_TYPE" in
+                    lora|lora+|dora|rslora|pissa|oft)
+                        ;;
+                    *)
+                        log_error "Invalid adapter type: $ADAPTER_TYPE"
+                        log_error "Valid options: lora, lora+, dora, rslora, pissa, oft"
+                        exit 1
+                        ;;
+                esac
+                shift 2
+                ;;
+            --no-quantization)
+                NO_QUANTIZATION=true
                 shift
                 ;;
             --eval-method)
@@ -971,9 +987,12 @@ step_run_training() {
         --eval_video_fps '$EVAL_VIDEO_FPS' \
         --eval_video_maxlen '$EVAL_VIDEO_MAXLEN'"
 
-    # Add use_dora flag if enabled
-    if [ "$USE_DORA" = true ]; then
-        train_pipeline_cmd="$train_pipeline_cmd --use_dora"
+    # Add adapter_type parameter
+    train_pipeline_cmd="$train_pipeline_cmd --adapter_type '$ADAPTER_TYPE'"
+
+    # Add no_quantization flag if enabled
+    if [ "$NO_QUANTIZATION" = true ]; then
+        train_pipeline_cmd="$train_pipeline_cmd --no_quantization"
     fi
 
     # Add skip_training flag if enabled
@@ -1345,7 +1364,8 @@ Common:
   Duration: $DURATION seconds
 
 Training:$([ "$SKIP_TRAINING" = true ] && echo " SKIPPED (using existing model)" || echo "
-  Adapter Type: $([ "$USE_DORA" = true ] && echo "DoRA" || echo "LoRA")
+  Adapter Type: $ADAPTER_TYPE
+  Quantization: $([ "$NO_QUANTIZATION" = true ] && echo "Disabled (full precision)" || echo "4-bit (bitsandbytes)")
   Epochs: $NUM_EPOCHS
   LoRA Rank: $LORA_RANK / Alpha: $LORA_ALPHA
   Learning Rate: $LEARNING_RATE

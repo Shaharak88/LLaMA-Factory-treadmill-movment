@@ -219,6 +219,14 @@
 ### 03_TRAINING.md
 - **Key Insight:** LoRA fine-tunes only 10-20M parameters (not full 7B model)
 - **Critical Info:** 4-bit quantization enables training on consumer GPUs
+- **New Feature (2025-12-08):** Multi-adapter support with `--adapter-type` parameter. Supported adapters:
+  - `lora` - Base LoRA (default)
+  - `lora+` - LoRA with learning rate ratio (loraplus_lr_ratio: 16.0)
+  - `dora` - Weight-Decomposed LoRA
+  - `rslora` - Rank Stabilization LoRA
+  - `pissa` - PiSSA initialization (SVD-based)
+  - `oft` - Orthogonal Fine-Tuning (different finetuning_type)
+- **New Option (2025-12-08):** `--no-quantization` flag disables 4-bit quantization for full precision training
 
 ### 04_EVALUATION.md
 - **Key Insight:** Evaluates both base and fine-tuned models with comprehensive metrics
@@ -249,6 +257,30 @@
 **Task:** Train for more epochs
 **File:** 01_ORCHESTRATION.md (Section: Stage 3 parameters)
 **Action:** Edit `--num_train_epochs 20`
+
+**Task:** Change adapter type (LoRA variant)
+**File:** 03_TRAINING.md (Section: Adapter Types)
+**Action:** Use `--adapter-type <type>` where type is one of: lora, lora+, dora, rslora, pissa, oft
+**Examples:**
+```bash
+# Use DoRA adapter
+./run_experiment.sh --adapter-type dora --epochs 5
+
+# Use LoRA+ adapter
+./run_experiment.sh --adapter-type lora+ --epochs 5
+
+# Use rsLoRA adapter
+./run_experiment.sh --adapter-type rslora --epochs 5
+
+# Use PiSSA adapter
+./run_experiment.sh --adapter-type pissa --epochs 5
+
+# Use OFT adapter
+./run_experiment.sh --adapter-type oft --epochs 5
+
+# Disable quantization (full precision)
+./run_experiment.sh --adapter-type dora --no-quantization --epochs 5
+```
 
 **Task:** Understand why accuracy is only 70%
 **File:** 04_EVALUATION.md (Section: Common Evaluation Issues)
@@ -315,4 +347,4 @@
 
 **Total Documentation:** 8 files, ~4,600 lines, comprehensive coverage of entire pipeline
 
-**Last Updated:** 2025-12-08 (Fixed CSV sync to use experiment_id for correct row retrieval)
+**Last Updated:** 2025-12-08 (Added multi-adapter support: lora, lora+, dora, rslora, pissa, oft)
