@@ -1618,8 +1618,12 @@ class SyntheticVideoGenerator:
             config['direction'],
             f"speed{config['speed']:.1f}",
             f"angle{config['view_angle']:.0f}",
-            f"dist{config.get('distance', 1.0):.1f}",
+            f"dist{config.get('distance', 1.0):.2f}",  # 2 decimal places for randomized distances
         ])
+
+        # Add distance randomization marker if enabled
+        if config.get('distance_randomization', 'disabled') == 'enabled':
+            parts.append('distrand')
 
         # Add center randomization if enabled
         if config.get('center_randomization', 'none') == 'randomized':
@@ -1762,6 +1766,9 @@ Examples:
     parser.add_argument('--center_randomization', type=str, default='none',
                        choices=['none', 'randomized'],
                        help='Center of mass randomization: none = centered, randomized = random position with min 30%% visible (default: none)')
+    parser.add_argument('--distance_randomization', type=str, default='disabled',
+                       choices=['disabled', 'enabled'],
+                       help='Track if distance was randomized by building_dataset.py (default: disabled)')
 
     # Object placement parameters
     parser.add_argument('--add-object', action='store_true',
@@ -1977,6 +1984,7 @@ def main():
         'edge_width': args.edge_width,
         'distance': args.distance,
         'center_randomization': args.center_randomization,
+        'distance_randomization': args.distance_randomization,
         'seed': args.seed,
         'background_color': bg_color,
         'stripe_width': stripe_width,

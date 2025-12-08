@@ -66,8 +66,10 @@ Defines all command-line parameters for dataset generation.
 - `motion_blur`: Enable motion blur (boolean)
 - `camera_noise`: Camera noise level (0.0 to 1.0)
 - `edge_width`: Belt edge width in pixels (default: 10)
-- `distance`: Camera distance (simulates depth, default: 3.0)
-- `center_randomization`: Position randomization (0=centered, 1=randomized with 30% min visibility)
+- `distance`: Camera distance (simulates depth, default: 3.0). When `distance_randomization` is disabled, accepts comma-separated values for discrete combinations.
+- `center_randomization`: Position randomization (0=centered, 1=randomized with 30% min visibility). **Note: Only effective when `distance > 1.0`** - at distance=1.0, the treadmill fills the entire frame leaving no room for position offset.
+- `distance_randomization`: Distance randomization mode (0=disabled, 1=enabled). When enabled, generates ONE random distance per video from `distance_range` instead of using discrete values.
+- `distance_range`: Range for distance randomization as "min,max" (e.g., "1.0,1.2"). Only used when `distance_randomization` is enabled.
 - `stripe_width`: Width of stripes for striped textures (default: None)
 - `stripe_spacing`: Spacing between stripes (default: None)
 - `stripe_gray`: Grayscale value for stripes (0-255, default: None)

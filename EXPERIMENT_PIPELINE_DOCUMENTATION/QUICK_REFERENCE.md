@@ -372,8 +372,32 @@
   -y
 ```
 
+**Task:** Generate videos with randomized distance per video
+**File:** 01_ORCHESTRATION.md (Section: Experiment Parameters) or 02_DATA_GENERATION.md
+**Action:** Use `--train-distance-randomization "1"` and `--train-distance-range "1.0,1.2"` to enable randomized distance
+**Behavior:**
+- `--train-distance-randomization "0"` (default): Uses `--train-distance` as discrete values (Cartesian product)
+- `--train-distance-randomization "1"`: Generates ONE random distance per video from uniform(min, max)
+- Distance is constant throughout each video (all frames same distance)
+- Filename includes `distrand` marker when randomization enabled (e.g., `dist1.15_distrand`)
+
+**Example with distance randomization:**
+```bash
+./run_experiment.sh \
+  --train-distance-randomization "1" \
+  --train-distance-range "1.0,1.2" \
+  --test-distance-randomization "0" \
+  --test-distance "1.0,3.0,5.0,8.0,10.0" \
+  --train-angles "0.0,30.0" \
+  --train-speed "0.0,14.0" \
+  --train-texture "subtle_gray_stripes" \
+  --train-direction "left" \
+  --epochs 5 \
+  -y
+```
+
 ---
 
 **Total Documentation:** 8 files, ~4,600 lines, comprehensive coverage of entire pipeline
 
-**Last Updated:** 2025-12-08 (Added run_all_adapters.sh for multi-adapter comparison; PiSSA excluded due to special init requirements)
+**Last Updated:** 2025-12-08 (Added distance randomization per video support with --train-distance-randomization and --train-distance-range flags)

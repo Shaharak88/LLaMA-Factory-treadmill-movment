@@ -151,6 +151,24 @@ class DatasetBuilder:
         else:
             return [param_type(param_str)]
 
+    def _parse_distance_range(self, range_str: str) -> tuple:
+        """
+        Parse distance range string into (min, max) tuple.
+
+        Args:
+            range_str: String like "1.0,1.2"
+
+        Returns:
+            Tuple[float, float]: (min_distance, max_distance)
+        """
+        parts = range_str.split(',')
+        if len(parts) != 2:
+            raise ValueError(f"Invalid distance_range format: {range_str}. Expected 'min,max' (e.g., '1.0,1.2')")
+        min_dist, max_dist = float(parts[0].strip()), float(parts[1].strip())
+        if min_dist > max_dist:
+            raise ValueError(f"Invalid distance_range: min ({min_dist}) must be <= max ({max_dist})")
+        return (min_dist, max_dist)
+
     def _generate_all_combinations(self) -> List[Dict]:
         """
         Generate all parameter combinations based on comma-separated arguments.
@@ -174,6 +192,14 @@ class DatasetBuilder:
         edge_widths = self._parse_parameter_values(self.args.edge_width, float)
         distances = self._parse_parameter_values(self.args.distance, float) if hasattr(self.args, 'distance') else [1.0]
         center_randomizations = self._parse_parameter_values(self.args.center_randomization, str) if hasattr(self.args, 'center_randomization') else ['none']
+        distance_randomization = getattr(self.args, 'distance_randomization', 'disabled')
+
+        # When distance randomization is enabled, use placeholder instead of discrete values
+        if distance_randomization == 'enabled':
+            distances_for_product = [None]  # Will randomize per video later
+            logger.info(f"  Distance randomization enabled - will generate random distance per video from range {self.args.distance_range}")
+        else:
+            distances_for_product = distances
 
         # Parse subtle_gray_stripes parameters
         stripe_widths = self._parse_parameter_values(self.args.stripe_width, int) if hasattr(self.args, 'stripe_width') else [10]
@@ -209,7 +235,7 @@ class DatasetBuilder:
             motion_blurs,
             camera_noises,
             edge_widths,
-            distances,
+            distances_for_product,  # Use placeholder [None] when randomization enabled
             center_randomizations,
             stripe_widths,
             stripe_spacings,
@@ -227,6 +253,11 @@ class DatasetBuilder:
              brightness, contrast, lighting_var, lighting_int, motion_blur,
              camera_noise, edge_width, distance, center_randomization, stripe_width, stripe_spacing, stripe_gray,
              background_gray, stripe_distance_variance) = combo
+
+            # Handle distance randomization
+            if distance_randomization == 'enabled' and distance is None:
+                min_dist, max_dist = self._parse_distance_range(self.args.distance_range)
+                distance = round(self.rng.uniform(min_dist, max_dist), 2)
 
             config = {
                 'index': idx,
@@ -247,6 +278,7 @@ class DatasetBuilder:
                 'camera_noise': camera_noise,
                 'edge_width': edge_width,
                 'distance': distance,
+                'distance_randomization': distance_randomization,
                 'center_randomization': center_randomization,
                 'stripe_width': stripe_width,
                 'stripe_spacing': stripe_spacing,
@@ -432,6 +464,7 @@ class DatasetBuilder:
                 '--edge_width', str(config['edge_width']),
                 '--distance', str(config.get('distance', 1.0)),
                 '--center_randomization', str(config.get('center_randomization', 'none')),
+                '--distance_randomization', str(config.get('distance_randomization', 'disabled')),
                 '--resolution', config['resolution'],
                 '--fps', str(config['fps']),
                 '--duration', str(config['duration'])
@@ -916,6 +949,10 @@ Notes:
                        help='Distance factor: 1.0 = normal size, >1.0 = smaller/further (default: 1.0). Accepts comma-separated values (e.g., 1.0,2.0,3.0)')
     parser.add_argument('--center_randomization', type=str, default='none',
                        help='Center of mass randomization: none,randomized (default: none). Accepts comma-separated values (e.g., none,randomized). When randomized, treadmill position is randomized with min 30%% visible')
+    parser.add_argument('--distance_randomization', type=str, default='disabled',
+                       help='Distance randomization: disabled=use discrete values, enabled=random per video from range (default: disabled)')
+    parser.add_argument('--distance_range', type=str, default='1.0,1.2',
+                       help='Distance range as min,max for randomization (e.g., "1.0,1.2"). Only used when distance_randomization is enabled')
 
     # Subtle gray stripes parameters (for subtle_gray_stripes texture type)
     parser.add_argument('--stripe_width', type=str, default='10',

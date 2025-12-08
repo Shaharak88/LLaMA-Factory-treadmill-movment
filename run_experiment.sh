@@ -110,6 +110,10 @@ TRAIN_DISTANCE="1.0"  # Distance factor: 1.0 = normal size, >1.0 = smaller/furth
 TEST_DISTANCE=""
 TRAIN_CENTER_RANDOMIZATION="0"  # Center randomization: 0 = none (centered), 1 = randomized position
 TEST_CENTER_RANDOMIZATION=""
+TRAIN_DISTANCE_RANDOMIZATION="0"  # Distance randomization: 0 = disabled (use discrete), 1 = enabled (random per video)
+TEST_DISTANCE_RANDOMIZATION=""    # If empty, uses TRAIN_DISTANCE_RANDOMIZATION
+TRAIN_DISTANCE_RANGE="1.0,1.2"    # Distance range for randomization: min,max
+TEST_DISTANCE_RANGE=""            # If empty, uses TRAIN_DISTANCE_RANGE
 
 # Stripe parameters (for subtle_gray_stripes)
 TRAIN_STRIPE_WIDTH="10"
@@ -259,6 +263,12 @@ EXPERIMENT PARAMETERS:
                                       Accepts comma-separated values (e.g., 0,1) for combinations
     --test-center-randomization VAL   Test: Center randomization (0=none, 1=randomized)
                                       If not specified, uses train value
+
+    # Distance randomization parameters
+    --train-distance-randomization VAL  Train: 0=disabled (discrete), 1=enabled (random per video)
+    --test-distance-randomization VAL   Test: (default: uses train value)
+    --train-distance-range MIN,MAX      Train: Range for randomization (e.g., "1.0,1.2")
+    --test-distance-range MIN,MAX       Test: (default: uses train value)
 
     # Object placement parameters
     --train-add-object BOOL Train: Enable object placement (true/false, default: false)
@@ -501,6 +511,22 @@ parse_args() {
                 TEST_CENTER_RANDOMIZATION="$2"
                 shift 2
                 ;;
+            --train-distance-randomization)
+                TRAIN_DISTANCE_RANDOMIZATION="$2"
+                shift 2
+                ;;
+            --test-distance-randomization)
+                TEST_DISTANCE_RANDOMIZATION="$2"
+                shift 2
+                ;;
+            --train-distance-range)
+                TRAIN_DISTANCE_RANGE="$2"
+                shift 2
+                ;;
+            --test-distance-range)
+                TEST_DISTANCE_RANGE="$2"
+                shift 2
+                ;;
             --fps)
                 FPS="$2"
                 shift 2
@@ -692,6 +718,19 @@ convert_center_randomization() {
     echo "$result"
 }
 
+convert_distance_randomization() {
+    # Convert 0/1 values to disabled/enabled for building_dataset.py
+    local input="$1"
+    if [ "$input" = "0" ]; then
+        echo "disabled"
+    elif [ "$input" = "1" ]; then
+        echo "enabled"
+    else
+        # Pass through other values unchanged (for backward compatibility)
+        echo "$input"
+    fi
+}
+
 ################################################################################
 # MAIN WORKFLOW STEPS
 ################################################################################
@@ -766,6 +805,8 @@ step_build_datasets() {
     local test_edge_width="${TEST_EDGE_WIDTH:-$TRAIN_EDGE_WIDTH}"
     local test_distance="${TEST_DISTANCE:-$TRAIN_DISTANCE}"
     local test_center_randomization="${TEST_CENTER_RANDOMIZATION:-$TRAIN_CENTER_RANDOMIZATION}"
+    local test_distance_randomization="${TEST_DISTANCE_RANDOMIZATION:-$TRAIN_DISTANCE_RANDOMIZATION}"
+    local test_distance_range="${TEST_DISTANCE_RANGE:-$TRAIN_DISTANCE_RANGE}"
     local test_stripe_width="${TEST_STRIPE_WIDTH:-$TRAIN_STRIPE_WIDTH}"
     local test_stripe_spacing="${TEST_STRIPE_SPACING:-$TRAIN_STRIPE_SPACING}"
     local test_stripe_distance_variance="${TEST_STRIPE_DISTANCE_VARIANCE:-$TRAIN_STRIPE_DISTANCE_VARIANCE}"
@@ -822,6 +863,8 @@ step_build_datasets() {
         --edge_width '$TRAIN_EDGE_WIDTH' \
         --distance '$TRAIN_DISTANCE' \
         --center_randomization '$(convert_center_randomization "$TRAIN_CENTER_RANDOMIZATION")' \
+        --distance_randomization '$(convert_distance_randomization "$TRAIN_DISTANCE_RANDOMIZATION")' \
+        --distance_range '$TRAIN_DISTANCE_RANGE' \
         --stripe_width '$TRAIN_STRIPE_WIDTH' \
         --stripe_spacing '$TRAIN_STRIPE_SPACING' \
         --stripe_gray '$TRAIN_STRIPE_GRAY' \
@@ -884,6 +927,8 @@ step_build_datasets() {
         --edge_width '$test_edge_width' \
         --distance '$test_distance' \
         --center_randomization '$(convert_center_randomization "$test_center_randomization")' \
+        --distance_randomization '$(convert_distance_randomization "$test_distance_randomization")' \
+        --distance_range '$test_distance_range' \
         --stripe_width '$test_stripe_width' \
         --stripe_spacing '$test_stripe_spacing' \
         --stripe_gray '$TEST_STRIPE_GRAY' \
@@ -950,6 +995,8 @@ step_run_training() {
     local test_edge_width="${TEST_EDGE_WIDTH:-$TRAIN_EDGE_WIDTH}"
     local test_distance="${TEST_DISTANCE:-$TRAIN_DISTANCE}"
     local test_center_randomization="${TEST_CENTER_RANDOMIZATION:-$TRAIN_CENTER_RANDOMIZATION}"
+    local test_distance_randomization="${TEST_DISTANCE_RANDOMIZATION:-$TRAIN_DISTANCE_RANDOMIZATION}"
+    local test_distance_range="${TEST_DISTANCE_RANGE:-$TRAIN_DISTANCE_RANGE}"
     local test_stripe_width="${TEST_STRIPE_WIDTH:-$TRAIN_STRIPE_WIDTH}"
     local test_stripe_spacing="${TEST_STRIPE_SPACING:-$TRAIN_STRIPE_SPACING}"
     local test_stripe_gray="${TEST_STRIPE_GRAY}"
@@ -1030,6 +1077,8 @@ step_run_training() {
         --train_edge_width '$TRAIN_EDGE_WIDTH' \
         --train_distance '$TRAIN_DISTANCE' \
         --train_center_randomization '$TRAIN_CENTER_RANDOMIZATION' \
+        --train_distance_randomization '$TRAIN_DISTANCE_RANDOMIZATION' \
+        --train_distance_range '$TRAIN_DISTANCE_RANGE' \
         --train_stripe_width '$TRAIN_STRIPE_WIDTH' \
         --train_stripe_spacing '$TRAIN_STRIPE_SPACING' \
         --train_stripe_gray '$TRAIN_STRIPE_GRAY' \
@@ -1061,6 +1110,8 @@ step_run_training() {
         --test_edge_width '$test_edge_width' \
         --test_distance '$test_distance' \
         --test_center_randomization '$test_center_randomization' \
+        --test_distance_randomization '$test_distance_randomization' \
+        --test_distance_range '$test_distance_range' \
         --test_stripe_width '$test_stripe_width' \
         --test_stripe_spacing '$test_stripe_spacing' \
         --test_stripe_gray '$test_stripe_gray' \
