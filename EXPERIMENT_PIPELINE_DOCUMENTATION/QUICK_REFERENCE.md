@@ -242,6 +242,7 @@
 - **Critical Info:** Uses relative paths so reports work when opened directly in browser
 - **New Feature (2025-12-07):** Failure Analysis tab automatically identifies which features (dist, angle, blur, etc.) significantly affect model accuracy using Chi-squared tests, with video examples grouped by worst-performing values
 - **Fix (2025-12-08):** `get_experiment_from_csv()` now returns the LAST match when searching by dataset_name (most recent experiment), not the first match. This ensures correct report generation when multiple experiments use the same dataset.
+- **Critical Fix (2025-12-08):** Eval folder matching by adapter path. When generating reports for experiments that share the same dataset (e.g., multi-adapter comparison), the report generator now matches eval folders by `lora_output_dir` instead of using the most recent folder. This ensures each report uses the correct per-video predictions for its specific adapter/model. The fix reads `evaluation_metadata_*.txt` files to match adapter paths.
 
 ### 06_EXPERIMENT_TRACKING.md
 - **Key Insight:** 196-column CSV logs everything for complete reproducibility

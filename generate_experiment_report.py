@@ -196,15 +196,18 @@ class ExperimentReportGenerator:
 
         return metadata_path
 
-    def find_evaluation_results(self, dataset_name: str) -> Optional[Dict[str, Path]]:
+    def find_evaluation_results(self, dataset_name: str, adapter_path: Optional[str] = None) -> Optional[Dict[str, Path]]:
         """
         Find evaluation result CSV files for a dataset.
 
-        Looks for eval_* folders in the dataset directory and finds the most recent
+        Looks for eval_* folders in the dataset directory and finds the matching
         per_video_predictions CSV files for both base and finetuned models.
 
         Args:
             dataset_name: Name of dataset (e.g., "_exp_20251207_143033_test")
+            adapter_path: Optional adapter path to match (e.g., "saves/my_comparison_rslora").
+                         If provided, finds the eval folder that used this specific adapter.
+                         If not provided, falls back to the most recent eval folder.
 
         Returns:
             Dict with 'base' and 'finetuned' paths to CSV files, or None if not found
@@ -221,16 +224,47 @@ class ExperimentReportGenerator:
             logger.warning(f"No evaluation folders found in {dataset_dir}")
             return None
 
-        # Get the most recent eval folder
-        latest_eval_folder = max(eval_folders, key=lambda p: p.stat().st_mtime)
-        logger.info(f"Found evaluation folder: {latest_eval_folder}")
+        # Find the correct eval folder by matching adapter path
+        target_eval_folder = None
+
+        if adapter_path:
+            logger.info(f"Looking for eval folder with adapter: {adapter_path}")
+            for eval_folder in eval_folders:
+                # Read metadata file to find adapter path
+                metadata_files = list(eval_folder.glob('evaluation_metadata_*.txt'))
+                if metadata_files:
+                    try:
+                        with open(metadata_files[0], 'r') as f:
+                            content = f.read()
+                            # Look for "Adapter Path: <path>" line
+                            for line in content.split('\n'):
+                                if 'Adapter Path:' in line:
+                                    folder_adapter = line.split('Adapter Path:')[1].strip()
+                                    if folder_adapter == adapter_path:
+                                        target_eval_folder = eval_folder
+                                        logger.info(f"✓ Found matching eval folder: {eval_folder.name} (adapter: {folder_adapter})")
+                                        break
+                    except Exception as e:
+                        logger.warning(f"Could not read metadata from {eval_folder}: {e}")
+                if target_eval_folder:
+                    break
+
+            if not target_eval_folder:
+                logger.warning(f"No eval folder found matching adapter '{adapter_path}'. Available folders: {[f.name for f in eval_folders]}")
+                # Return None to trigger download of correct eval folder from server
+                return None
+
+        # Fall back to most recent eval folder ONLY if no adapter_path was specified
+        if not target_eval_folder:
+            target_eval_folder = max(eval_folders, key=lambda p: p.stat().st_mtime)
+            logger.info(f"Using most recent eval folder: {target_eval_folder.name}")
 
         # Look for prediction CSV files
-        base_csvs = list(latest_eval_folder.glob('per_video_predictions_base_*.csv'))
-        finetuned_csvs = list(latest_eval_folder.glob('per_video_predictions_finetuned_*.csv'))
+        base_csvs = list(target_eval_folder.glob('per_video_predictions_base_*.csv'))
+        finetuned_csvs = list(target_eval_folder.glob('per_video_predictions_finetuned_*.csv'))
 
         if not base_csvs or not finetuned_csvs:
-            logger.warning(f"Prediction CSV files not found in {latest_eval_folder}")
+            logger.warning(f"Prediction CSV files not found in {target_eval_folder}")
             return None
 
         # Get the most recent of each
@@ -245,7 +279,7 @@ class ExperimentReportGenerator:
             'finetuned': finetuned_csv
         }
 
-    def download_evaluation_results(self, dataset_name: str) -> Optional[Dict[str, Path]]:
+    def download_evaluation_results(self, dataset_name: str, adapter_path: Optional[str] = None) -> Optional[Dict[str, Path]]:
         """
         Download evaluation results from server container.
 
@@ -253,11 +287,15 @@ class ExperimentReportGenerator:
 
         Args:
             dataset_name: Name of dataset
+            adapter_path: Optional adapter path to match. If provided, only downloads
+                         the eval folder that used this specific adapter.
 
         Returns:
             Dict with 'base' and 'finetuned' paths to CSV files, or None if download failed
         """
         logger.info(f"Downloading evaluation results for {dataset_name} from server container...")
+        if adapter_path:
+            logger.info(f"  Looking for eval folder with adapter: {adapter_path}")
 
         local_dataset_path = self.local_data_dir / dataset_name
         local_dataset_path.mkdir(parents=True, exist_ok=True)
@@ -277,8 +315,28 @@ class ExperimentReportGenerator:
 
             logger.info(f"Found {len(eval_folders)} eval folder(s) in container")
 
-            # Step 2: For each eval folder, docker cp it
-            for container_path in eval_folders:
+            # Step 2: If adapter_path provided, find the matching eval folder
+            folders_to_download = eval_folders
+            if adapter_path:
+                matching_folder = None
+                for container_path in eval_folders:
+                    eval_folder_name = os.path.basename(container_path)
+                    # Read metadata file from container to check adapter path
+                    grep_cmd = f"ssh {self.server} 'docker exec {self.docker_container} grep \"Adapter Path:\" /app/data/{dataset_name}/{eval_folder_name}/evaluation_metadata_*.txt 2>/dev/null || echo \"\"'"
+                    grep_result = subprocess.run(grep_cmd, shell=True, capture_output=True, text=True)
+                    if grep_result.returncode == 0 and adapter_path in grep_result.stdout:
+                        matching_folder = container_path
+                        logger.info(f"✓ Found matching eval folder on server: {eval_folder_name}")
+                        break
+
+                if matching_folder:
+                    folders_to_download = [matching_folder]
+                else:
+                    logger.warning(f"No eval folder found on server matching adapter '{adapter_path}'")
+                    logger.info("Downloading all eval folders as fallback...")
+
+            # Step 3: Download selected eval folders
+            for container_path in folders_to_download:
                 eval_folder_name = os.path.basename(container_path)
 
                 # Docker cp from container to temp location on server, then rsync to local
@@ -292,32 +350,34 @@ class ExperimentReportGenerator:
                 logger.info(f"  ✓ Downloaded {eval_folder_name}")
 
             logger.info("✓ Download complete")
-            return self.find_evaluation_results(dataset_name)
+            return self.find_evaluation_results(dataset_name, adapter_path)
 
         except subprocess.CalledProcessError as e:
             logger.error(f"Failed to download evaluation results: {e}")
             logger.error(f"stderr: {e.stderr}")
             return None
 
-    def ensure_evaluation_results(self, dataset_name: str) -> Optional[Dict[str, Path]]:
+    def ensure_evaluation_results(self, dataset_name: str, adapter_path: Optional[str] = None) -> Optional[Dict[str, Path]]:
         """
         Ensure evaluation results are available locally. Download if needed.
 
         Args:
             dataset_name: Name of dataset
+            adapter_path: Optional adapter path to match (e.g., "saves/my_comparison_rslora").
+                         If provided, ensures the eval folder for this specific adapter is used.
 
         Returns:
             Dict with 'base' and 'finetuned' paths to CSV files, or None if not available
         """
         # First, check if results exist locally
-        results = self.find_evaluation_results(dataset_name)
+        results = self.find_evaluation_results(dataset_name, adapter_path)
 
         if results:
             return results
 
         # If not, try to download from server
         logger.info(f"Evaluation results not found locally, attempting download...")
-        return self.download_evaluation_results(dataset_name)
+        return self.download_evaluation_results(dataset_name, adapter_path)
 
     def load_prediction_data(self, csv_paths: Dict[str, Path]) -> Dict[str, Dict]:
         """
@@ -897,10 +957,13 @@ class ExperimentReportGenerator:
         test_metadata_csv = self.get_metadata(test_dataset)
 
         # Load evaluation results (predictions) for test dataset
+        # Use experiment's adapter path to find the correct eval folder
+        adapter_path = experiment.get('lora_output_dir', '')
         logger.info("\n=== LOADING EVALUATION RESULTS ===")
+        logger.info(f"  Adapter path from experiment: {adapter_path}")
         test_prediction_data = {}
         failure_analysis_results = None
-        test_eval_csvs = self.ensure_evaluation_results(test_dataset)
+        test_eval_csvs = self.ensure_evaluation_results(test_dataset, adapter_path)
         if test_eval_csvs:
             test_prediction_data = self.load_prediction_data(test_eval_csvs)
 

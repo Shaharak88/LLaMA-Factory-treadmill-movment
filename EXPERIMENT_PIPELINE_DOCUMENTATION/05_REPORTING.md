@@ -658,6 +658,36 @@ The failure analysis helps you:
 - **Plan next experiments**: Should you train with more distance variation? Add blur augmentation?
 - **Compare experiments**: Did training on feature X improve robustness to feature Y?
 
+---
+
+## Fixes and Changelog
+
+### Critical Fix: Eval Folder Matching by Adapter Path (2025-12-08)
+
+**Problem:** When running multiple experiments on the same dataset with different adapters (e.g., using `run_all_adapters.sh`), the report generator would use the most recent eval folder for all reports, regardless of which adapter the experiment actually used. This caused:
+- Incorrect accuracy breakdowns in the Failure Analysis tab
+- All reports showing identical dist/speed/angle accuracy tables
+- Mismatch between CSV metrics (correct) and HTML breakdown tables (wrong)
+
+**Root Cause:** `find_evaluation_results()` used `max(eval_folders, key=mtime)` to select the "latest" eval folder, without checking which adapter produced it.
+
+**Solution:** The report generator now:
+1. Reads the experiment's `lora_output_dir` from the CSV (e.g., `saves/my_comparison_rslora`)
+2. Searches for eval folders that have matching `Adapter Path:` in their `evaluation_metadata_*.txt`
+3. Uses the correct eval folder for that specific adapter/model
+4. If no local match found, downloads the correct eval folder from the server
+
+**Files Changed:**
+- `generate_experiment_report.py`: Modified `find_evaluation_results()`, `download_evaluation_results()`, `ensure_evaluation_results()`, and `generate_dual_report()` to pass and match adapter paths.
+
+**Technical Details:**
+- Eval folders contain `evaluation_metadata_*.txt` with line: `Adapter Path: saves/<model_name>`
+- This adapter path is matched against the experiment's `lora_output_dir` column
+- If no match found locally but adapter_path is specified, returns None to trigger download
+- Download function queries server metadata files to find the correct folder before downloading
+
+---
+
 ## Next Steps
 - Read `06_EXPERIMENT_TRACKING.md` for how experiments are logged
 - See examples in `analytics/reports/` folder
