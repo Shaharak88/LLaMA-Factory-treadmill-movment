@@ -111,8 +111,14 @@
   - Chi-squared and Fisher's exact tests for statistical significance
   - Per-feature failure examples grouped by worst-performing values
   - Automatic conclusions identifying which features affect model accuracy
+- **NEW (2025-12-09):** Subset/Conditional Significance Analysis:
+  - Single-level subset analysis (e.g., "Is stripe significant within distance=2.0?")
+  - Two-level combination analysis (e.g., "Is bg significant within distance=2.0 AND angle=30?")
+  - Only shows NEW findings not already in global analysis
+  - Uses both Chi-squared and Fisher's exact tests at p<0.05 threshold
+  - Shows ALL failed videos in significant groups (collapsible sections)
 
-**When to read it:** Customizing report appearance, adding new report sections, troubleshooting video display issues, **understanding why a model fails on specific features**.
+**When to read it:** Customizing report appearance, adding new report sections, troubleshooting video display issues, **understanding why a model fails on specific features**, **finding hidden patterns in feature combinations**.
 
 ---
 
@@ -147,6 +153,7 @@
 | HTML report structure | 05_REPORTING.md | HTML Report Structure |
 | Video display issues | 05_REPORTING.md | Video Path Handling |
 | **Why model fails on specific features** | 05_REPORTING.md | Statistical Failure Analysis Tab |
+| **Why model fails on feature combinations** | 05_REPORTING.md | Subset/Conditional Significance Analysis |
 | **Statistical significance testing** | 05_REPORTING.md | Statistical Failure Analysis Tab |
 | What gets logged | 06_EXPERIMENT_TRACKING.md | CSV Structure |
 | Querying experiments | 06_EXPERIMENT_TRACKING.md | Querying Experiments |

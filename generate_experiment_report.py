@@ -679,6 +679,16 @@ class ExperimentReportGenerator:
                 </div>
                 """
 
+        # Generate subset analysis HTML (NEW)
+        single_level_subset_html = self._generate_single_level_subset_html(
+            analysis_results.get('single_level_subset_analysis'),
+            test_video_dir
+        )
+        two_level_subset_html = self._generate_two_level_subset_html(
+            analysis_results.get('two_level_subset_analysis'),
+            test_video_dir
+        )
+
         conclusion = analysis_results.get('conclusion', 'No conclusion available.')
         p_threshold = analysis_results.get('p_threshold', 0.01)
         row_count = analysis_results.get('row_count', 0)
@@ -753,8 +763,378 @@ class ExperimentReportGenerator:
 
         <!-- General Failed Examples (if no significant features) -->
         {general_failed_html}
+
+        <!-- Single-Level Subset Analysis (NEW) -->
+        {single_level_subset_html}
+
+        <!-- Two-Level Subset Analysis (NEW) -->
+        {two_level_subset_html}
         '''
 
+        return html
+
+    def _generate_single_level_subset_html(self, single_level_analysis: Dict, test_video_dir: str) -> str:
+        """
+        Generate HTML for single-level subset findings.
+
+        Args:
+            single_level_analysis: Results from analyze_single_level_subsets()
+            test_video_dir: Relative path to test video directory
+
+        Returns:
+            HTML string for single-level subset analysis section
+        """
+        if not single_level_analysis:
+            return ""
+
+        findings = single_level_analysis.get('findings', {})
+        summary = single_level_analysis.get('summary', {})
+
+        if summary.get('total_new_findings', 0) == 0:
+            return ""
+
+        html = f'''
+        <div class="subset-analysis-section">
+            <h3>🔬 Conditional Significance Analysis (Single-Level Subsets)</h3>
+            <p class="section-desc">
+                Features that become significant within specific subsets of data.
+                These patterns were NOT found in the global analysis but emerge when examining subgroups.
+                <strong>Found {summary['total_new_findings']} new patterns</strong> in features:
+                {', '.join(summary.get('features_with_subset_significance', []))}
+            </p>
+        '''
+
+        for outer_feature, value_findings in findings.items():
+            html += f'''
+            <div class="outer-feature-group">
+                <h4>📊 Within {outer_feature.upper()} subsets:</h4>
+            '''
+
+            for outer_value, data in sorted(value_findings.items()):
+                sample_count = data.get('sample_count', 0)
+                new_sig_features = data.get('new_significant_features', {})
+
+                html += f'''
+                <div class="subset-finding">
+                    <div class="subset-header">
+                        <span class="subset-context">{outer_feature} = {outer_value}</span>
+                        <span class="subset-count">({sample_count} samples)</span>
+                    </div>
+                '''
+
+                for inner_feature, result in new_sig_features.items():
+                    chi2 = result.get('chi2', 'N/A')
+                    chi2_p = result.get('chi2_p_value')
+                    chi2_sig = result.get('chi2_significant', False)
+                    fisher_sig = result.get('fisher_significant', False)
+                    fisher_results = result.get('fisher_results', [])
+                    acc_by_val = result.get('accuracy_by_value', {})
+                    failed_videos = result.get('failed_videos', [])
+
+                    # Build test results summary
+                    test_parts = []
+                    if chi2 != 'N/A' and chi2_p is not None:
+                        chi2_status = "✅" if chi2_sig else "❌"
+                        test_parts.append(f"Chi² = {chi2}, p = {chi2_p:.4f} {chi2_status}")
+
+                    # Show significant Fisher pairs
+                    sig_fisher_pairs = [f for f in fisher_results if f.get('is_significant')]
+                    if sig_fisher_pairs:
+                        fisher_status = "✅" if fisher_sig else "❌"
+                        best_fisher = sig_fisher_pairs[0]
+                        pair = best_fisher['pair']
+                        test_parts.append(f"Fisher({pair[0]} vs {pair[1]}): p = {best_fisher['p_value']:.4f} {fisher_status}")
+
+                    test_summary = " | ".join(test_parts) if test_parts else "Statistical tests"
+
+                    html += f'''
+                    <div class="new-finding">
+                        <strong>NEW: {inner_feature.upper()} is significant</strong>
+                        <span class="test-summary">({test_summary})</span>
+                    </div>
+                    '''
+
+                    # Show Fisher pairwise comparisons if any are significant
+                    if sig_fisher_pairs:
+                        fisher_rows = ""
+                        for fp in sig_fisher_pairs[:5]:  # Show top 5
+                            pair = fp['pair']
+                            fisher_rows += f'''
+                            <tr>
+                                <td>{pair[0]} vs {pair[1]}</td>
+                                <td>{fp['val1_accuracy']:.1f}% vs {fp['val2_accuracy']:.1f}%</td>
+                                <td>{fp['p_value']:.4f}</td>
+                                <td>{'✅ Sig' if fp['is_significant'] else '❌'}</td>
+                            </tr>
+                            '''
+                        html += f'''
+                        <div class="fisher-results">
+                            <strong>Fisher's Exact Test (Pairwise):</strong>
+                            <table class="analysis-table fisher-table">
+                                <thead>
+                                    <tr><th>Comparison</th><th>Accuracy</th><th>p-value</th><th>Significant</th></tr>
+                                </thead>
+                                <tbody>{fisher_rows}</tbody>
+                            </table>
+                        </div>
+                        '''
+
+                    # Accuracy table for this feature
+                    if acc_by_val:
+                        rows = ""
+                        for val, stats in sorted(acc_by_val.items()):
+                            acc_class = "high-acc" if stats['accuracy'] >= 80 else ("mid-acc" if stats['accuracy'] >= 50 else "low-acc")
+                            rows += f'''
+                            <tr class="{acc_class}">
+                                <td>{val}</td>
+                                <td>{stats['correct']}</td>
+                                <td>{stats['total']}</td>
+                                <td><strong>{stats['accuracy']:.1f}%</strong></td>
+                                <td>{stats['error_rate']:.1f}%</td>
+                            </tr>
+                            '''
+
+                        html += f'''
+                        <table class="analysis-table subset-table">
+                            <thead>
+                                <tr>
+                                    <th>{inner_feature}</th>
+                                    <th>Correct</th>
+                                    <th>Total</th>
+                                    <th>Accuracy</th>
+                                    <th>Error Rate</th>
+                                </tr>
+                            </thead>
+                            <tbody>{rows}</tbody>
+                        </table>
+                        '''
+
+                    # Collapsible video section showing ALL failed videos
+                    if failed_videos:
+                        video_cards = ""
+                        for video in failed_videos:
+                            video_path = video.get('video_path', '')
+                            video_filename = video_path.split('/')[-1] if video_path else 'unknown'
+                            video_url = f"{test_video_dir}/{video_filename}" if test_video_dir else video_path
+
+                            label = video.get('label', 'unknown')
+                            prediction = video.get('prediction', 'unknown')
+                            features = video.get('features', {})
+
+                            # Build feature display
+                            feature_items = ""
+                            for f_name, f_val in sorted(features.items()):
+                                highlight = "highlight" if f_name == inner_feature else ""
+                                feature_items += f'<span class="video-feature {highlight}">{f_name}={f_val}</span> '
+
+                            video_cards += f'''
+                            <div class="failed-video-card compact">
+                                <video width="200" height="150" controls preload="metadata">
+                                    <source src="{video_url}" type="video/mp4">
+                                </video>
+                                <div class="video-info">
+                                    <span class="label-badge">Truth: {label}</span>
+                                    <span class="pred-badge wrong">Pred: {prediction}</span>
+                                </div>
+                                <div class="video-features">{feature_items}</div>
+                            </div>
+                            '''
+
+                        html += f'''
+                        <details class="video-details">
+                            <summary>View all {len(failed_videos)} failed videos in this subset</summary>
+                            <div class="failed-videos-grid compact-grid">
+                                {video_cards}
+                            </div>
+                        </details>
+                        '''
+
+                html += '</div>'  # Close subset-finding
+
+            html += '</div>'  # Close outer-feature-group
+
+        html += '</div>'  # Close subset-analysis-section
+        return html
+
+    def _generate_two_level_subset_html(self, two_level_analysis: Dict, test_video_dir: str) -> str:
+        """
+        Generate HTML for two-level subset findings.
+
+        Args:
+            two_level_analysis: Results from analyze_two_level_subsets()
+            test_video_dir: Relative path to test video directory
+
+        Returns:
+            HTML string for two-level subset analysis section
+        """
+        if not two_level_analysis:
+            return ""
+
+        findings = two_level_analysis.get('findings', {})
+        summary = two_level_analysis.get('summary', {})
+
+        if summary.get('total_new_findings', 0) == 0:
+            return ""
+
+        html = f'''
+        <div class="subset-analysis-section two-level">
+            <h3>🔬 Conditional Significance Analysis (Two-Level Combinations)</h3>
+            <p class="section-desc">
+                Features that become significant only within specific combinations of two other features.
+                These patterns were NOT found in global or single-level analysis.
+                <strong>Found {summary['total_new_findings']} additional patterns.</strong>
+            </p>
+        '''
+
+        for (f1, f2), combo_findings in findings.items():
+            html += f'''
+            <div class="outer-feature-group">
+                <h4>📊 Within ({f1.upper()}, {f2.upper()}) combinations:</h4>
+            '''
+
+            for (v1, v2), data in sorted(combo_findings.items()):
+                sample_count = data.get('sample_count', 0)
+                new_sig_features = data.get('new_significant_features', {})
+
+                html += f'''
+                <div class="subset-finding">
+                    <div class="subset-header">
+                        <span class="subset-context">{f1} = {v1}, {f2} = {v2}</span>
+                        <span class="subset-count">({sample_count} samples)</span>
+                    </div>
+                '''
+
+                for inner_feature, result in new_sig_features.items():
+                    chi2 = result.get('chi2', 'N/A')
+                    chi2_p = result.get('chi2_p_value')
+                    chi2_sig = result.get('chi2_significant', False)
+                    fisher_sig = result.get('fisher_significant', False)
+                    fisher_results = result.get('fisher_results', [])
+                    acc_by_val = result.get('accuracy_by_value', {})
+                    failed_videos = result.get('failed_videos', [])
+
+                    # Build test results summary
+                    test_parts = []
+                    if chi2 != 'N/A' and chi2_p is not None:
+                        chi2_status = "✅" if chi2_sig else "❌"
+                        test_parts.append(f"Chi² = {chi2}, p = {chi2_p:.4f} {chi2_status}")
+
+                    # Show significant Fisher pairs
+                    sig_fisher_pairs = [f for f in fisher_results if f.get('is_significant')]
+                    if sig_fisher_pairs:
+                        best_fisher = sig_fisher_pairs[0]
+                        pair = best_fisher['pair']
+                        test_parts.append(f"Fisher({pair[0]} vs {pair[1]}): p = {best_fisher['p_value']:.4f} ✅")
+
+                    test_summary = " | ".join(test_parts) if test_parts else "Statistical tests"
+
+                    html += f'''
+                    <div class="new-finding">
+                        <strong>NEW: {inner_feature.upper()} is significant</strong>
+                        <span class="test-summary">({test_summary})</span>
+                        <em>— Not found in global or single-level analysis</em>
+                    </div>
+                    '''
+
+                    # Show Fisher pairwise comparisons if any are significant
+                    if sig_fisher_pairs:
+                        fisher_rows = ""
+                        for fp in sig_fisher_pairs[:5]:  # Show top 5
+                            pair = fp['pair']
+                            fisher_rows += f'''
+                            <tr>
+                                <td>{pair[0]} vs {pair[1]}</td>
+                                <td>{fp['val1_accuracy']:.1f}% vs {fp['val2_accuracy']:.1f}%</td>
+                                <td>{fp['p_value']:.4f}</td>
+                                <td>{'✅ Sig' if fp['is_significant'] else '❌'}</td>
+                            </tr>
+                            '''
+                        html += f'''
+                        <div class="fisher-results">
+                            <strong>Fisher's Exact Test (Pairwise):</strong>
+                            <table class="analysis-table fisher-table">
+                                <thead>
+                                    <tr><th>Comparison</th><th>Accuracy</th><th>p-value</th><th>Significant</th></tr>
+                                </thead>
+                                <tbody>{fisher_rows}</tbody>
+                            </table>
+                        </div>
+                        '''
+
+                    # Accuracy table
+                    if acc_by_val:
+                        rows = ""
+                        for val, stats in sorted(acc_by_val.items()):
+                            acc_class = "high-acc" if stats['accuracy'] >= 80 else ("mid-acc" if stats['accuracy'] >= 50 else "low-acc")
+                            rows += f'''
+                            <tr class="{acc_class}">
+                                <td>{val}</td>
+                                <td>{stats['correct']}</td>
+                                <td>{stats['total']}</td>
+                                <td><strong>{stats['accuracy']:.1f}%</strong></td>
+                                <td>{stats['error_rate']:.1f}%</td>
+                            </tr>
+                            '''
+
+                        html += f'''
+                        <table class="analysis-table subset-table">
+                            <thead>
+                                <tr>
+                                    <th>{inner_feature}</th>
+                                    <th>Correct</th>
+                                    <th>Total</th>
+                                    <th>Accuracy</th>
+                                    <th>Error Rate</th>
+                                </tr>
+                            </thead>
+                            <tbody>{rows}</tbody>
+                        </table>
+                        '''
+
+                    # Collapsible video section
+                    if failed_videos:
+                        video_cards = ""
+                        for video in failed_videos:
+                            video_path = video.get('video_path', '')
+                            video_filename = video_path.split('/')[-1] if video_path else 'unknown'
+                            video_url = f"{test_video_dir}/{video_filename}" if test_video_dir else video_path
+
+                            label = video.get('label', 'unknown')
+                            prediction = video.get('prediction', 'unknown')
+                            features = video.get('features', {})
+
+                            feature_items = ""
+                            for f_name, f_val in sorted(features.items()):
+                                highlight = "highlight" if f_name in [inner_feature, f1, f2] else ""
+                                feature_items += f'<span class="video-feature {highlight}">{f_name}={f_val}</span> '
+
+                            video_cards += f'''
+                            <div class="failed-video-card compact">
+                                <video width="200" height="150" controls preload="metadata">
+                                    <source src="{video_url}" type="video/mp4">
+                                </video>
+                                <div class="video-info">
+                                    <span class="label-badge">Truth: {label}</span>
+                                    <span class="pred-badge wrong">Pred: {prediction}</span>
+                                </div>
+                                <div class="video-features">{feature_items}</div>
+                            </div>
+                            '''
+
+                        html += f'''
+                        <details class="video-details">
+                            <summary>View all {len(failed_videos)} failed videos in this subset</summary>
+                            <div class="failed-videos-grid compact-grid">
+                                {video_cards}
+                            </div>
+                        </details>
+                        '''
+
+                html += '</div>'  # Close subset-finding
+
+            html += '</div>'  # Close outer-feature-group
+
+        html += '</div>'  # Close subset-analysis-section
         return html
 
     def generate_model_performance_tab_html(self, experiment: Dict) -> str:
@@ -1604,6 +1984,183 @@ class ExperimentReportGenerator:
             font-size: 0.95em;
             color: #6c757d;
             font-weight: 500;
+        }}
+
+        /* Subset Analysis Styles (NEW) */
+        .subset-analysis-section {{
+            background: linear-gradient(135deg, #fff5e6 0%, #fff9f0 100%);
+            border-left: 4px solid #fd7e14;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+        }}
+        .subset-analysis-section h3 {{
+            color: #fd7e14;
+            margin: 0 0 15px 0;
+        }}
+        .subset-analysis-section.two-level {{
+            background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+            border-left: 4px solid #28a745;
+        }}
+        .subset-analysis-section.two-level h3 {{
+            color: #28a745;
+        }}
+        .outer-feature-group {{
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }}
+        .outer-feature-group h4 {{
+            color: #495057;
+            margin: 0 0 15px 0;
+            font-size: 1.1em;
+        }}
+        .subset-finding {{
+            margin: 15px 0;
+            padding: 15px;
+            background: #fafafa;
+            border-radius: 6px;
+            border-left: 3px solid #28a745;
+        }}
+        .subset-header {{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }}
+        .subset-context {{
+            font-weight: bold;
+            font-family: monospace;
+            background: #e9ecef;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.95em;
+        }}
+        .subset-count {{
+            color: #6c757d;
+            font-size: 0.9em;
+        }}
+        .new-finding {{
+            background: #d4edda;
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 3px solid #28a745;
+        }}
+        .new-finding strong {{
+            color: #155724;
+        }}
+        .new-finding em {{
+            color: #6c757d;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }}
+        .new-finding .test-summary {{
+            color: #495057;
+            font-size: 0.85em;
+            font-family: monospace;
+        }}
+        .fisher-results {{
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }}
+        .fisher-results strong {{
+            color: #495057;
+            font-size: 0.9em;
+        }}
+        .fisher-table {{
+            font-size: 0.85em;
+            margin-top: 8px;
+        }}
+        .fisher-table td, .fisher-table th {{
+            padding: 6px 10px;
+        }}
+        .subset-table {{
+            margin: 10px 0;
+            font-size: 0.9em;
+        }}
+        .video-details {{
+            margin-top: 15px;
+        }}
+        .video-details summary {{
+            cursor: pointer;
+            color: #667eea;
+            font-weight: 500;
+            padding: 8px 0;
+        }}
+        .video-details summary:hover {{
+            color: #4a5bc7;
+        }}
+        .video-details[open] .failed-videos-grid {{
+            max-height: 600px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }}
+        .compact-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 12px;
+        }}
+        .failed-video-card.compact {{
+            padding: 8px;
+            font-size: 0.85em;
+        }}
+        .failed-video-card.compact video {{
+            width: 100%;
+            height: auto;
+            max-height: 120px;
+            border-radius: 4px;
+        }}
+        .video-info {{
+            display: flex;
+            gap: 8px;
+            margin: 6px 0;
+            flex-wrap: wrap;
+        }}
+        .label-badge {{
+            background: #28a745;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.85em;
+        }}
+        .pred-badge {{
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.85em;
+        }}
+        .pred-badge.wrong {{
+            background: #dc3545;
+            color: white;
+        }}
+        .video-features {{
+            font-size: 0.8em;
+            color: #6c757d;
+            line-height: 1.6;
+        }}
+        .video-feature {{
+            display: inline-block;
+            margin: 2px;
+            padding: 1px 5px;
+            background: #e9ecef;
+            border-radius: 3px;
+        }}
+        .video-feature.highlight {{
+            background: #fff3cd;
+            color: #856404;
+            font-weight: 600;
+        }}
+        .section-desc {{
+            color: #6c757d;
+            font-size: 0.95em;
+            margin-bottom: 15px;
+            line-height: 1.5;
         }}
     </style>
 </head>

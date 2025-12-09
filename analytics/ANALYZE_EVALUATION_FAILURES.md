@@ -115,3 +115,98 @@ CONCLUSION
 - Python 3.7+
 - scipy (for statistical tests)
 - numpy
+
+## Subset/Conditional Significance Analysis (NEW - 2025-12-09)
+
+### Purpose
+Discovers significant patterns that only appear within specific data subsets, like "stripe=228 has high error rate only within distance=2.0" - patterns invisible in global analysis.
+
+### New Return Fields (in `analyze_predictions()`)
+
+The function now returns two additional fields:
+
+```python
+{
+    # ... existing fields ...
+    'single_level_subset_analysis': {
+        'findings': {
+            'dist': {  # outer feature
+                2.0: {  # outer value
+                    'sample_count': 64,
+                    'new_significant_features': {
+                        'stripe': {
+                            'is_significant': True,
+                            'chi2': 8.06,
+                            'chi2_p_value': 0.0448,
+                            'chi2_significant': True,
+                            'fisher_significant': False,
+                            'fisher_results': [...],
+                            'accuracy_by_value': {...},
+                            'failed_videos': [...]
+                        }
+                    }
+                }
+            }
+        },
+        'summary': {
+            'total_new_findings': 4,
+            'features_with_subset_significance': ['angle', 'stripe', 'bg']
+        }
+    },
+    'two_level_subset_analysis': {
+        'findings': {...},  # Similar structure with (f1, f2) as keys
+        'summary': {'total_new_findings': 0}
+    }
+}
+```
+
+### New Functions
+
+**`analyze_subset(rows, feature_to_analyze, p_threshold=0.05)`**
+- Analyzes one feature within a filtered subset of data
+- Runs BOTH chi-squared and Fisher's exact tests
+- Returns significance from either test
+
+**`analyze_single_level_subsets(all_rows, features_found, global_significant_features)`**
+- For each outer feature F1, for each value V1:
+  - Filter rows where F1=V1
+  - Test all OTHER features (skip globally significant ones)
+- Returns only NEW findings not in global analysis
+
+**`analyze_two_level_subsets(all_rows, features_found, global_significant, single_level_findings)`**
+- For each feature pair (F1, F2), for each (V1, V2) combination:
+  - Filter rows where F1=V1 AND F2=V2
+  - Test remaining features (skip global + single-level findings)
+- Returns only NEW findings not found at higher levels
+
+### Configuration Constants
+
+```python
+MIN_SUBSET_SIZE_SINGLE = 20   # Min samples for single-level subset
+MIN_SUBSET_SIZE_TWO = 10      # Min samples for two-level subset
+MAX_FEATURE_VALUES = 10       # Skip features with >10 unique values
+```
+
+### P-Value Thresholds
+
+- **Global analysis**: p < 0.01 (strict)
+- **Subset analysis**: p < 0.05 (more exploratory)
+
+### Example Usage
+
+```python
+from analytics.analyze_evaluation_failures import analyze_predictions
+
+results = analyze_predictions('per_video_predictions.csv')
+
+# Check single-level subset findings
+single_level = results['single_level_subset_analysis']
+print(f"Found {single_level['summary']['total_new_findings']} new patterns")
+
+for outer_feat, values in single_level['findings'].items():
+    for val, data in values.items():
+        for inner_feat, result in data['new_significant_features'].items():
+            print(f"Within {outer_feat}={val}: {inner_feat} is significant")
+            print(f"  Chi2 p={result['chi2_p_value']:.4f}")
+            print(f"  Failed videos: {len(result['failed_videos'])}")
+```

@@ -660,6 +660,89 @@ The failure analysis helps you:
 
 ---
 
+## Subset/Conditional Significance Analysis (New Feature - 2025-12-09)
+
+### Purpose
+
+The **Subset Analysis** feature discovers significant patterns that only appear within specific data subsets. For example, "stripe=228 causes high error rate, but only within distance=2.0" - this pattern wouldn't show in global analysis since stripe isn't significant overall.
+
+### Key Capabilities
+
+1. **Single-Level Subset Analysis**: Tests each feature within subsets of every other feature
+   - Example: "Is STRIPE significant within distance=2.0?"
+2. **Two-Level Combination Analysis**: Tests features within (F1=X, F2=Y) combinations
+   - Example: "Is BG significant within distance=2.0 AND angle=30?"
+3. **Only NEW Findings**: Skips patterns already found in global analysis to reduce noise
+4. **Both Chi-squared and Fisher's Tests**: Uses both tests and reports significant from either
+5. **All Failed Videos**: Shows ALL videos in significant groups (not just 4 examples)
+
+### How It Works
+
+**P-Value Threshold:**
+- Global analysis uses p < 0.01 (strict)
+- Subset analysis uses p < 0.05 (more exploratory)
+
+**Statistical Tests Per Subset:**
+- Chi-squared test for overall feature significance
+- Fisher's exact test for pairwise comparisons between values
+
+**"New Finding" Filter:**
+A finding is reported only if:
+1. Feature is NOT globally significant, AND
+2. For two-level: Feature was NOT already found in single-level for either outer feature
+
+### Example Output
+
+```
+🔬 Conditional Significance Analysis (Single-Level Subsets)
+
+Within DIST subsets:
+├── dist = 2.0 (64 samples)
+│   └── NEW: STRIPE is significant (Chi² = 8.06, p = 0.0448 ✅)
+│       ├── Fisher's Exact Test:
+│       │   └── 228 vs 226: p=0.0312, accuracies=62.5% vs 93.8% ✅
+│       ├── Accuracy by stripe:
+│       │   ├── stripe=226: 93.8% accuracy (6.2% error)
+│       │   ├── stripe=227: 87.5% accuracy (12.5% error)
+│       │   ├── stripe=228: 62.5% accuracy (37.5% error) ← HIGH ERROR
+│       │   └── stripe=229: 93.8% accuracy (6.2% error)
+│       └── [View all 10 failed videos] (collapsible)
+
+Within SPEED subsets:
+├── speed = 0.0 (160 samples)
+│   └── NEW: ANGLE is significant (Chi² = 8.50, p = 0.0034 ✅)
+│       ├── Fisher (0, 30): p=0.0031 ✅
+│       └── angle=0: 58.8% acc, angle=30: 81.2% acc
+```
+
+### Implementation Details
+
+**Files:**
+| File | Function |
+|------|----------|
+| `analytics/analyze_evaluation_failures.py` | `analyze_subset()` - tests one feature within subset |
+| `analytics/analyze_evaluation_failures.py` | `analyze_single_level_subsets()` - iterates over all outer features |
+| `analytics/analyze_evaluation_failures.py` | `analyze_two_level_subsets()` - iterates over feature pairs |
+| `generate_experiment_report.py` | `_generate_single_level_subset_html()` - generates HTML |
+| `generate_experiment_report.py` | `_generate_two_level_subset_html()` - generates HTML |
+
+**Configuration Constants** (in `analyze_evaluation_failures.py`):
+```python
+MIN_SUBSET_SIZE_SINGLE = 20   # Minimum samples for single-level subset analysis
+MIN_SUBSET_SIZE_TWO = 10      # Minimum samples for two-level subset analysis
+MAX_FEATURE_VALUES = 10       # Skip features with too many unique values
+```
+
+### Using Subset Analysis Results
+
+The subset analysis helps you:
+- **Discover hidden patterns**: Find feature interactions not visible in global analysis
+- **Identify edge cases**: Which specific combinations cause model failures?
+- **Target training data**: Should you add more samples with stripe=228 at distance=2.0?
+- **Understand model limitations**: Does the model struggle with specific feature combinations?
+
+---
+
 ## Fixes and Changelog
 
 ### Critical Fix: Eval Folder Matching by Adapter Path (2025-12-08)

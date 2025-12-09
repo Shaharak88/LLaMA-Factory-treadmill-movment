@@ -59,6 +59,17 @@ import numpy as np
 # Features to skip in analysis (not experimental parameters)
 SKIP_FEATURES = {'seed', 'treadmill', 'x', 'mp'}
 
+# =============================================================================
+# Subset Analysis Configuration
+# =============================================================================
+
+# Minimum samples required for subset analysis
+MIN_SUBSET_SIZE_SINGLE = 20   # Min samples for single-level subset analysis
+MIN_SUBSET_SIZE_TWO = 10      # Min samples for two-level subset analysis
+
+# Skip features with too many unique values (would create too many subsets)
+MAX_FEATURE_VALUES = 10
+
 
 def extract_all_features(path: str) -> dict:
     """
@@ -249,6 +260,363 @@ def print_feature_analysis(data: dict, feature_name: str, label_filter: str = No
         acc = (d['correct'] / d['total']) * 100
         err = 100 - acc
         print(f"{val:<12} {label:<10} {d['correct']:<10} {d['total']:<10} {acc:>6.2f}%      {err:>6.2f}%")
+
+
+# =============================================================================
+# Subset Analysis Functions
+# =============================================================================
+
+def analyze_subset(rows: list, feature_to_analyze: str, p_threshold: float = 0.05) -> dict:
+    """
+    Analyze a single feature's significance within a subset of data.
+
+    Uses BOTH chi-squared test (overall) and Fisher's exact tests (pairwise).
+    Significance is determined by either test meeting the threshold.
+
+    Args:
+        rows: List of row dictionaries (subset of all data)
+        feature_to_analyze: Feature name to test for significance
+        p_threshold: P-value threshold for significance (default 0.05 for subset analysis)
+
+    Returns:
+        Dictionary with chi2_result, fisher_results, is_significant, accuracy_by_value,
+        sample_count, and all failed videos in this subset
+    """
+    if not rows:
+        return {'is_significant': False, 'skip_reason': 'Empty subset'}
+
+    # Build aggregation: by_feature[(value, label)] = {total, correct}
+    by_value = defaultdict(lambda: {'total': 0, 'correct': 0})
+    failed_videos = []
+
+    for row in rows:
+        feat_value = row['features'].get(feature_to_analyze)
+        if feat_value is None:
+            continue
+        label = row['label']
+        correct = row['correct']
+
+        by_value[(feat_value, label)]['total'] += 1
+        by_value[(feat_value, label)]['correct'] += int(correct)
+
+        if not correct:
+            failed_videos.append(row)
+
+    # Need at least 2 different values to compare
+    unique_values = set(k[0] for k in by_value.keys())
+    if len(unique_values) < 2:
+        return {'is_significant': False, 'skip_reason': 'Less than 2 unique values'}
+
+    # Run chi-squared test
+    chi2, chi2_p_value, skip_reason = compute_chi2_test(dict(by_value), None)
+
+    chi2_significant = False
+    if chi2 is not None:
+        chi2_significant = chi2_p_value < p_threshold
+
+    # Build accuracy breakdown by value
+    accuracy_by_value = {}
+    value_totals = defaultdict(lambda: {'correct': 0, 'total': 0})
+    for (val, label), counts in by_value.items():
+        value_totals[val]['correct'] += counts['correct']
+        value_totals[val]['total'] += counts['total']
+
+    for val, counts in value_totals.items():
+        if counts['total'] > 0:
+            accuracy_by_value[val] = {
+                'accuracy': round((counts['correct'] / counts['total']) * 100, 2),
+                'correct': counts['correct'],
+                'total': counts['total'],
+                'error_rate': round(((counts['total'] - counts['correct']) / counts['total']) * 100, 2)
+            }
+
+    # Run Fisher's exact tests for pairwise comparisons
+    fisher_results = []
+    fisher_significant = False
+    unique_vals_list = sorted(unique_values, key=str)
+
+    for i, val1 in enumerate(unique_vals_list):
+        for val2 in unique_vals_list[i+1:]:
+            # Build 2x2 contingency table: correct/incorrect for val1 vs val2
+            val1_correct = value_totals[val1]['correct']
+            val1_incorrect = value_totals[val1]['total'] - val1_correct
+            val2_correct = value_totals[val2]['correct']
+            val2_incorrect = value_totals[val2]['total'] - val2_correct
+
+            # Skip if any cell would be zero (Fisher test still works but less meaningful)
+            if val1_correct + val1_incorrect == 0 or val2_correct + val2_incorrect == 0:
+                continue
+
+            table = [[val1_correct, val1_incorrect], [val2_correct, val2_incorrect]]
+
+            try:
+                odds_ratio, fisher_p = fisher_exact(table)
+                fisher_results.append({
+                    'pair': (val1, val2),
+                    'odds_ratio': round(odds_ratio, 3) if odds_ratio != float('inf') else 'inf',
+                    'p_value': fisher_p,
+                    'val1_accuracy': accuracy_by_value[val1]['accuracy'],
+                    'val2_accuracy': accuracy_by_value[val2]['accuracy'],
+                    'is_significant': fisher_p < p_threshold
+                })
+                if fisher_p < p_threshold:
+                    fisher_significant = True
+            except Exception:
+                pass  # Skip if Fisher test fails
+
+    # Sort Fisher results by p-value
+    fisher_results.sort(key=lambda x: x['p_value'])
+
+    # Significant if EITHER chi-squared OR any Fisher test is significant
+    is_significant = chi2_significant or fisher_significant
+
+    result = {
+        'is_significant': is_significant,
+        'chi2_significant': chi2_significant,
+        'fisher_significant': fisher_significant,
+        'accuracy_by_value': accuracy_by_value,
+        'sample_count': len(rows),
+        'failed_videos': failed_videos,
+        'fisher_results': fisher_results
+    }
+
+    if chi2 is not None:
+        result['chi2'] = round(chi2, 2)
+        result['chi2_p_value'] = chi2_p_value
+    else:
+        result['chi2_skip_reason'] = skip_reason
+
+    return result
+
+
+def analyze_single_level_subsets(
+    all_rows: list,
+    features_found: list,
+    global_significant_features: list,
+    p_threshold: float = 0.05
+) -> dict:
+    """
+    For each feature F1 (outer), analyze all OTHER features within each value of F1.
+
+    Only reports findings that are NEW (not already globally significant).
+
+    Args:
+        all_rows: List of all row dictionaries
+        features_found: List of all feature names found
+        global_significant_features: Features already significant in global analysis
+        p_threshold: P-value threshold for significance
+
+    Returns:
+        Dictionary with findings and summary:
+        {
+            'findings': {
+                'dist': {  # outer feature
+                    2.0: {  # outer feature value
+                        'sample_count': 120,
+                        'new_significant_features': {
+                            'stripe': { chi2, p_value, accuracy_by_value, failed_videos }
+                        }
+                    }
+                }
+            },
+            'summary': {
+                'total_new_findings': count,
+                'features_with_subset_significance': [...]
+            }
+        }
+    """
+    findings = {}
+    total_new_findings = 0
+    features_with_subset_significance = set()
+
+    for outer_feature in features_found:
+        # Get unique values for outer feature
+        outer_values = set()
+        for row in all_rows:
+            val = row['features'].get(outer_feature)
+            if val is not None:
+                outer_values.add(val)
+
+        # Skip if too many values (would create too many subsets)
+        if len(outer_values) > MAX_FEATURE_VALUES:
+            continue
+
+        feature_findings = {}
+
+        for outer_value in sorted(outer_values):
+            # Filter rows for this subset
+            subset_rows = [r for r in all_rows if r['features'].get(outer_feature) == outer_value]
+
+            # Skip small subsets
+            if len(subset_rows) < MIN_SUBSET_SIZE_SINGLE:
+                continue
+
+            new_significant = {}
+
+            # Test all OTHER features
+            for inner_feature in features_found:
+                if inner_feature == outer_feature:
+                    continue
+
+                # Skip if already globally significant
+                if inner_feature in global_significant_features:
+                    continue
+
+                # Skip if inner feature has too many values
+                inner_values = set(r['features'].get(inner_feature) for r in subset_rows)
+                inner_values.discard(None)
+                if len(inner_values) > MAX_FEATURE_VALUES or len(inner_values) < 2:
+                    continue
+
+                # Analyze this feature within the subset
+                result = analyze_subset(subset_rows, inner_feature, p_threshold)
+
+                if result.get('is_significant'):
+                    new_significant[inner_feature] = result
+                    total_new_findings += 1
+                    features_with_subset_significance.add(inner_feature)
+
+            if new_significant:
+                feature_findings[outer_value] = {
+                    'sample_count': len(subset_rows),
+                    'new_significant_features': new_significant
+                }
+
+        if feature_findings:
+            findings[outer_feature] = feature_findings
+
+    return {
+        'findings': findings,
+        'summary': {
+            'total_new_findings': total_new_findings,
+            'features_with_subset_significance': sorted(features_with_subset_significance)
+        }
+    }
+
+
+def analyze_two_level_subsets(
+    all_rows: list,
+    features_found: list,
+    global_significant_features: list,
+    single_level_findings: dict,
+    p_threshold: float = 0.05
+) -> dict:
+    """
+    For each pair of features (F1, F2), analyze remaining features
+    within each (F1_value, F2_value) combination.
+
+    Only reports findings that are NEW (not in global or single-level).
+
+    Args:
+        all_rows: List of all row dictionaries
+        features_found: List of all feature names found
+        global_significant_features: Features already significant in global analysis
+        single_level_findings: Results from analyze_single_level_subsets()
+        p_threshold: P-value threshold for significance
+
+    Returns:
+        Dictionary with findings and summary
+    """
+    findings = {}
+    total_new_findings = 0
+
+    # Helper to check if a feature was already found significant in single-level
+    def is_found_in_single_level(feature, outer1, val1, outer2, val2):
+        """Check if feature was found significant in single-level for either outer feature."""
+        sl_findings = single_level_findings.get('findings', {})
+
+        # Check if found under outer1
+        if outer1 in sl_findings:
+            if val1 in sl_findings[outer1]:
+                if feature in sl_findings[outer1][val1].get('new_significant_features', {}):
+                    return True
+
+        # Check if found under outer2
+        if outer2 in sl_findings:
+            if val2 in sl_findings[outer2]:
+                if feature in sl_findings[outer2][val2].get('new_significant_features', {}):
+                    return True
+
+        return False
+
+    # Test all pairs of features
+    for f1, f2 in combinations(sorted(features_found), 2):
+        # Get unique values for both features
+        f1_values = set()
+        f2_values = set()
+        for row in all_rows:
+            v1 = row['features'].get(f1)
+            v2 = row['features'].get(f2)
+            if v1 is not None:
+                f1_values.add(v1)
+            if v2 is not None:
+                f2_values.add(v2)
+
+        # Skip if too many combinations
+        if len(f1_values) > MAX_FEATURE_VALUES or len(f2_values) > MAX_FEATURE_VALUES:
+            continue
+        if len(f1_values) * len(f2_values) > 100:  # Limit total combinations
+            continue
+
+        pair_key = (f1, f2)
+        pair_findings = {}
+
+        for v1 in sorted(f1_values):
+            for v2 in sorted(f2_values):
+                # Filter rows for this combination
+                subset_rows = [
+                    r for r in all_rows
+                    if r['features'].get(f1) == v1 and r['features'].get(f2) == v2
+                ]
+
+                # Skip small subsets
+                if len(subset_rows) < MIN_SUBSET_SIZE_TWO:
+                    continue
+
+                new_significant = {}
+
+                # Test remaining features
+                for inner_feature in features_found:
+                    if inner_feature in [f1, f2]:
+                        continue
+
+                    # Skip if already globally significant
+                    if inner_feature in global_significant_features:
+                        continue
+
+                    # Skip if already found in single-level analysis
+                    if is_found_in_single_level(inner_feature, f1, v1, f2, v2):
+                        continue
+
+                    # Skip if inner feature has too few values in this subset
+                    inner_values = set(r['features'].get(inner_feature) for r in subset_rows)
+                    inner_values.discard(None)
+                    if len(inner_values) < 2:
+                        continue
+
+                    # Analyze this feature within the subset
+                    result = analyze_subset(subset_rows, inner_feature, p_threshold)
+
+                    if result.get('is_significant'):
+                        new_significant[inner_feature] = result
+                        total_new_findings += 1
+
+                if new_significant:
+                    combo_key = (v1, v2)
+                    pair_findings[combo_key] = {
+                        'sample_count': len(subset_rows),
+                        'new_significant_features': new_significant
+                    }
+
+        if pair_findings:
+            findings[pair_key] = pair_findings
+
+    return {
+        'findings': findings,
+        'summary': {
+            'total_new_findings': total_new_findings
+        }
+    }
 
 
 # =============================================================================
@@ -498,6 +866,45 @@ def analyze_predictions(csv_path: str, p_threshold: float = 0.01) -> dict:
             reverse=True
         )
 
+    # ==========================================================================
+    # NEW: Subset Analysis - Find patterns within subsets
+    # ==========================================================================
+
+    # Run single-level subset analysis
+    # (e.g., "is stripe significant within distance=2.0?")
+    # Note: Uses p_threshold=0.05 (more exploratory) for subset analysis
+    single_level_subset_analysis = analyze_single_level_subsets(
+        all_rows=all_rows,
+        features_found=sorted(all_features_found),
+        global_significant_features=significant_chi2_features
+        # Uses default p_threshold=0.05 for subset analysis (more exploratory)
+    )
+
+    # Run two-level subset analysis
+    # (e.g., "is bg significant within distance=2.0 AND angle=30?")
+    two_level_subset_analysis = analyze_two_level_subsets(
+        all_rows=all_rows,
+        features_found=sorted(all_features_found),
+        global_significant_features=significant_chi2_features,
+        single_level_findings=single_level_subset_analysis
+        # Uses default p_threshold=0.05 for subset analysis (more exploratory)
+    )
+
+    # Update conclusion if subset analysis found new patterns
+    subset_summary_parts = []
+    if single_level_subset_analysis['summary']['total_new_findings'] > 0:
+        subset_summary_parts.append(
+            f"Single-level subset analysis found {single_level_subset_analysis['summary']['total_new_findings']} "
+            f"new significant patterns in features: {', '.join(single_level_subset_analysis['summary']['features_with_subset_significance'])}"
+        )
+    if two_level_subset_analysis['summary']['total_new_findings'] > 0:
+        subset_summary_parts.append(
+            f"Two-level subset analysis found {two_level_subset_analysis['summary']['total_new_findings']} additional patterns"
+        )
+
+    if subset_summary_parts:
+        conclusion += " Additionally: " + "; ".join(subset_summary_parts) + "."
+
     return {
         'row_count': row_count,
         'features_found': sorted(all_features_found),
@@ -509,7 +916,12 @@ def analyze_predictions(csv_path: str, p_threshold: float = 0.01) -> dict:
         'significant_feature_examples': significant_feature_examples,
         'conclusion': conclusion,
         'failed_videos': failed_videos[:50],
-        'p_threshold': p_threshold
+        'p_threshold': p_threshold,
+        # NEW: Include all rows for potential further analysis
+        'all_rows': all_rows,
+        # NEW: Subset analysis results
+        'single_level_subset_analysis': single_level_subset_analysis,
+        'two_level_subset_analysis': two_level_subset_analysis
     }
 
 
