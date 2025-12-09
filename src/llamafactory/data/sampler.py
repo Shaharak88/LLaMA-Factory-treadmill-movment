@@ -295,6 +295,161 @@ class DistributedBalancedBatchSampler(BalancedBatchSampler):
         return (total_batches + self.num_replicas - 1) // self.num_replicas
 
 
+class RandomBatchSampler(Sampler[List[int]]):
+    """
+    Simple random batch sampler that shuffles all samples without class balancing.
+
+    Unlike BalancedBatchSampler, this does NOT enforce class balance.
+    Each batch contains randomly selected samples from the entire dataset.
+
+    Used when balanced_sampling is OFF but we still want consistent
+    behavior and logging compared to BalancedBatchSampler.
+
+    Args:
+        dataset: The dataset to sample from.
+        batch_size: Total batch size (any size allowed, unlike BalancedBatchSampler).
+        drop_last: Whether to drop the last incomplete batch.
+        shuffle: Whether to shuffle indices.
+        seed: Random seed for reproducibility.
+
+    Example:
+        >>> sampler = RandomBatchSampler(dataset, batch_size=4)
+        >>> for batch_indices in sampler:
+        ...     # batch_indices contains 4 randomly selected samples
+        ...     pass
+    """
+
+    def __init__(
+        self,
+        dataset: Dataset,
+        batch_size: int,
+        drop_last: bool = True,
+        shuffle: bool = True,
+        seed: int = 42,
+    ):
+        self.dataset = dataset
+        self.batch_size = batch_size
+        self.drop_last = drop_last
+        self.shuffle = shuffle
+        self.seed = seed
+        self.epoch = 0
+        self.all_indices = list(range(len(dataset)))
+
+        logger.info_rank0(
+            f"RandomBatchSampler initialized: {len(self.all_indices)} samples, "
+            f"batch_size={batch_size}, shuffle={shuffle}"
+        )
+
+    def set_epoch(self, epoch: int) -> None:
+        """
+        Set epoch for deterministic shuffling.
+
+        This ensures different orderings across epochs while maintaining
+        reproducibility when using the same seed.
+
+        Args:
+            epoch: Current epoch number.
+        """
+        self.epoch = epoch
+
+    def __iter__(self) -> Iterator[List[int]]:
+        """Yield batches of indices."""
+        g = torch.Generator()
+        g.manual_seed(self.seed + self.epoch)
+
+        if self.shuffle:
+            perm = torch.randperm(len(self.all_indices), generator=g).tolist()
+            indices = [self.all_indices[i] for i in perm]
+        else:
+            indices = self.all_indices.copy()
+
+        # Yield batches
+        num_batches = len(indices) // self.batch_size
+        for batch_idx in range(num_batches):
+            start = batch_idx * self.batch_size
+            end = start + self.batch_size
+            yield indices[start:end]
+
+        # Handle remaining if not drop_last
+        if not self.drop_last:
+            remaining = indices[num_batches * self.batch_size:]
+            if remaining:
+                yield remaining
+
+    def __len__(self) -> int:
+        """Return number of batches."""
+        if self.drop_last:
+            return len(self.all_indices) // self.batch_size
+        return (len(self.all_indices) + self.batch_size - 1) // self.batch_size
+
+
+class DistributedRandomBatchSampler(RandomBatchSampler):
+    """
+    Random batch sampler with distributed training support.
+
+    Each process gets a subset of batches, ensuring all processes
+    have the same number of batches (padding if necessary).
+
+    Args:
+        dataset: The dataset to sample from.
+        batch_size: Total batch size per process.
+        num_replicas: Number of distributed processes.
+        rank: Current process rank.
+        drop_last: Whether to drop incomplete batches.
+        shuffle: Whether to shuffle indices.
+        seed: Random seed.
+    """
+
+    def __init__(
+        self,
+        dataset: Dataset,
+        batch_size: int,
+        num_replicas: Optional[int] = None,
+        rank: Optional[int] = None,
+        drop_last: bool = True,
+        shuffle: bool = True,
+        seed: int = 42,
+    ):
+        super().__init__(dataset, batch_size, drop_last, shuffle, seed)
+
+        if num_replicas is None:
+            if not torch.distributed.is_available():
+                raise RuntimeError("Distributed package not available")
+            num_replicas = torch.distributed.get_world_size()
+        if rank is None:
+            if not torch.distributed.is_available():
+                raise RuntimeError("Distributed package not available")
+            rank = torch.distributed.get_rank()
+
+        self.num_replicas = num_replicas
+        self.rank = rank
+
+    def __iter__(self) -> Iterator[List[int]]:
+        """Yield batches assigned to this rank."""
+        all_batches = list(super().__iter__())
+
+        # Pad to make divisible by num_replicas
+        remainder = len(all_batches) % self.num_replicas
+        if remainder != 0:
+            # Pad with repeated batches from the beginning
+            padding = self.num_replicas - remainder
+            all_batches.extend(all_batches[:padding])
+
+        # Select batches for this rank
+        batches_per_replica = len(all_batches) // self.num_replicas
+        start_idx = self.rank * batches_per_replica
+        end_idx = start_idx + batches_per_replica
+
+        for batch in all_batches[start_idx:end_idx]:
+            yield batch
+
+    def __len__(self) -> int:
+        """Return number of batches for this rank."""
+        total_batches = super().__len__()
+        # Ceiling division to account for padding
+        return (total_batches + self.num_replicas - 1) // self.num_replicas
+
+
 class LoggingCollateWrapper:
     """
     Wrapper around collate function that logs batch information.
