@@ -179,6 +179,7 @@ DATASET_NAME=""  # Can be set via --dataset-name to reuse existing datasets
 EVAL_METHOD="yesno"  # Evaluation method: "yesno" or "moving_stopped"
 MODEL_NAME=""  # Custom name for the trained model (optional)
 EVAL_MODEL_PATH=""  # Path to existing model for re-evaluation (used with --skip-training)
+BALANCED_SAMPLING=false  # If true, use balanced batch sampling (50% moving, 50% stopped per batch)
 
 ################################################################################
 # COLOR OUTPUT
@@ -239,6 +240,7 @@ OPTIONS:
     --model-name NAME       Custom name for the trained model (saves to saves/<NAME>)
     --eval-model-path PATH  Path to existing model for re-evaluation (use with --skip-training)
                             Example: saves/my_custom_model
+    --balanced-sampling     Enable balanced batch sampling (50% moving, 50% stopped per batch)
     -v, --verbose           Verbose output
 
 EXPERIMENT PARAMETERS:
@@ -418,6 +420,10 @@ parse_args() {
             --eval-model-path)
                 EVAL_MODEL_PATH="$2"
                 shift 2
+                ;;
+            --balanced-sampling)
+                BALANCED_SAMPLING=true
+                shift
                 ;;
             -v|--verbose)
                 VERBOSE=true
@@ -1042,6 +1048,11 @@ step_run_training() {
         train_pipeline_cmd="$train_pipeline_cmd --no_quantization"
     fi
 
+    # Add balanced_sampling flag if enabled
+    if [ "$BALANCED_SAMPLING" = true ]; then
+        train_pipeline_cmd="$train_pipeline_cmd --balanced_sampling"
+    fi
+
     # Add skip_training flag if enabled
     if [ "$SKIP_TRAINING" = true ]; then
         train_pipeline_cmd="$train_pipeline_cmd --skip_training"
@@ -1417,6 +1428,7 @@ Common:
 Training:$([ "$SKIP_TRAINING" = true ] && echo " SKIPPED (using existing model)" || echo "
   Adapter Type: $ADAPTER_TYPE
   Quantization: $([ "$NO_QUANTIZATION" = true ] && echo "Disabled (full precision)" || echo "4-bit (bitsandbytes)")
+  Balanced Sampling: $([ "$BALANCED_SAMPLING" = true ] && echo "Enabled (50/50 per batch)" || echo "Disabled")
   Epochs: $NUM_EPOCHS
   LoRA Rank: $LORA_RANK / Alpha: $LORA_ALPHA
   Learning Rate: $LEARNING_RATE

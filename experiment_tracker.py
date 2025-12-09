@@ -199,7 +199,10 @@ class ExperimentTracker:
         'num_train_epochs',
 
         # Dataset comparison report (HTML link)
-        'dataset_comparison_report'
+        'dataset_comparison_report',
+
+        # Balanced sampling (50/50 moving/stopped per batch)
+        'balanced_sampling'
     ]
 
     def __init__(self, csv_path: str = 'experiments_log.csv'):
@@ -437,7 +440,10 @@ class ExperimentTracker:
             'model_name': getattr(args, 'model_name', ''),
 
             # Dataset comparison report (empty initially, filled after evaluation)
-            'dataset_comparison_report': ''
+            'dataset_comparison_report': '',
+
+            # Balanced sampling
+            'balanced_sampling': getattr(args, 'balanced_sampling', False)
         }
 
         # Write to CSV

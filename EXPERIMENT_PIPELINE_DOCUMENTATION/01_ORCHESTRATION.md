@@ -186,6 +186,7 @@ DATASET_NAME=$(ssh ... "ls -t ... | grep '^_exp_' | head -n 1 ...")
 - `--lora_alpha`: LoRA alpha (64, scales LoRA weights)
 - `--save_steps`: Save checkpoint every 100 steps
 - `--use_dora`: Use DoRA (improved LoRA variant)
+- `--balanced-sampling`: Use balanced batch sampling (50% moving, 50% stopped per batch)
 - `--eval_method`: Evaluation format ("yesno" = yes/no answers)
 
 ### 5. Stage 4: Retrieve Results
@@ -330,6 +331,7 @@ Edit the docker run command in Stage 3:
 ```bash
 --num_train_epochs 20    # More epochs
 --learning_rate 1e-4     # Different LR
+--balanced-sampling      # Ensure 50/50 moving/stopped per batch
 ```
 
 ### Change dataset parameters

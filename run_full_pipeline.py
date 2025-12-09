@@ -518,6 +518,9 @@ logging_strategy: "steps"
 gradient_checkpointing: true
 ddp_timeout: 180000000
 
+### Balanced Batch Sampling
+balanced_sampling: {str(self.args.balanced_sampling).lower()}
+
 ### Additional Settings
 report_to: tensorboard
 seed: {self.args.seed}
@@ -907,6 +910,8 @@ Notes:
                             help='Adapter type: lora, lora+, dora, rslora, pissa, oft (default: lora)')
     train_group.add_argument('--no_quantization', action='store_true', default=False,
                             help='Disable 4-bit quantization (use full precision adapters)')
+    train_group.add_argument('--balanced_sampling', action='store_true', default=False,
+                            help='Use balanced batch sampling (50%% moving, 50%% stopped per batch)')
     train_group.add_argument('--cutoff_len', type=int, default=8192,
                             help='Cutoff length (default: 8192)')
     train_group.add_argument('--per_device_train_batch_size', type=int, default=1,

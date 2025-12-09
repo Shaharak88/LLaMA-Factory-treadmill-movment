@@ -276,14 +276,18 @@
 
 **Task:** Use balanced batch sampling (NEW - 2025-12-09)
 **File:** 03_TRAINING.md (Section: Balanced Batch Sampling)
-**Action:** Add `balanced_sampling: true` to training YAML config
+**Action:** Use `--balanced-sampling` flag in run_experiment.sh or add `balanced_sampling: true` to training YAML config
 **Description:** Ensures each batch contains exactly 50% moving and 50% stopped videos. Parses video filenames for speed parameter.
+**Example CLI usage:**
+```bash
+./run_experiment.sh --balanced-sampling --batch-size 14 --epochs 5
+```
 **Example YAML config:**
 ```yaml
 balanced_sampling: true
-per_device_train_batch_size: 4  # Must be even!
+per_device_train_batch_size: 14  # Must be even!
 ```
-**Note:** Not compatible with streaming mode. Batch size must be even.
+**Note:** Not compatible with streaming mode. Batch size must be even. Tracked in experiments_log.csv as last column.
 
 **Task:** Change adapter type (LoRA variant)
 **File:** 03_TRAINING.md (Section: Adapter Types)
