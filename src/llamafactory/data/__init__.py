@@ -23,6 +23,7 @@ from .loader import get_dataset
 from .sampler import (
     BalancedBatchSampler,
     DistributedBalancedBatchSampler,
+    LoggingCollateWrapper,
     extract_speed_from_path,
     is_video_moving,
 )
@@ -32,6 +33,7 @@ from .template import TEMPLATES, Template, get_template_and_fix_tokenizer
 __all__ = [
     "BalancedBatchSampler",
     "DistributedBalancedBatchSampler",
+    "LoggingCollateWrapper",
     "TEMPLATES",
     "KTODataCollatorWithPadding",
     "MultiModalDataCollatorForSeq2Seq",

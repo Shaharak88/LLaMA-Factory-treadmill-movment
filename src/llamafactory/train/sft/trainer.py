@@ -123,7 +123,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         # Import balanced sampler
         from torch.utils.data import IterableDataset
 
-        from ...data.sampler import BalancedBatchSampler, DistributedBalancedBatchSampler
+        from ...data.sampler import BalancedBatchSampler, DistributedBalancedBatchSampler, LoggingCollateWrapper
 
         # Check for streaming mode incompatibility
         if isinstance(self.train_dataset, IterableDataset):
@@ -155,11 +155,19 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                 seed=self.args.seed,
             )
 
+        # Wrap collate function with logging (logs batch info to file and console)
+        logging_collate_fn = LoggingCollateWrapper(
+            collate_fn=self.data_collator,
+            output_dir=self.args.output_dir,
+            log_filename="balanced_sampling_log.txt",
+        )
+        logger.info_rank0(f"Batch logging enabled: {self.args.output_dir}/balanced_sampling_log.txt")
+
         # Create DataLoader with batch_sampler (batch_size must be None when using batch_sampler)
         return torch.utils.data.DataLoader(
             self.train_dataset,
             batch_sampler=batch_sampler,
-            collate_fn=self.data_collator,
+            collate_fn=logging_collate_fn,
             num_workers=self.args.dataloader_num_workers,
             pin_memory=self.args.dataloader_pin_memory,
             persistent_workers=self.args.dataloader_persistent_workers if self.args.dataloader_num_workers > 0 else False,

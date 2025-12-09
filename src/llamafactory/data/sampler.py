@@ -22,8 +22,11 @@ The sampler extracts class labels from video filenames by parsing the
 speed parameter: speed > 0.0 = moving, speed == 0.0 = stopped.
 """
 
+import os
 import re
-from typing import Iterator, List, Optional
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Callable, Iterator, List, Optional
 
 import torch
 from torch.utils.data import Dataset, Sampler
@@ -290,3 +293,123 @@ class DistributedBalancedBatchSampler(BalancedBatchSampler):
         total_batches = super().__len__()
         # Ceiling division to account for padding
         return (total_batches + self.num_replicas - 1) // self.num_replicas
+
+
+class LoggingCollateWrapper:
+    """
+    Wrapper around collate function that logs batch information.
+
+    Logs video names and class distribution (moving/stopped) for each batch
+    to both console and a log file in the model output directory.
+
+    Args:
+        collate_fn: Original collate function to wrap.
+        output_dir: Model output directory (saves/{model_name}).
+        log_filename: Name of log file (default: balanced_sampling_log.txt).
+    """
+
+    def __init__(
+        self,
+        collate_fn: Callable,
+        output_dir: str,
+        log_filename: str = "balanced_sampling_log.txt",
+    ):
+        self.collate_fn = collate_fn
+        self.output_dir = Path(output_dir)
+        self.log_file = self.output_dir / log_filename
+        self.batch_count = 0
+
+        # Ensure output directory exists
+        self.output_dir.mkdir(parents=True, exist_ok=True)
+
+        # Initialize log file with header
+        self._init_log_file()
+
+    def _init_log_file(self) -> None:
+        """Initialize log file with header."""
+        with open(self.log_file, "w", encoding="utf-8") as f:
+            f.write("=" * 80 + "\n")
+            f.write("BALANCED SAMPLING BATCH LOG\n")
+            f.write(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write(f"Output directory: {self.output_dir}\n")
+            f.write("=" * 80 + "\n\n")
+
+    def _log_batch(self, batch: List[dict]) -> None:
+        """
+        Log batch information to console and file.
+
+        Args:
+            batch: List of samples in the batch.
+        """
+        self.batch_count += 1
+
+        # Extract video info from batch
+        video_info = []
+        moving_count = 0
+        stopped_count = 0
+
+        for sample in batch:
+            videos = sample.get("videos", [])
+            if videos:
+                video_path = videos[0] if isinstance(videos, list) else videos
+                # Get just the filename for cleaner logging
+                video_name = os.path.basename(video_path)
+                speed = extract_speed_from_path(video_path)
+
+                if speed is not None:
+                    is_moving = speed > 0.0
+                    class_label = "MOVING" if is_moving else "STOPPED"
+                    if is_moving:
+                        moving_count += 1
+                    else:
+                        stopped_count += 1
+                else:
+                    class_label = "UNKNOWN"
+
+                video_info.append((video_name, speed, class_label))
+
+        # Format log message
+        total = moving_count + stopped_count
+        moving_pct = (moving_count / total * 100) if total > 0 else 0
+        stopped_pct = (stopped_count / total * 100) if total > 0 else 0
+
+        log_lines = []
+        log_lines.append(f"\n{'='*80}")
+        log_lines.append(f"BATCH {self.batch_count}")
+        log_lines.append(f"{'='*80}")
+        log_lines.append(f"Class Distribution: {moving_count} MOVING ({moving_pct:.1f}%) | {stopped_count} STOPPED ({stopped_pct:.1f}%)")
+        log_lines.append(f"Total samples: {len(batch)}")
+        log_lines.append("-" * 80)
+        log_lines.append("Videos in this batch:")
+
+        for i, (name, speed, label) in enumerate(video_info, 1):
+            speed_str = f"speed={speed:.1f}" if speed is not None else "speed=?"
+            log_lines.append(f"  {i:3d}. [{label:7s}] {speed_str:12s} | {name}")
+
+        log_lines.append("-" * 80)
+
+        # Join all lines
+        log_message = "\n".join(log_lines)
+
+        # Print to console
+        logger.info_rank0(log_message)
+
+        # Write to file
+        with open(self.log_file, "a", encoding="utf-8") as f:
+            f.write(log_message + "\n")
+
+    def __call__(self, batch: List[dict]) -> Any:
+        """
+        Log batch info and call original collate function.
+
+        Args:
+            batch: List of samples to collate.
+
+        Returns:
+            Collated batch from original collate function.
+        """
+        # Log batch information before collating
+        self._log_batch(batch)
+
+        # Call original collate function
+        return self.collate_fn(batch)
