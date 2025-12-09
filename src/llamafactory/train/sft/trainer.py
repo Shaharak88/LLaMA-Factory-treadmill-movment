@@ -110,7 +110,60 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         if self.finetuning_args.disable_shuffling:
             return torch.utils.data.SequentialSampler(self.train_dataset)
 
+        # Note: balanced_sampling uses batch sampler via get_train_dataloader() override
+        # This method is not called when balanced_sampling is enabled
         return super()._get_train_sampler(*args, **kwargs)
+
+    @override
+    def get_train_dataloader(self) -> "torch.utils.data.DataLoader":
+        r"""Override to support balanced batch sampling for binary classification."""
+        if not self.finetuning_args.balanced_sampling:
+            return super().get_train_dataloader()
+
+        # Import balanced sampler
+        from torch.utils.data import IterableDataset
+
+        from ...data.sampler import BalancedBatchSampler, DistributedBalancedBatchSampler
+
+        # Check for streaming mode incompatibility
+        if isinstance(self.train_dataset, IterableDataset):
+            raise ValueError(
+                "balanced_sampling is not compatible with streaming mode. "
+                "Please disable streaming (streaming: false) when using balanced_sampling."
+            )
+
+        batch_size = self.args.per_device_train_batch_size
+        logger.info_rank0(f"Using balanced batch sampling with batch_size={batch_size}")
+
+        # Create appropriate sampler based on distributed training
+        if self.args.world_size > 1:
+            batch_sampler = DistributedBalancedBatchSampler(
+                dataset=self.train_dataset,
+                batch_size=batch_size,
+                num_replicas=self.args.world_size,
+                rank=self.args.process_index,
+                drop_last=True,
+                shuffle=True,
+                seed=self.args.seed,
+            )
+        else:
+            batch_sampler = BalancedBatchSampler(
+                dataset=self.train_dataset,
+                batch_size=batch_size,
+                drop_last=True,
+                shuffle=True,
+                seed=self.args.seed,
+            )
+
+        # Create DataLoader with batch_sampler (batch_size must be None when using batch_sampler)
+        return torch.utils.data.DataLoader(
+            self.train_dataset,
+            batch_sampler=batch_sampler,
+            collate_fn=self.data_collator,
+            num_workers=self.args.dataloader_num_workers,
+            pin_memory=self.args.dataloader_pin_memory,
+            persistent_workers=self.args.dataloader_persistent_workers if self.args.dataloader_num_workers > 0 else False,
+        )
 
     @override
     def compute_loss(self, model, inputs, *args, **kwargs):

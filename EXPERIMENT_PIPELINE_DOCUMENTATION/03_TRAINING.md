@@ -169,6 +169,47 @@ To compare all adapters on the same dataset, use `run_all_adapters.sh`:
 ./run_experiment.sh --adapter-type dora --no-quantization --epochs 5
 ```
 
+---
+
+### Balanced Batch Sampling (NEW - 2025-12-09)
+
+For binary classification tasks (moving vs stopped treadmill detection), you can enable balanced batch sampling to ensure each training batch contains exactly 50% moving and 50% stopped samples.
+
+**What It Does:**
+- Parses video filenames to extract speed parameter (`speed0.0` = stopped, `speed > 0` = moving)
+- Groups samples into "moving" and "stopped" categories
+- Creates batches with exactly half from each category
+- Improves gradient consistency during training
+
+**YAML Configuration:**
+```yaml
+# In your training config (e.g., examples/train_qlora/*.yaml)
+balanced_sampling: true
+per_device_train_batch_size: 4  # Must be even!
+```
+
+**Requirements:**
+- Batch size must be **even** (since each batch is split 50/50)
+- Video filenames must contain speed parameter (e.g., `treadmill_0000_stripes_speed3.0_angle0.mp4`)
+- **Not compatible with streaming mode** (`streaming: false` required)
+
+**How It Works:**
+1. At training start, all samples are categorized by parsing video filenames
+2. Two index lists are maintained: `moving_indices` and `stopped_indices`
+3. During each epoch, both lists are shuffled independently
+4. Batches are created by taking `batch_size/2` samples from each list
+5. Samples are interleaved (moving, stopped, moving, stopped...) within each batch
+
+**Code Location:**
+- Sampler: `src/llamafactory/data/sampler.py`
+- Configuration: `src/llamafactory/hparams/finetuning_args.py` (line 513)
+- Trainer integration: `src/llamafactory/train/sft/trainer.py`
+
+**When to Use:**
+- Training on treadmill motion detection (binary classification)
+- When you want consistent class representation in each batch
+- When gradient variance from class imbalance is a concern
+
 **Adapter parameters explained:**
 - **Rank**: Controls capacity (higher = more parameters, better fit, slower)
 - **Alpha**: Controls how much adapter affects base model (alpha/rank = scaling factor)

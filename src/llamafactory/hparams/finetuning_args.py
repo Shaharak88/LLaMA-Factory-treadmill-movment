@@ -510,6 +510,16 @@ class FinetuningArguments(
         default=False,
         metadata={"help": "Whether or not to disable the shuffling of the training set."},
     )
+    balanced_sampling: bool = field(
+        default=False,
+        metadata={
+            "help": (
+                "Whether to use balanced batch sampling for binary classification tasks. "
+                "Ensures each batch contains 50% of each class (e.g., moving vs stopped). "
+                "Requires video filenames to contain speed parameter (speed0.0 = stopped)."
+            )
+        },
+    )
     early_stopping_steps: Optional[int] = field(
         default=None,
         metadata={"help": "Number of steps to stop training if the `metric_for_best_model` does not improve."},

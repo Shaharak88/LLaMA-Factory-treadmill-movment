@@ -74,9 +74,10 @@
 - Training loop internals (forward pass, loss calculation, gradient accumulation)
 - Optimization techniques (gradient checkpointing, flash attention, mixed precision)
 - Output structure (adapter_config.json, adapter_model.bin files)
+- Balanced batch sampling for binary classification (50% moving, 50% stopped per batch)
 - Common training issues (OOM, slow training, not learning, overfitting)
 
-**When to read it:** Modifying training hyperparameters, troubleshooting training issues, understanding LoRA fine-tuning.
+**When to read it:** Modifying training hyperparameters, troubleshooting training issues, understanding LoRA fine-tuning, configuring balanced sampling.
 
 ---
 
@@ -147,6 +148,7 @@
 | Video generation | 02_DATA_GENERATION.md | Part 2: synthetic_data_generation.py |
 | LoRA configuration | 03_TRAINING.md | Argument Parsing |
 | **Multi-adapter comparison** | 03_TRAINING.md | Multi-Adapter Comparison |
+| **Balanced batch sampling** | 03_TRAINING.md | Balanced Batch Sampling |
 | Training loop details | 03_TRAINING.md | Part 2: Training with LLaMA-Factory |
 | Evaluation metrics | 04_EVALUATION.md | Metrics Calculation |
 | Response parsing | 04_EVALUATION.md | Response Parsing |
@@ -239,6 +241,7 @@
   - Builds dataset once, reuses for all adapters
   - Supports: lora, lora+, dora, rslora, oft
   - Usage: `./run_all_adapters.sh --epochs 7 --no-quantization -y`
+- **New Feature (2025-12-09):** Balanced batch sampling (`balanced_sampling: true`) ensures each batch has exactly 50% moving and 50% stopped videos. Parses speed from video filenames. Not compatible with streaming mode.
 
 ### 04_EVALUATION.md
 - **Key Insight:** Evaluates both base and fine-tuned models with comprehensive metrics
@@ -270,6 +273,17 @@
 **Task:** Train for more epochs
 **File:** 01_ORCHESTRATION.md (Section: Stage 3 parameters)
 **Action:** Edit `--num_train_epochs 20`
+
+**Task:** Use balanced batch sampling (NEW - 2025-12-09)
+**File:** 03_TRAINING.md (Section: Balanced Batch Sampling)
+**Action:** Add `balanced_sampling: true` to training YAML config
+**Description:** Ensures each batch contains exactly 50% moving and 50% stopped videos. Parses video filenames for speed parameter.
+**Example YAML config:**
+```yaml
+balanced_sampling: true
+per_device_train_batch_size: 4  # Must be even!
+```
+**Note:** Not compatible with streaming mode. Batch size must be even.
 
 **Task:** Change adapter type (LoRA variant)
 **File:** 03_TRAINING.md (Section: Adapter Types)
@@ -408,4 +422,4 @@
 
 **Total Documentation:** 8 files, ~4,600 lines, comprehensive coverage of entire pipeline
 
-**Last Updated:** 2025-12-08 (Added distance randomization per video support with --train-distance-randomization and --train-distance-range flags)
+**Last Updated:** 2025-12-09 (Added balanced batch sampling feature with balanced_sampling config for 50/50 moving/stopped per batch)

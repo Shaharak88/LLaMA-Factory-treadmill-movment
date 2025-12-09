@@ -20,10 +20,18 @@ from .collator import (
 )
 from .data_utils import Role, split_dataset
 from .loader import get_dataset
+from .sampler import (
+    BalancedBatchSampler,
+    DistributedBalancedBatchSampler,
+    extract_speed_from_path,
+    is_video_moving,
+)
 from .template import TEMPLATES, Template, get_template_and_fix_tokenizer
 
 
 __all__ = [
+    "BalancedBatchSampler",
+    "DistributedBalancedBatchSampler",
     "TEMPLATES",
     "KTODataCollatorWithPadding",
     "MultiModalDataCollatorForSeq2Seq",
@@ -31,7 +39,9 @@ __all__ = [
     "Role",
     "SFTDataCollatorWith4DAttentionMask",
     "Template",
+    "extract_speed_from_path",
     "get_dataset",
     "get_template_and_fix_tokenizer",
+    "is_video_moving",
     "split_dataset",
 ]
