@@ -117,6 +117,12 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
     @override
     def get_train_dataloader(self) -> "torch.utils.data.DataLoader":
         r"""Override to support custom batch sampling (balanced or random) with logging."""
+        # TEMPORARY: Use HuggingFace's default RandomSampler which properly reshuffles each epoch.
+        # Our custom RandomBatchSampler has a bug where it doesn't reshuffle between epochs
+        # because get_train_dataloader() is called multiple times, creating new samplers with epoch=0.
+        # TODO: Fix our custom sampler by caching the dataloader or implementing proper epoch handling.
+        return super().get_train_dataloader()
+
         # Check for disable_shuffling first - use HuggingFace default (SequentialSampler)
         if self.finetuning_args.disable_shuffling:
             return super().get_train_dataloader()
