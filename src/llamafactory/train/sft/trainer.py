@@ -92,6 +92,11 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         if model_args is not None and model_args.fp8 and hasattr(self, "accelerator"):
             verify_fp8_status(self.accelerator, model_args)
 
+        # Cache for custom train dataloader to preserve sampler state across epochs.
+        # Without caching, each call to get_train_dataloader() creates a new sampler
+        # with epoch=0, breaking per-epoch reshuffling.
+        self._cached_train_dataloader = None
+
     @override
     def create_optimizer(self) -> "torch.optim.Optimizer":
         if self.optimizer is None:
@@ -117,11 +122,10 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
     @override
     def get_train_dataloader(self) -> "torch.utils.data.DataLoader":
         r"""Override to support custom batch sampling (balanced or random) with logging."""
-        # TEMPORARY: Use HuggingFace's default RandomSampler which properly reshuffles each epoch.
-        # Our custom RandomBatchSampler has a bug where it doesn't reshuffle between epochs
-        # because get_train_dataloader() is called multiple times, creating new samplers with epoch=0.
-        # TODO: Fix our custom sampler by caching the dataloader or implementing proper epoch handling.
-        return super().get_train_dataloader()
+        # Return cached dataloader if it exists. This preserves the sampler's epoch state
+        # across multiple calls, enabling proper per-epoch reshuffling.
+        if self._cached_train_dataloader is not None:
+            return self._cached_train_dataloader
 
         # Check for disable_shuffling first - use HuggingFace default (SequentialSampler)
         if self.finetuning_args.disable_shuffling:
@@ -208,7 +212,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         logger.info_rank0(f"Batch logging enabled: {self.args.output_dir}/{log_filename}")
 
         # Create DataLoader with batch_sampler (batch_size must be None when using batch_sampler)
-        return torch.utils.data.DataLoader(
+        self._cached_train_dataloader = torch.utils.data.DataLoader(
             self.train_dataset,
             batch_sampler=batch_sampler,
             collate_fn=logging_collate_fn,
@@ -216,6 +220,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
             pin_memory=self.args.dataloader_pin_memory,
             persistent_workers=self.args.dataloader_persistent_workers if self.args.dataloader_num_workers > 0 else False,
         )
+        return self._cached_train_dataloader
 
     @override
     def compute_loss(self, model, inputs, *args, **kwargs):
