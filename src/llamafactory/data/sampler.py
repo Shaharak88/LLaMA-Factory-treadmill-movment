@@ -116,8 +116,7 @@ class BalancedBatchSampler(Sampler[List[int]]):
         self.drop_last = drop_last
         self.shuffle = shuffle
         self.seed = seed
-        self.epoch = 0  # Can be set via set_epoch() for compatibility
-        self._iter_count = 0  # Tracks __iter__ calls for reliable per-epoch shuffling
+        self.epoch = 0
 
         # Categorize samples by class
         self.moving_indices: List[int] = []
@@ -173,10 +172,7 @@ class BalancedBatchSampler(Sampler[List[int]]):
     def __iter__(self) -> Iterator[List[int]]:
         """Yield balanced batches of indices."""
         g = torch.Generator()
-        # Use _iter_count for seeding, then increment IMMEDIATELY (before any yields)
-        # This ensures each __iter__ call gets a different seed, regardless of generator exhaustion
-        g.manual_seed(self.seed + self._iter_count)
-        self._iter_count += 1
+        g.manual_seed(self.seed + self.epoch)
 
         # Shuffle indices within each class if enabled
         if self.shuffle:
@@ -218,8 +214,8 @@ class BalancedBatchSampler(Sampler[List[int]]):
                 # Yield partial batch (won't be perfectly balanced)
                 yield remaining_moving + remaining_stopped
 
-        # Note: epoch increment moved to START of __iter__ using _iter_count
-        # This ensures reliable per-epoch shuffling regardless of generator exhaustion
+        # Auto-increment epoch for next iteration (since HuggingFace doesn't call set_epoch on batch_sampler)
+        self.epoch += 1
 
     def __len__(self) -> int:
         """Return number of batches."""
@@ -339,8 +335,7 @@ class RandomBatchSampler(Sampler[List[int]]):
         self.drop_last = drop_last
         self.shuffle = shuffle
         self.seed = seed
-        self.epoch = 0  # Can be set via set_epoch() for compatibility
-        self._iter_count = 0  # Tracks __iter__ calls for reliable per-epoch shuffling
+        self.epoch = 0
         self.all_indices = list(range(len(dataset)))
 
         logger.info_rank0(
@@ -363,10 +358,7 @@ class RandomBatchSampler(Sampler[List[int]]):
     def __iter__(self) -> Iterator[List[int]]:
         """Yield batches of indices."""
         g = torch.Generator()
-        # Use _iter_count for seeding, then increment IMMEDIATELY (before any yields)
-        # This ensures each __iter__ call gets a different seed, regardless of generator exhaustion
-        g.manual_seed(self.seed + self._iter_count)
-        self._iter_count += 1
+        g.manual_seed(self.seed + self.epoch)
 
         if self.shuffle:
             perm = torch.randperm(len(self.all_indices), generator=g).tolist()
@@ -387,8 +379,8 @@ class RandomBatchSampler(Sampler[List[int]]):
             if remaining:
                 yield remaining
 
-        # Note: epoch increment moved to START of __iter__ using _iter_count
-        # This ensures reliable per-epoch shuffling regardless of generator exhaustion
+        # Auto-increment epoch for next iteration (since HuggingFace doesn't call set_epoch on batch_sampler)
+        self.epoch += 1
 
     def __len__(self) -> int:
         """Return number of batches."""
