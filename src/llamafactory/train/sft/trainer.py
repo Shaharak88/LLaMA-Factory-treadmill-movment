@@ -157,7 +157,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                     batch_size=batch_size,
                     num_replicas=self.args.world_size,
                     rank=self.args.process_index,
-                    drop_last=True,
+                    drop_last=False,  # Include all samples - remaining ones yield as partial final batch
                     shuffle=True,
                     seed=self.args.seed,
                 )
@@ -165,7 +165,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                 batch_sampler = BalancedBatchSampler(
                     dataset=self.train_dataset,
                     batch_size=batch_size,
-                    drop_last=True,
+                    drop_last=False,  # Include all samples - remaining ones yield as partial final batch
                     shuffle=True,
                     seed=self.args.seed,
                 )
@@ -180,7 +180,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                     batch_size=batch_size,
                     num_replicas=self.args.world_size,
                     rank=self.args.process_index,
-                    drop_last=True,
+                    drop_last=False,  # Include all samples - remaining ones yield as partial final batch
                     shuffle=True,
                     seed=self.args.seed,
                 )
@@ -188,7 +188,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                 batch_sampler = RandomBatchSampler(
                     dataset=self.train_dataset,
                     batch_size=batch_size,
-                    drop_last=True,
+                    drop_last=False,  # Include all samples - remaining ones yield as partial final batch
                     shuffle=True,
                     seed=self.args.seed,
                 )

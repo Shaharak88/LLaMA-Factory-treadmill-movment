@@ -214,6 +214,9 @@ class BalancedBatchSampler(Sampler[List[int]]):
                 # Yield partial batch (won't be perfectly balanced)
                 yield remaining_moving + remaining_stopped
 
+        # Auto-increment epoch for next iteration (since HuggingFace doesn't call set_epoch on batch_sampler)
+        self.epoch += 1
+
     def __len__(self) -> int:
         """Return number of batches."""
         num_moving_batches = len(self.moving_indices) // self.half_batch
@@ -375,6 +378,9 @@ class RandomBatchSampler(Sampler[List[int]]):
             remaining = indices[num_batches * self.batch_size:]
             if remaining:
                 yield remaining
+
+        # Auto-increment epoch for next iteration (since HuggingFace doesn't call set_epoch on batch_sampler)
+        self.epoch += 1
 
     def __len__(self) -> int:
         """Return number of batches."""
