@@ -92,11 +92,6 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         if model_args is not None and model_args.fp8 and hasattr(self, "accelerator"):
             verify_fp8_status(self.accelerator, model_args)
 
-        # Cache for custom train dataloader to preserve sampler state across epochs.
-        # Without caching, each call to get_train_dataloader() creates a new sampler
-        # with epoch=0, breaking per-epoch reshuffling.
-        self._cached_train_dataloader = None
-
     @override
     def create_optimizer(self) -> "torch.optim.Optimizer":
         if self.optimizer is None:
@@ -115,112 +110,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         if self.finetuning_args.disable_shuffling:
             return torch.utils.data.SequentialSampler(self.train_dataset)
 
-        # Note: balanced_sampling uses batch sampler via get_train_dataloader() override
-        # This method is not called when balanced_sampling is enabled
         return super()._get_train_sampler(*args, **kwargs)
-
-    @override
-    def get_train_dataloader(self) -> "torch.utils.data.DataLoader":
-        r"""Override to support custom batch sampling (balanced or random) with logging."""
-        # Return cached dataloader if it exists. This preserves the sampler's epoch state
-        # across multiple calls, enabling proper per-epoch reshuffling.
-        if self._cached_train_dataloader is not None:
-            return self._cached_train_dataloader
-
-        # Check for disable_shuffling first - use HuggingFace default (SequentialSampler)
-        if self.finetuning_args.disable_shuffling:
-            return super().get_train_dataloader()
-
-        # Import samplers
-        from torch.utils.data import IterableDataset
-
-        from ...data.sampler import (
-            BalancedBatchSampler,
-            DistributedBalancedBatchSampler,
-            DistributedRandomBatchSampler,
-            LoggingCollateWrapper,
-            RandomBatchSampler,
-        )
-
-        # Check for streaming mode incompatibility
-        if isinstance(self.train_dataset, IterableDataset):
-            if self.finetuning_args.balanced_sampling:
-                raise ValueError(
-                    "balanced_sampling is not compatible with streaming mode. "
-                    "Please disable streaming (streaming: false) when using balanced_sampling."
-                )
-            # For streaming mode without balanced_sampling, use HuggingFace default
-            logger.warning_rank0("Custom samplers not compatible with streaming mode, using default.")
-            return super().get_train_dataloader()
-
-        batch_size = self.args.per_device_train_batch_size
-
-        # Select appropriate sampler based on balanced_sampling flag
-        if self.finetuning_args.balanced_sampling:
-            # Use BalancedBatchSampler for 50/50 class balance
-            logger.info_rank0(f"Using balanced batch sampling with batch_size={batch_size}")
-            log_filename = "balanced_sampling_log.txt"
-
-            if self.args.world_size > 1:
-                batch_sampler = DistributedBalancedBatchSampler(
-                    dataset=self.train_dataset,
-                    batch_size=batch_size,
-                    num_replicas=self.args.world_size,
-                    rank=self.args.process_index,
-                    drop_last=False,  # Include all samples - remaining ones yield as partial final batch
-                    shuffle=True,
-                    seed=self.args.seed,
-                )
-            else:
-                batch_sampler = BalancedBatchSampler(
-                    dataset=self.train_dataset,
-                    batch_size=batch_size,
-                    drop_last=False,  # Include all samples - remaining ones yield as partial final batch
-                    shuffle=True,
-                    seed=self.args.seed,
-                )
-        else:
-            # Use RandomBatchSampler for random sampling with logging
-            logger.info_rank0(f"Using random batch sampling with batch_size={batch_size}")
-            log_filename = "random_sampling_log.txt"
-
-            if self.args.world_size > 1:
-                batch_sampler = DistributedRandomBatchSampler(
-                    dataset=self.train_dataset,
-                    batch_size=batch_size,
-                    num_replicas=self.args.world_size,
-                    rank=self.args.process_index,
-                    drop_last=False,  # Include all samples - remaining ones yield as partial final batch
-                    shuffle=True,
-                    seed=self.args.seed,
-                )
-            else:
-                batch_sampler = RandomBatchSampler(
-                    dataset=self.train_dataset,
-                    batch_size=batch_size,
-                    drop_last=False,  # Include all samples - remaining ones yield as partial final batch
-                    shuffle=True,
-                    seed=self.args.seed,
-                )
-
-        # Wrap collate function with logging (logs batch info to file and console)
-        logging_collate_fn = LoggingCollateWrapper(
-            collate_fn=self.data_collator,
-            output_dir=self.args.output_dir,
-            log_filename=log_filename,
-        )
-        logger.info_rank0(f"Batch logging enabled: {self.args.output_dir}/{log_filename}")
-
-        # Create DataLoader with batch_sampler (batch_size must be None when using batch_sampler)
-        self._cached_train_dataloader = torch.utils.data.DataLoader(
-            self.train_dataset,
-            batch_sampler=batch_sampler,
-            collate_fn=logging_collate_fn,
-            num_workers=self.args.dataloader_num_workers,
-            pin_memory=self.args.dataloader_pin_memory,
-            persistent_workers=self.args.dataloader_persistent_workers if self.args.dataloader_num_workers > 0 else False,
-        )
-        return self._cached_train_dataloader
 
     @override
     def compute_loss(self, model, inputs, *args, **kwargs):
