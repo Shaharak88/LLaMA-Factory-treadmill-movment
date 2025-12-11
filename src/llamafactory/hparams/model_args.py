@@ -343,7 +343,7 @@ class ProcessorArguments:
         metadata={"help": "The minimum number of pixels of video inputs."},
     )
     video_fps: float = field(
-        default=2.0,
+        default=4.0,
         metadata={"help": "The frames to sample per second for video inputs."},
     )
     video_maxlen: int = field(
