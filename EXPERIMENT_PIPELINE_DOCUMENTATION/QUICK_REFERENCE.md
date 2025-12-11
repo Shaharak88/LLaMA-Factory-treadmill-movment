@@ -253,6 +253,7 @@
 ### 03_TRAINING.md
 - **Key Insight:** LoRA fine-tunes only 10-20M parameters (not full 7B model)
 - **Critical Info:** 4-bit quantization enables training on consumer GPUs
+- **New (2025-12-11):** Default video_fps changed from 2.0 to 4.0 to match inference and video generation
 - **New Feature (2025-12-08):** Multi-adapter support with `--adapter-type` parameter. Supported adapters:
   - `lora` - Base LoRA (default)
   - `lora+` - LoRA with learning rate ratio (loraplus_lr_ratio: 16.0)
@@ -474,4 +475,4 @@ per_device_train_batch_size: 14
 
 **Total Documentation:** 9 files, ~4,800 lines, comprehensive coverage of entire pipeline
 
-**Last Updated:** 2025-12-11 (Added feature_balanced sampler for cross-epoch balancing of ALL features with fixed batch sizes)
+**Last Updated:** 2025-12-11 (Changed default video_fps from 2.0 to 4.0 for training/inference consistency; Added feature_balanced sampler for cross-epoch balancing of ALL features with fixed batch sizes)

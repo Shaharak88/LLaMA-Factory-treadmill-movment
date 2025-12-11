@@ -264,7 +264,7 @@ parser.add_argument('--eval_method', type=str, default='yesno',
                    help='Evaluation prompt format')
 parser.add_argument('--eval_batch_size', type=int, default=1,
                    help='Batch size for evaluation')
-parser.add_argument('--eval_video_fps', type=float, default=2.0,
+parser.add_argument('--eval_video_fps', type=float, default=4.0,
                    help='FPS for evaluation videos')
 parser.add_argument('--eval_video_maxlen', type=int, default=128,
                    help='Max frames per video for evaluation')
@@ -342,7 +342,7 @@ quantization_bit: 4
 quantization_method: bitsandbytes
 
 ### vision
-video_fps: 2.0
+video_fps: 4.0
 video_maxlen: 128
 ```
 
@@ -350,7 +350,7 @@ video_maxlen: 128
 
 **1. Sequence length (`cutoff_len=4096`):**
 - Videos are tokenized into long sequences
-- 4096 tokens = enough for ~128 frames at 2 fps
+- 4096 tokens = enough for ~128 frames at 4 fps
 - Longer = more context, but more memory
 
 **2. Validation split (`val_size=0.1`):**
@@ -364,14 +364,19 @@ video_maxlen: 128
 - Frequent logging helps track training progress
 
 **4. Video processing:**
-- `video_fps=2.0`: Sample 2 frames per second from video
+- `video_fps=4.0`: Sample 4 frames per second from video
 - `video_maxlen=128`: Max 128 frames per video
-- Example: 3-second video at 30 fps → downsampled to 6 frames
+- Example: 3-second video at 30 fps → downsampled to 12 frames
 
 **Why downsample videos?**
 - Reduces memory usage dramatically
-- 2 fps captures enough motion information
+- 4 fps captures enough motion information (consistent with inference)
 - Model doesn't need 30 fps for this task
+
+**Note (2025-12-11):** Default video_fps changed from 2.0 to 4.0 to match:
+- Synthetic video generation (TRAIN_FPS=4 in run_experiment.sh)
+- Inference evaluation scripts (fps=4.0)
+This ensures training and inference use the same frame sampling rate.
 
 **Dynamic config generation code:**
 ```python
@@ -695,7 +700,7 @@ for sample in dataset:
     video_path = sample['videos'][0]  # Path to video file
 
     # Load and process video
-    video_frames = load_video(video_path, fps=2.0, max_frames=128)
+    video_frames = load_video(video_path, fps=4.0, max_frames=128)
 
     # Tokenize conversation
     input_ids = tokenizer.apply_chat_template(
