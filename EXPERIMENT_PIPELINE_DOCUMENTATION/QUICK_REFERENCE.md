@@ -138,6 +138,27 @@
 
 ---
 
+### **07_BATCH_SAMPLING.md** - Custom Batch Samplers (NEW - sampler branch)
+**What's in it:**
+- Three custom samplers:
+  - `BalancedBatchSampler` (50/50 moving/stopped class balance)
+  - `RandomBatchSampler` (random with logging)
+  - `FeatureBalancedBatchSampler` (NEW 2025-12-11: balances ALL features across epochs)
+- Distributed training variants for multi-GPU support
+- `LoggingCollateWrapper` and `FeatureBalancedLoggingCollateWrapper` for per-batch logging
+- Complete list of ALL files modified in the sampler branch
+- Speed extraction from video filenames for class classification
+- Feature extraction for all parseable features (texture, angle, direction, distance, etc.)
+- Usage examples (CLI flags and YAML config)
+- Log output format and file locations
+- **Bug Fix (2025-12-10):** Fixed epoch shuffling bug - now each epoch has different shuffle order
+- **Bug Fix (2025-12-10):** Fixed data loss - all samples now trained every epoch (no more dropped samples)
+- **NEW (2025-12-11):** `feature_balanced` sampler for cross-epoch feature balancing with fixed batch sizes
+
+**When to read it:** Understanding batch sampling options, enabling balanced training, debugging batch composition, reviewing sampler implementation, **ensuring fair representation of ALL features**.
+
+---
+
 ## Finding Specific Information
 
 | I want to know about... | Read this file... | Section... |
@@ -149,6 +170,8 @@
 | LoRA configuration | 03_TRAINING.md | Argument Parsing |
 | **Multi-adapter comparison** | 03_TRAINING.md | Multi-Adapter Comparison |
 | **Balanced batch sampling** | 03_TRAINING.md | Balanced Batch Sampling |
+| **Feature-balanced sampling (ALL features)** | 07_BATCH_SAMPLING.md | Feature Balanced Sampler |
+| **Custom batch samplers (full details)** | 07_BATCH_SAMPLING.md | All sections |
 | Training loop details | 03_TRAINING.md | Part 2: Training with LLaMA-Factory |
 | Evaluation metrics | 04_EVALUATION.md | Metrics Calculation |
 | Response parsing | 04_EVALUATION.md | Response Parsing |
@@ -175,8 +198,9 @@
 | 04_EVALUATION.md | 801 | ★★★★★ | 45 min |
 | 05_REPORTING.md | 566 | ★★★☆☆ | 30 min |
 | 06_EXPERIMENT_TRACKING.md | 555 | ★★★☆☆ | 30 min |
+| 07_BATCH_SAMPLING.md | 220 | ★★☆☆☆ | 15 min |
 
-**Estimated total reading time: ~4 hours**
+**Estimated total reading time: ~4.5 hours**
 
 ---
 
@@ -288,6 +312,30 @@ balanced_sampling: true
 per_device_train_batch_size: 14  # Must be even!
 ```
 **Note:** Not compatible with streaming mode. Batch size must be even. Tracked in experiments_log.csv as last column.
+
+**Bug Fixes (2025-12-10):**
+- **Epoch shuffling fixed:** Each epoch now has a DIFFERENT shuffle order (was same order every epoch due to HuggingFace not calling `set_epoch()` on batch_sampler)
+- **100% data coverage:** All samples are now trained every epoch. Remaining samples yield as a partial final batch instead of being dropped.
+
+**Task:** Use feature-balanced sampling (balance ALL features) (NEW - 2025-12-11)
+**File:** 07_BATCH_SAMPLING.md (Section: Feature Balanced Sampler)
+**Action:** Use `--sampler-type feature_balanced` flag in run_experiment.sh
+**Description:** Ensures fair representation of ALL features (texture, angle, direction, distance, speed, brightness, contrast, etc.) across ALL epochs. Tracks cumulative feature counts and prioritizes under-represented samples.
+**Key Features:**
+- Fixed batch size (all batches exactly the specified size)
+- Cross-epoch balancing (cumulative counts tracked across all epochs)
+- Automatic feature extraction from video filenames
+- Detailed logging to `feature_balanced_sampling_log.txt`
+**Example CLI usage:**
+```bash
+./run_experiment.sh --sampler-type feature_balanced --batch-size 14 --epochs 5
+```
+**Example YAML config:**
+```yaml
+sampler_type: feature_balanced
+per_device_train_batch_size: 14
+```
+**Tracked Features:** texture, stripe_gray, bg_gray, direction, motion (moving/stopped), speed, angle, distance, brightness, contrast, resolution
 
 **Task:** Change adapter type (LoRA variant)
 **File:** 03_TRAINING.md (Section: Adapter Types)
@@ -424,6 +472,6 @@ per_device_train_batch_size: 14  # Must be even!
 
 ---
 
-**Total Documentation:** 8 files, ~4,600 lines, comprehensive coverage of entire pipeline
+**Total Documentation:** 9 files, ~4,800 lines, comprehensive coverage of entire pipeline
 
-**Last Updated:** 2025-12-09 (Added balanced batch sampling feature with balanced_sampling config for 50/50 moving/stopped per batch)
+**Last Updated:** 2025-12-11 (Added feature_balanced sampler for cross-epoch balancing of ALL features with fixed batch sizes)
