@@ -938,12 +938,13 @@ Notes:
                             help='DEPRECATED: Use --sampler_type=balanced instead. '
                                  'Use balanced batch sampling (50%% moving, 50%% stopped per batch)')
     train_group.add_argument('--sampler_type', type=str, default='random',
-                            choices=['hf_shuffle', 'hf_sequential', 'random_no_fix', 'random', 'balanced'],
+                            choices=['hf_shuffle', 'hf_sequential', 'random_no_fix', 'random', 'balanced', 'feature_balanced'],
                             help='Sampler type: hf_shuffle (HF RandomSampler), '
                                  'hf_sequential (HF SequentialSampler, no shuffle), '
                                  'random_no_fix (custom random, same order every epoch), '
                                  'random (custom random with per-epoch shuffle, DEFAULT), '
-                                 'balanced (custom 50/50 class balance per batch)')
+                                 'balanced (custom 50/50 class balance per batch), '
+                                 'feature_balanced (custom sampler balancing ALL features across epochs with fixed batch size)')
     train_group.add_argument('--cutoff_len', type=int, default=8192,
                             help='Cutoff length (default: 8192)')
     train_group.add_argument('--per_device_train_batch_size', type=int, default=1,

@@ -154,8 +154,11 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         from ...data.sampler import (
             BalancedBatchSampler,
             DistributedBalancedBatchSampler,
+            DistributedFeatureBalancedBatchSampler,
             DistributedRandomBatchSampler,
             DistributedRandomBatchSamplerNoIterFix,
+            FeatureBalancedBatchSampler,
+            FeatureBalancedLoggingCollateWrapper,
             LoggingCollateWrapper,
             RandomBatchSampler,
             RandomBatchSamplerNoIterFix,
@@ -163,7 +166,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
 
         # Check for streaming mode incompatibility with custom samplers
         if isinstance(self.train_dataset, IterableDataset):
-            if sampler_type in ["random", "random_no_fix", "balanced"]:
+            if sampler_type in ["random", "random_no_fix", "balanced", "feature_balanced"]:
                 logger.warning_rank0(
                     f"Custom sampler '{sampler_type}' not compatible with streaming mode, "
                     "falling back to HuggingFace default."
@@ -254,16 +257,52 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                     seed=self.args.seed,
                 )
 
+        elif sampler_type == "feature_balanced":
+            # Custom feature-balanced sampler (balances ALL features across epochs)
+            logger.info_rank0(
+                f"Using FeatureBalancedBatchSampler with batch_size={batch_size} "
+                "(balances ALL features across epochs with fixed batch size)"
+            )
+            log_filename = "feature_balanced_sampling_log.txt"
+
+            if self.args.world_size > 1:
+                batch_sampler = DistributedFeatureBalancedBatchSampler(
+                    dataset=self.train_dataset,
+                    batch_size=batch_size,
+                    num_replicas=self.args.world_size,
+                    rank=self.args.process_index,
+                    drop_last=False,
+                    shuffle=True,
+                    seed=self.args.seed,
+                )
+            else:
+                batch_sampler = FeatureBalancedBatchSampler(
+                    dataset=self.train_dataset,
+                    batch_size=batch_size,
+                    drop_last=False,
+                    shuffle=True,
+                    seed=self.args.seed,
+                )
+
         else:
             # Should not reach here due to validation in finetuning_args
             raise ValueError(f"Unknown sampler_type: {sampler_type}")
 
         # Wrap collate function with logging (logs batch info to file and console)
-        logging_collate_fn = LoggingCollateWrapper(
-            collate_fn=self.data_collator,
-            output_dir=self.args.output_dir,
-            log_filename=log_filename,
-        )
+        # Use specialized wrapper for feature_balanced sampler
+        if sampler_type == "feature_balanced":
+            logging_collate_fn = FeatureBalancedLoggingCollateWrapper(
+                collate_fn=self.data_collator,
+                output_dir=self.args.output_dir,
+                sampler=batch_sampler,
+                log_filename=log_filename,
+            )
+        else:
+            logging_collate_fn = LoggingCollateWrapper(
+                collate_fn=self.data_collator,
+                output_dir=self.args.output_dir,
+                log_filename=log_filename,
+            )
         logger.info_rank0(f"Batch logging enabled: {self.args.output_dir}/{log_filename}")
 
         # Create DataLoader with batch_sampler (batch_size must be None when using batch_sampler)

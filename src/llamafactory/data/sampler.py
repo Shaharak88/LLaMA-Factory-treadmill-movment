@@ -631,6 +631,507 @@ class DistributedRandomBatchSampler(RandomBatchSampler):
         return (total_batches + self.num_replicas - 1) // self.num_replicas
 
 
+def extract_features_from_path(video_path: str) -> dict[str, str]:
+    """
+    Extract all features from video filename for feature-balanced sampling.
+
+    Parses features from filenames like:
+    treadmill_0000_subtle_gray_stripes_stripe226_bg120_left_speed0.0_angle0_dist1.13_distrand_bright0.00_contr1.00_640x480_seed42.mp4
+
+    Args:
+        video_path: Path to video file.
+
+    Returns:
+        Dictionary of feature_name -> feature_value (as strings for grouping).
+    """
+    import re
+    filename = os.path.basename(video_path)
+    features = {}
+
+    # Texture type (between second underscore and stripe/bg)
+    texture_match = re.search(r"treadmill_\d+_([a-z_]+)_stripe", filename)
+    if texture_match:
+        features["texture"] = texture_match.group(1)
+
+    # Stripe gray level
+    stripe_match = re.search(r"stripe(\d+)", filename)
+    if stripe_match:
+        features["stripe_gray"] = stripe_match.group(1)
+
+    # Background gray level
+    bg_match = re.search(r"bg(\d+)", filename)
+    if bg_match:
+        features["bg_gray"] = bg_match.group(1)
+
+    # Direction (left, right, up, down)
+    dir_match = re.search(r"_(left|right|up|down)_", filename)
+    if dir_match:
+        features["direction"] = dir_match.group(1)
+
+    # Speed (categorize as moving/stopped for balance)
+    speed_match = re.search(r"speed([\d.]+)", filename)
+    if speed_match:
+        speed_val = float(speed_match.group(1))
+        features["motion"] = "moving" if speed_val > 0 else "stopped"
+        # Also store actual speed for granular balancing
+        features["speed"] = speed_match.group(1)
+
+    # View angle
+    angle_match = re.search(r"angle(\d+)", filename)
+    if angle_match:
+        features["angle"] = angle_match.group(1)
+
+    # Distance
+    dist_match = re.search(r"dist([\d.]+)", filename)
+    if dist_match:
+        # Round to 1 decimal for grouping
+        dist_val = round(float(dist_match.group(1)), 1)
+        features["distance"] = str(dist_val)
+
+    # Distance randomization flag
+    if "_distrand_" in filename:
+        features["dist_randomized"] = "yes"
+    elif "_dist" in filename and "_distrand_" not in filename:
+        features["dist_randomized"] = "no"
+
+    # Center randomization
+    if "_center_randomized_" in filename or "_centerrand_" in filename:
+        features["center_randomized"] = "yes"
+
+    # Brightness
+    bright_match = re.search(r"bright([\d.-]+)", filename)
+    if bright_match:
+        features["brightness"] = bright_match.group(1)
+
+    # Contrast
+    contr_match = re.search(r"contr([\d.]+)", filename)
+    if contr_match:
+        features["contrast"] = contr_match.group(1)
+
+    # Resolution
+    res_match = re.search(r"(\d+x\d+)", filename)
+    if res_match:
+        features["resolution"] = res_match.group(1)
+
+    return features
+
+
+class FeatureBalancedBatchSampler(Sampler[List[int]]):
+    """
+    Sampler that balances ALL features across epochs with fixed batch sizes.
+
+    This sampler ensures fair representation of all feature combinations across
+    the entire training run. It tracks cumulative feature counts and prioritizes
+    samples with under-represented features.
+
+    Features extracted from video filenames:
+    - texture: Texture type (e.g., subtle_gray_stripes)
+    - stripe_gray: Stripe gray level
+    - bg_gray: Background gray level
+    - direction: Motion direction (left, right, up, down)
+    - motion: Moving vs stopped (speed > 0 or == 0)
+    - speed: Actual speed value
+    - angle: View angle
+    - distance: Distance factor
+    - brightness, contrast, resolution
+
+    Key behaviors:
+    - Fixed batch size (always exactly batch_size, no partial batches)
+    - Cross-epoch balancing: tracks cumulative counts across all epochs
+    - Prioritizes under-represented feature combinations
+    - Logs detailed feature distribution per batch
+
+    Args:
+        dataset: The dataset to sample from (must have 'videos' column).
+        batch_size: Fixed batch size (all batches will be exactly this size).
+        drop_last: Whether to drop samples that don't fit in complete batches.
+        shuffle: Whether to shuffle within priority groups.
+        seed: Random seed for reproducibility.
+
+    Example:
+        >>> sampler = FeatureBalancedBatchSampler(dataset, batch_size=14)
+        >>> for batch_indices in sampler:
+        ...     # batch_indices always contains exactly 14 samples
+        ...     # with fair feature representation
+        ...     pass
+    """
+
+    def __init__(
+        self,
+        dataset: Dataset,
+        batch_size: int,
+        drop_last: bool = True,
+        shuffle: bool = True,
+        seed: int = 42,
+    ):
+        self.dataset = dataset
+        self.batch_size = batch_size
+        self.drop_last = drop_last
+        self.shuffle = shuffle
+        self.seed = seed
+        self.epoch = 0
+        self._iter_count = 0
+
+        # Feature tracking
+        self.sample_features: dict[int, dict[str, str]] = {}  # idx -> features dict
+        self.feature_values: dict[str, set[str]] = {}  # feature_name -> set of values
+        self.cumulative_feature_counts: dict[str, dict[str, int]] = {}  # feature -> value -> count
+
+        # Extract features from all samples
+        self._extract_all_features()
+
+        # Initialize cumulative counts
+        self._init_cumulative_counts()
+
+        logger.info_rank0(
+            f"FeatureBalancedBatchSampler initialized: {len(self.dataset)} samples, "
+            f"batch_size={batch_size}, features tracked: {list(self.feature_values.keys())}"
+        )
+        for feat, values in self.feature_values.items():
+            logger.info_rank0(f"  {feat}: {sorted(values)}")
+
+    def _extract_all_features(self) -> None:
+        """Extract features from all samples in dataset."""
+        for idx in range(len(self.dataset)):
+            sample = self.dataset[idx]
+            videos = sample.get("videos", None)
+
+            if videos and len(videos) > 0:
+                video_path = videos[0] if isinstance(videos, list) else videos
+                features = extract_features_from_path(video_path)
+                self.sample_features[idx] = features
+
+                # Track all unique values for each feature
+                for feat_name, feat_value in features.items():
+                    if feat_name not in self.feature_values:
+                        self.feature_values[feat_name] = set()
+                    self.feature_values[feat_name].add(feat_value)
+            else:
+                self.sample_features[idx] = {}
+
+    def _init_cumulative_counts(self) -> None:
+        """Initialize cumulative feature counts to zero."""
+        for feat_name, values in self.feature_values.items():
+            self.cumulative_feature_counts[feat_name] = {v: 0 for v in values}
+
+    def _calculate_sample_priority(self, idx: int) -> float:
+        """
+        Calculate priority score for a sample based on under-representation.
+
+        Lower score = higher priority (more under-represented).
+
+        Args:
+            idx: Sample index.
+
+        Returns:
+            Priority score (sum of cumulative counts for sample's features).
+        """
+        features = self.sample_features.get(idx, {})
+        if not features:
+            return float('inf')  # No features = lowest priority
+
+        score = 0.0
+        for feat_name, feat_value in features.items():
+            if feat_name in self.cumulative_feature_counts:
+                count = self.cumulative_feature_counts[feat_name].get(feat_value, 0)
+                score += count
+
+        return score
+
+    def _update_counts(self, indices: List[int]) -> None:
+        """Update cumulative feature counts for selected samples."""
+        for idx in indices:
+            features = self.sample_features.get(idx, {})
+            for feat_name, feat_value in features.items():
+                if feat_name in self.cumulative_feature_counts:
+                    if feat_value in self.cumulative_feature_counts[feat_name]:
+                        self.cumulative_feature_counts[feat_name][feat_value] += 1
+
+    def set_epoch(self, epoch: int) -> None:
+        """Set epoch for deterministic shuffling."""
+        self.epoch = epoch
+
+    def __iter__(self) -> Iterator[List[int]]:
+        """Yield feature-balanced batches of fixed size."""
+        g = torch.Generator()
+        g.manual_seed(self.seed + self._iter_count)
+        self._iter_count += 1
+
+        # Get all indices
+        all_indices = list(range(len(self.dataset)))
+
+        # Calculate priority scores for all samples
+        priorities = [(idx, self._calculate_sample_priority(idx)) for idx in all_indices]
+
+        # Sort by priority (lower score = higher priority = selected first)
+        priorities.sort(key=lambda x: x[1])
+
+        # Add some randomness within similar priority levels
+        if self.shuffle:
+            # Group by similar priority and shuffle within groups
+            shuffled_indices = []
+            current_group = []
+            current_priority = None
+            tolerance = 1.0  # Group samples with similar scores
+
+            for idx, priority in priorities:
+                if current_priority is None or abs(priority - current_priority) <= tolerance:
+                    current_group.append(idx)
+                    if current_priority is None:
+                        current_priority = priority
+                else:
+                    # Shuffle current group and add to result
+                    perm = torch.randperm(len(current_group), generator=g).tolist()
+                    shuffled_indices.extend([current_group[i] for i in perm])
+                    current_group = [idx]
+                    current_priority = priority
+
+            # Don't forget the last group
+            if current_group:
+                perm = torch.randperm(len(current_group), generator=g).tolist()
+                shuffled_indices.extend([current_group[i] for i in perm])
+
+            indices = shuffled_indices
+        else:
+            indices = [idx for idx, _ in priorities]
+
+        # Yield fixed-size batches
+        num_complete_batches = len(indices) // self.batch_size
+
+        for batch_idx in range(num_complete_batches):
+            start = batch_idx * self.batch_size
+            end = start + self.batch_size
+            batch = indices[start:end]
+
+            # Update cumulative counts
+            self._update_counts(batch)
+
+            yield batch
+
+        # Handle remaining samples if not drop_last
+        if not self.drop_last:
+            remaining = indices[num_complete_batches * self.batch_size:]
+            if remaining:
+                # Pad to full batch size by repeating under-represented samples
+                while len(remaining) < self.batch_size:
+                    # Find most under-represented sample not yet in remaining
+                    candidates = [idx for idx in indices if idx not in remaining]
+                    if not candidates:
+                        candidates = indices  # Allow repeats from anywhere
+                    priorities = [(idx, self._calculate_sample_priority(idx)) for idx in candidates]
+                    priorities.sort(key=lambda x: x[1])
+                    remaining.append(priorities[0][0])
+
+                self._update_counts(remaining)
+                yield remaining
+
+    def __len__(self) -> int:
+        """Return number of batches."""
+        if self.drop_last:
+            return len(self.dataset) // self.batch_size
+        return (len(self.dataset) + self.batch_size - 1) // self.batch_size
+
+    def get_feature_distribution_report(self) -> str:
+        """Generate a report of cumulative feature distribution."""
+        lines = ["=" * 80, "CUMULATIVE FEATURE DISTRIBUTION", "=" * 80]
+
+        for feat_name in sorted(self.cumulative_feature_counts.keys()):
+            counts = self.cumulative_feature_counts[feat_name]
+            total = sum(counts.values())
+            lines.append(f"\n{feat_name}:")
+            for value in sorted(counts.keys()):
+                count = counts[value]
+                pct = (count / total * 100) if total > 0 else 0
+                lines.append(f"  {value}: {count} ({pct:.1f}%)")
+
+        return "\n".join(lines)
+
+
+class DistributedFeatureBalancedBatchSampler(FeatureBalancedBatchSampler):
+    """
+    Feature-balanced batch sampler with distributed training support.
+
+    Each process gets a subset of batches, ensuring all processes
+    have the same number of batches (padding if necessary).
+
+    Args:
+        dataset: The dataset to sample from.
+        batch_size: Fixed batch size per process.
+        num_replicas: Number of distributed processes.
+        rank: Current process rank.
+        drop_last: Whether to drop incomplete batches.
+        shuffle: Whether to shuffle within priority groups.
+        seed: Random seed.
+    """
+
+    def __init__(
+        self,
+        dataset: Dataset,
+        batch_size: int,
+        num_replicas: Optional[int] = None,
+        rank: Optional[int] = None,
+        drop_last: bool = True,
+        shuffle: bool = True,
+        seed: int = 42,
+    ):
+        super().__init__(dataset, batch_size, drop_last, shuffle, seed)
+
+        if num_replicas is None:
+            if not torch.distributed.is_available():
+                raise RuntimeError("Distributed package not available")
+            num_replicas = torch.distributed.get_world_size()
+        if rank is None:
+            if not torch.distributed.is_available():
+                raise RuntimeError("Distributed package not available")
+            rank = torch.distributed.get_rank()
+
+        self.num_replicas = num_replicas
+        self.rank = rank
+
+    def __iter__(self) -> Iterator[List[int]]:
+        """Yield batches assigned to this rank."""
+        all_batches = list(super().__iter__())
+
+        # Pad to make divisible by num_replicas
+        remainder = len(all_batches) % self.num_replicas
+        if remainder != 0:
+            padding = self.num_replicas - remainder
+            all_batches.extend(all_batches[:padding])
+
+        # Select batches for this rank
+        batches_per_replica = len(all_batches) // self.num_replicas
+        start_idx = self.rank * batches_per_replica
+        end_idx = start_idx + batches_per_replica
+
+        for batch in all_batches[start_idx:end_idx]:
+            yield batch
+
+    def __len__(self) -> int:
+        """Return number of batches for this rank."""
+        total_batches = super().__len__()
+        return (total_batches + self.num_replicas - 1) // self.num_replicas
+
+
+class FeatureBalancedLoggingCollateWrapper:
+    """
+    Wrapper for feature-balanced sampler that logs detailed feature info per batch.
+
+    Logs feature distribution for each batch to both console and a log file.
+
+    Args:
+        collate_fn: Original collate function to wrap.
+        output_dir: Model output directory.
+        sampler: The FeatureBalancedBatchSampler (to access feature tracking).
+        log_filename: Name of log file.
+    """
+
+    def __init__(
+        self,
+        collate_fn: Callable,
+        output_dir: str,
+        sampler: FeatureBalancedBatchSampler,
+        log_filename: str = "feature_balanced_sampling_log.txt",
+    ):
+        self.collate_fn = collate_fn
+        self.output_dir = Path(output_dir)
+        self.sampler = sampler
+        self.log_file = self.output_dir / log_filename
+        self.batch_count = 0
+
+        self.output_dir.mkdir(parents=True, exist_ok=True)
+        self._init_log_file()
+
+    def _init_log_file(self) -> None:
+        """Initialize log file with header."""
+        with open(self.log_file, "w", encoding="utf-8") as f:
+            f.write("=" * 80 + "\n")
+            f.write("FEATURE-BALANCED SAMPLING BATCH LOG\n")
+            f.write(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write(f"Output directory: {self.output_dir}\n")
+            f.write(f"Batch size: {self.sampler.batch_size}\n")
+            f.write(f"Features tracked: {list(self.sampler.feature_values.keys())}\n")
+            f.write("=" * 80 + "\n\n")
+
+    def _log_batch(self, batch: List[dict]) -> None:
+        """Log detailed feature distribution for this batch."""
+        self.batch_count += 1
+
+        # Count features in this batch
+        batch_feature_counts: dict[str, dict[str, int]] = {}
+        video_details = []
+
+        for sample in batch:
+            videos = sample.get("videos", [])
+            if videos:
+                video_path = videos[0] if isinstance(videos, list) else videos
+                video_name = os.path.basename(video_path)
+                features = extract_features_from_path(video_path)
+
+                video_details.append((video_name, features))
+
+                for feat_name, feat_value in features.items():
+                    if feat_name not in batch_feature_counts:
+                        batch_feature_counts[feat_name] = {}
+                    if feat_value not in batch_feature_counts[feat_name]:
+                        batch_feature_counts[feat_name][feat_value] = 0
+                    batch_feature_counts[feat_name][feat_value] += 1
+
+        # Format log message
+        log_lines = []
+        log_lines.append(f"\n{'='*80}")
+        log_lines.append(f"BATCH {self.batch_count} (size={len(batch)})")
+        log_lines.append(f"{'='*80}")
+
+        # Batch feature distribution
+        log_lines.append("Batch Feature Distribution:")
+        for feat_name in sorted(batch_feature_counts.keys()):
+            counts = batch_feature_counts[feat_name]
+            parts = [f"{v}:{c}" for v, c in sorted(counts.items())]
+            log_lines.append(f"  {feat_name}: {', '.join(parts)}")
+
+        log_lines.append("-" * 80)
+
+        # Cumulative distribution (key features only)
+        log_lines.append("Cumulative Distribution (key features):")
+        for feat_name in ["motion", "direction", "angle"]:
+            if feat_name in self.sampler.cumulative_feature_counts:
+                counts = self.sampler.cumulative_feature_counts[feat_name]
+                total = sum(counts.values())
+                parts = []
+                for v in sorted(counts.keys()):
+                    c = counts[v]
+                    pct = (c / total * 100) if total > 0 else 0
+                    parts.append(f"{v}:{c}({pct:.0f}%)")
+                log_lines.append(f"  {feat_name}: {', '.join(parts)}")
+
+        log_lines.append("-" * 80)
+
+        # Video list
+        log_lines.append("Videos in this batch:")
+        for i, (name, features) in enumerate(video_details, 1):
+            motion = features.get("motion", "?")
+            direction = features.get("direction", "?")
+            angle = features.get("angle", "?")
+            speed = features.get("speed", "?")
+            log_lines.append(f"  {i:3d}. [{motion:7s}] dir={direction:5s} angle={angle:3s} speed={speed:4s} | {name}")
+
+        log_lines.append("-" * 80)
+
+        log_message = "\n".join(log_lines)
+
+        # Print to console
+        logger.info_rank0(log_message)
+
+        # Write to file
+        with open(self.log_file, "a", encoding="utf-8") as f:
+            f.write(log_message + "\n")
+
+    def __call__(self, batch: List[dict]) -> Any:
+        """Log batch info and call original collate function."""
+        self._log_batch(batch)
+        return self.collate_fn(batch)
+
+
 class LoggingCollateWrapper:
     """
     Wrapper around collate function that logs batch information.

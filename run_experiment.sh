@@ -180,7 +180,7 @@ EVAL_METHOD="yesno"  # Evaluation method: "yesno" or "moving_stopped"
 MODEL_NAME=""  # Custom name for the trained model (optional)
 EVAL_MODEL_PATH=""  # Path to existing model for re-evaluation (used with --skip-training)
 BALANCED_SAMPLING=false  # DEPRECATED: Use SAMPLER_TYPE instead
-SAMPLER_TYPE="random"  # Sampler type: hf_shuffle, hf_sequential, random_no_fix, random (default), balanced
+SAMPLER_TYPE="random"  # Sampler type: hf_shuffle, hf_sequential, random_no_fix, random (default), balanced, feature_balanced
 
 ################################################################################
 # COLOR OUTPUT
@@ -439,11 +439,11 @@ parse_args() {
                 SAMPLER_TYPE="$2"
                 # Validate sampler type
                 case "$SAMPLER_TYPE" in
-                    hf_shuffle|hf_sequential|random_no_fix|random|balanced)
+                    hf_shuffle|hf_sequential|random_no_fix|random|balanced|feature_balanced)
                         ;;
                     *)
                         log_error "Invalid sampler type: $SAMPLER_TYPE"
-                        log_error "Valid options: hf_shuffle, hf_sequential, random_no_fix, random, balanced"
+                        log_error "Valid options: hf_shuffle, hf_sequential, random_no_fix, random, balanced, feature_balanced"
                         exit 1
                         ;;
                 esac
