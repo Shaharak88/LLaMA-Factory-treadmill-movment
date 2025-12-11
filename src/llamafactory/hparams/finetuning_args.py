@@ -516,7 +516,22 @@ class FinetuningArguments(
             "help": (
                 "Whether to use balanced batch sampling for binary classification tasks. "
                 "Ensures each batch contains 50% of each class (e.g., moving vs stopped). "
-                "Requires video filenames to contain speed parameter (speed0.0 = stopped)."
+                "Requires video filenames to contain speed parameter (speed0.0 = stopped). "
+                "DEPRECATED: Use sampler_type='balanced' instead."
+            )
+        },
+    )
+    sampler_type: str = field(
+        default="random",
+        metadata={
+            "help": (
+                "Sampler type for training data. Options: "
+                "hf_shuffle (HuggingFace RandomSampler with per-epoch shuffle), "
+                "hf_sequential (HuggingFace SequentialSampler, no shuffle), "
+                "random_no_fix (custom random sampler, same order every epoch), "
+                "random (custom random sampler with per-epoch shuffle fix, DEFAULT), "
+                "balanced (custom balanced sampler, 50/50 class balance per batch). "
+                "Note: disable_shuffling=True maps to hf_sequential, balanced_sampling=True maps to balanced."
             )
         },
     )
@@ -548,6 +563,22 @@ class FinetuningArguments(
         self.galore_target: list[str] = split_arg(self.galore_target)
         self.apollo_target: list[str] = split_arg(self.apollo_target)
         self.use_ref_model = self.stage == "dpo" and self.pref_loss not in ["orpo", "simpo"]
+
+        # Backward compatibility: map old boolean flags to sampler_type
+        # Only apply mapping if sampler_type is still at default AND old flags are set
+        if self.sampler_type == "random":  # default value, might need override
+            if self.disable_shuffling:
+                self.sampler_type = "hf_sequential"
+            elif self.balanced_sampling:
+                self.sampler_type = "balanced"
+
+        # Validate sampler_type
+        valid_sampler_types = ["hf_shuffle", "hf_sequential", "random_no_fix", "random", "balanced"]
+        if self.sampler_type not in valid_sampler_types:
+            raise ValueError(
+                f"Invalid sampler_type: {self.sampler_type}. "
+                f"Valid options: {', '.join(valid_sampler_types)}"
+            )
 
         assert self.finetuning_type in ["lora", "oft", "freeze", "full"], "Invalid fine-tuning method."
         assert self.ref_model_quantization_bit in [None, 8, 4], "We only accept 4-bit or 8-bit quantization."

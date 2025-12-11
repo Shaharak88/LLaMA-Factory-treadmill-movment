@@ -112,76 +112,100 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
 
     @override
     def _get_train_sampler(self, *args, **kwargs) -> Optional["torch.utils.data.Sampler"]:
-        if self.finetuning_args.disable_shuffling:
+        # Handle HF sampler types (hf_sequential uses SequentialSampler)
+        if self.finetuning_args.sampler_type == "hf_sequential":
             return torch.utils.data.SequentialSampler(self.train_dataset)
 
-        # Note: balanced_sampling uses batch sampler via get_train_dataloader() override
-        # This method is not called when balanced_sampling is enabled
+        # For hf_shuffle or when using custom samplers, defer to parent
+        # Note: Custom samplers (random, random_no_fix, balanced) use batch_sampler
+        # via get_train_dataloader() override, so this method is not called for them
         return super()._get_train_sampler(*args, **kwargs)
 
     @override
     def get_train_dataloader(self) -> "torch.utils.data.DataLoader":
-        r"""Override to support custom batch sampling (balanced or random) with logging."""
+        r"""Override to support 5 sampler types with logging for custom samplers.
+
+        Sampler types:
+        - hf_shuffle: HuggingFace default RandomSampler (per-epoch shuffle)
+        - hf_sequential: HuggingFace SequentialSampler (no shuffle)
+        - random_no_fix: Custom RandomBatchSamplerNoIterFix (same order every epoch)
+        - random: Custom RandomBatchSampler (per-epoch shuffle with _iter_count fix)
+        - balanced: Custom BalancedBatchSampler (50/50 class balance per batch)
+        """
         # Return cached dataloader if it exists. This preserves the sampler's epoch state
         # across multiple calls, enabling proper per-epoch reshuffling.
         if self._cached_train_dataloader is not None:
             return self._cached_train_dataloader
 
-        # Check for disable_shuffling first - use HuggingFace default (SequentialSampler)
-        if self.finetuning_args.disable_shuffling:
+        sampler_type = self.finetuning_args.sampler_type
+
+        # HF sampler types - use parent implementation (no custom logging)
+        if sampler_type == "hf_sequential":
+            logger.info_rank0("Using HuggingFace SequentialSampler (no shuffle)")
             return super().get_train_dataloader()
 
-        # Import samplers
+        if sampler_type == "hf_shuffle":
+            logger.info_rank0("Using HuggingFace RandomSampler (with per-epoch shuffle)")
+            return super().get_train_dataloader()
+
+        # Custom sampler types - need imports and logging
         from torch.utils.data import IterableDataset
 
         from ...data.sampler import (
             BalancedBatchSampler,
             DistributedBalancedBatchSampler,
             DistributedRandomBatchSampler,
+            DistributedRandomBatchSamplerNoIterFix,
             LoggingCollateWrapper,
             RandomBatchSampler,
+            RandomBatchSamplerNoIterFix,
         )
 
-        # Check for streaming mode incompatibility
+        # Check for streaming mode incompatibility with custom samplers
         if isinstance(self.train_dataset, IterableDataset):
-            if self.finetuning_args.balanced_sampling:
-                raise ValueError(
-                    "balanced_sampling is not compatible with streaming mode. "
-                    "Please disable streaming (streaming: false) when using balanced_sampling."
+            if sampler_type in ["random", "random_no_fix", "balanced"]:
+                logger.warning_rank0(
+                    f"Custom sampler '{sampler_type}' not compatible with streaming mode, "
+                    "falling back to HuggingFace default."
                 )
-            # For streaming mode without balanced_sampling, use HuggingFace default
-            logger.warning_rank0("Custom samplers not compatible with streaming mode, using default.")
             return super().get_train_dataloader()
 
         batch_size = self.args.per_device_train_batch_size
 
-        # Select appropriate sampler based on balanced_sampling flag
-        if self.finetuning_args.balanced_sampling:
-            # Use BalancedBatchSampler for 50/50 class balance
-            logger.info_rank0(f"Using balanced batch sampling with batch_size={batch_size}")
-            log_filename = "balanced_sampling_log.txt"
+        # Select sampler based on sampler_type
+        if sampler_type == "random_no_fix":
+            # Custom random sampler WITHOUT iter fix (same order every epoch)
+            logger.info_rank0(
+                f"Using RandomBatchSamplerNoIterFix with batch_size={batch_size} "
+                "(SAME ORDER EVERY EPOCH)"
+            )
+            log_filename = "random_no_fix_sampling_log.txt"
 
             if self.args.world_size > 1:
-                batch_sampler = DistributedBalancedBatchSampler(
+                batch_sampler = DistributedRandomBatchSamplerNoIterFix(
                     dataset=self.train_dataset,
                     batch_size=batch_size,
                     num_replicas=self.args.world_size,
                     rank=self.args.process_index,
-                    drop_last=False,  # Include all samples - remaining ones yield as partial final batch
+                    drop_last=False,
                     shuffle=True,
                     seed=self.args.seed,
                 )
             else:
-                batch_sampler = BalancedBatchSampler(
+                batch_sampler = RandomBatchSamplerNoIterFix(
                     dataset=self.train_dataset,
                     batch_size=batch_size,
-                    drop_last=False,  # Include all samples - remaining ones yield as partial final batch
+                    drop_last=False,
                     shuffle=True,
                     seed=self.args.seed,
                 )
-        else:
-            # Use RandomBatchSampler for random sampling with logging
-            logger.info_rank0(f"Using random batch sampling with batch_size={batch_size}")
+
+        elif sampler_type == "random":
+            # Custom random sampler WITH iter fix (different order each epoch)
+            logger.info_rank0(
+                f"Using RandomBatchSampler with batch_size={batch_size} "
+                "(different order each epoch)"
+            )
             log_filename = "random_sampling_log.txt"
 
             if self.args.world_size > 1:
@@ -190,7 +214,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                     batch_size=batch_size,
                     num_replicas=self.args.world_size,
                     rank=self.args.process_index,
-                    drop_last=False,  # Include all samples - remaining ones yield as partial final batch
+                    drop_last=False,
                     shuffle=True,
                     seed=self.args.seed,
                 )
@@ -198,10 +222,41 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                 batch_sampler = RandomBatchSampler(
                     dataset=self.train_dataset,
                     batch_size=batch_size,
-                    drop_last=False,  # Include all samples - remaining ones yield as partial final batch
+                    drop_last=False,
                     shuffle=True,
                     seed=self.args.seed,
                 )
+
+        elif sampler_type == "balanced":
+            # Custom balanced sampler (50/50 class balance per batch)
+            logger.info_rank0(
+                f"Using BalancedBatchSampler with batch_size={batch_size} "
+                "(50% moving / 50% stopped per batch)"
+            )
+            log_filename = "balanced_sampling_log.txt"
+
+            if self.args.world_size > 1:
+                batch_sampler = DistributedBalancedBatchSampler(
+                    dataset=self.train_dataset,
+                    batch_size=batch_size,
+                    num_replicas=self.args.world_size,
+                    rank=self.args.process_index,
+                    drop_last=False,
+                    shuffle=True,
+                    seed=self.args.seed,
+                )
+            else:
+                batch_sampler = BalancedBatchSampler(
+                    dataset=self.train_dataset,
+                    batch_size=batch_size,
+                    drop_last=False,
+                    shuffle=True,
+                    seed=self.args.seed,
+                )
+
+        else:
+            # Should not reach here due to validation in finetuning_args
+            raise ValueError(f"Unknown sampler_type: {sampler_type}")
 
         # Wrap collate function with logging (logs batch info to file and console)
         logging_collate_fn = LoggingCollateWrapper(

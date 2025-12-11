@@ -179,7 +179,8 @@ DATASET_NAME=""  # Can be set via --dataset-name to reuse existing datasets
 EVAL_METHOD="yesno"  # Evaluation method: "yesno" or "moving_stopped"
 MODEL_NAME=""  # Custom name for the trained model (optional)
 EVAL_MODEL_PATH=""  # Path to existing model for re-evaluation (used with --skip-training)
-BALANCED_SAMPLING=false  # If true, use balanced batch sampling (50% moving, 50% stopped per batch)
+BALANCED_SAMPLING=false  # DEPRECATED: Use SAMPLER_TYPE instead
+SAMPLER_TYPE="random"  # Sampler type: hf_shuffle, hf_sequential, random_no_fix, random (default), balanced
 
 ################################################################################
 # COLOR OUTPUT
@@ -240,7 +241,14 @@ OPTIONS:
     --model-name NAME       Custom name for the trained model (saves to saves/<NAME>)
     --eval-model-path PATH  Path to existing model for re-evaluation (use with --skip-training)
                             Example: saves/my_custom_model
-    --balanced-sampling     Enable balanced batch sampling (50% moving, 50% stopped per batch)
+    --sampler-type TYPE     Sampler type for training (default: random)
+                            Options:
+                              hf_shuffle     - HuggingFace RandomSampler (per-epoch shuffle)
+                              hf_sequential  - HuggingFace SequentialSampler (no shuffle)
+                              random_no_fix  - Custom random sampler (same order every epoch)
+                              random         - Custom random sampler (per-epoch shuffle, DEFAULT)
+                              balanced       - Custom balanced sampler (50/50 class balance)
+    --balanced-sampling     DEPRECATED: Use --sampler-type=balanced instead
     -v, --verbose           Verbose output
 
 EXPERIMENT PARAMETERS:
@@ -422,8 +430,24 @@ parse_args() {
                 shift 2
                 ;;
             --balanced-sampling)
+                # DEPRECATED: Use --sampler-type=balanced instead
                 BALANCED_SAMPLING=true
+                SAMPLER_TYPE="balanced"
                 shift
+                ;;
+            --sampler-type)
+                SAMPLER_TYPE="$2"
+                # Validate sampler type
+                case "$SAMPLER_TYPE" in
+                    hf_shuffle|hf_sequential|random_no_fix|random|balanced)
+                        ;;
+                    *)
+                        log_error "Invalid sampler type: $SAMPLER_TYPE"
+                        log_error "Valid options: hf_shuffle, hf_sequential, random_no_fix, random, balanced"
+                        exit 1
+                        ;;
+                esac
+                shift 2
                 ;;
             -v|--verbose)
                 VERBOSE=true
@@ -1048,10 +1072,8 @@ step_run_training() {
         train_pipeline_cmd="$train_pipeline_cmd --no_quantization"
     fi
 
-    # Add balanced_sampling flag if enabled
-    if [ "$BALANCED_SAMPLING" = true ]; then
-        train_pipeline_cmd="$train_pipeline_cmd --balanced_sampling"
-    fi
+    # Add sampler_type parameter
+    train_pipeline_cmd="$train_pipeline_cmd --sampler_type '$SAMPLER_TYPE'"
 
     # Add skip_training flag if enabled
     if [ "$SKIP_TRAINING" = true ]; then
@@ -1428,7 +1450,7 @@ Common:
 Training:$([ "$SKIP_TRAINING" = true ] && echo " SKIPPED (using existing model)" || echo "
   Adapter Type: $ADAPTER_TYPE
   Quantization: $([ "$NO_QUANTIZATION" = true ] && echo "Disabled (full precision)" || echo "4-bit (bitsandbytes)")
-  Balanced Sampling: $([ "$BALANCED_SAMPLING" = true ] && echo "Enabled (50/50 per batch)" || echo "Disabled")
+  Sampler Type: $SAMPLER_TYPE
   Epochs: $NUM_EPOCHS
   LoRA Rank: $LORA_RANK / Alpha: $LORA_ALPHA
   Learning Rate: $LEARNING_RATE

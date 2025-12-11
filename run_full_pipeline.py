@@ -422,6 +422,30 @@ class FullPipelineRunner:
         # Update tracker status
         self.tracker.update_status('training', 'completed')
 
+    def _get_effective_sampler_type(self) -> str:
+        """
+        Get the effective sampler type, handling backward compatibility.
+
+        If --sampler_type is at default ('random') and --balanced_sampling is set,
+        returns 'balanced' for backward compatibility.
+
+        Returns:
+            str: Effective sampler type
+        """
+        # If sampler_type is explicitly set to something other than default, use it
+        if self.args.sampler_type != "random":
+            return self.args.sampler_type
+
+        # Backward compatibility: if balanced_sampling is set, use 'balanced'
+        if self.args.balanced_sampling:
+            logger.warning(
+                "--balanced_sampling is deprecated. Use --sampler_type=balanced instead."
+            )
+            return "balanced"
+
+        # Return the default
+        return self.args.sampler_type
+
     def _create_training_config(self) -> Path:
         """
         Create custom training configuration YAML.
@@ -518,8 +542,8 @@ logging_strategy: "steps"
 gradient_checkpointing: true
 ddp_timeout: 180000000
 
-### Balanced Batch Sampling
-balanced_sampling: {str(self.args.balanced_sampling).lower()}
+### Sampler Configuration
+sampler_type: {self._get_effective_sampler_type()}
 
 ### Additional Settings
 report_to: tensorboard
@@ -911,7 +935,15 @@ Notes:
     train_group.add_argument('--no_quantization', action='store_true', default=False,
                             help='Disable 4-bit quantization (use full precision adapters)')
     train_group.add_argument('--balanced_sampling', action='store_true', default=False,
-                            help='Use balanced batch sampling (50%% moving, 50%% stopped per batch)')
+                            help='DEPRECATED: Use --sampler_type=balanced instead. '
+                                 'Use balanced batch sampling (50%% moving, 50%% stopped per batch)')
+    train_group.add_argument('--sampler_type', type=str, default='random',
+                            choices=['hf_shuffle', 'hf_sequential', 'random_no_fix', 'random', 'balanced'],
+                            help='Sampler type: hf_shuffle (HF RandomSampler), '
+                                 'hf_sequential (HF SequentialSampler, no shuffle), '
+                                 'random_no_fix (custom random, same order every epoch), '
+                                 'random (custom random with per-epoch shuffle, DEFAULT), '
+                                 'balanced (custom 50/50 class balance per batch)')
     train_group.add_argument('--cutoff_len', type=int, default=8192,
                             help='Cutoff length (default: 8192)')
     train_group.add_argument('--per_device_train_batch_size', type=int, default=1,
