@@ -981,8 +981,8 @@ Notes:
                            help='Max new tokens for evaluation (default: 128)')
     eval_group.add_argument('--eval_batch_size', type=int, default=1024,
                            help='Batch size for evaluation (default: 1024)')
-    eval_group.add_argument('--eval_video_fps', type=float, default=2.0,
-                           help='Video FPS for evaluation (default: 2.0)')
+    eval_group.add_argument('--eval_video_fps', type=float, default=4.0,
+                           help='Video FPS for evaluation (default: 4.0)')
     eval_group.add_argument('--eval_video_maxlen', type=int, default=128,
                            help='Max video length for evaluation (default: 128)')
     eval_group.add_argument('--gpu_memory_utilization', type=float, default=0.8,
