@@ -507,7 +507,7 @@ class FinetuningArguments(
         metadata={"help": "Whether or not to compute the token-level accuracy at evaluation."},
     )
     disable_shuffling: bool = field(
-        default=True,
+        default=False,
         metadata={"help": "Whether or not to disable the shuffling of the training set."},
     )
     balanced_sampling: bool = field(
