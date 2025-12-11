@@ -274,6 +274,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                     drop_last=False,
                     shuffle=True,
                     seed=self.args.seed,
+                    output_dir=self.args.output_dir,
                 )
             else:
                 batch_sampler = FeatureBalancedBatchSampler(
@@ -282,6 +283,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                     drop_last=False,
                     shuffle=True,
                     seed=self.args.seed,
+                    output_dir=self.args.output_dir,
                 )
 
         else:
