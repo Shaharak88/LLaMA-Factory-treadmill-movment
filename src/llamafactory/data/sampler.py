@@ -812,6 +812,15 @@ class FeatureBalancedBatchSampler(Sampler[List[int]]):
         for feat, values in self.feature_values.items():
             logger.info_rank0(f"  {feat}: {sorted(values)}")
 
+        # Log per-batch quota limits (critical for understanding diversity enforcement)
+        half_batch = batch_size // 2
+        logger.info_rank0(f"\n  PER-BATCH QUOTA LIMITS (max samples per feature value per half-batch of {half_batch}):")
+        for feat_name, values in self.feature_values.items():
+            num_values = len(values)
+            if num_values > 0:
+                quota = (half_batch + num_values - 1) // num_values  # ceil division
+                logger.info_rank0(f"    {feat_name}: max {quota} per value (ceil({half_batch}/{num_values}))")
+
     def _extract_all_features(self) -> None:
         """Extract features from all samples and categorize by motion class."""
         for idx in range(len(self.dataset)):
@@ -920,10 +929,19 @@ class FeatureBalancedBatchSampler(Sampler[List[int]]):
         generator: torch.Generator,
     ) -> list[int]:
         """
-        Select samples ensuring per-batch diversity across ALL features.
+        Select samples ensuring per-batch diversity across ALL features using QUOTA-BASED selection.
 
-        For each feature where unique_values > target_count, ensures at most
-        1 sample per feature value. Prioritizes diversity across all features.
+        QUOTA-BASED SELECTION (the key fix):
+        For each feature, enforces max ceil(target_count / num_unique_values) samples
+        per feature value per batch. This ensures:
+        - Distance 1.0 (even with 64 videos) can only appear once per half-batch if there are 10+ distances
+        - Rare distances (with few videos) get fair representation via oversampling pool
+        - No single feature value dominates a batch
+
+        Example: batch_size=8, half_batch=4, 10 distances, 2 angles
+        - max_per_distance = ceil(4 / 10) = 1 → each distance at most ONCE per half-batch
+        - max_per_angle = ceil(4 / 2) = 2 → each angle at most TWICE per half-batch
+        - Result: 4 different distances selected, roughly balanced angles
 
         Args:
             pool: Available sample indices (may contain duplicates from oversampling)
@@ -931,13 +949,27 @@ class FeatureBalancedBatchSampler(Sampler[List[int]]):
             generator: Random generator
 
         Returns:
-            List of selected indices with maximum feature diversity
+            List of selected indices with maximum feature diversity enforced by quotas
         """
         if len(pool) == 0:
             return []
 
         selected = []
-        used_feature_values: dict[str, set[str]] = {feat: set() for feat in self.feature_values.keys()}
+
+        # Calculate max quota per feature value: ceil(target_count / num_unique_values)
+        # This ensures no feature value appears more than its fair share in a batch
+        feature_max_quota: dict[str, int] = {}
+        for feat_name, values in self.feature_values.items():
+            num_values = len(values)
+            if num_values > 0:
+                # ceil(target_count / num_values) using integer arithmetic
+                feature_max_quota[feat_name] = (target_count + num_values - 1) // num_values
+
+        # Track how many times each feature value has been selected in THIS batch
+        feature_value_counts: dict[str, dict[str, int]] = {}
+        for feat_name, values in self.feature_values.items():
+            feature_value_counts[feat_name] = {v: 0 for v in values}
+
         available = pool.copy()
 
         # Shuffle available pool
@@ -949,13 +981,28 @@ class FeatureBalancedBatchSampler(Sampler[List[int]]):
             best_score = -1
             best_pos = -1
 
-            # Find sample that adds most diversity
+            # Find sample that:
+            # 1. Doesn't exceed quota for ANY feature
+            # 2. Adds most diversity (prioritize NEW feature values with count=0)
             for pos, idx in enumerate(available):
                 features = self.sample_features.get(idx, {})
-                # Score = number of NEW feature values this sample would add
+
+                # Check if this sample would exceed quota for any feature
+                exceeds_quota = False
+                for feat_name, feat_value in features.items():
+                    max_q = feature_max_quota.get(feat_name, target_count)  # Default to target_count if unknown
+                    current_count = feature_value_counts.get(feat_name, {}).get(feat_value, 0)
+                    if current_count >= max_q:
+                        exceeds_quota = True
+                        break
+
+                if exceeds_quota:
+                    continue  # Skip this sample, would exceed quota
+
+                # Score = number of NEW feature values (values with count=0 in this batch)
                 score = 0
                 for feat_name, feat_value in features.items():
-                    if feat_value not in used_feature_values.get(feat_name, set()):
+                    if feature_value_counts.get(feat_name, {}).get(feat_value, 0) == 0:
                         score += 1
 
                 if score > best_score:
@@ -964,7 +1011,8 @@ class FeatureBalancedBatchSampler(Sampler[List[int]]):
                     best_pos = pos
 
             if best_idx is None:
-                # No more samples available, take any
+                # No samples available that don't exceed quota
+                # Fall back: take any sample (edge case when pool is exhausted of valid options)
                 if available:
                     best_idx = available[0]
                     best_pos = 0
@@ -974,10 +1022,13 @@ class FeatureBalancedBatchSampler(Sampler[List[int]]):
             # Add selected sample
             selected.append(best_idx)
 
-            # Update used feature values
+            # Update feature value counts for this batch
             features = self.sample_features.get(best_idx, {})
             for feat_name, feat_value in features.items():
-                used_feature_values[feat_name].add(feat_value)
+                if feat_name in feature_value_counts:
+                    if feat_value not in feature_value_counts[feat_name]:
+                        feature_value_counts[feat_name][feat_value] = 0
+                    feature_value_counts[feat_name][feat_value] += 1
 
             # Remove from available (only this occurrence if duplicated)
             available.pop(best_pos)
