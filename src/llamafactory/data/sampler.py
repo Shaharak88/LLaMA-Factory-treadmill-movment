@@ -984,6 +984,8 @@ class FeatureBalancedBatchSampler(Sampler[List[int]]):
             # Find sample that:
             # 1. Doesn't exceed quota for ANY feature
             # 2. Adds most diversity (prioritize NEW feature values with count=0)
+            # 3. Tie-breaker: prefer least-seen videos (ensures equal representation within feature groups)
+            best_seen_count = float('inf')
             for pos, idx in enumerate(available):
                 features = self.sample_features.get(idx, {})
 
@@ -1005,8 +1007,13 @@ class FeatureBalancedBatchSampler(Sampler[List[int]]):
                     if feature_value_counts.get(feat_name, {}).get(feat_value, 0) == 0:
                         score += 1
 
-                if score > best_score:
+                # Get how many times this video has been seen (for tie-breaking)
+                seen_count = self.video_seen_counts.get(idx, 0)
+
+                # Select if: higher score OR (same score AND seen fewer times)
+                if score > best_score or (score == best_score and seen_count < best_seen_count):
                     best_score = score
+                    best_seen_count = seen_count
                     best_idx = idx
                     best_pos = pos
 
