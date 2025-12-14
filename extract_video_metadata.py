@@ -430,7 +430,7 @@ Examples:
     parser.add_argument(
         '--output-dir',
         default='./data',
-        help='Local directory to save CSV file (default: ./data)'
+        help='Base directory for datasets (default: ./data). CSV will be saved in ./data/{dataset_name}/'
     )
 
     args = parser.parse_args()
@@ -438,13 +438,15 @@ Examples:
     # Construct full dataset path on server
     dataset_path = f"{args.dataset_base_path}/{args.dataset_name}"
 
-    # Create output directory if it doesn't exist
-    os.makedirs(args.output_dir, exist_ok=True)
+    # Create output directory: ./data/{dataset_name}/
+    # This matches the dataset folder structure
+    dataset_output_dir = os.path.join(args.output_dir, args.dataset_name)
+    os.makedirs(dataset_output_dir, exist_ok=True)
 
     # Generate output filename with timestamp
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
     output_file = os.path.join(
-        args.output_dir,
+        dataset_output_dir,  # Changed: now saves inside dataset folder
         f"{args.dataset_name}_metadata_{timestamp}.csv"
     )
 
