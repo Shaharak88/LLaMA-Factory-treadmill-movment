@@ -794,6 +794,16 @@ class FeatureBalancedBatchSampler(Sampler[List[int]]):
         for idx in range(len(self.dataset)):
             self.video_seen_counts[idx] = 0
 
+        # Distance-specific tracking for priority-weighted sampling
+        self.distance_priority_scores: dict[str, float] = {}  # distance -> priority score
+        self.distance_target_count: int = 0  # target samples per distance
+        self.moving_distance_groups: dict[str, dict[tuple, list[int]]] = {}  # distance -> (angle, dir) -> indices
+        self.stopped_distance_groups: dict[str, dict[tuple, list[int]]] = {}  # distance -> (angle, dir) -> indices
+
+        # Initialize distance groups and priorities
+        self._init_distance_groups()
+        self._update_distance_priorities()
+
         logger.info_rank0(
             f"FeatureBalancedBatchSampler initialized: {len(self.dataset)} samples, "
             f"batch_size={batch_size}, features tracked: {list(self.feature_values.keys())}"
@@ -832,6 +842,107 @@ class FeatureBalancedBatchSampler(Sampler[List[int]]):
         for feat_name, values in self.feature_values.items():
             self.cumulative_feature_counts[feat_name] = {v: 0 for v in values}
 
+    def _init_distance_groups(self) -> None:
+        """
+        Pre-group samples by distance (primary) and (angle, direction) (secondary).
+
+        Creates hierarchical grouping structure:
+            moving_distance_groups[distance][(angle, direction)] = [sample_indices]
+            stopped_distance_groups[distance][(angle, direction)] = [sample_indices]
+
+        This enables distance-prioritized sampling while maintaining angle/direction diversity
+        within each distance group.
+        """
+        # Group moving samples
+        for idx in self.moving_indices:
+            features = self.sample_features.get(idx, {})
+            distance = features.get("distance", "unknown")
+            angle = features.get("angle", "unknown")
+            direction = features.get("direction", "unknown")
+
+            if distance not in self.moving_distance_groups:
+                self.moving_distance_groups[distance] = {}
+
+            key = (angle, direction)
+            if key not in self.moving_distance_groups[distance]:
+                self.moving_distance_groups[distance][key] = []
+
+            self.moving_distance_groups[distance][key].append(idx)
+
+        # Group stopped samples
+        for idx in self.stopped_indices:
+            features = self.sample_features.get(idx, {})
+            distance = features.get("distance", "unknown")
+            angle = features.get("angle", "unknown")
+            direction = features.get("direction", "unknown")
+
+            if distance not in self.stopped_distance_groups:
+                self.stopped_distance_groups[distance] = {}
+
+            key = (angle, direction)
+            if key not in self.stopped_distance_groups[distance]:
+                self.stopped_distance_groups[distance][key] = []
+
+            self.stopped_distance_groups[distance][key].append(idx)
+
+        # Log distance grouping statistics
+        moving_distances = sorted(self.moving_distance_groups.keys())
+        stopped_distances = sorted(self.stopped_distance_groups.keys())
+        logger.info_rank0(f"Distance-based hierarchical grouping complete:")
+        logger.info_rank0(f"  Moving distances: {moving_distances}")
+        logger.info_rank0(f"  Stopped distances: {stopped_distances}")
+
+    def _update_distance_priorities(self) -> None:
+        """
+        Calculate priority scores for each distance value based on representation gap.
+
+        Priority calculation:
+            priority = 1.0 + (target_count - current_count) / target_count
+
+        Higher priority (> 1.0) = under-represented, will get more samples
+        Lower priority (< 1.0) = over-represented, will get fewer samples
+        Equal priority (= 1.0) = perfectly balanced
+        """
+        # Get all unique distances
+        all_distances = set()
+        if "distance" in self.cumulative_feature_counts:
+            all_distances = set(self.cumulative_feature_counts["distance"].keys())
+
+        if not all_distances or len(all_distances) == 0:
+            return
+
+        # Calculate target count per distance
+        total_samples = sum(self.cumulative_feature_counts["distance"].values())
+
+        if total_samples == 0:
+            # First epoch - equal priority for all distances
+            self.distance_target_count = len(self.dataset) // len(all_distances)
+            for dist in all_distances:
+                self.distance_priority_scores[dist] = 1.0
+            logger.info_rank0(f"Distance priorities initialized: all distances have equal priority (1.0)")
+        else:
+            # Calculate target and priorities based on cumulative counts
+            self.distance_target_count = total_samples // len(all_distances)
+
+            # Calculate priority for each distance
+            for dist in all_distances:
+                current_count = self.cumulative_feature_counts["distance"].get(dist, 0)
+                gap = self.distance_target_count - current_count
+                # Normalize to 0-2 range (2 = very under-represented, 0 = over-represented)
+                priority = max(0.0, 1.0 + (gap / max(1, self.distance_target_count)))
+                self.distance_priority_scores[dist] = priority
+
+            # Log top under-represented distances
+            sorted_priorities = sorted(
+                self.distance_priority_scores.items(),
+                key=lambda x: x[1],
+                reverse=True
+            )[:5]
+            logger.info_rank0(
+                f"Distance priorities updated - Top 5 under-represented: "
+                f"{[(d, f'{p:.3f}') for d, p in sorted_priorities]}"
+            )
+
     def _group_by_features(self, indices: list[int], feature_keys: list[str]) -> dict[tuple, list[int]]:
         """
         Group indices by their feature values.
@@ -853,6 +964,124 @@ class FeatureBalancedBatchSampler(Sampler[List[int]]):
             groups[key].append(idx)
         return groups
 
+    def _regroup_pool_by_distance(self, pool: list[int], motion_class: str) -> dict[str, list[int]]:
+        """
+        Re-group pool indices by their distance values.
+
+        Args:
+            pool: List of sample indices currently available.
+            motion_class: "moving" or "stopped" (for logging).
+
+        Returns:
+            Dict mapping distance -> list of indices with that distance.
+
+        Note:
+            This is needed because the pool changes dynamically as batches are created,
+            so we need to re-group the remaining samples by distance for each batch.
+        """
+        groups: dict[str, list[int]] = {}
+        for idx in pool:
+            features = self.sample_features.get(idx, {})
+            distance = features.get("distance", "unknown")
+
+            if distance not in groups:
+                groups[distance] = []
+            groups[distance].append(idx)
+
+        return groups
+
+    def _select_distance_prioritized_samples(
+        self,
+        distance_groups: dict[str, list[int]],
+        target_count: int,
+        generator: torch.Generator,
+        motion_class: str,
+    ) -> list[int]:
+        """
+        Select samples prioritizing under-represented distances.
+
+        Algorithm:
+        1. Create priority-sorted list of distances
+        2. Round-robin through distances, weighted by priority
+        3. Higher priority distances get more samples per cycle (1-3)
+        4. Lower priority distances get fewer samples (1)
+        5. Continue until target_count samples selected
+
+        Args:
+            distance_groups: Dict of distance -> [indices].
+            target_count: Number of samples to select.
+            generator: Random generator for shuffling.
+            motion_class: "moving" or "stopped" (for logging).
+
+        Returns:
+            List of selected indices with distance-prioritized diversity.
+        """
+        selected = []
+
+        # Create list of (distance, priority, available_indices)
+        distance_queue = []
+        for distance, indices in distance_groups.items():
+            if len(indices) > 0:
+                priority = self.distance_priority_scores.get(distance, 1.0)
+                distance_queue.append(
+                    {"distance": distance, "priority": priority, "indices": indices.copy()}
+                )
+
+        # Sort by priority (descending)
+        distance_queue.sort(key=lambda x: x["priority"], reverse=True)
+
+        # Round-robin with priority weighting
+        cycle_count = 0
+        max_cycles = target_count * 2  # Safety limit to avoid infinite loops
+
+        while len(selected) < target_count and len(distance_queue) > 0 and cycle_count < max_cycles:
+            cycle_count += 1
+
+            # Go through each distance in priority order
+            for dist_info in distance_queue:
+                if len(selected) >= target_count:
+                    break
+
+                if len(dist_info["indices"]) == 0:
+                    continue
+
+                # Higher priority = more samples per cycle (1-3)
+                # priority >= 1.5 -> 3 samples, priority >= 1.2 -> 2 samples, else 1 sample
+                if dist_info["priority"] >= 1.5:
+                    samples_to_take = 3
+                elif dist_info["priority"] >= 1.2:
+                    samples_to_take = 2
+                else:
+                    samples_to_take = 1
+
+                samples_to_take = min(
+                    samples_to_take, target_count - len(selected), len(dist_info["indices"])
+                )
+
+                # Randomly select from this distance group
+                perm = torch.randperm(len(dist_info["indices"]), generator=generator).tolist()
+                for i in range(samples_to_take):
+                    selected.append(dist_info["indices"].pop(perm[i] if i < len(perm) else 0))
+
+            # Remove empty distance groups
+            distance_queue = [d for d in distance_queue if len(d["indices"]) > 0]
+
+        # If still need more samples, take any available
+        if len(selected) < target_count:
+            all_remaining = []
+            for dist_info in distance_queue:
+                all_remaining.extend(dist_info["indices"])
+
+            needed = target_count - len(selected)
+            if len(all_remaining) >= needed:
+                perm = torch.randperm(len(all_remaining), generator=generator).tolist()
+                selected.extend([all_remaining[i] for i in perm[:needed]])
+            elif len(all_remaining) > 0:
+                # Take what's available
+                selected.extend(all_remaining)
+
+        return selected
+
     def _create_diverse_batch(
         self,
         moving_pool: list[int],
@@ -861,7 +1090,13 @@ class FeatureBalancedBatchSampler(Sampler[List[int]]):
         generator: torch.Generator,
     ) -> tuple[list[int], list[int], list[int]]:
         """
-        Create one batch with maximum diversity + 50/50 balance.
+        Create one batch with DISTANCE-FIRST diversity + 50/50 balance.
+
+        This method prioritizes distance balancing by:
+        1. Grouping samples by distance value
+        2. Selecting from under-represented distances first (higher priority)
+        3. Maintaining 50/50 moving/stopped balance
+        4. Providing angle/direction diversity within distance groups
 
         Args:
             moving_pool: Available moving indices.
@@ -872,72 +1107,29 @@ class FeatureBalancedBatchSampler(Sampler[List[int]]):
         Returns:
             (batch_indices, remaining_moving, remaining_stopped)
         """
-        # Group moving samples by key features (angle, distance, direction)
-        moving_groups = self._group_by_features(moving_pool, ["angle", "distance", "direction"])
-        stopped_groups = self._group_by_features(stopped_pool, ["angle", "distance", "direction"])
+        # Regroup pools by distance (primary grouping key)
+        moving_dist_groups = self._regroup_pool_by_distance(moving_pool, "moving")
+        stopped_dist_groups = self._regroup_pool_by_distance(stopped_pool, "stopped")
 
-        # Select diverse samples from moving group
-        moving_batch = []
-        moving_group_keys = list(moving_groups.keys())
-        if self.shuffle:
-            perm = torch.randperm(len(moving_group_keys), generator=generator).tolist()
-            moving_group_keys = [moving_group_keys[i] for i in perm]
+        # Select moving samples with distance prioritization
+        moving_batch = self._select_distance_prioritized_samples(
+            moving_dist_groups, half_batch, generator, "moving"
+        )
 
-        # Round-robin through groups to get diverse samples
-        for _ in range(half_batch):
-            if not moving_group_keys:
-                break
-            # Cycle through groups
-            for group_key in moving_group_keys[:]:
-                if len(moving_batch) >= half_batch:
-                    break
-                if moving_groups[group_key]:
-                    # Pop one sample from this group
-                    idx = moving_groups[group_key].pop(0)
-                    moving_batch.append(idx)
-                    # Remove group if empty
-                    if not moving_groups[group_key]:
-                        moving_group_keys.remove(group_key)
+        # Select stopped samples with distance prioritization
+        stopped_batch = self._select_distance_prioritized_samples(
+            stopped_dist_groups, half_batch, generator, "stopped"
+        )
 
-        # If we need more moving samples, take any available
-        while len(moving_batch) < half_batch and moving_pool:
-            for group in moving_groups.values():
-                if group and len(moving_batch) < half_batch:
-                    moving_batch.append(group.pop(0))
-
-        # Select diverse samples from stopped group (same logic)
-        stopped_batch = []
-        stopped_group_keys = list(stopped_groups.keys())
-        if self.shuffle:
-            perm = torch.randperm(len(stopped_group_keys), generator=generator).tolist()
-            stopped_group_keys = [stopped_group_keys[i] for i in perm]
-
-        for _ in range(half_batch):
-            if not stopped_group_keys:
-                break
-            for group_key in stopped_group_keys[:]:
-                if len(stopped_batch) >= half_batch:
-                    break
-                if stopped_groups[group_key]:
-                    idx = stopped_groups[group_key].pop(0)
-                    stopped_batch.append(idx)
-                    if not stopped_groups[group_key]:
-                        stopped_group_keys.remove(group_key)
-
-        while len(stopped_batch) < half_batch and stopped_pool:
-            for group in stopped_groups.values():
-                if group and len(stopped_batch) < half_batch:
-                    stopped_batch.append(group.pop(0))
-
-        # Interleave moving and stopped for batch
+        # Interleave moving and stopped for batch (preserves existing logic)
         batch = []
         for m, s in zip(moving_batch, stopped_batch):
             batch.extend([m, s])
         # Add any extras
-        batch.extend(moving_batch[len(stopped_batch):])
-        batch.extend(stopped_batch[len(moving_batch):])
+        batch.extend(moving_batch[len(stopped_batch) :])
+        batch.extend(stopped_batch[len(moving_batch) :])
 
-        # Remove selected from pools
+        # Remove selected from pools (preserves existing logic)
         remaining_moving = [idx for idx in moving_pool if idx not in moving_batch]
         remaining_stopped = [idx for idx in stopped_pool if idx not in stopped_batch]
 
@@ -1000,6 +1192,70 @@ class FeatureBalancedBatchSampler(Sampler[List[int]]):
                     pct = (count / total * 100) if total > 0 else 0
                     f.write(f"  {value}: {count} ({pct:.1f}%)\n")
 
+            # Distance-specific balance analysis (new section)
+            if "distance" in self.cumulative_feature_counts:
+                f.write(f"\n{'='*80}\n")
+                f.write(f"DISTANCE BALANCE ANALYSIS:\n")
+                f.write(f"{'='*80}\n")
+
+                distance_counts = self.cumulative_feature_counts["distance"]
+                total_dist = sum(distance_counts.values())
+                num_distances = len(distance_counts)
+                target_per_dist = total_dist // num_distances if num_distances > 0 else 0
+
+                f.write(f"\nSummary:\n")
+                f.write(f"  Total samples: {total_dist}\n")
+                f.write(f"  Unique distances: {num_distances}\n")
+                f.write(f"  Target per distance: {target_per_dist}\n")
+                f.write(f"  Ideal representation: {100/num_distances:.2f}%\n\n")
+
+                # Calculate balance metrics
+                deviations = []
+                f.write(f"Per-Distance Statistics:\n")
+                f.write(f"  {'Status':<6} {'Distance':<10} {'Count':<8} {'%':<8} {'Deviation':<15} {'Priority'}\n")
+                f.write(f"  {'-'*70}\n")
+
+                for distance in sorted(distance_counts.keys(), key=lambda x: float(x) if x != "unknown" else 999.0):
+                    count = distance_counts[distance]
+                    pct = (count / total_dist * 100) if total_dist > 0 else 0
+                    deviation = count - target_per_dist
+                    deviation_pct = (deviation / target_per_dist * 100) if target_per_dist > 0 else 0
+                    deviations.append(abs(deviation_pct))
+
+                    # Get priority score for next epoch
+                    priority = self.distance_priority_scores.get(distance, 1.0)
+
+                    # Status indicator
+                    if abs(deviation_pct) < 10:
+                        status = "✓"  # Excellent
+                    elif abs(deviation_pct) < 20:
+                        status = "⚠"  # Acceptable
+                    else:
+                        status = "✗"  # Needs improvement
+
+                    f.write(
+                        f"  {status:<6} {distance:<10} {count:<8} {pct:>6.2f}% "
+                        f"{deviation:>+5d} ({deviation_pct:>+6.2f}%) {priority:>7.3f}\n"
+                    )
+
+                # Overall balance metrics
+                avg_deviation = sum(deviations) / len(deviations) if deviations else 0
+                max_deviation = max(deviations) if deviations else 0
+
+                f.write(f"\nBalance Metrics:\n")
+                f.write(f"  Average deviation: {avg_deviation:.2f}%\n")
+                f.write(f"  Maximum deviation: {max_deviation:.2f}%\n")
+
+                if max_deviation < 10:
+                    status_msg = "✓ EXCELLENT BALANCE"
+                elif max_deviation < 20:
+                    status_msg = "⚠ GOOD BALANCE"
+                else:
+                    status_msg = "✗ NEEDS IMPROVEMENT"
+
+                f.write(f"  Status: {status_msg}\n")
+                f.write(f"{'='*80}\n\n")
+
             # Per-video details
             f.write(f"\nPER-VIDEO DETAILS:\n")
             f.write("-" * 80 + "\n")
@@ -1019,10 +1275,13 @@ class FeatureBalancedBatchSampler(Sampler[List[int]]):
         self.epoch = epoch
 
     def __iter__(self) -> Iterator[List[int]]:
-        """Yield diverse, balanced batches with round-robin cycling."""
+        """Yield diverse, balanced batches with distance-prioritized sampling."""
         epoch_start_time = datetime.now()
         g = torch.Generator()
         g.manual_seed(self.seed + self._iter_count)
+
+        # Update distance priorities at start of each epoch
+        self._update_distance_priorities()
 
         # Round-robin offset based on epoch for cycling
         epoch_offset = self._iter_count % max(1, len(self.moving_indices) // self.batch_size)
