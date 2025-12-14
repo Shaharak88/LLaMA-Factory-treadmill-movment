@@ -842,6 +842,148 @@ class FeatureBalancedBatchSampler(Sampler[List[int]]):
         for feat_name, values in self.feature_values.items():
             self.cumulative_feature_counts[feat_name] = {v: 0 for v in values}
 
+    def _calculate_sample_oversample_weights(self) -> dict[int, int]:
+        """
+        Calculate oversample weights for each sample based on feature rarity.
+
+        For each feature, samples with rare values should appear more often.
+        The weight is the maximum oversample factor across all features.
+
+        Example: If angle0 has 6 samples and angle30 has 2 samples,
+        angle30 videos get weight=3 (6/2=3x more appearances).
+
+        Note: motion is excluded - 50/50 balance handled separately.
+
+        Returns:
+            Dict mapping sample index -> oversample weight (how many times to include)
+        """
+        # Calculate counts per feature value (excluding motion - handled separately)
+        feature_value_counts: dict[str, dict[str, int]] = {}
+        for feat_name in self.feature_values.keys():
+            if feat_name == "motion":  # Skip motion - handled via 50/50 balance
+                continue
+            feature_value_counts[feat_name] = {}
+            for idx, features in self.sample_features.items():
+                value = features.get(feat_name, "unknown")
+                feature_value_counts[feat_name][value] = feature_value_counts[feat_name].get(value, 0) + 1
+
+        # Calculate max count per feature (target for balancing)
+        feature_max_counts: dict[str, int] = {}
+        for feat_name, value_counts in feature_value_counts.items():
+            if value_counts:
+                feature_max_counts[feat_name] = max(value_counts.values())
+
+        # Calculate oversample weight for each sample
+        sample_weights: dict[int, int] = {}
+        for idx, features in self.sample_features.items():
+            max_weight = 1
+            for feat_name, value in features.items():
+                if feat_name == "motion":
+                    continue
+                if feat_name in feature_value_counts and feat_name in feature_max_counts:
+                    value_count = feature_value_counts[feat_name].get(value, 1)
+                    max_count = feature_max_counts[feat_name]
+                    # Weight = how many times more this sample should appear
+                    weight = max(1, round(max_count / value_count))
+                    max_weight = max(max_weight, weight)
+            sample_weights[idx] = max_weight
+
+        # Log oversample statistics
+        weights_distribution = {}
+        for weight in sample_weights.values():
+            weights_distribution[weight] = weights_distribution.get(weight, 0) + 1
+        logger.info_rank0(f"Oversample weights distribution: {dict(sorted(weights_distribution.items()))}")
+
+        return sample_weights
+
+    def _create_oversampled_pool(self, indices: list[int], weights: dict[int, int]) -> list[int]:
+        """
+        Create an oversampled pool where rare-feature samples appear multiple times.
+
+        Args:
+            indices: Original list of sample indices
+            weights: Dict mapping index -> oversample weight
+
+        Returns:
+            Oversampled pool with rare samples repeated
+        """
+        pool = []
+        for idx in indices:
+            weight = weights.get(idx, 1)
+            pool.extend([idx] * weight)
+        return pool
+
+    def _select_diverse_samples(
+        self,
+        pool: list[int],
+        target_count: int,
+        generator: torch.Generator,
+    ) -> list[int]:
+        """
+        Select samples ensuring per-batch diversity across ALL features.
+
+        For each feature where unique_values > target_count, ensures at most
+        1 sample per feature value. Prioritizes diversity across all features.
+
+        Args:
+            pool: Available sample indices (may contain duplicates from oversampling)
+            target_count: Number of samples to select
+            generator: Random generator
+
+        Returns:
+            List of selected indices with maximum feature diversity
+        """
+        if len(pool) == 0:
+            return []
+
+        selected = []
+        used_feature_values: dict[str, set[str]] = {feat: set() for feat in self.feature_values.keys()}
+        available = pool.copy()
+
+        # Shuffle available pool
+        perm = torch.randperm(len(available), generator=generator).tolist()
+        available = [available[i] for i in perm]
+
+        while len(selected) < target_count and available:
+            best_idx = None
+            best_score = -1
+            best_pos = -1
+
+            # Find sample that adds most diversity
+            for pos, idx in enumerate(available):
+                features = self.sample_features.get(idx, {})
+                # Score = number of NEW feature values this sample would add
+                score = 0
+                for feat_name, feat_value in features.items():
+                    if feat_value not in used_feature_values.get(feat_name, set()):
+                        score += 1
+
+                if score > best_score:
+                    best_score = score
+                    best_idx = idx
+                    best_pos = pos
+
+            if best_idx is None:
+                # No more samples available, take any
+                if available:
+                    best_idx = available[0]
+                    best_pos = 0
+                else:
+                    break
+
+            # Add selected sample
+            selected.append(best_idx)
+
+            # Update used feature values
+            features = self.sample_features.get(best_idx, {})
+            for feat_name, feat_value in features.items():
+                used_feature_values[feat_name].add(feat_value)
+
+            # Remove from available (only this occurrence if duplicated)
+            available.pop(best_pos)
+
+        return selected
+
     def _init_distance_groups(self) -> None:
         """
         Pre-group samples by distance (primary) and (angle, direction) (secondary).
@@ -1093,48 +1235,47 @@ class FeatureBalancedBatchSampler(Sampler[List[int]]):
         generator: torch.Generator,
     ) -> tuple[list[int], list[int], list[int]]:
         """
-        Create one batch with DISTANCE-FIRST diversity + 50/50 balance.
+        Create one batch with ALL-FEATURE diversity + 50/50 moving/stopped balance.
 
-        This method prioritizes distance balancing by:
-        1. Grouping samples by distance value
-        2. Selecting from under-represented distances first (higher priority)
-        3. Maintaining 50/50 moving/stopped balance
-        4. Providing angle/direction diversity within distance groups
+        This method ensures:
+        1. Maximum diversity across ALL features (distance, angle, direction, etc.)
+        2. At most 1 sample per feature value when unique_values > half_batch
+        3. Maintaining 50/50 moving/stopped balance per batch
+        4. Rare feature values get selected (from oversampled pool)
 
         Args:
-            moving_pool: Available moving indices.
-            stopped_pool: Available stopped indices.
+            moving_pool: Available moving indices (may have duplicates from oversampling).
+            stopped_pool: Available stopped indices (may have duplicates from oversampling).
             half_batch: Number of samples per class (batch_size // 2).
             generator: Random generator for shuffling.
 
         Returns:
             (batch_indices, remaining_moving, remaining_stopped)
         """
-        # Regroup pools by distance (primary grouping key)
-        moving_dist_groups = self._regroup_pool_by_distance(moving_pool, "moving")
-        stopped_dist_groups = self._regroup_pool_by_distance(stopped_pool, "stopped")
+        # Select moving samples with ALL-feature diversity
+        moving_batch = self._select_diverse_samples(moving_pool, half_batch, generator)
 
-        # Select moving samples with distance prioritization
-        moving_batch = self._select_distance_prioritized_samples(
-            moving_dist_groups, half_batch, generator, "moving"
-        )
+        # Select stopped samples with ALL-feature diversity
+        stopped_batch = self._select_diverse_samples(stopped_pool, half_batch, generator)
 
-        # Select stopped samples with distance prioritization
-        stopped_batch = self._select_distance_prioritized_samples(
-            stopped_dist_groups, half_batch, generator, "stopped"
-        )
-
-        # Interleave moving and stopped for batch (preserves existing logic)
+        # Interleave moving and stopped for batch (preserves 50/50 balance)
         batch = []
         for m, s in zip(moving_batch, stopped_batch):
             batch.extend([m, s])
         # Add any extras
-        batch.extend(moving_batch[len(stopped_batch) :])
-        batch.extend(stopped_batch[len(moving_batch) :])
+        batch.extend(moving_batch[len(stopped_batch):])
+        batch.extend(stopped_batch[len(moving_batch):])
 
-        # Remove selected from pools (preserves existing logic)
-        remaining_moving = [idx for idx in moving_pool if idx not in moving_batch]
-        remaining_stopped = [idx for idx in stopped_pool if idx not in stopped_batch]
+        # Remove selected from pools (remove only ONE occurrence per selected item)
+        remaining_moving = moving_pool.copy()
+        for idx in moving_batch:
+            if idx in remaining_moving:
+                remaining_moving.remove(idx)  # Removes first occurrence only
+
+        remaining_stopped = stopped_pool.copy()
+        for idx in stopped_batch:
+            if idx in remaining_stopped:
+                remaining_stopped.remove(idx)  # Removes first occurrence only
 
         return batch, remaining_moving, remaining_stopped
 
@@ -1278,10 +1419,13 @@ class FeatureBalancedBatchSampler(Sampler[List[int]]):
         self.epoch = epoch
 
     def __iter__(self) -> Iterator[List[int]]:
-        """Yield diverse, balanced batches with distance-prioritized sampling."""
+        """Yield diverse, balanced batches with ALL-feature balancing and oversampling."""
         epoch_start_time = datetime.now()
         g = torch.Generator()
         g.manual_seed(self.seed + self._iter_count)
+
+        # Calculate oversample weights based on feature rarity
+        oversample_weights = self._calculate_sample_oversample_weights()
 
         # Update distance priorities at start of each epoch
         self._update_distance_priorities()
@@ -1292,8 +1436,18 @@ class FeatureBalancedBatchSampler(Sampler[List[int]]):
         self._iter_count += 1
 
         # Apply round-robin rotation to starting positions
-        moving_pool = self.moving_indices[epoch_offset:] + self.moving_indices[:epoch_offset]
-        stopped_pool = self.stopped_indices[epoch_offset:] + self.stopped_indices[:epoch_offset]
+        moving_base = self.moving_indices[epoch_offset:] + self.moving_indices[:epoch_offset]
+        stopped_base = self.stopped_indices[epoch_offset:] + self.stopped_indices[:epoch_offset]
+
+        # Create OVERSAMPLED pools - rare features appear multiple times
+        moving_pool = self._create_oversampled_pool(moving_base, oversample_weights)
+        stopped_pool = self._create_oversampled_pool(stopped_base, oversample_weights)
+
+        logger.info_rank0(
+            f"Epoch {self._iter_count}: Oversampled pools - "
+            f"moving: {len(moving_base)} -> {len(moving_pool)}, "
+            f"stopped: {len(stopped_base)} -> {len(stopped_pool)}"
+        )
 
         # Shuffle pools
         if self.shuffle:
@@ -1370,7 +1524,63 @@ class FeatureBalancedBatchSampler(Sampler[List[int]]):
     def finalize(self) -> None:
         """Write final statistics at end of training."""
         self._write_statistics(self._iter_count, is_final=True)
+        self._print_final_summary()
         logger.info_rank0(f"Final statistics written to: {self.output_dir / 'feature_balanced_statistics.txt'}")
+
+    def _print_final_summary(self) -> None:
+        """Print clear summary of video and feature statistics to console and file."""
+        lines = []
+        lines.append("\n" + "=" * 80)
+        lines.append("FINAL TRAINING STATISTICS SUMMARY")
+        lines.append("=" * 80)
+
+        # Per-video statistics
+        lines.append("\n" + "-" * 40)
+        lines.append("PER-VIDEO SEEN COUNTS:")
+        lines.append("-" * 40)
+        sorted_videos = sorted(self.video_seen_counts.items(), key=lambda x: x[1], reverse=True)
+        for idx, count in sorted_videos:
+            features = self.sample_features.get(idx, {})
+            motion = features.get("motion", "?")
+            distance = features.get("distance", "?")
+            angle = features.get("angle", "?")
+            lines.append(f"  Video {idx}: {count} times (motion={motion}, dist={distance}, angle={angle})")
+
+        # Summary of seen counts
+        lines.append("\n" + "-" * 40)
+        lines.append("VIDEO SEEN DISTRIBUTION:")
+        lines.append("-" * 40)
+        seen_counts = {}
+        for count in self.video_seen_counts.values():
+            seen_counts[count] = seen_counts.get(count, 0) + 1
+        for count in sorted(seen_counts.keys()):
+            num_videos = seen_counts[count]
+            lines.append(f"  Seen {count}x: {num_videos} videos")
+
+        # Per-feature statistics
+        lines.append("\n" + "-" * 40)
+        lines.append("PER-FEATURE VALUE COUNTS (how many times model saw each value):")
+        lines.append("-" * 40)
+        for feat_name in sorted(self.cumulative_feature_counts.keys()):
+            counts = self.cumulative_feature_counts[feat_name]
+            total = sum(counts.values())
+            lines.append(f"\n  {feat_name.upper()}:")
+            for value in sorted(counts.keys(), key=lambda x: counts[x], reverse=True):
+                count = counts[value]
+                pct = (count / total * 100) if total > 0 else 0
+                lines.append(f"    {value}: {count} ({pct:.1f}%)")
+
+        lines.append("\n" + "=" * 80)
+
+        # Print to console
+        summary = "\n".join(lines)
+        logger.info_rank0(summary)
+
+        # Also write to file
+        if self.output_dir:
+            summary_file = self.output_dir / "training_summary.txt"
+            with open(summary_file, "w", encoding="utf-8") as f:
+                f.write(summary)
 
 
 class DistributedFeatureBalancedBatchSampler(FeatureBalancedBatchSampler):
