@@ -684,8 +684,9 @@ def extract_features_from_path(video_path: str) -> dict[str, str]:
     # Distance
     dist_match = re.search(r"dist([\d.]+)", filename)
     if dist_match:
-        # Round to 1 decimal for grouping
-        dist_val = round(float(dist_match.group(1)), 1)
+        # Round to 2 decimals for grouping (1 decimal loses too much granularity)
+        # e.g., 1.01, 1.02, 1.05 should be separate groups, not all rounded to 1.0
+        dist_val = round(float(dist_match.group(1)), 2)
         features["distance"] = str(dist_val)
 
     # Distance randomization flag
