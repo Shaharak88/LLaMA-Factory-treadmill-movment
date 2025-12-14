@@ -22,6 +22,7 @@ The sampler extracts class labels from video filenames by parsing the
 speed parameter: speed > 0.0 = moving, speed == 0.0 = stopped.
 """
 
+import atexit
 import os
 import re
 from datetime import datetime
@@ -821,6 +822,19 @@ class FeatureBalancedBatchSampler(Sampler[List[int]]):
             if num_values > 0:
                 quota = (half_batch + num_values - 1) // num_values  # ceil division
                 logger.info_rank0(f"    {feat_name}: max {quota} per value (ceil({half_batch}/{num_values}))")
+
+        # Register cleanup to write final statistics when program exits
+        # This ensures stats are written even if HuggingFace Trainer doesn't exhaust the iterator
+        atexit.register(self._write_final_statistics_on_exit)
+
+    def _write_final_statistics_on_exit(self) -> None:
+        """Write final statistics on program exit (called by atexit)."""
+        if self.output_dir and self._iter_count > 0:
+            try:
+                self._write_statistics(self._iter_count, is_final=True)
+                logger.info_rank0(f"Final statistics written to: {self.output_dir / 'feature_balanced_statistics.txt'}")
+            except Exception as e:
+                logger.warning_rank0(f"Failed to write final statistics: {e}")
 
     def _extract_all_features(self) -> None:
         """Extract features from all samples and categorize by motion class."""
