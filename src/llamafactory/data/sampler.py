@@ -1030,11 +1030,49 @@ class FeatureBalancedBatchSampler(Sampler[List[int]]):
                     best_pos = pos
 
             if best_idx is None:
-                # No samples available that don't exceed quota
-                # Fall back: take any sample (edge case when pool is exhausted of valid options)
+                # No samples pass ALL quota checks - use smarter fallback
+                # Priority: prefer samples that don't exceed DISTANCE quota (most important for diversity)
+                # Then prefer samples with lowest cumulative exposure
                 if available:
-                    best_idx = available[0]
-                    best_pos = 0
+                    fallback_idx = None
+                    fallback_pos = -1
+                    fallback_exposure = float('inf')
+
+                    for pos, idx in enumerate(available):
+                        features = self.sample_features.get(idx, {})
+
+                        # Check if distance quota is exceeded (most critical)
+                        dist_value = features.get("distance", "unknown")
+                        dist_quota = feature_max_quota.get("distance", target_count)
+                        dist_count = feature_value_counts.get("distance", {}).get(dist_value, 0)
+
+                        if dist_count < dist_quota:
+                            # This sample doesn't exceed distance quota - prefer it
+                            cumulative_exposure = sum(
+                                self.cumulative_feature_counts.get(fn, {}).get(fv, 0)
+                                for fn, fv in features.items()
+                            )
+                            if cumulative_exposure < fallback_exposure:
+                                fallback_exposure = cumulative_exposure
+                                fallback_idx = idx
+                                fallback_pos = pos
+
+                    if fallback_idx is not None:
+                        best_idx = fallback_idx
+                        best_pos = fallback_pos
+                    else:
+                        # Even distance quota exhausted - take sample with lowest exposure
+                        best_exposure = float('inf')
+                        for pos, idx in enumerate(available):
+                            features = self.sample_features.get(idx, {})
+                            exposure = sum(
+                                self.cumulative_feature_counts.get(fn, {}).get(fv, 0)
+                                for fn, fv in features.items()
+                            )
+                            if exposure < best_exposure:
+                                best_exposure = exposure
+                                best_idx = idx
+                                best_pos = pos
                 else:
                     break
 
