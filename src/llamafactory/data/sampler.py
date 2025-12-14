@@ -1469,6 +1469,59 @@ class FeatureBalancedBatchSampler(Sampler[List[int]]):
                 f.write(f"  Status: {status_msg}\n")
                 f.write(f"{'='*80}\n\n")
 
+            # GLOBAL FEATURE BINS STATISTICS - shows balance for ALL features
+            f.write(f"\n{'='*80}\n")
+            f.write(f"GLOBAL FEATURE BINS STATISTICS\n")
+            f.write(f"(How many times the model saw each feature value - used for tie-breaking)\n")
+            f.write(f"{'='*80}\n\n")
+
+            for feat_name in sorted(self.cumulative_feature_counts.keys()):
+                counts = self.cumulative_feature_counts[feat_name]
+                total = sum(counts.values())
+                num_values = len(counts)
+
+                if num_values == 0 or total == 0:
+                    continue
+
+                target_per_value = total // num_values
+                ideal_pct = 100.0 / num_values
+
+                f.write(f"FEATURE: {feat_name.upper()}\n")
+                f.write(f"  Unique values: {num_values}, Total seen: {total}, Target per value: {target_per_value}\n")
+                f.write(f"  {'Value':<20} {'Count':<10} {'%':<10} {'Deviation':<15} {'Status'}\n")
+                f.write(f"  {'-'*65}\n")
+
+                deviations = []
+                for value in sorted(counts.keys(), key=lambda x: counts[x]):  # Sort by count (ascending)
+                    count = counts[value]
+                    pct = (count / total * 100) if total > 0 else 0
+                    deviation = count - target_per_value
+                    deviation_pct = (deviation / target_per_value * 100) if target_per_value > 0 else 0
+                    deviations.append(abs(deviation_pct))
+
+                    # Status indicator
+                    if abs(deviation_pct) < 10:
+                        status = "✓"
+                    elif abs(deviation_pct) < 25:
+                        status = "⚠"
+                    else:
+                        status = "✗"
+
+                    f.write(f"  {str(value):<20} {count:<10} {pct:>6.1f}%    {deviation:>+6d} ({deviation_pct:>+6.1f}%)  {status}\n")
+
+                # Feature-level balance summary
+                avg_dev = sum(deviations) / len(deviations) if deviations else 0
+                max_dev = max(deviations) if deviations else 0
+                if max_dev < 15:
+                    feat_status = "✓ BALANCED"
+                elif max_dev < 30:
+                    feat_status = "⚠ ACCEPTABLE"
+                else:
+                    feat_status = "✗ IMBALANCED"
+                f.write(f"  Summary: avg_dev={avg_dev:.1f}%, max_dev={max_dev:.1f}% → {feat_status}\n\n")
+
+            f.write(f"{'='*80}\n\n")
+
             # Per-video details
             f.write(f"\nPER-VIDEO DETAILS:\n")
             f.write("-" * 80 + "\n")
