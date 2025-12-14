@@ -984,6 +984,15 @@ class FeatureBalancedBatchSampler(Sampler[List[int]]):
             # Find sample that:
             # 1. Doesn't exceed quota for ANY feature
             # 2. Adds most diversity (prioritize NEW feature values with count=0)
+            # 3. Tie-breaker: prefer videos with LESS-SEEN FEATURE VALUES (lower cumulative exposure)
+            #
+            # GLOBAL FEATURE BINS: We sum cumulative counts across ALL features.
+            # This naturally creates "bins" where videos with under-represented feature
+            # combinations are preferred. Works WITH oversampling:
+            #   - distance=1.1 seen 20x + angle=0 seen 20x = exposure 40 (preferred)
+            #   - distance=1.0 seen 100x + angle=30 seen 100x = exposure 200
+            # The video with rarer features (lower total exposure) wins the tie-breaker.
+            best_cumulative_exposure = float('inf')
             for pos, idx in enumerate(available):
                 features = self.sample_features.get(idx, {})
 
@@ -1005,8 +1014,17 @@ class FeatureBalancedBatchSampler(Sampler[List[int]]):
                     if feature_value_counts.get(feat_name, {}).get(feat_value, 0) == 0:
                         score += 1
 
-                if score > best_score:
+                # GLOBAL FEATURE BINS: Calculate cumulative exposure across ALL features
+                # Sum of how many times EACH feature value has been seen by the model
+                # Lower sum = rarer feature combination = should be preferred
+                cumulative_exposure = 0
+                for feat_name, feat_value in features.items():
+                    cumulative_exposure += self.cumulative_feature_counts.get(feat_name, {}).get(feat_value, 0)
+
+                # Select if: higher diversity score OR (same score AND lower feature exposure)
+                if score > best_score or (score == best_score and cumulative_exposure < best_cumulative_exposure):
                     best_score = score
+                    best_cumulative_exposure = cumulative_exposure
                     best_idx = idx
                     best_pos = pos
 
