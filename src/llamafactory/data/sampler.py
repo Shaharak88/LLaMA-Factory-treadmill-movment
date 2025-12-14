@@ -1059,9 +1059,12 @@ class FeatureBalancedBatchSampler(Sampler[List[int]]):
                 )
 
                 # Randomly select from this distance group
+                # Get shuffled indices, then sort in descending order so we can pop safely
+                # (popping from higher indices first keeps lower indices valid)
                 perm = torch.randperm(len(dist_info["indices"]), generator=generator).tolist()
-                for i in range(samples_to_take):
-                    selected.append(dist_info["indices"].pop(perm[i] if i < len(perm) else 0))
+                indices_to_pop = sorted(perm[:samples_to_take], reverse=True)
+                for pop_idx in indices_to_pop:
+                    selected.append(dist_info["indices"].pop(pop_idx))
 
             # Remove empty distance groups
             distance_queue = [d for d in distance_queue if len(d["indices"]) > 0]
