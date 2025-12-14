@@ -188,48 +188,53 @@ def list_videos_on_server(server: str, dataset_path: str, docker_container: Opti
 
 def extract_metadata(dataset_name: str, server: str, remote_base: str,
                     output_dir: str, docker_container: str = None) -> str:
-    """Extract metadata from server and save to CSV."""
-    dataset_path = f"{remote_base}/{dataset_name}"
-    os.makedirs(output_dir, exist_ok=True)
+    """
+    Extract metadata from server and save to CSV.
 
-    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-    output_file = os.path.join(output_dir, f"{dataset_name}_metadata_{timestamp}.csv")
-
-    print(f"📋 Extracting metadata from server...")
+    Uses extract_video_metadata.py script with dynamic feature extraction.
+    This ensures consistency with standalone metadata extraction and includes
+    all features (distance, etc.) automatically.
+    """
+    print(f"📋 Extracting metadata using extract_video_metadata.py...")
     print(f"   Dataset: {dataset_name}")
     print(f"   Server: {server}")
     if docker_container:
         print(f"   Docker: {docker_container}")
-    print(f"   Path: {dataset_path}")
 
-    # Get list of videos
-    videos = list_videos_on_server(server, dataset_path, docker_container)
-
-    if not videos:
-        print("❌ No videos found")
-        return None
-
-    print(f"   Found {len(videos)} videos")
-
-    # Parse metadata
-    metadata_list = [parse_video_filename(video) for video in videos]
-
-    # Save to CSV
-    fieldnames = [
-        'video_name', 'index', 'texture', 'direction', 'speed', 'angle',
-        'brightness', 'contrast', 'stripe_contrast', 'background_contrast',
-        'object_enabled', 'object_type', 'num_objects', 'object_size', 'object_position',
-        'blur_enabled', 'blur_type', 'blur_intensity', 'blur_variation',
-        'resolution', 'seed'
+    # Build command to run extract_video_metadata.py
+    script_path = Path(__file__).parent / "extract_video_metadata.py"
+    cmd = [
+        "python3", str(script_path),
+        dataset_name,
+        "--server", server,
+        "--dataset-base-path", remote_base,
+        "--output-dir", output_dir,
     ]
 
-    with open(output_file, 'w', newline='') as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(metadata_list)
+    if docker_container:
+        cmd.extend(["--docker-container", docker_container])
 
-    print(f"   ✅ Saved: {output_file}")
-    return output_file
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        print(result.stdout)
+
+        # Find the generated CSV file (extract_video_metadata.py saves to dataset folder)
+        dataset_dir = os.path.join(output_dir, dataset_name)
+        csv_files = list(Path(dataset_dir).glob(f"{dataset_name}_metadata_*.csv"))
+
+        if csv_files:
+            # Return the most recent one
+            latest_csv = max(csv_files, key=lambda p: p.stat().st_mtime)
+            print(f"   ✅ Metadata CSV: {latest_csv}")
+            return str(latest_csv)
+        else:
+            print("   ❌ No CSV file found after extraction")
+            return None
+
+    except subprocess.CalledProcessError as e:
+        print(f"   ❌ Extraction failed: {e}")
+        print(f"   stderr: {e.stderr}")
+        return None
 
 
 # ============================================================================

@@ -996,6 +996,35 @@ step_build_datasets() {
     log_success "Datasets built: ${DATASET_NAME}_train and ${DATASET_NAME}_test"
 }
 
+step_extract_metadata() {
+    log_step "STEP 2.5: Extract metadata CSVs for datasets"
+
+    log_info "Extracting metadata with distance and all parameters..."
+
+    # Extract metadata for train dataset
+    log_info "Extracting train dataset metadata..."
+    local train_cmd="python3 extract_video_metadata.py ${DATASET_NAME}_train --output-dir ./data"
+
+    if [ "$LOCAL_MODE" = true ]; then
+        run_cmd "$train_cmd" "Extracting train metadata..."
+    else
+        run_cmd "cd '$REMOTE_DIR' && $train_cmd" "Extracting train metadata..."
+    fi
+
+    # Extract metadata for test dataset
+    log_info "Extracting test dataset metadata..."
+    local test_cmd="python3 extract_video_metadata.py ${DATASET_NAME}_test --output-dir ./data"
+
+    if [ "$LOCAL_MODE" = true ]; then
+        run_cmd "$test_cmd" "Extracting test metadata..."
+    else
+        run_cmd "cd '$REMOTE_DIR' && $test_cmd" "Extracting test metadata..."
+    fi
+
+    log_success "Metadata CSVs created with dynamic feature extraction (includes distance)"
+    log_info "CSVs saved to: data/${DATASET_NAME}_train/ and data/${DATASET_NAME}_test/"
+}
+
 step_run_training() {
     log_step "STEP 3: Running training pipeline with tracking"
 
@@ -1477,6 +1506,12 @@ EOF
 
     step_sync_code
     step_build_datasets
+
+    # Extract metadata CSVs after building datasets (skip if datasets were skipped)
+    if [ "$SKIP_DATASETS" != true ] && [ -n "$DATASET_NAME" ]; then
+        step_extract_metadata
+    fi
+
     step_run_training
     step_retrieve_results
     step_generate_html_report
