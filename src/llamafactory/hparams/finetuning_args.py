@@ -531,7 +531,8 @@ class FinetuningArguments(
                 "random_no_fix (custom random sampler, same order every epoch), "
                 "random (custom random sampler with per-epoch shuffle fix, DEFAULT), "
                 "balanced (custom balanced sampler, 50/50 class balance per batch), "
-                "feature_balanced (custom sampler balancing ALL features across epochs with fixed batch size). "
+                "feature_balanced (custom sampler balancing ALL features across epochs with fixed batch size), "
+                "hierarchical_balanced (50/50 speed balance + distance round-robin + adaptive oversampling, single GPU only). "
                 "Note: disable_shuffling=True maps to hf_sequential, balanced_sampling=True maps to balanced."
             )
         },
@@ -574,7 +575,7 @@ class FinetuningArguments(
                 self.sampler_type = "balanced"
 
         # Validate sampler_type
-        valid_sampler_types = ["hf_shuffle", "hf_sequential", "random_no_fix", "random", "balanced", "feature_balanced"]
+        valid_sampler_types = ["hf_shuffle", "hf_sequential", "random_no_fix", "random", "balanced", "feature_balanced", "hierarchical_balanced"]
         if self.sampler_type not in valid_sampler_types:
             raise ValueError(
                 f"Invalid sampler_type: {self.sampler_type}. "

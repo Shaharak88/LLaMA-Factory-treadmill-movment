@@ -182,7 +182,7 @@ EVAL_METHOD="yesno"  # Evaluation method: "yesno" or "moving_stopped"
 MODEL_NAME=""  # Custom name for the trained model (optional)
 EVAL_MODEL_PATH=""  # Path to existing model for re-evaluation (used with --skip-training)
 BALANCED_SAMPLING=false  # DEPRECATED: Use SAMPLER_TYPE instead
-SAMPLER_TYPE="random"  # Sampler type: hf_shuffle, hf_sequential, random_no_fix, random (default), balanced, feature_balanced
+SAMPLER_TYPE="random"  # Sampler type: hf_shuffle, hf_sequential, random_no_fix, random (default), balanced, feature_balanced, hierarchical_balanced
 
 ################################################################################
 # COLOR OUTPUT
@@ -245,11 +245,13 @@ OPTIONS:
                             Example: saves/my_custom_model
     --sampler-type TYPE     Sampler type for training (default: random)
                             Options:
-                              hf_shuffle     - HuggingFace RandomSampler (per-epoch shuffle)
-                              hf_sequential  - HuggingFace SequentialSampler (no shuffle)
-                              random_no_fix  - Custom random sampler (same order every epoch)
-                              random         - Custom random sampler (per-epoch shuffle, DEFAULT)
-                              balanced       - Custom balanced sampler (50/50 class balance)
+                              hf_shuffle            - HuggingFace RandomSampler (per-epoch shuffle)
+                              hf_sequential         - HuggingFace SequentialSampler (no shuffle)
+                              random_no_fix         - Custom random sampler (same order every epoch)
+                              random                - Custom random sampler (per-epoch shuffle, DEFAULT)
+                              balanced              - Custom balanced sampler (50/50 class balance)
+                              feature_balanced      - Feature-balanced sampler (all features balanced)
+                              hierarchical_balanced - Hierarchical sampler (speed > distance > tertiary)
     --balanced-sampling     DEPRECATED: Use --sampler-type=balanced instead
     -v, --verbose           Verbose output
 
@@ -445,11 +447,11 @@ parse_args() {
                 SAMPLER_TYPE="$2"
                 # Validate sampler type
                 case "$SAMPLER_TYPE" in
-                    hf_shuffle|hf_sequential|random_no_fix|random|balanced|feature_balanced)
+                    hf_shuffle|hf_sequential|random_no_fix|random|balanced|feature_balanced|hierarchical_balanced)
                         ;;
                     *)
                         log_error "Invalid sampler type: $SAMPLER_TYPE"
-                        log_error "Valid options: hf_shuffle, hf_sequential, random_no_fix, random, balanced, feature_balanced"
+                        log_error "Valid options: hf_shuffle, hf_sequential, random_no_fix, random, balanced, feature_balanced, hierarchical_balanced"
                         exit 1
                         ;;
                 esac

@@ -159,6 +159,8 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
             DistributedRandomBatchSamplerNoIterFix,
             FeatureBalancedBatchSampler,
             FeatureBalancedLoggingCollateWrapper,
+            HierarchicalBalancedBatchSampler,
+            HierarchicalBalancedLoggingCollateWrapper,
             LoggingCollateWrapper,
             RandomBatchSampler,
             RandomBatchSamplerNoIterFix,
@@ -166,7 +168,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
 
         # Check for streaming mode incompatibility with custom samplers
         if isinstance(self.train_dataset, IterableDataset):
-            if sampler_type in ["random", "random_no_fix", "balanced", "feature_balanced"]:
+            if sampler_type in ["random", "random_no_fix", "balanced", "feature_balanced", "hierarchical_balanced"]:
                 logger.warning_rank0(
                     f"Custom sampler '{sampler_type}' not compatible with streaming mode, "
                     "falling back to HuggingFace default."
@@ -286,18 +288,50 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                     output_dir=self.args.output_dir,
                 )
 
+        elif sampler_type == "hierarchical_balanced":
+            # Custom hierarchical balanced sampler (priority: speed > distance > tertiary features)
+            logger.info_rank0(
+                f"Using HierarchicalBalancedBatchSampler with batch_size={batch_size} "
+                "(50/50 speed balance + distance round-robin + adaptive oversampling)"
+            )
+            log_filename = "hierarchical_balanced_sampling_log.txt"
+
+            # Single GPU only - no distributed variant
+            if self.args.world_size > 1:
+                raise ValueError(
+                    "hierarchical_balanced sampler only supports single GPU training.\n"
+                    f"Current world_size: {self.args.world_size}\n"
+                    "Please use world_size=1 or choose a different sampler."
+                )
+
+            batch_sampler = HierarchicalBalancedBatchSampler(
+                dataset=self.train_dataset,
+                batch_size=batch_size,
+                drop_last=True,
+                shuffle=True,
+                seed=self.args.seed,
+                output_dir=self.args.output_dir,
+                data_dir=getattr(self.args, 'data_dir', 'data'),
+            )
+
         else:
             # Should not reach here due to validation in finetuning_args
             raise ValueError(f"Unknown sampler_type: {sampler_type}")
 
         # Wrap collate function with logging (logs batch info to file and console)
-        # Use specialized wrapper for feature_balanced sampler
+        # Use specialized wrapper for feature_balanced and hierarchical_balanced samplers
         if sampler_type == "feature_balanced":
             logging_collate_fn = FeatureBalancedLoggingCollateWrapper(
                 collate_fn=self.data_collator,
                 output_dir=self.args.output_dir,
                 sampler=batch_sampler,
                 log_filename=log_filename,
+            )
+        elif sampler_type == "hierarchical_balanced":
+            logging_collate_fn = HierarchicalBalancedLoggingCollateWrapper(
+                collate_fn=self.data_collator,
+                sampler=batch_sampler,
+                output_dir=self.args.output_dir,
             )
         else:
             logging_collate_fn = LoggingCollateWrapper(

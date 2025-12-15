@@ -2061,3 +2061,751 @@ class LoggingCollateWrapper:
 
         # Call original collate function
         return self.collate_fn(batch)
+
+
+# ============================================================================
+# HIERARCHICAL BALANCED BATCH SAMPLER
+# ============================================================================
+
+
+class HierarchicalBalancedBatchSampler(Sampler[List[int]]):
+    """
+    Sampler that ensures balanced representation across multiple features with strict priority hierarchy.
+
+    Priority Hierarchy:
+    1. Speed Balance (HARD CONSTRAINT): Every batch MUST have exactly 50% stopped and 50% moving videos
+    2. Distance Diversity (MAXIMIZE): Round-robin through distances in rarest-first order
+    3. Tertiary Features (BALANCE WHEN POSSIBLE): Balance stripe/angle/bg within distance constraints
+
+    Key Features:
+    - Automatic CSV discovery from dataset folder (NO hardcoded paths)
+    - Adaptive repeat limits for rare distances (oversample to achieve equal representation)
+    - Per-speed-group tracking (stopped and moving are independent)
+    - Comprehensive statistics output
+
+    Args:
+        dataset: PyTorch Dataset object with dataset_attr containing file_name
+        batch_size: Must be EVEN number for 50/50 speed split
+        drop_last: Always True for this sampler (maintains speed balance)
+        shuffle: Whether to shuffle distance priority order within tiers
+        seed: Random seed for reproducibility
+        base_max_repeats: Base limit for reporting (adaptive limits override)
+        output_dir: Output directory for statistics files
+        data_dir: Root data directory for CSV discovery (default: "data")
+    """
+
+    def __init__(
+        self,
+        dataset: Dataset,
+        batch_size: int,
+        drop_last: bool = True,
+        shuffle: bool = True,
+        seed: int = 42,
+        base_max_repeats: int = 3,
+        output_dir: Optional[str] = None,
+        data_dir: str = "data",
+    ):
+        import math
+        import pandas as pd
+
+        self.dataset = dataset
+        self.batch_size = batch_size
+        self.drop_last = True  # Always true for this sampler
+        self.shuffle = shuffle
+        self.seed = seed
+        self.base_max_repeats = base_max_repeats
+        self.output_dir = Path(output_dir) if output_dir else None
+        self.data_dir = data_dir
+        self.epoch = 0
+        self._iter_count = 0
+
+        # Validate batch_size is even
+        if batch_size % 2 != 0:
+            raise ValueError(
+                f"batch_size must be EVEN for 50/50 speed split. Got: {batch_size}"
+            )
+
+        # ========== CSV Discovery and Loading (STRICT - NO FALLBACK) ==========
+        csv_path = self._find_metadata_csv(dataset, data_dir)
+        logger.info_rank0(f"HierarchicalBalancedBatchSampler: Loading metadata from {csv_path}")
+
+        self.metadata_df = pd.read_csv(csv_path)
+        self._validate_csv_columns(self.metadata_df)
+
+        # Verify CSV row count matches dataset length
+        if len(self.metadata_df) != len(dataset):
+            raise ValueError(
+                f"CSV/JSON INDEX MISMATCH!\n"
+                f"CSV rows: {len(self.metadata_df)}\n"
+                f"Dataset length: {len(dataset)}\n"
+                f"CSV row indices MUST exactly match JSON dataset indices.\n"
+                f"CSV file: {csv_path}"
+            )
+
+        # Verify CSV 'index' column matches expected sequence
+        if 'index' in self.metadata_df.columns:
+            csv_indices = self.metadata_df['index'].tolist()
+            expected_indices = list(range(len(dataset)))
+            if csv_indices != expected_indices:
+                raise ValueError(
+                    f"CSV index column doesn't match expected dataset indices!\n"
+                    f"CSV indices (first 10): {csv_indices[:10]}...\n"
+                    f"Expected (first 10): {expected_indices[:10]}...\n"
+                    f"The CSV 'index' column MUST contain sequential integers 0 to {len(dataset)-1}.\n"
+                    f"CSV file: {csv_path}"
+                )
+
+        logger.info_rank0(f"✓ Loaded metadata CSV: {csv_path}")
+        logger.info_rank0(f"✓ Verified {len(self.metadata_df)} rows match dataset length")
+
+        # Create video_features dict indexed by row position (= dataset index)
+        self.video_features: dict[int, dict] = self.metadata_df.to_dict('index')
+
+        # ========== Categorize by Speed and Distance ==========
+        self.stopped_bins: dict[str, list[int]] = {}  # dist -> [indices] for speed=0.0
+        self.moving_bins: dict[str, list[int]] = {}   # dist -> [indices] for speed>0.0
+
+        stopped_mask = self.metadata_df['speed'] == 0.0
+        moving_mask = self.metadata_df['speed'] > 0.0
+
+        stopped_indices = self.metadata_df[stopped_mask].index.tolist()
+        moving_indices = self.metadata_df[moving_mask].index.tolist()
+
+        # Group by distance (format to 2 decimals to prevent '1.0' vs '1.00' bugs)
+        for idx in stopped_indices:
+            dist_value = float(self.metadata_df.loc[idx, 'dist'])
+            dist_key = f"{dist_value:.2f}"
+            if dist_key not in self.stopped_bins:
+                self.stopped_bins[dist_key] = []
+            self.stopped_bins[dist_key].append(idx)
+
+        for idx in moving_indices:
+            dist_value = float(self.metadata_df.loc[idx, 'dist'])
+            dist_key = f"{dist_value:.2f}"
+            if dist_key not in self.moving_bins:
+                self.moving_bins[dist_key] = []
+            self.moving_bins[dist_key].append(idx)
+
+        logger.info_rank0(f"Stopped: {len(stopped_indices)} videos across {len(self.stopped_bins)} distances")
+        logger.info_rank0(f"Moving: {len(moving_indices)} videos across {len(self.moving_bins)} distances")
+
+        # ========== Calculate Distance Frequencies & Priority Order ==========
+        stopped_counts = {dist: len(indices) for dist, indices in self.stopped_bins.items()}
+        moving_counts = {dist: len(indices) for dist, indices in self.moving_bins.items()}
+
+        self.max_stopped = max(stopped_counts.values()) if stopped_counts else 1
+        self.max_moving = max(moving_counts.values()) if moving_counts else 1
+
+        # Sort by frequency (ascending) = rarest first, dominant last
+        self.stopped_distance_priority = sorted(stopped_counts.keys(), key=lambda d: stopped_counts[d])
+        self.moving_distance_priority = sorted(moving_counts.keys(), key=lambda d: moving_counts[d])
+
+        # ========== Calculate Adaptive Repeat Limits ==========
+        # Formula: adaptive_limit[dist] = max_freq_count / count[dist]
+        self.stopped_adaptive_limits: dict[str, float] = {}
+        self.moving_adaptive_limits: dict[str, float] = {}
+
+        for dist, count in stopped_counts.items():
+            self.stopped_adaptive_limits[dist] = self.max_stopped / count
+
+        for dist, count in moving_counts.items():
+            self.moving_adaptive_limits[dist] = self.max_moving / count
+
+        # Log adaptive limits
+        logger.info_rank0("\nAdaptive repeat limits (stopped):")
+        for dist in self.stopped_distance_priority:
+            count = stopped_counts[dist]
+            limit = self.stopped_adaptive_limits[dist]
+            total = count * limit
+            logger.info_rank0(f"  dist={dist}: {count} videos × {limit:.1f} repeats = {total:.0f} samples")
+
+        logger.info_rank0("\nAdaptive repeat limits (moving):")
+        for dist in self.moving_distance_priority:
+            count = moving_counts[dist]
+            limit = self.moving_adaptive_limits[dist]
+            total = count * limit
+            logger.info_rank0(f"  dist={dist}: {count} videos × {limit:.1f} repeats = {total:.0f} samples")
+
+        # ========== Initialize Tracking Structures ==========
+        self.video_usage_counts: dict[int, int] = {}
+        self.distance_usage_counts: dict[str, int] = {}
+
+        # Tertiary feature tracking - SEPARATE for stopped and moving
+        self.stopped_stripe_usage: dict = {}
+        self.stopped_angle_usage: dict = {}
+        self.stopped_bg_usage: dict = {}
+        self.moving_stripe_usage: dict = {}
+        self.moving_angle_usage: dict = {}
+        self.moving_bg_usage: dict = {}
+
+        # Round-robin positions
+        self.stopped_rr_position: int = 0
+        self.moving_rr_position: int = 0
+
+        # Statistics
+        self.epoch_stats: list[dict] = []
+        self.batch_distance_diversity: list[dict] = []
+        self.oversampling_records: list[dict] = []
+        self.reset_count: int = 0
+
+        # Store counts for statistics
+        self.stopped_counts = stopped_counts
+        self.moving_counts = moving_counts
+
+        # Register cleanup for final statistics
+        atexit.register(self._write_final_statistics_on_exit)
+
+        logger.info_rank0(
+            f"\nHierarchicalBalancedBatchSampler initialized: {len(dataset)} samples, "
+            f"batch_size={batch_size}, half_batch={batch_size // 2}"
+        )
+
+    def _find_metadata_csv(self, dataset: Dataset, data_dir: str) -> str:
+        """
+        Discover metadata CSV INSIDE dataset folder ONLY (STRICT - NO FALLBACK).
+
+        Expected location: {data_dir}/{dataset_name}/{dataset_name}_metadata.csv
+
+        Raises:
+            ValueError: If dataset name cannot be determined
+            FileNotFoundError: If CSV does not exist at expected location
+        """
+        dataset_name = None
+        if hasattr(dataset, 'dataset_attr'):
+            if hasattr(dataset.dataset_attr, 'dataset_name'):
+                dataset_name = dataset.dataset_attr.dataset_name
+            elif hasattr(dataset.dataset_attr, 'file_name'):
+                dataset_name = dataset.dataset_attr.file_name.replace('.json', '')
+
+        if not dataset_name:
+            raise ValueError(
+                "Cannot determine dataset name from dataset object.\n"
+                "Dataset must have dataset_attr.dataset_name or dataset_attr.file_name"
+            )
+
+        dataset_folder = Path(data_dir) / dataset_name
+        csv_inside = dataset_folder / f"{dataset_name}_metadata.csv"
+
+        if csv_inside.exists():
+            return str(csv_inside)
+
+        raise FileNotFoundError(
+            f"Could not find metadata CSV for dataset '{dataset_name}'.\n"
+            f"Expected location: {csv_inside}\n"
+            f"CSV MUST exist at this exact location. No fallback search.\n"
+            f"Please ensure the metadata CSV is inside the dataset folder."
+        )
+
+    def _validate_csv_columns(self, df) -> None:
+        """Validate CSV has ALL required columns."""
+        required_cols = ['video_name', 'index', 'speed', 'angle', 'dist', 'stripe', 'bg']
+        missing = [col for col in required_cols if col not in df.columns]
+        if missing:
+            raise ValueError(
+                f"CSV is missing required columns: {missing}\n"
+                f"Required columns: {required_cols}\n"
+                f"Found columns: {list(df.columns)}\n"
+                f"CSV MUST contain all required columns. No fallback available."
+            )
+
+    def __len__(self) -> int:
+        """Return number of batches per epoch."""
+        half_batch = self.batch_size // 2
+
+        stopped_total = sum(
+            len(self.stopped_bins[dist]) * self.stopped_adaptive_limits[dist]
+            for dist in self.stopped_bins
+        )
+        moving_total = sum(
+            len(self.moving_bins[dist]) * self.moving_adaptive_limits[dist]
+            for dist in self.moving_bins
+        )
+
+        return int(min(stopped_total // half_batch, moving_total // half_batch))
+
+    def __iter__(self) -> Iterator[List[int]]:
+        """Generate batches for one epoch."""
+        import math
+
+        # Reset per-epoch tracking
+        self.video_usage_counts.clear()
+        self.distance_usage_counts.clear()
+        self.batch_distance_diversity.clear()
+        self.reset_count = 0
+
+        # Reset tertiary feature tracking
+        self.stopped_stripe_usage.clear()
+        self.stopped_angle_usage.clear()
+        self.stopped_bg_usage.clear()
+        self.moving_stripe_usage.clear()
+        self.moving_angle_usage.clear()
+        self.moving_bg_usage.clear()
+
+        # Reset round-robin positions
+        self.stopped_rr_position = 0
+        self.moving_rr_position = 0
+
+        # Shuffle distance priority if enabled (randomize within tiers)
+        if self.shuffle:
+            self._shuffle_priority_tiers()
+
+        # Calculate number of batches
+        half_batch = self.batch_size // 2
+        stopped_total = sum(
+            len(self.stopped_bins[dist]) * self.stopped_adaptive_limits[dist]
+            for dist in self.stopped_bins
+        )
+        moving_total = sum(
+            len(self.moving_bins[dist]) * self.moving_adaptive_limits[dist]
+            for dist in self.moving_bins
+        )
+
+        num_batches = int(min(stopped_total // half_batch, moving_total // half_batch))
+        logger.info_rank0(
+            f"Epoch {self.epoch}: {num_batches} batches "
+            f"(stopped: {stopped_total:.0f} samples, moving: {moving_total:.0f} samples)"
+        )
+
+        # Generate exactly num_batches batches
+        for batch_idx in range(num_batches):
+            batch = self._generate_batch()
+            self._iter_count += 1
+            yield batch
+
+        # Write epoch statistics
+        self._write_epoch_statistics()
+        self.epoch += 1
+
+    def _shuffle_priority_tiers(self) -> None:
+        """Shuffle distance order within frequency tiers for randomization."""
+        import random
+        rng = random.Random(self.seed + self.epoch)
+
+        # Group by count (tier)
+        stopped_tiers: dict[int, list[str]] = {}
+        for dist in self.stopped_distance_priority:
+            count = len(self.stopped_bins[dist])
+            if count not in stopped_tiers:
+                stopped_tiers[count] = []
+            stopped_tiers[count].append(dist)
+
+        # Shuffle within each tier and rebuild priority list
+        self.stopped_distance_priority = []
+        for count in sorted(stopped_tiers.keys()):
+            tier = stopped_tiers[count]
+            rng.shuffle(tier)
+            self.stopped_distance_priority.extend(tier)
+
+        # Same for moving
+        moving_tiers: dict[int, list[str]] = {}
+        for dist in self.moving_distance_priority:
+            count = len(self.moving_bins[dist])
+            if count not in moving_tiers:
+                moving_tiers[count] = []
+            moving_tiers[count].append(dist)
+
+        self.moving_distance_priority = []
+        for count in sorted(moving_tiers.keys()):
+            tier = moving_tiers[count]
+            rng.shuffle(tier)
+            self.moving_distance_priority.extend(tier)
+
+    def _generate_batch(self) -> List[int]:
+        """Generate one batch with 50% stopped and 50% moving."""
+        half_batch = self.batch_size // 2
+
+        stopped_indices = self._fill_half_batch(
+            bins=self.stopped_bins,
+            priority_order=self.stopped_distance_priority,
+            adaptive_limits=self.stopped_adaptive_limits,
+            speed_group='stopped',
+            target_count=half_batch
+        )
+
+        moving_indices = self._fill_half_batch(
+            bins=self.moving_bins,
+            priority_order=self.moving_distance_priority,
+            adaptive_limits=self.moving_adaptive_limits,
+            speed_group='moving',
+            target_count=half_batch
+        )
+
+        batch = stopped_indices + moving_indices
+
+        # Track batch statistics
+        stopped_distances = [f"{self.video_features[idx]['dist']:.2f}" for idx in stopped_indices]
+        moving_distances = [f"{self.video_features[idx]['dist']:.2f}" for idx in moving_indices]
+        self.batch_distance_diversity.append({
+            'stopped_distances': stopped_distances,
+            'moving_distances': moving_distances,
+            'stopped_unique': len(set(stopped_distances)),
+            'moving_unique': len(set(moving_distances)),
+        })
+
+        return batch
+
+    def _fill_half_batch(
+        self,
+        bins: dict[str, list[int]],
+        priority_order: list[str],
+        adaptive_limits: dict[str, float],
+        speed_group: str,
+        target_count: int
+    ) -> List[int]:
+        """Fill half a batch using round-robin through distance priorities."""
+        import math
+
+        selected = []
+        rr_position = self.stopped_rr_position if speed_group == 'stopped' else self.moving_rr_position
+        consecutive_failures = 0
+
+        while len(selected) < target_count:
+            dist = priority_order[rr_position % len(priority_order)]
+            rr_position += 1
+
+            available_videos = self._get_available_videos_in_bin(
+                bins[dist], adaptive_limits[dist]
+            )
+
+            if available_videos:
+                idx = self._select_best_video_from_bin(available_videos, speed_group)
+                selected.append(idx)
+                self.video_usage_counts[idx] = self.video_usage_counts.get(idx, 0) + 1
+                self.distance_usage_counts[dist] = self.distance_usage_counts.get(dist, 0) + 1
+                consecutive_failures = 0
+            else:
+                consecutive_failures += 1
+
+                # If all distances exhausted, reset ONLY current speed group's videos
+                if consecutive_failures >= len(priority_order):
+                    self.reset_count += 1
+                    for dist_indices in bins.values():
+                        for idx in dist_indices:
+                            self.video_usage_counts[idx] = 0
+                    consecutive_failures = 0
+
+        # Update round-robin position
+        if speed_group == 'stopped':
+            self.stopped_rr_position = rr_position
+        else:
+            self.moving_rr_position = rr_position
+
+        return selected
+
+    def _get_available_videos_in_bin(
+        self,
+        bin_indices: list[int],
+        adaptive_limit: float
+    ) -> list[int]:
+        """Return videos that haven't exceeded their adaptive repeat limit."""
+        import math
+
+        available = []
+        for idx in bin_indices:
+            current_usage = self.video_usage_counts.get(idx, 0)
+            video_position = bin_indices.index(idx)
+            video_limit = self._calculate_video_limit(video_position, len(bin_indices), adaptive_limit)
+
+            if current_usage < video_limit:
+                available.append(idx)
+
+        return available
+
+    def _calculate_video_limit(
+        self,
+        video_position: int,
+        total_videos: int,
+        adaptive_limit: float
+    ) -> int:
+        """Calculate individual video's repeat limit from fractional adaptive limit."""
+        import math
+
+        if total_videos == 0:
+            return 0
+
+        # Distribute fractional limits fairly
+        target_total = total_videos * adaptive_limit
+        fractional_part = target_total - math.floor(target_total)
+        extra_samples_needed = int(math.ceil(fractional_part * total_videos)) if fractional_part > 0 else 0
+
+        if extra_samples_needed > 0 and video_position >= (total_videos - extra_samples_needed):
+            return int(math.ceil(adaptive_limit))
+        else:
+            return int(math.floor(adaptive_limit))
+
+    def _select_best_video_from_bin(
+        self,
+        available_videos: list[int],
+        speed_group: str
+    ) -> int:
+        """Select video that best balances tertiary features (least-used-first)."""
+        if speed_group == 'stopped':
+            stripe_usage = self.stopped_stripe_usage
+            angle_usage = self.stopped_angle_usage
+            bg_usage = self.stopped_bg_usage
+        else:
+            stripe_usage = self.moving_stripe_usage
+            angle_usage = self.moving_angle_usage
+            bg_usage = self.moving_bg_usage
+
+        best_idx = available_videos[0]
+        best_score = float('inf')
+
+        for idx in available_videos:
+            features = self.video_features[idx]
+            stripe_count = stripe_usage.get(features.get('stripe'), 0)
+            angle_count = angle_usage.get(features.get('angle'), 0)
+            bg_count = bg_usage.get(features.get('bg'), 0)
+
+            score = stripe_count + angle_count + bg_count
+            if score < best_score:
+                best_score = score
+                best_idx = idx
+
+        # Update tertiary feature usage
+        features = self.video_features[best_idx]
+        stripe_val = features.get('stripe')
+        angle_val = features.get('angle')
+        bg_val = features.get('bg')
+
+        if stripe_val is not None:
+            stripe_usage[stripe_val] = stripe_usage.get(stripe_val, 0) + 1
+        if angle_val is not None:
+            angle_usage[angle_val] = angle_usage.get(angle_val, 0) + 1
+        if bg_val is not None:
+            bg_usage[bg_val] = bg_usage.get(bg_val, 0) + 1
+
+        return best_idx
+
+    def _write_epoch_statistics(self) -> None:
+        """Write detailed statistics for this epoch."""
+        if not self.output_dir:
+            return
+
+        stats_file = self.output_dir / "hierarchical_balanced_statistics.txt"
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        with open(stats_file, "a", encoding="utf-8") as f:
+            f.write(f"\n{'='*80}\n")
+            f.write(f"EPOCH {self.epoch} STATISTICS - {timestamp}\n")
+            f.write(f"{'='*80}\n\n")
+
+            # Dataset Summary
+            f.write("DATASET SUMMARY\n")
+            f.write("-" * 40 + "\n")
+            total_stopped = sum(len(indices) for indices in self.stopped_bins.values())
+            total_moving = sum(len(indices) for indices in self.moving_bins.values())
+            f.write(f"Total Videos: {total_stopped + total_moving}\n")
+            f.write(f"  Stopped (speed=0.0): {total_stopped} videos\n")
+            f.write(f"  Moving (speed>0.0): {total_moving} videos\n")
+            f.write(f"Batch Size: {self.batch_size} (Half-batch: {self.batch_size // 2})\n")
+            f.write(f"Batches Generated: {len(self.batch_distance_diversity)}\n")
+            f.write(f"Limit Resets: {self.reset_count}\n\n")
+
+            # Adaptive Limits Report
+            f.write("ADAPTIVE REPEAT LIMITS\n")
+            f.write("-" * 40 + "\n")
+            f.write("Stopped Videos:\n")
+            for dist in self.stopped_distance_priority:
+                count = self.stopped_counts[dist]
+                limit = self.stopped_adaptive_limits[dist]
+                total = count * limit
+                rarity = "(rarest)" if dist == self.stopped_distance_priority[0] else ""
+                rarity = "(dominant)" if dist == self.stopped_distance_priority[-1] else rarity
+                f.write(f"  Distance {dist}: {count} videos × {limit:.1f} repeats = {total:.0f} samples {rarity}\n")
+
+            f.write("\nMoving Videos:\n")
+            for dist in self.moving_distance_priority:
+                count = self.moving_counts[dist]
+                limit = self.moving_adaptive_limits[dist]
+                total = count * limit
+                rarity = "(rarest)" if dist == self.moving_distance_priority[0] else ""
+                rarity = "(dominant)" if dist == self.moving_distance_priority[-1] else rarity
+                f.write(f"  Distance {dist}: {count} videos × {limit:.1f} repeats = {total:.0f} samples {rarity}\n")
+
+            # Distance Diversity Metrics
+            f.write("\nDISTANCE DIVERSITY ANALYSIS\n")
+            f.write("-" * 40 + "\n")
+            if self.batch_distance_diversity:
+                stopped_uniques = [b['stopped_unique'] for b in self.batch_distance_diversity]
+                moving_uniques = [b['moving_unique'] for b in self.batch_distance_diversity]
+                f.write("Per Half-Batch Statistics:\n")
+                f.write(f"  Stopped: avg={sum(stopped_uniques)/len(stopped_uniques):.2f} unique distances\n")
+                f.write(f"           min={min(stopped_uniques)}, max={max(stopped_uniques)}\n")
+                f.write(f"  Moving:  avg={sum(moving_uniques)/len(moving_uniques):.2f} unique distances\n")
+                f.write(f"           min={min(moving_uniques)}, max={max(moving_uniques)}\n")
+
+            # Overall Distance Distribution
+            f.write("\nOverall Distance Distribution:\n")
+            total_samples = sum(self.distance_usage_counts.values())
+            for dist, count in sorted(self.distance_usage_counts.items()):
+                pct = (count / total_samples * 100) if total_samples > 0 else 0
+                f.write(f"  dist={dist}: {count} samples ({pct:.1f}%)\n")
+
+            # Video-Level Usage
+            f.write("\nVIDEO USAGE STATISTICS\n")
+            f.write("-" * 40 + "\n")
+            usage_counts = list(self.video_usage_counts.values())
+            if usage_counts:
+                from collections import Counter
+                usage_dist = Counter(usage_counts)
+                f.write("Distribution of sampling frequency:\n")
+                for times, count in sorted(usage_dist.items()):
+                    f.write(f"  Sampled {times}x: {count} videos\n")
+
+                # Videos exceeding base_max_repeats
+                oversampled = [(idx, cnt) for idx, cnt in self.video_usage_counts.items()
+                               if cnt > self.base_max_repeats]
+                if oversampled:
+                    f.write(f"\nVideos exceeding base_max_repeats ({self.base_max_repeats}):\n")
+                    for idx, cnt in sorted(oversampled, key=lambda x: -x[1])[:10]:
+                        features = self.video_features[idx]
+                        f.write(f"  idx={idx}, dist={features.get('dist')}, sampled={cnt}x\n")
+
+            # Tertiary Feature Balance
+            f.write("\nTERTIARY FEATURE DISTRIBUTION\n")
+            f.write("-" * 40 + "\n")
+            all_stripe = {**self.stopped_stripe_usage, **self.moving_stripe_usage}
+            all_angle = {**self.stopped_angle_usage, **self.moving_angle_usage}
+            all_bg = {**self.stopped_bg_usage, **self.moving_bg_usage}
+
+            if all_stripe:
+                f.write("Stripe Values:\n")
+                for val, cnt in sorted(all_stripe.items()):
+                    f.write(f"  {val}: {cnt} samples\n")
+
+            if all_angle:
+                f.write("Angle Values:\n")
+                for val, cnt in sorted(all_angle.items()):
+                    f.write(f"  {val}: {cnt} samples\n")
+
+            if all_bg:
+                f.write("Background Values:\n")
+                for val, cnt in sorted(all_bg.items()):
+                    f.write(f"  {val}: {cnt} samples\n")
+
+            # Sample batch tracking
+            f.write("\nBATCH DISTANCE TRACKING (Sample)\n")
+            f.write("-" * 40 + "\n")
+            for i, batch_info in enumerate(self.batch_distance_diversity[:5]):
+                f.write(f"Batch {i+1}: Stopped: {batch_info['stopped_unique']} unique, "
+                        f"Moving: {batch_info['moving_unique']} unique\n")
+            if len(self.batch_distance_diversity) > 10:
+                f.write("...\n")
+                for i, batch_info in enumerate(self.batch_distance_diversity[-5:],
+                                               len(self.batch_distance_diversity) - 5):
+                    f.write(f"Batch {i+1}: Stopped: {batch_info['stopped_unique']} unique, "
+                            f"Moving: {batch_info['moving_unique']} unique\n")
+
+            f.write(f"\n{'='*80}\n")
+
+        logger.info_rank0(f"Epoch {self.epoch} statistics written to {stats_file}")
+
+    def _write_final_statistics_on_exit(self) -> None:
+        """Write final statistics on program exit."""
+        if self.output_dir and self._iter_count > 0:
+            try:
+                stats_file = self.output_dir / "hierarchical_balanced_statistics.txt"
+                with open(stats_file, "a", encoding="utf-8") as f:
+                    f.write(f"\n{'='*80}\n")
+                    f.write(f"FINAL STATISTICS (Total iterations: {self._iter_count})\n")
+                    f.write(f"{'='*80}\n")
+                logger.info_rank0(f"Final statistics written to {stats_file}")
+            except Exception as e:
+                logger.warning_rank0(f"Failed to write final statistics: {e}")
+
+    def set_epoch(self, epoch: int) -> None:
+        """Set the epoch for deterministic shuffling."""
+        self.epoch = epoch
+
+
+class HierarchicalBalancedLoggingCollateWrapper:
+    """
+    Wrapper around collate function that logs batch info for HierarchicalBalancedBatchSampler.
+    """
+
+    def __init__(
+        self,
+        collate_fn: Callable[[List[dict]], Any],
+        sampler: HierarchicalBalancedBatchSampler,
+        output_dir: Optional[str] = None,
+    ):
+        self.collate_fn = collate_fn
+        self.sampler = sampler
+        self.output_dir = Path(output_dir) if output_dir else None
+        self.batch_count = 0
+
+        if self.output_dir:
+            self.log_file = self.output_dir / "hierarchical_balanced_sampling_log.txt"
+            with open(self.log_file, "w", encoding="utf-8") as f:
+                f.write(f"Hierarchical Balanced Sampling Log\n")
+                f.write(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                f.write(f"{'='*80}\n\n")
+        else:
+            self.log_file = None
+
+    def _log_batch(self, batch: List[dict]) -> None:
+        """Log batch information."""
+        self.batch_count += 1
+
+        moving_count = 0
+        stopped_count = 0
+        video_info = []
+        distances = []
+
+        for sample in batch:
+            videos = sample.get("videos", [])
+            if videos:
+                video_path = videos[0] if isinstance(videos, list) else videos
+                video_name = os.path.basename(video_path)
+                speed = extract_speed_from_path(video_path)
+
+                if speed is not None:
+                    is_moving = speed > 0.0
+                    class_label = "MOVING" if is_moving else "STOPPED"
+                    if is_moving:
+                        moving_count += 1
+                    else:
+                        stopped_count += 1
+                else:
+                    class_label = "UNKNOWN"
+
+                # Extract distance from filename
+                dist_match = re.search(r"dist([\d.]+)", video_path)
+                dist_val = dist_match.group(1) if dist_match else "?"
+                distances.append(dist_val)
+
+                video_info.append((video_name, speed, class_label, dist_val))
+
+        # Format log message
+        total = moving_count + stopped_count
+        moving_pct = (moving_count / total * 100) if total > 0 else 0
+        stopped_pct = (stopped_count / total * 100) if total > 0 else 0
+        unique_distances = len(set(distances))
+
+        log_lines = []
+        log_lines.append(f"\n{'='*80}")
+        log_lines.append(f"BATCH {self.batch_count}")
+        log_lines.append(f"{'='*80}")
+        log_lines.append(f"Class Distribution: {moving_count} MOVING ({moving_pct:.1f}%) | {stopped_count} STOPPED ({stopped_pct:.1f}%)")
+        log_lines.append(f"Distance Diversity: {unique_distances} unique distances")
+        log_lines.append(f"Total samples: {len(batch)}")
+        log_lines.append("-" * 80)
+
+        for i, (name, speed, label, dist) in enumerate(video_info, 1):
+            speed_str = f"speed={speed:.1f}" if speed is not None else "speed=?"
+            log_lines.append(f"  {i:3d}. [{label:7s}] {speed_str:12s} dist={dist:5s} | {name}")
+
+        log_lines.append("-" * 80)
+        log_message = "\n".join(log_lines)
+
+        logger.info_rank0(log_message)
+
+        if self.log_file:
+            with open(self.log_file, "a", encoding="utf-8") as f:
+                f.write(log_message + "\n")
+
+    def __call__(self, batch: List[dict]) -> Any:
+        """Log batch info and call original collate function."""
+        self._log_batch(batch)
+        return self.collate_fn(batch)
