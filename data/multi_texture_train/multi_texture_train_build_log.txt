@@ -1,0 +1,99 @@
+2025-12-02 10:43:33 - INFO - Dataset Builder started - multi_texture_train
+2025-12-02 10:43:33 - INFO - Configuration: {'dataset_name': 'multi_texture_train', 'output_dir': 'data/multi_texture_train', 'num_videos': 10, 'train_split': 1.0, 'moving_ratio': 0.5, 'seed': 42, 'vary_parameters': False, 'texture_type': 'factory_dark,factory_dark_stripes,noise,stripes', 'direction': 'left,right', 'speed_range': '0.0,14.0', 'resolution': '640x480', 'fps': '4', 'duration': '12.0', 'view_angle': '0,15,30', 'brightness': '0.0', 'contrast': '1.0', 'lighting_variation': 'none', 'lighting_intensity': '0.5', 'motion_blur': '0', 'camera_noise': '0.0', 'edge_width': '0.1', 'stripe_width': '10', 'stripe_spacing': '60', 'stripe_gray': '125', 'background_gray': '140', 'stripe_distance_variance': '0.0', 'add_object': False, 'object_type': 'box', 'object_position': 'center', 'object_size': 'medium', 'num_objects': 1, 'add_blur': False, 'blur_type': 'gaussian', 'blur_intensity': '0.3', 'random_blur_variation': False}
+2025-12-02 10:43:33 - INFO - Validating prerequisites...
+2025-12-02 10:43:33 - INFO -   [OK] Found synthetic generation script
+2025-12-02 10:43:33 - INFO -   [OK] Found dataset_info.json
+2025-12-02 10:43:33 - INFO -   [OK] Python3 available: Python 3.12.3
+2025-12-02 10:43:33 - INFO - Generating video configurations...
+2025-12-02 10:43:33 - INFO -   Generated 48 parameter combinations
+2025-12-02 10:43:33 - INFO -   Generated: 24 moving, 24 stopped videos
+2025-12-02 10:43:33 - INFO - Generating 48 videos...
+2025-12-02 10:43:33 - INFO -   [1/48] Generating video...
+2025-12-02 10:43:33 - INFO -     Texture: factory_dark, Direction: right, Speed: 0.00
+2025-12-02 10:43:33 - INFO -     DEBUG CMD for factory_dark: python3 /mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py --num_videos 1 --output_dir data/multi_texture_train --seed 50 --texture_type factory_dark --direction right --speed 0.0 --view_angle 30.0 --brightness 0.0 --contrast 1.0 --lighting_variation none --lighting_intensity 0.5 --motion_blur 0 --camera_noise 0.0 --edge_width 0.1 --resolution 640x480 --fps 4 --duration 12.0
+2025-12-02 10:43:34 - ERROR -     [FAIL] Video generation failed:
+2025-12-02 10:43:34 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-02 10:43:34 - INFO -   [2/48] Generating video...
+2025-12-02 10:43:34 - INFO -     Texture: stripes, Direction: right, Speed: 14.00
+2025-12-02 10:43:35 - ERROR -     [FAIL] Video generation failed:
+2025-12-02 10:43:35 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-02 10:43:35 - INFO -   [3/48] Generating video...
+2025-12-02 10:43:35 - INFO -     Texture: factory_dark, Direction: left, Speed: 0.00
+2025-12-02 10:43:35 - INFO -     DEBUG CMD for factory_dark: python3 /mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py --num_videos 1 --output_dir data/multi_texture_train --seed 42 --texture_type factory_dark --direction left --speed 0.0 --view_angle 0.0 --brightness 0.0 --contrast 1.0 --lighting_variation none --lighting_intensity 0.5 --motion_blur 0 --camera_noise 0.0 --edge_width 0.1 --resolution 640x480 --fps 4 --duration 12.0
+2025-12-02 10:43:35 - ERROR -     [FAIL] Video generation failed:
+2025-12-02 10:43:35 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-02 10:43:35 - INFO -   [4/48] Generating video...
+2025-12-02 10:43:35 - INFO -     Texture: factory_dark_stripes, Direction: right, Speed: 14.00
+2025-12-02 10:43:35 - INFO -     DEBUG CMD for factory_dark_stripes: python3 /mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py --num_videos 1 --output_dir data/multi_texture_train --seed 64 --texture_type factory_dark_stripes --direction right --speed 14.0 --view_angle 15.0 --brightness 0.0 --contrast 1.0 --lighting_variation none --lighting_intensity 0.5 --motion_blur 0 --camera_noise 0.0 --edge_width 0.1 --resolution 640x480 --fps 4 --duration 12.0
+2025-12-02 10:43:36 - ERROR -     [FAIL] Video generation failed:
+2025-12-02 10:43:36 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-02 10:43:36 - INFO -   [5/48] Generating video...
+2025-12-02 10:43:36 - INFO -     Texture: stripes, Direction: right, Speed: 14.00
+2025-12-02 10:43:37 - ERROR -     [FAIL] Video generation failed:
+2025-12-02 10:43:37 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-02 10:43:37 - INFO -   [6/48] Generating video...
+2025-12-02 10:43:37 - INFO -     Texture: factory_dark_stripes, Direction: right, Speed: 14.00
+2025-12-02 10:43:37 - INFO -     DEBUG CMD for factory_dark_stripes: python3 /mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py --num_videos 1 --output_dir data/multi_texture_train --seed 63 --texture_type factory_dark_stripes --direction right --speed 14.0 --view_angle 0.0 --brightness 0.0 --contrast 1.0 --lighting_variation none --lighting_intensity 0.5 --motion_blur 0 --camera_noise 0.0 --edge_width 0.1 --resolution 640x480 --fps 4 --duration 12.0
+2025-12-02 10:43:38 - ERROR -     [FAIL] Video generation failed:
+2025-12-02 10:43:38 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-02 10:43:38 - INFO -   [7/48] Generating video...
+2025-12-02 10:43:38 - INFO -     Texture: factory_dark_stripes, Direction: left, Speed: 0.00
+2025-12-02 10:43:38 - INFO -     DEBUG CMD for factory_dark_stripes: python3 /mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py --num_videos 1 --output_dir data/multi_texture_train --seed 54 --texture_type factory_dark_stripes --direction left --speed 0.0 --view_angle 0.0 --brightness 0.0 --contrast 1.0 --lighting_variation none --lighting_intensity 0.5 --motion_blur 0 --camera_noise 0.0 --edge_width 0.1 --resolution 640x480 --fps 4 --duration 12.0
+2025-12-02 10:43:38 - ERROR -     [FAIL] Video generation failed:
+2025-12-02 10:43:38 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-02 10:43:38 - INFO -   [8/48] Generating video...
+2025-12-02 10:43:38 - INFO -     Texture: noise, Direction: right, Speed: 0.00
+2025-12-02 10:43:39 - ERROR -     [FAIL] Video generation failed:
+2025-12-02 10:43:39 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-02 10:43:39 - INFO -   [9/48] Generating video...
+2025-12-02 10:43:39 - INFO -     Texture: noise, Direction: left, Speed: 14.00
+2025-12-02 10:43:40 - ERROR -     [FAIL] Video generation failed:
+2025-12-02 10:43:40 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-02 10:43:40 - INFO -   [10/48] Generating video...
+2025-12-02 10:43:40 - INFO -     Texture: factory_dark, Direction: right, Speed: 14.00
+2025-12-02 10:43:40 - INFO -     DEBUG CMD for factory_dark: python3 /mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py --num_videos 1 --output_dir data/multi_texture_train --seed 51 --texture_type factory_dark --direction right --speed 14.0 --view_angle 0.0 --brightness 0.0 --contrast 1.0 --lighting_variation none --lighting_intensity 0.5 --motion_blur 0 --camera_noise 0.0 --edge_width 0.1 --resolution 640x480 --fps 4 --duration 12.0
+2025-12-02 10:43:40 - ERROR -     [FAIL] Video generation failed:
+2025-12-02 10:43:40 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-02 10:43:40 - INFO -   [11/48] Generating video...
+2025-12-02 10:43:40 - INFO -     Texture: factory_dark_stripes, Direction: right, Speed: 0.00
+2025-12-02 10:43:40 - INFO -     DEBUG CMD for factory_dark_stripes: python3 /mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py --num_videos 1 --output_dir data/multi_texture_train --seed 62 --texture_type factory_dark_stripes --direction right --speed 0.0 --view_angle 30.0 --brightness 0.0 --contrast 1.0 --lighting_variation none --lighting_intensity 0.5 --motion_blur 0 --camera_noise 0.0 --edge_width 0.1 --resolution 640x480 --fps 4 --duration 12.0

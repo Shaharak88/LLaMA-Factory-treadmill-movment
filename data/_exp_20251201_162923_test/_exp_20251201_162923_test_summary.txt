@@ -1,0 +1,38 @@
+======================================================================
+Dataset Generation Summary: _exp_20251201_162923_test
+======================================================================
+
+Generation Date: 2025-12-01 14:30:37
+Seed: 42
+
+Dataset Statistics:
+----------------------------------------------------------------------
+  Total Videos: 16
+  Moving Videos: 8 (50.0%)
+  Stopped Videos: 8 (50.0%)
+
+  Speed Range: 10.00 - 10.00 px/frame
+
+Texture Distribution:
+  subtle_gray_stripes:  16 (100.0%)
+
+Direction Distribution:
+  down           :   4 (25.0%)
+  left           :   4 (25.0%)
+  right          :   4 (25.0%)
+  up             :   4 (25.0%)
+
+File Sizes:
+  Total: 0.32 MB
+  Average: 0.02 MB per video
+
+Output Files:
+----------------------------------------------------------------------
+  Videos: data/_exp_20251201_162923_test/
+  Dataset JSON: /app/data/_exp_20251201_162923_test.json
+  Dataset Info: /app/data/dataset_info.json
+  Log File: data/_exp_20251201_162923_test/_exp_20251201_162923_test_build_log.txt
+
+======================================================================
+Dataset ready for training!
+======================================================================

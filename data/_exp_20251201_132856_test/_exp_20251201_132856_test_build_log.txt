@@ -1,0 +1,81 @@
+2025-12-01 11:29:12 - INFO - Dataset Builder started - _exp_20251201_132856_test
+2025-12-01 11:29:12 - INFO - Configuration: {'dataset_name': '_exp_20251201_132856_test', 'output_dir': 'data/_exp_20251201_132856_test', 'num_videos': 10, 'train_split': 0.8, 'moving_ratio': 0.5, 'seed': 42, 'vary_parameters': False, 'texture_type': 'subtle_gray_stripes', 'direction': 'left', 'speed_range': '0.0,14.0', 'resolution': '640x480', 'fps': '4', 'duration': '12.0', 'view_angle': '7.0,22.0,30.0,45.0', 'brightness': '1.0', 'contrast': '1.0', 'lighting_variation': 'none', 'lighting_intensity': '1.0', 'motion_blur': '0', 'camera_noise': '0.0', 'edge_width': '5', 'stripe_width': '20', 'stripe_spacing': '20', 'stripe_gray': '15', 'background_gray': '10', 'stripe_distance_variance': '0.0'}
+2025-12-01 11:29:12 - INFO - Validating prerequisites...
+2025-12-01 11:29:12 - INFO -   [OK] Found synthetic generation script
+2025-12-01 11:29:12 - INFO -   [OK] Found dataset_info.json
+2025-12-01 11:29:12 - INFO -   [OK] Python3 available: Python 3.11.11
+2025-12-01 11:29:12 - INFO - Generating video configurations...
+2025-12-01 11:29:12 - INFO -   Generated 8 parameter combinations
+2025-12-01 11:29:12 - INFO -   Generated: 4 moving, 4 stopped videos
+2025-12-01 11:29:12 - INFO - Generating 8 videos...
+2025-12-01 11:29:12 - INFO -   [1/8] Generating video...
+2025-12-01 11:29:12 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 11:29:14 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed14.0_angle45_bright1.00_contr1.00_640x480_seed49.mp4 (20.8 KB)
+2025-12-01 11:29:14 - INFO -   [2/8] Generating video...
+2025-12-01 11:29:14 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 11:29:17 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed0.0_angle7_bright1.00_contr1.00_640x480_seed42.mp4 (20.8 KB)
+2025-12-01 11:29:17 - INFO -   [3/8] Generating video...
+2025-12-01 11:29:17 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 11:29:19 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed0.0_angle30_bright1.00_contr1.00_640x480_seed44.mp4 (20.8 KB)
+2025-12-01 11:29:19 - INFO -   [4/8] Generating video...
+2025-12-01 11:29:19 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 11:29:22 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed0.0_angle45_bright1.00_contr1.00_640x480_seed45.mp4 (20.8 KB)
+2025-12-01 11:29:22 - INFO -   [5/8] Generating video...
+2025-12-01 11:29:22 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 11:29:24 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed14.0_angle30_bright1.00_contr1.00_640x480_seed48.mp4 (20.8 KB)
+2025-12-01 11:29:24 - INFO -   [6/8] Generating video...
+2025-12-01 11:29:24 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 11:29:27 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed0.0_angle22_bright1.00_contr1.00_640x480_seed43.mp4 (20.8 KB)
+2025-12-01 11:29:27 - INFO -   [7/8] Generating video...
+2025-12-01 11:29:27 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 11:29:29 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed14.0_angle7_bright1.00_contr1.00_640x480_seed46.mp4 (20.8 KB)
+2025-12-01 11:29:29 - INFO -   [8/8] Generating video...
+2025-12-01 11:29:29 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 11:29:32 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed14.0_angle22_bright1.00_contr1.00_640x480_seed47.mp4 (20.8 KB)
+2025-12-01 11:29:32 - INFO - Successfully generated 8/8 videos
+2025-12-01 11:29:32 - INFO - Creating dataset JSON: /app/data/_exp_20251201_132856_test.json
+2025-12-01 11:29:32 - INFO -   [OK] Created dataset with 8 entries
+2025-12-01 11:29:32 - INFO - Updating dataset_info.json...
+2025-12-01 11:29:32 - INFO -   Created backup: dataset_info.json.backup
+2025-12-01 11:29:32 - INFO -   [OK] Added '_exp_20251201_132856_test' to dataset_info.json
+2025-12-01 11:29:32 - INFO - Generating summary report...
+2025-12-01 11:29:32 - INFO - 
+======================================================================
+Dataset Generation Summary: _exp_20251201_132856_test
+======================================================================
+
+Generation Date: 2025-12-01 11:29:32
+Seed: 42
+
+Dataset Statistics:
+----------------------------------------------------------------------
+  Total Videos: 8
+  Moving Videos: 4 (50.0%)
+  Stopped Videos: 4 (50.0%)
+
+  Speed Range: 14.00 - 14.00 px/frame
+
+Texture Distribution:
+  subtle_gray_stripes:   8 (100.0%)
+
+Direction Distribution:
+  left           :   8 (100.0%)
+
+File Sizes:
+  Total: 0.16 MB
+  Average: 0.02 MB per video
+
+Output Files:
+----------------------------------------------------------------------
+  Videos: data/_exp_20251201_132856_test/
+  Dataset JSON: /app/data/_exp_20251201_132856_test.json
+  Dataset Info: /app/data/dataset_info.json
+  Log File: data/_exp_20251201_132856_test/_exp_20251201_132856_test_build_log.txt
+
+======================================================================
+Dataset ready for training!
+======================================================================
+
+2025-12-01 11:29:32 - INFO - ======================================================================
+2025-12-01 11:29:32 - INFO - [OK] Dataset building complete!
+2025-12-01 11:29:32 - INFO - ======================================================================

@@ -1,0 +1,89 @@
+================================================================================
+EVALUATION METADATA - COMPLETE CONFIGURATION
+================================================================================
+
+TIMESTAMP INFORMATION:
+  Evaluation Started: 2025-12-09 10:07:41
+  Timestamp ID: 20251209_100741
+
+MODEL CONFIGURATION:
+  Base Model Path: Qwen/Qwen2.5-VL-3B-Instruct
+  Adapter Path: saves/5epoch_dec9_oft
+  Template: qwen2_vl
+
+DATASET CONFIGURATION:
+  Test Dataset Name: _exp_20251208_230500_test
+  Dataset Directory: data
+  Dataset File: _exp_20251208_230500_test.json
+  Dataset Formatting: sharegpt
+  Dataset Columns: {'messages': 'messages', 'videos': 'videos'}
+  Dataset Info Path: /app/data/dataset_info.json
+
+EVALUATION CONFIGURATION:
+  Evaluation Method: yesno
+  Evaluation Prompt: "Is there movement in the video? Answer only with yes or no."
+  Max New Tokens: 128
+  Batch Size: 1024
+
+VIDEO PROCESSING CONFIGURATION:
+  Video FPS: 4.0
+  Video Max Length: 128
+  Min Pixels (hardcoded): 224 * 224 = 50176
+  Max Pixels (hardcoded): 384 * 384 = 147456
+  FPS (hardcoded in inference): 4.0
+
+QUANTIZATION CONFIGURATION:
+  Load in 4-bit: True
+  4-bit Compute Dtype: torch.float16
+  4-bit Use Double Quant: True
+  4-bit Quant Type: nf4
+
+GPU CONFIGURATION:
+  GPU Memory Utilization: Not specified (auto)
+  Device Map: auto
+  Low CPU Memory Usage: True
+
+OUTPUT CONFIGURATION:
+  Output Directory: /app/data/_exp_20251208_230500_test/eval_20251209_100741
+  Project Root: /app
+
+INFERENCE CONFIGURATION:
+  Sampling: False (do_sample=False, deterministic greedy decoding)
+  Trust Remote Code: True
+
+PARSING LOGIC:
+  Evaluation Method: yesno
+  Expected Model Responses: 'yes' (moving) or 'no' (stopped)
+  Parsing Strategy: Check for 'yes'/'no' keywords (case-insensitive)
+  Fallback: Default to 'stopped' if parsing is ambiguous
+
+GIT INFORMATION:
+  Not available
+
+SYSTEM INFORMATION:
+  Python Version: 3.11.11
+  PyTorch Version: 2.6.0+cu124
+  CUDA Available: True
+  CUDA Version: 12.4
+  GPU Count: 1
+  GPU 0: NVIDIA RTX 6000 Ada Generation
+
+COMMAND LINE ARGUMENTS (COMPLETE):
+  --model_name_or_path: Qwen/Qwen2.5-VL-3B-Instruct
+  --adapter_name_or_path: saves/5epoch_dec9_oft
+  --test_dataset: _exp_20251208_230500_test
+  --dataset_dir: data
+  --output_dir: evaluation_results_20251209_100342
+  --eval_method: yesno
+  --template: qwen2_vl
+  --max_new_tokens: 128
+  --batch_size: 1024
+  --video_fps: 4.0
+  --video_maxlen: 128
+  --image_max_pixels: None
+  --image_min_pixels: None
+  --gpu_memory_utilization: None
+
+================================================================================
+END OF METADATA
+================================================================================

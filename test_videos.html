@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Test - Working Example</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 30px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .status {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .video-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .video-card video {
+            width: 100%;
+            border-radius: 8px;
+            background: #000;
+            margin-bottom: 15px;
+        }
+
+        .video-card h3 {
+            font-size: 0.9em;
+            color: #667eea;
+            margin-bottom: 10px;
+            word-break: break-word;
+        }
+
+        .video-info {
+            font-size: 0.85em;
+            color: #495057;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+        }
+
+        .instructions {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            color: #856404;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .instructions h2 {
+            margin-bottom: 10px;
+            color: #856404;
+        }
+
+        .instructions code {
+            background: rgba(0,0,0,0.1);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .instructions li {
+            margin: 8px 0;
+        }
+
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎬 Video Playback Test</h1>
+            <p>Testing video playback with local HTTP server</p>
+        </header>
+
+        <div class="instructions">
+            <h2>⚠️ IMPORTANT: How to View This Page</h2>
+            <p><strong>Videos ONLY work when served via HTTP server!</strong> They won't play if you just double-click the HTML file.</p>
+
+            <h3 style="margin-top: 15px;">To view this page properly:</h3>
+            <ol>
+                <li>Open a terminal/command prompt in this directory</li>
+                <li>Run: <code>python -m http.server 8000</code> (or <code>python3 -m http.server 8000</code>)</li>
+                <li>Open your browser and go to: <code>http://localhost:8000/test_videos.html</code></li>
+                <li>Videos should now play! ✅</li>
+            </ol>
+
+            <h3 style="margin-top: 15px;">Alternative (Windows):</h3>
+            <p>Double-click <code>START_SERVER.bat</code> then open <code>http://localhost:8000/test_videos.html</code></p>
+        </div>
+
+        <div id="status" class="status">
+            📊 Loading videos...
+        </div>
+
+        <div class="video-grid" id="videoGrid">
+            <!-- Videos will be loaded here -->
+        </div>
+    </div>
+
+    <script>
+        // Sample videos from the dataset (using known paths)
+        const sampleVideos = [
+            {
+                name: "treadmill_0000_subtle_gray_stripes_right_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4",
+                path: "data/videos/preformat_right_only_20251130_141204/treadmill_0000_subtle_gray_stripes_right_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4",
+                info: "Direction: right, Speed: 0.0, Angle: 0°"
+            },
+            {
+                name: "treadmill_0000_subtle_gray_stripes_right_speed0.0_angle0_bright0.00_contr1.00_640x480_seed43.mp4",
+                path: "data/videos/preformat_right_only_20251130_141204/treadmill_0000_subtle_gray_stripes_right_speed0.0_angle0_bright0.00_contr1.00_640x480_seed43.mp4",
+                info: "Direction: right, Speed: 0.0, Angle: 0°"
+            },
+            {
+                name: "treadmill_0000_subtle_gray_stripes_right_speed0.0_angle15_bright0.00_contr1.00_640x480_seed51.mp4",
+                path: "data/videos/preformat_right_only_20251130_141204/treadmill_0000_subtle_gray_stripes_right_speed0.0_angle15_bright0.00_contr1.00_640x480_seed51.mp4",
+                info: "Direction: right, Speed: 0.0, Angle: 15°"
+            },
+            {
+                name: "treadmill_0000_subtle_gray_stripes_right_speed0.0_angle30_bright0.00_contr1.00_640x480_seed60.mp4",
+                path: "data/videos/preformat_right_only_20251130_141204/treadmill_0000_subtle_gray_stripes_right_speed0.0_angle30_bright0.00_contr1.00_640x480_seed60.mp4",
+                info: "Direction: right, Speed: 0.0, Angle: 30°"
+            }
+        ];
+
+        function createVideoCard(video) {
+            const card = document.createElement('div');
+            card.className = 'video-card';
+
+            card.innerHTML = `
+                <video controls preload="metadata" onloadedmetadata="onVideoLoaded(this)" onerror="onVideoError(this)">
+                    <source src="${video.path}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <h3>${video.name}</h3>
+                <div class="video-info">
+                    ${video.info}
+                </div>
+            `;
+
+            return card;
+        }
+
+        function loadVideos() {
+            const grid = document.getElementById('videoGrid');
+            grid.innerHTML = '';
+
+            sampleVideos.forEach(video => {
+                grid.appendChild(createVideoCard(video));
+            });
+        }
+
+        let loadedCount = 0;
+        let errorCount = 0;
+
+        function onVideoLoaded(videoElement) {
+            loadedCount++;
+            updateStatus();
+        }
+
+        function onVideoError(videoElement) {
+            errorCount++;
+            updateStatus();
+            console.error('Failed to load video:', videoElement.querySelector('source').src);
+        }
+
+        function updateStatus() {
+            const statusDiv = document.getElementById('status');
+            const total = sampleVideos.length;
+
+            if (loadedCount + errorCount >= total) {
+                if (errorCount === 0) {
+                    statusDiv.className = 'success';
+                    statusDiv.innerHTML = `✅ Success! All ${loadedCount} videos loaded and ready to play.`;
+                } else if (errorCount === total) {
+                    statusDiv.className = 'status';
+                    statusDiv.style.background = '#f8d7da';
+                    statusDiv.style.borderLeft = '4px solid #dc3545';
+                    statusDiv.style.color = '#721c24';
+                    statusDiv.innerHTML = `
+                        ❌ Videos failed to load. Make sure you're running this via HTTP server!<br>
+                        <strong>Run:</strong> <code>python -m http.server 8000</code><br>
+                        <strong>Then open:</strong> <code>http://localhost:8000/test_videos.html</code>
+                    `;
+                } else {
+                    statusDiv.className = 'status';
+                    statusDiv.innerHTML = `⚠️ Loaded ${loadedCount} videos, ${errorCount} failed. Check console for errors.`;
+                }
+            }
+        }
+
+        // Load videos on page load
+        window.addEventListener('DOMContentLoaded', loadVideos);
+    </script>
+</body>
+</html>

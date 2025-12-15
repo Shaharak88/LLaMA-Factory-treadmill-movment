@@ -1,0 +1,3701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Video Dataset Report</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        header p { font-size: 1em; opacity: 0.95; margin: 5px 0; }
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+            overflow-x: auto;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 1em;
+            font-weight: 500;
+            color: #495057;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .tab:hover { background: rgba(102, 126, 234, 0.1); color: #667eea; }
+        .tab.active { background: white; color: #667eea; border-bottom: 3px solid #667eea; }
+        .tab-content { padding: 30px; display: none; }
+        .tab-content.active { display: block; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .stat-card h3 { font-size: 1em; opacity: 0.9; margin-bottom: 10px; }
+        .stat-card .value { font-size: 2.5em; font-weight: bold; }
+        .distribution-chart {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .distribution-chart h3 { margin-bottom: 15px; color: #667eea; }
+        .bar-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .bar-label {
+            width: 150px;
+            font-size: 0.9em;
+            color: #495057;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .bar {
+            flex: 1;
+            height: 25px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            position: relative;
+            margin-right: 10px;
+            min-width: 30px;
+        }
+        .bar-value {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .alert-warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            color: #856404;
+        }
+        .alert-danger {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            color: #721c24;
+        }
+        .alert-success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            color: #155724;
+        }
+        .alert-info {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            color: #0c5460;
+        }
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        .video-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .video-card:hover { transform: translateY(-5px); }
+        .video-card.missing {
+            opacity: 0.5;
+            border: 2px dashed #dc3545;
+        }
+        .video-card video {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background: #000;
+        }
+        .video-card h4 {
+            font-size: 0.9em;
+            color: #667eea;
+            margin-bottom: 10px;
+            word-break: break-all;
+        }
+        .video-metadata {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            font-size: 0.85em;
+        }
+        .metadata-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px;
+            background: white;
+            border-radius: 4px;
+        }
+        .metadata-label { font-weight: 600; color: #495057; }
+        .metadata-value { color: #667eea; }
+        .group-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0 15px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        .search-box {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1em;
+            margin-bottom: 20px;
+        }
+        .search-box:focus { outline: none; border-color: #667eea; }
+        .missing-badge {
+            background: #dc3545;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+        .heatmap-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+        .heatmap {
+            display: inline-grid;
+            gap: 2px;
+            margin: 20px 0;
+        }
+        .heatmap-cell {
+            min-width: 60px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+            color: white;
+        }
+        .heatmap-label {
+            min-width: 60px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #495057;
+        }
+        .combination-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+        .combination-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        .combination-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .combination-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        @media (max-width: 768px) {
+            .video-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📹 Enhanced Video Dataset Report</h1>
+            <p>Generated: 2025-12-03 12:22:22</p>
+            <p>Total Videos: 64</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">
+                ✅ With category distributions, warnings, and imbalance analysis
+            </p>
+        </header>
+
+        
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab(event, 'overview')">Overview</button>
+            <button class="tab" onclick="switchTab(event, 'warnings')">⚠️ Warnings</button>
+            <button class="tab" onclick="switchTab(event, 'distributions')">📊 Distributions</button>
+            <button class="tab" onclick="switchTab(event, 'defaults')">Dataset Defaults</button>
+            <button class="tab" onclick="switchTab(event, 'texture')">By Texture</button>
+            <button class="tab" onclick="switchTab(event, 'direction')">By Direction</button>
+            <button class="tab" onclick="switchTab(event, 'speed')">By Speed</button>
+            <button class="tab" onclick="switchTab(event, 'angle')">By Angle</button>
+            <button class="tab" onclick="switchTab(event, 'objects')">Objects</button>
+            <button class="tab" onclick="switchTab(event, 'blur')">Blur Effects</button>
+            <button class="tab" onclick="switchTab(event, 'all')">All Videos</button>
+        </div>
+
+        <div id="overview" class="tab-content active">
+            <h2>📊 Statistical Overview</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Videos</h3>
+                    <div class="value">64</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Parameters Tracked</h3>
+                    <div class="value">14</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Outliers Detected</h3>
+                    <div class="value">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Coverage</h3>
+                    <div class="value">100.0%</div>
+                </div>
+            </div>
+            <div id="quick-stats"></div>
+        </div>
+
+        <div id="warnings" class="tab-content">
+            <h2>⚠️ Dataset Warnings & Analysis</h2>
+            <div id="warnings-content"></div>
+        </div>
+
+        <div id="distributions" class="tab-content">
+            <h2>📊 Category Distributions</h2>
+            <p style="margin-bottom: 20px; color: #495057;">Complete distribution analysis for all metadata categories.</p>
+            <div id="distribution-charts"></div>
+        </div>
+
+        <div id="defaults" class="tab-content">
+            <h2>📋 Dataset Defaults & Common Values</h2>
+            <p style="margin-bottom: 20px; color: #495057;">Most common value for each parameter.</p>
+            <div id="defaults-table"></div>
+        </div>
+
+        <div id="texture" class="tab-content"></div>
+        <div id="direction" class="tab-content"></div>
+        <div id="speed" class="tab-content"></div>
+        <div id="angle" class="tab-content"></div>
+        <div id="objects" class="tab-content"></div>
+        <div id="blur" class="tab-content"></div>
+
+        <div id="all" class="tab-content">
+            <h2>All Videos</h2>
+            <input type="text" class="search-box" id="searchBox"
+                   placeholder="Search by name, texture, direction, speed..."
+                   onkeyup="filterVideos()">
+            <div id="allVideosGrid" class="video-grid"></div>
+        </div>
+    </div>
+
+    <script>
+        const metadata = [
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "28",
+    "background_contrast": "20",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "42",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed58.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "28",
+    "background_contrast": "20",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "58",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed58.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed58.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed74.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "28",
+    "background_contrast": "20",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "74",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed74.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed74.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed90.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "28",
+    "background_contrast": "20",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "90",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed90.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed90.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed43.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "28",
+    "background_contrast": "21",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "43",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed43.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed43.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed59.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "28",
+    "background_contrast": "21",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "59",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed59.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed59.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed75.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "28",
+    "background_contrast": "21",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "75",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed75.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed75.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed91.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "28",
+    "background_contrast": "21",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "91",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed91.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed91.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg22_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed44.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "28",
+    "background_contrast": "22",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "44",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg22_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed44.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg22_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed44.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg22_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed60.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "28",
+    "background_contrast": "22",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "60",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg22_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed60.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg22_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed60.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg22_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed76.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "28",
+    "background_contrast": "22",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "76",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg22_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed76.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg22_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed76.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg22_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed92.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "28",
+    "background_contrast": "22",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "92",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg22_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed92.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg22_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed92.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg23_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed45.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "28",
+    "background_contrast": "23",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "45",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg23_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed45.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg23_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed45.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg23_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed61.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "28",
+    "background_contrast": "23",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "61",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg23_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed61.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg23_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed61.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg23_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed77.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "28",
+    "background_contrast": "23",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "77",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg23_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed77.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg23_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed77.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg23_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed93.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "28",
+    "background_contrast": "23",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "93",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg23_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed93.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg23_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed93.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe29_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed46.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "29",
+    "background_contrast": "20",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "46",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed46.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed46.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe29_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed62.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "29",
+    "background_contrast": "20",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "62",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed62.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed62.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe29_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed78.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "29",
+    "background_contrast": "20",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "78",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed78.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed78.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe29_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed94.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "29",
+    "background_contrast": "20",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "94",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed94.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed94.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe29_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed47.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "29",
+    "background_contrast": "21",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "47",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed47.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed47.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe29_bg21_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed63.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "29",
+    "background_contrast": "21",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "63",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg21_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed63.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg21_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed63.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe29_bg21_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed79.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "29",
+    "background_contrast": "21",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "79",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg21_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed79.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg21_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed79.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe29_bg21_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed95.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "29",
+    "background_contrast": "21",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "95",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg21_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed95.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg21_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed95.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe29_bg22_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed48.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "29",
+    "background_contrast": "22",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "48",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg22_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed48.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg22_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed48.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe29_bg22_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed64.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "29",
+    "background_contrast": "22",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "64",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg22_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed64.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg22_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed64.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe29_bg22_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed80.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "29",
+    "background_contrast": "22",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "80",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg22_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed80.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg22_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed80.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe29_bg22_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed96.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "29",
+    "background_contrast": "22",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "96",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg22_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed96.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg22_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed96.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe29_bg23_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed49.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "29",
+    "background_contrast": "23",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "49",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg23_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed49.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg23_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed49.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe29_bg23_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed65.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "29",
+    "background_contrast": "23",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "65",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg23_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed65.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg23_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed65.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe29_bg23_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed81.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "29",
+    "background_contrast": "23",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "81",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg23_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed81.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg23_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed81.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe29_bg23_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed97.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "29",
+    "background_contrast": "23",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "97",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg23_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed97.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe29_bg23_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed97.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe30_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed50.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "30",
+    "background_contrast": "20",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "50",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed50.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed50.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe30_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed66.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "30",
+    "background_contrast": "20",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "66",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed66.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed66.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe30_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed82.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "30",
+    "background_contrast": "20",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "82",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed82.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed82.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe30_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed98.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "30",
+    "background_contrast": "20",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "98",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed98.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed98.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe30_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed51.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "30",
+    "background_contrast": "21",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "51",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed51.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed51.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe30_bg21_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed67.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "30",
+    "background_contrast": "21",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "67",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg21_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed67.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg21_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed67.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe30_bg21_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed83.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "30",
+    "background_contrast": "21",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "83",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg21_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed83.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg21_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed83.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe30_bg21_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed99.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "30",
+    "background_contrast": "21",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "99",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg21_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed99.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg21_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed99.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe30_bg22_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed52.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "30",
+    "background_contrast": "22",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "52",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg22_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed52.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg22_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed52.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe30_bg22_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed68.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "30",
+    "background_contrast": "22",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "68",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg22_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed68.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg22_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed68.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe30_bg22_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed84.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "30",
+    "background_contrast": "22",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "84",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg22_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed84.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg22_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed84.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe30_bg22_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed100.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "30",
+    "background_contrast": "22",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "100",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg22_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed100.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg22_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed100.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe30_bg23_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed53.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "30",
+    "background_contrast": "23",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "53",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg23_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed53.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg23_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed53.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe30_bg23_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed69.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "30",
+    "background_contrast": "23",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "69",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg23_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed69.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg23_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed69.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe30_bg23_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed85.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "30",
+    "background_contrast": "23",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "85",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg23_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed85.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg23_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed85.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe30_bg23_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed101.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "30",
+    "background_contrast": "23",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "101",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg23_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed101.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe30_bg23_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed101.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe31_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed54.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "31",
+    "background_contrast": "20",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "54",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed54.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed54.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe31_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed70.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "31",
+    "background_contrast": "20",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "70",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed70.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed70.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe31_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed86.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "31",
+    "background_contrast": "20",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "86",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed86.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed86.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe31_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed102.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "31",
+    "background_contrast": "20",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "102",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed102.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed102.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe31_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed55.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "31",
+    "background_contrast": "21",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "55",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed55.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed55.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe31_bg21_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed71.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "31",
+    "background_contrast": "21",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "71",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg21_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed71.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg21_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed71.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe31_bg21_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed87.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "31",
+    "background_contrast": "21",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "87",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg21_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed87.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg21_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed87.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe31_bg21_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed103.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "31",
+    "background_contrast": "21",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "103",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg21_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed103.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg21_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed103.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe31_bg22_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed56.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "31",
+    "background_contrast": "22",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "56",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg22_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed56.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg22_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed56.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe31_bg22_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed72.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "31",
+    "background_contrast": "22",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "72",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg22_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed72.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg22_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed72.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe31_bg22_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed88.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "31",
+    "background_contrast": "22",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "88",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg22_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed88.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg22_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed88.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe31_bg22_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed104.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "31",
+    "background_contrast": "22",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "104",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg22_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed104.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg22_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed104.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe31_bg23_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed57.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "31",
+    "background_contrast": "23",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "57",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg23_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed57.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg23_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed57.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe31_bg23_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed73.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "31",
+    "background_contrast": "23",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "73",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg23_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed73.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg23_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed73.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe31_bg23_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed89.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "31",
+    "background_contrast": "23",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "89",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg23_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed89.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg23_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed89.mp4"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_stripe31_bg23_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed105.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "14.0",
+    "angle": "30",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "31",
+    "background_contrast": "23",
+    "object_enabled": "no",
+    "object_type": "",
+    "num_objects": "",
+    "object_size": "",
+    "object_position": "",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "105",
+    "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg23_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed105.mp4",
+    "file_exists": true,
+    "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe31_bg23_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed105.mp4"
+  }
+];
+        const stats = {
+  "total_videos": 64,
+  "distributions": {
+    "angle": {
+      "counts": {
+        "0": 32,
+        "30": 32
+      },
+      "unique_values": 2,
+      "average_per_value": 32.0,
+      "min_count": 32,
+      "max_count": 32,
+      "std_dev": 0.0
+    },
+    "background_contrast": {
+      "counts": {
+        "20": 16,
+        "21": 16,
+        "22": 16,
+        "23": 16
+      },
+      "unique_values": 4,
+      "average_per_value": 16.0,
+      "min_count": 16,
+      "max_count": 16,
+      "std_dev": 0.0
+    },
+    "blur_enabled": {
+      "counts": {
+        "no": 64
+      },
+      "unique_values": 1,
+      "average_per_value": 64.0,
+      "min_count": 64,
+      "max_count": 64,
+      "std_dev": 0
+    },
+    "blur_variation": {
+      "counts": {
+        "no": 64
+      },
+      "unique_values": 1,
+      "average_per_value": 64.0,
+      "min_count": 64,
+      "max_count": 64,
+      "std_dev": 0
+    },
+    "brightness": {
+      "counts": {
+        "0.00": 64
+      },
+      "unique_values": 1,
+      "average_per_value": 64.0,
+      "min_count": 64,
+      "max_count": 64,
+      "std_dev": 0
+    },
+    "contrast": {
+      "counts": {
+        "1.00": 64
+      },
+      "unique_values": 1,
+      "average_per_value": 64.0,
+      "min_count": 64,
+      "max_count": 64,
+      "std_dev": 0
+    },
+    "direction": {
+      "counts": {
+        "left": 64
+      },
+      "unique_values": 1,
+      "average_per_value": 64.0,
+      "min_count": 64,
+      "max_count": 64,
+      "std_dev": 0
+    },
+    "index": {
+      "counts": {
+        "0000": 64
+      },
+      "unique_values": 1,
+      "average_per_value": 64.0,
+      "min_count": 64,
+      "max_count": 64,
+      "std_dev": 0
+    },
+    "object_enabled": {
+      "counts": {
+        "no": 64
+      },
+      "unique_values": 1,
+      "average_per_value": 64.0,
+      "min_count": 64,
+      "max_count": 64,
+      "std_dev": 0
+    },
+    "resolution": {
+      "counts": {
+        "640x480": 64
+      },
+      "unique_values": 1,
+      "average_per_value": 64.0,
+      "min_count": 64,
+      "max_count": 64,
+      "std_dev": 0
+    },
+    "seed": {
+      "counts": {
+        "42": 1,
+        "58": 1,
+        "74": 1,
+        "90": 1,
+        "43": 1,
+        "59": 1,
+        "75": 1,
+        "91": 1,
+        "44": 1,
+        "60": 1,
+        "76": 1,
+        "92": 1,
+        "45": 1,
+        "61": 1,
+        "77": 1,
+        "93": 1,
+        "46": 1,
+        "62": 1,
+        "78": 1,
+        "94": 1,
+        "47": 1,
+        "63": 1,
+        "79": 1,
+        "95": 1,
+        "48": 1,
+        "64": 1,
+        "80": 1,
+        "96": 1,
+        "49": 1,
+        "65": 1,
+        "81": 1,
+        "97": 1,
+        "50": 1,
+        "66": 1,
+        "82": 1,
+        "98": 1,
+        "51": 1,
+        "67": 1,
+        "83": 1,
+        "99": 1,
+        "52": 1,
+        "68": 1,
+        "84": 1,
+        "100": 1,
+        "53": 1,
+        "69": 1,
+        "85": 1,
+        "101": 1,
+        "54": 1,
+        "70": 1,
+        "86": 1,
+        "102": 1,
+        "55": 1,
+        "71": 1,
+        "87": 1,
+        "103": 1,
+        "56": 1,
+        "72": 1,
+        "88": 1,
+        "104": 1,
+        "57": 1,
+        "73": 1,
+        "89": 1,
+        "105": 1
+      },
+      "unique_values": 64,
+      "average_per_value": 1.0,
+      "min_count": 1,
+      "max_count": 1,
+      "std_dev": 0.0
+    },
+    "speed": {
+      "counts": {
+        "0.0": 32,
+        "14.0": 32
+      },
+      "unique_values": 2,
+      "average_per_value": 32.0,
+      "min_count": 32,
+      "max_count": 32,
+      "std_dev": 0.0
+    },
+    "stripe_contrast": {
+      "counts": {
+        "28": 16,
+        "29": 16,
+        "30": 16,
+        "31": 16
+      },
+      "unique_values": 4,
+      "average_per_value": 16.0,
+      "min_count": 16,
+      "max_count": 16,
+      "std_dev": 0.0
+    },
+    "texture": {
+      "counts": {
+        "subtle_gray_stripes": 64
+      },
+      "unique_values": 1,
+      "average_per_value": 64.0,
+      "min_count": 64,
+      "max_count": 64,
+      "std_dev": 0
+    }
+  },
+  "outliers": [],
+  "imbalance_warnings": []
+};
+        const samples = {
+  "texture": {
+    "subtle_gray_stripes": [
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "20",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "42",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed58.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "30",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "20",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "58",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed58.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed58.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed74.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "14.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "20",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "74",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed74.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed74.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed90.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "14.0",
+        "angle": "30",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "20",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "90",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed90.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed90.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed43.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "21",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "43",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed43.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed43.mp4"
+      }
+    ]
+  },
+  "direction": {
+    "left": [
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "20",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "42",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed58.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "30",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "20",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "58",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed58.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed58.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed74.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "14.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "20",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "74",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed74.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed74.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed90.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "14.0",
+        "angle": "30",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "20",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "90",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed90.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed90.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed43.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "21",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "43",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed43.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed43.mp4"
+      }
+    ]
+  },
+  "speed_range": {
+    "stationary": [
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "20",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "42",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed58.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "30",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "20",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "58",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed58.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed58.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed43.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "21",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "43",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed43.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed43.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed59.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "30",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "21",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "59",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed59.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed59.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg22_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed44.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "22",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "44",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg22_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed44.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg22_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed44.mp4"
+      }
+    ],
+    "fast (10+)": [
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed74.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "14.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "20",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "74",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed74.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed74.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed90.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "14.0",
+        "angle": "30",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "20",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "90",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed90.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed90.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed75.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "14.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "21",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "75",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed75.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed75.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed91.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "14.0",
+        "angle": "30",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "21",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "91",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed91.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed91.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg22_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed76.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "14.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "22",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "76",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg22_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed76.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg22_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed76.mp4"
+      }
+    ]
+  },
+  "angle": {
+    "0\u00b0": [
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "20",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "42",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed74.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "14.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "20",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "74",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed74.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed74.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed43.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "21",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "43",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed43.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed43.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed75.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "14.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "21",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "75",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed75.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed75.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg22_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed44.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "22",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "44",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg22_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed44.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg22_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed44.mp4"
+      }
+    ],
+    "30\u00b0": [
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed58.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "30",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "20",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "58",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed58.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed58.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed90.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "14.0",
+        "angle": "30",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "20",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "90",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed90.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed90.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed59.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "30",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "21",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "59",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed59.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed59.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed91.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "14.0",
+        "angle": "30",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "21",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "91",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed91.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed91.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg22_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed60.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "30",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "22",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "60",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg22_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed60.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg22_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed60.mp4"
+      }
+    ]
+  },
+  "objects": {
+    "no_objects": [
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "20",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "42",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed58.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "30",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "20",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "58",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed58.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed58.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed74.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "14.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "20",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "74",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed74.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed74.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed90.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "14.0",
+        "angle": "30",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "20",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "90",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed90.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed90.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed43.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "21",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "43",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed43.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed43.mp4"
+      }
+    ]
+  },
+  "blur": {
+    "no_blur": [
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "20",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "42",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed58.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "30",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "20",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "58",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed58.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed58.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed74.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "14.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "20",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "74",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed74.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed74.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed90.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "14.0",
+        "angle": "30",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "20",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "90",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed90.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg20_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed90.mp4"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed43.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "28",
+        "background_contrast": "21",
+        "object_enabled": "no",
+        "object_type": "",
+        "num_objects": "",
+        "object_size": "",
+        "object_position": "",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "43",
+        "absolute_path": "C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed43.mp4",
+        "file_exists": true,
+        "file_url": "file:///C:/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/videos/_exp_20251203_114718_train/treadmill_0000_subtle_gray_stripes_stripe28_bg21_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed43.mp4"
+      }
+    ]
+  }
+};
+        const missingCombos = {
+  "total_possible": 4,
+  "total_present": 4,
+  "coverage": 100.0,
+  "missing": [],
+  "missing_count": 0,
+  "params": {
+    "textures": [
+      "subtle_gray_stripes"
+    ],
+    "directions": [
+      "left"
+    ],
+    "speeds": [
+      "0.0",
+      "14.0"
+    ],
+    "angles": [
+      "0",
+      "30"
+    ]
+  }
+};
+        const heatmapData = {
+  "speeds": [
+    "0.0",
+    "14.0"
+  ],
+  "angles": [
+    "0",
+    "30"
+  ],
+  "counts": {
+    "0.0_0": 16,
+    "0.0_30": 16,
+    "14.0_0": 16,
+    "14.0_30": 16
+  }
+};
+
+        function switchTab(event, tabName) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+            if (tabName === 'all' && !document.getElementById('allVideosGrid').innerHTML) {
+                renderAllVideos();
+            }
+        }
+
+        function renderVideoCard(video) {
+            const isMissing = !video.file_exists;
+            const missingClass = isMissing ? 'missing' : '';
+            const missingBadge = isMissing ? '<span class="missing-badge">FILE NOT FOUND</span>' : '';
+
+            return `
+                <div class="video-card ${missingClass}">
+                    <video controls preload="metadata">
+                        <source src="${video.file_url}" type="video/mp4">
+                        Your browser does not support video playback.
+                    </video>
+                    <h4>${video.video_name}${missingBadge}</h4>
+                    <div class="video-metadata">
+                        <div class="metadata-item">
+                            <span class="metadata-label">Texture:</span>
+                            <span class="metadata-value">${video.texture || 'N/A'}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Direction:</span>
+                            <span class="metadata-value">${video.direction || 'N/A'}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Speed:</span>
+                            <span class="metadata-value">${video.speed || 'N/A'}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Angle:</span>
+                            <span class="metadata-value">${video.angle || 'N/A'}°</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 10px; padding: 8px; background: white; border-radius: 4px; font-size: 0.75em; font-family: monospace; word-break: break-all; color: #6c757d;">
+                        ${video.absolute_path}
+                    </div>
+                </div>
+            `;
+        }
+
+        function getHeatmapColor(count, max) {
+            if (count === 0) return '#e9ecef';
+            const intensity = count / max;
+            if (intensity < 0.25) return '#c7d2fe';
+            if (intensity < 0.5) return '#a5b4fc';
+            if (intensity < 0.75) return '#818cf8';
+            return '#6366f1';
+        }
+
+        function renderWarnings() {
+            const container = document.getElementById('warnings-content');
+            let html = '';
+
+            // Check if there are any warnings
+            const hasImbalances = stats.imbalance_warnings && stats.imbalance_warnings.length > 0;
+            const hasOutliers = stats.outliers && stats.outliers.length > 0;
+            const hasMissingCombos = missingCombos.missing_count > 0;
+
+            if (!hasImbalances && !hasOutliers && !hasMissingCombos) {
+                html += `
+                    <div class="alert alert-success">
+                        <h3>✅ No Imbalances Detected</h3>
+                        <p>Your dataset appears to be well-balanced with no significant distribution issues.</p>
+                    </div>
+                `;
+            } else {
+                // Imbalance warnings
+                if (hasImbalances) {
+                    html += `
+                        <div class="alert alert-warning">
+                            <h3>⚠️ Imbalanced Parameters (${stats.imbalance_warnings.length})</h3>
+                            <p>These parameters have significant imbalances (>3x difference between max and min counts):</p>
+                            <table class="combination-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Max Count</th>
+                                        <th>Min Count</th>
+                                        <th>Ratio</th>
+                                        <th>Unique Values</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${stats.imbalance_warnings.map(w => `
+                                        <tr>
+                                            <td><strong>${w.parameter}</strong></td>
+                                            <td>${w.max_count}</td>
+                                            <td>${w.min_count}</td>
+                                            <td>${w.ratio}x</td>
+                                            <td>${w.unique_values}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                }
+
+                // Outlier warnings
+                if (hasOutliers) {
+                    html += `
+                        <div class="alert alert-warning">
+                            <h3>📊 Distribution Outliers (${stats.outliers.length})</h3>
+                            <p>Values that deviate significantly from the expected average:</p>
+                            <table class="combination-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Value</th>
+                                        <th>Actual Count</th>
+                                        <th>Expected Avg</th>
+                                        <th>Deviation</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${stats.outliers.slice(0, 30).map(o => `
+                                        <tr>
+                                            <td><strong>${o.parameter}</strong></td>
+                                            <td>${o.value}</td>
+                                            <td>${o.count}</td>
+                                            <td>${o.expected_avg}</td>
+                                            <td>${o.deviation > 0 ? '+' : ''}${o.deviation}%</td>
+                                        </tr>
+                                    `).join('')}
+                                    ${stats.outliers.length > 30 ? `<tr><td colspan="5"><em>...and ${stats.outliers.length - 30} more outliers</em></td></tr>` : ''}
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                }
+
+                // Missing combinations
+                if (hasMissingCombos) {
+                    html += `
+                        <div class="alert alert-info">
+                            <h3>🔍 Missing Combinations Analysis</h3>
+                            <p><strong>Coverage:</strong> ${missingCombos.coverage}% of all possible combinations</p>
+                            <p><strong>Present:</strong> ${missingCombos.total_present} / ${missingCombos.total_possible} possible combinations</p>
+                            <p><strong>Missing:</strong> ${missingCombos.missing_count} combinations</p>
+
+                            <details style="margin-top: 15px;">
+                                <summary style="cursor: pointer; font-weight: 600; padding: 10px; background: white; border-radius: 4px;">
+                                    Show First ${Math.min(missingCombos.missing.length, 50)} Missing Combinations
+                                </summary>
+                                <table class="combination-table" style="margin-top: 10px;">
+                                    <thead>
+                                        <tr>
+                                            <th>Texture</th>
+                                            <th>Direction</th>
+                                            <th>Speed</th>
+                                            <th>Angle</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${missingCombos.missing.slice(0, 50).map(m => `
+                                            <tr>
+                                                <td>${m.texture}</td>
+                                                <td>${m.direction}</td>
+                                                <td>${m.speed}</td>
+                                                <td>${m.angle}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </details>
+                        </div>
+                    `;
+                }
+            }
+
+            // Speed/Angle Heatmap
+            if (heatmapData.speeds.length > 0 && heatmapData.angles.length > 0) {
+                const maxCount = Math.max(...Object.values(heatmapData.counts));
+
+                html += `
+                    <div class="heatmap-container">
+                        <h3 style="color: #667eea; margin-bottom: 15px;">🔥 Speed vs Angle Distribution Heatmap</h3>
+                        <p style="margin-bottom: 15px; color: #495057;">Darker colors indicate more videos with that speed/angle combination.</p>
+                        <div class="heatmap" style="grid-template-columns: 80px repeat(${heatmapData.speeds.length}, 60px);">
+                            <div class="heatmap-label"></div>
+                            ${heatmapData.speeds.map(speed => `
+                                <div class="heatmap-label">Speed ${speed}</div>
+                            `).join('')}
+
+                            ${heatmapData.angles.map(angle => `
+                                <div class="heatmap-label">Angle ${angle}°</div>
+                                ${heatmapData.speeds.map(speed => {
+                                    const key = speed + '_' + angle;
+                                    const count = heatmapData.counts[key] || 0;
+                                    const color = getHeatmapColor(count, maxCount);
+                                    return `<div class="heatmap-cell" style="background: ${color}; color: ${count === 0 ? '#6c757d' : 'white'};">${count}</div>`;
+                                }).join('')}
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+
+        function renderDistributionCharts() {
+            const container = document.getElementById('distribution-charts');
+            for (const [param, data] of Object.entries(stats.distributions)) {
+                const chartDiv = document.createElement('div');
+                chartDiv.className = 'distribution-chart';
+                const counts = data.counts;
+                const maxCount = Math.max(...Object.values(counts));
+                let barsHtml = '';
+                for (const [value, count] of Object.entries(counts)) {
+                    const width = (count / maxCount) * 100;
+                    barsHtml += `
+                        <div class="bar-item">
+                            <div class="bar-label" title="${value || 'empty'}">${value || 'empty'}</div>
+                            <div class="bar" style="width: ${width}%">
+                                <span class="bar-value">${count}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+                chartDiv.innerHTML = `
+                    <h3>${param.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</h3>
+                    <p style="font-size: 0.85em; color: #6c757d; margin-bottom: 10px;">
+                        ${data.unique_values} unique values | Avg: ${data.average_per_value} per value |
+                        Min: ${data.min_count} | Max: ${data.max_count} | Std Dev: ${data.std_dev}
+                    </p>
+                    <div>${barsHtml}</div>
+                `;
+                container.appendChild(chartDiv);
+            }
+        }
+
+        function renderQuickStats() {
+            const container = document.getElementById('quick-stats');
+            let html = '<div class="distribution-chart"><h3>Quick Statistics</h3><ul>';
+
+            // Count unique values for key parameters
+            const keyParams = ['texture', 'direction', 'speed', 'angle'];
+            keyParams.forEach(param => {
+                if (stats.distributions[param]) {
+                    const data = stats.distributions[param];
+                    html += `<li><strong>${param.charAt(0).toUpperCase() + param.slice(1)}:</strong> ${data.unique_values} unique values</li>`;
+                }
+            });
+
+            html += '</ul></div>';
+            container.innerHTML = html;
+        }
+
+        function renderDefaultsTable() {
+            const container = document.getElementById('defaults-table');
+            const fields = Object.keys(stats.distributions);
+            const defaults = {};
+
+            fields.forEach(field => {
+                const data = stats.distributions[field];
+                const counts = data.counts;
+                let maxCount = 0, mostCommon = 'N/A';
+                for (const [value, count] of Object.entries(counts)) {
+                    if (count > maxCount) {
+                        maxCount = count;
+                        mostCommon = value;
+                    }
+                }
+                defaults[field] = {
+                    value: mostCommon,
+                    count: maxCount,
+                    percentage: ((maxCount / metadata.length) * 100).toFixed(1)
+                };
+            });
+
+            let html = `
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                                <th style="padding: 15px; text-align: left;">Parameter</th>
+                                <th style="padding: 15px; text-align: left;">Most Common Value</th>
+                                <th style="padding: 15px; text-align: center;">Count</th>
+                                <th style="padding: 15px; text-align: center;">Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            fields.forEach((field, i) => {
+                const bg = i % 2 === 0 ? '#ffffff' : '#f8f9fa';
+                const def = defaults[field];
+                html += `
+                    <tr style="background: ${bg};">
+                        <td style="padding: 12px; font-weight: 600; border-bottom: 1px solid #dee2e6;">
+                            ${field.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                        </td>
+                        <td style="padding: 12px; color: #667eea; font-family: monospace; border-bottom: 1px solid #dee2e6;">
+                            ${def.value}
+                        </td>
+                        <td style="padding: 12px; text-align: center; border-bottom: 1px solid #dee2e6;">
+                            ${def.count}
+                        </td>
+                        <td style="padding: 12px; text-align: center; border-bottom: 1px solid #dee2e6;">
+                            ${def.percentage}%
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += '</tbody></table></div>';
+            container.innerHTML = html;
+        }
+
+        function renderGroupTab(tabId, categoryName) {
+            const container = document.getElementById(tabId);
+            const categoryData = samples[categoryName];
+            let html = `<h2>${categoryName.charAt(0).toUpperCase() + categoryName.slice(1).replace('_', ' ')} Groups</h2>`;
+            for (const [groupName, videos] of Object.entries(categoryData)) {
+                html += `
+                    <div class="group-header">
+                        <h3>${groupName}</h3>
+                        <span>${videos.length} samples</span>
+                    </div>
+                    <div class="video-grid">
+                        ${videos.map(video => renderVideoCard(video)).join('')}
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        function renderAllVideos() {
+            document.getElementById('allVideosGrid').innerHTML =
+                metadata.map(video => renderVideoCard(video)).join('');
+        }
+
+        function filterVideos() {
+            const search = document.getElementById('searchBox').value.toLowerCase();
+            document.querySelectorAll('#allVideosGrid .video-card').forEach(card => {
+                card.style.display = card.textContent.toLowerCase().includes(search) ? 'block' : 'none';
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderQuickStats();
+            renderWarnings();
+            renderDistributionCharts();
+            renderDefaultsTable();
+            renderGroupTab('texture', 'texture');
+            renderGroupTab('direction', 'direction');
+            renderGroupTab('speed', 'speed_range');
+            renderGroupTab('angle', 'angle');
+            renderGroupTab('objects', 'objects');
+            renderGroupTab('blur', 'blur');
+        });
+    </script>
+</body>
+</html>

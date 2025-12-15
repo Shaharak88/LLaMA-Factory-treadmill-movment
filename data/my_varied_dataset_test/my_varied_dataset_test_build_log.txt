@@ -1,0 +1,206 @@
+2025-11-26 15:53:16 - INFO - Dataset Builder started - my_varied_dataset_test
+2025-11-26 15:53:16 - INFO - Configuration: {'dataset_name': 'my_varied_dataset_test', 'output_dir': 'data/my_varied_dataset_test', 'num_videos': 10, 'train_split': 0.8, 'moving_ratio': 0.5, 'seed': 10042, 'vary_parameters': False, 'texture_type': 'stripes,noise,factory_dark_stripes,factory_dark', 'direction': 'left,right', 'speed_range': '0,6.0', 'resolution': '640x480', 'fps': '4', 'duration': '12.0', 'view_angle': '0.0,15.0,30.0', 'brightness': '0.0', 'contrast': '1.0', 'lighting_variation': 'none', 'lighting_intensity': '0.5', 'motion_blur': '0', 'camera_noise': '0.0', 'edge_width': '0.1'}
+2025-11-26 15:53:16 - INFO - Validating prerequisites...
+2025-11-26 15:53:16 - INFO -   ✓ Found synthetic generation script
+2025-11-26 15:53:16 - INFO -   ✓ Found dataset_info.json
+2025-11-26 15:53:16 - INFO -   ✓ Python3 available: Python 3.11.11
+2025-11-26 15:53:16 - INFO - Generating video configurations...
+2025-11-26 15:53:16 - INFO -   Using parameter combination mode
+2025-11-26 15:53:16 - INFO -   Generated 48 parameter combinations
+2025-11-26 15:53:16 - INFO -   Generated: 24 moving, 24 stopped videos
+2025-11-26 15:53:16 - INFO - Generating 48 videos...
+2025-11-26 15:53:16 - INFO -   [1/48] Generating video...
+2025-11-26 15:53:16 - INFO -     Texture: stripes, Direction: left, Speed: 6.00
+2025-11-26 15:53:17 - INFO -     ✓ Generated: treadmill_0000_stripes_left_speed6.0_angle0_bright0.00_contr1.00_640x480_seed10045.mp4 (135.9 KB)
+2025-11-26 15:53:17 - INFO -   [2/48] Generating video...
+2025-11-26 15:53:17 - INFO -     Texture: stripes, Direction: right, Speed: 6.00
+2025-11-26 15:53:19 - INFO -     ✓ Generated: treadmill_0000_stripes_right_speed6.0_angle15_bright0.00_contr1.00_640x480_seed10052.mp4 (176.5 KB)
+2025-11-26 15:53:19 - INFO -   [3/48] Generating video...
+2025-11-26 15:53:19 - INFO -     Texture: stripes, Direction: left, Speed: 6.00
+2025-11-26 15:53:21 - INFO -     ✓ Generated: treadmill_0000_stripes_left_speed6.0_angle15_bright0.00_contr1.00_640x480_seed10046.mp4 (176.0 KB)
+2025-11-26 15:53:21 - INFO -   [4/48] Generating video...
+2025-11-26 15:53:21 - INFO -     Texture: factory_dark_stripes, Direction: left, Speed: 6.00
+2025-11-26 15:53:22 - INFO -     ✓ Generated: treadmill_0000_factory_dark_stripes_left_speed6.0_angle0_bright0.00_contr1.00_640x480_seed10069.mp4 (73.9 KB)
+2025-11-26 15:53:22 - INFO -   [5/48] Generating video...
+2025-11-26 15:53:22 - INFO -     Texture: factory_dark, Direction: right, Speed: 0.00
+2025-11-26 15:53:23 - INFO -     ✓ Generated: treadmill_0000_factory_dark_right_speed0.0_angle0_bright0.00_contr1.00_640x480_seed10084.mp4 (308.4 KB)
+2025-11-26 15:53:23 - INFO -   [6/48] Generating video...
+2025-11-26 15:53:23 - INFO -     Texture: factory_dark_stripes, Direction: right, Speed: 6.00
+2025-11-26 15:53:25 - INFO -     ✓ Generated: treadmill_0000_factory_dark_stripes_right_speed6.0_angle15_bright0.00_contr1.00_640x480_seed10076.mp4 (82.3 KB)
+2025-11-26 15:53:25 - INFO -   [7/48] Generating video...
+2025-11-26 15:53:25 - INFO -     Texture: noise, Direction: left, Speed: 6.00
+2025-11-26 15:53:27 - INFO -     ✓ Generated: treadmill_0000_noise_left_speed6.0_angle15_bright0.00_contr1.00_640x480_seed10058.mp4 (2420.4 KB)
+2025-11-26 15:53:27 - INFO -   [8/48] Generating video...
+2025-11-26 15:53:27 - INFO -     Texture: noise, Direction: right, Speed: 0.00
+2025-11-26 15:53:28 - INFO -     ✓ Generated: treadmill_0000_noise_right_speed0.0_angle30_bright0.00_contr1.00_640x480_seed10062.mp4 (393.4 KB)
+2025-11-26 15:53:28 - INFO -   [9/48] Generating video...
+2025-11-26 15:53:28 - INFO -     Texture: stripes, Direction: right, Speed: 6.00
+2025-11-26 15:53:30 - INFO -     ✓ Generated: treadmill_0000_stripes_right_speed6.0_angle0_bright0.00_contr1.00_640x480_seed10051.mp4 (138.7 KB)
+2025-11-26 15:53:30 - INFO -   [10/48] Generating video...
+2025-11-26 15:53:30 - INFO -     Texture: stripes, Direction: right, Speed: 0.00
+2025-11-26 15:53:31 - INFO -     ✓ Generated: treadmill_0000_stripes_right_speed0.0_angle0_bright0.00_contr1.00_640x480_seed10048.mp4 (61.1 KB)
+2025-11-26 15:53:31 - INFO -   [11/48] Generating video...
+2025-11-26 15:53:31 - INFO -     Texture: factory_dark, Direction: left, Speed: 0.00
+2025-11-26 15:53:33 - INFO -     ✓ Generated: treadmill_0000_factory_dark_left_speed0.0_angle15_bright0.00_contr1.00_640x480_seed10079.mp4 (208.0 KB)
+2025-11-26 15:53:33 - INFO -   [12/48] Generating video...
+2025-11-26 15:53:33 - INFO -     Texture: factory_dark, Direction: left, Speed: 6.00
+2025-11-26 15:53:34 - INFO -     ✓ Generated: treadmill_0000_factory_dark_left_speed6.0_angle0_bright0.00_contr1.00_640x480_seed10081.mp4 (515.8 KB)
+2025-11-26 15:53:34 - INFO -   [13/48] Generating video...
+2025-11-26 15:53:34 - INFO -     Texture: factory_dark, Direction: right, Speed: 6.00
+2025-11-26 15:53:36 - INFO -     ✓ Generated: treadmill_0000_factory_dark_right_speed6.0_angle15_bright0.00_contr1.00_640x480_seed10088.mp4 (772.2 KB)
+2025-11-26 15:53:36 - INFO -   [14/48] Generating video...
+2025-11-26 15:53:36 - INFO -     Texture: factory_dark_stripes, Direction: left, Speed: 0.00
+2025-11-26 15:53:38 - INFO -     ✓ Generated: treadmill_0000_factory_dark_stripes_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed10066.mp4 (42.0 KB)
+2025-11-26 15:53:38 - INFO -   [15/48] Generating video...
+2025-11-26 15:53:38 - INFO -     Texture: noise, Direction: left, Speed: 0.00
+2025-11-26 15:53:39 - INFO -     ✓ Generated: treadmill_0000_noise_left_speed0.0_angle15_bright0.00_contr1.00_640x480_seed10055.mp4 (393.2 KB)
+2025-11-26 15:53:39 - INFO -   [16/48] Generating video...
+2025-11-26 15:53:39 - INFO -     Texture: factory_dark_stripes, Direction: right, Speed: 6.00
+2025-11-26 15:53:41 - INFO -     ✓ Generated: treadmill_0000_factory_dark_stripes_right_speed6.0_angle30_bright0.00_contr1.00_640x480_seed10077.mp4 (82.7 KB)
+2025-11-26 15:53:41 - INFO -   [17/48] Generating video...
+2025-11-26 15:53:41 - INFO -     Texture: factory_dark_stripes, Direction: left, Speed: 6.00
+2025-11-26 15:53:43 - INFO -     ✓ Generated: treadmill_0000_factory_dark_stripes_left_speed6.0_angle15_bright0.00_contr1.00_640x480_seed10070.mp4 (83.7 KB)
+2025-11-26 15:53:43 - INFO -   [18/48] Generating video...
+2025-11-26 15:53:43 - INFO -     Texture: noise, Direction: right, Speed: 6.00
+2025-11-26 15:53:44 - INFO -     ✓ Generated: treadmill_0000_noise_right_speed6.0_angle0_bright0.00_contr1.00_640x480_seed10063.mp4 (1385.9 KB)
+2025-11-26 15:53:44 - INFO -   [19/48] Generating video...
+2025-11-26 15:53:44 - INFO -     Texture: factory_dark, Direction: left, Speed: 0.00
+2025-11-26 15:53:46 - INFO -     ✓ Generated: treadmill_0000_factory_dark_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed10078.mp4 (307.9 KB)
+2025-11-26 15:53:46 - INFO -   [20/48] Generating video...
+2025-11-26 15:53:46 - INFO -     Texture: noise, Direction: left, Speed: 6.00
+2025-11-26 15:53:48 - INFO -     ✓ Generated: treadmill_0000_noise_left_speed6.0_angle30_bright0.00_contr1.00_640x480_seed10059.mp4 (2422.9 KB)
+2025-11-26 15:53:48 - INFO -   [21/48] Generating video...
+2025-11-26 15:53:48 - INFO -     Texture: stripes, Direction: right, Speed: 0.00
+2025-11-26 15:53:49 - INFO -     ✓ Generated: treadmill_0000_stripes_right_speed0.0_angle15_bright0.00_contr1.00_640x480_seed10049.mp4 (76.9 KB)
+2025-11-26 15:53:49 - INFO -   [22/48] Generating video...
+2025-11-26 15:53:49 - INFO -     Texture: noise, Direction: right, Speed: 0.00
+2025-11-26 15:53:51 - INFO -     ✓ Generated: treadmill_0000_noise_right_speed0.0_angle0_bright0.00_contr1.00_640x480_seed10060.mp4 (529.1 KB)
+2025-11-26 15:53:51 - INFO -   [23/48] Generating video...
+2025-11-26 15:53:51 - INFO -     Texture: stripes, Direction: left, Speed: 0.00
+2025-11-26 15:53:52 - INFO -     ✓ Generated: treadmill_0000_stripes_left_speed0.0_angle15_bright0.00_contr1.00_640x480_seed10043.mp4 (76.8 KB)
+2025-11-26 15:53:52 - INFO -   [24/48] Generating video...
+2025-11-26 15:53:52 - INFO -     Texture: noise, Direction: right, Speed: 0.00
+2025-11-26 15:53:54 - INFO -     ✓ Generated: treadmill_0000_noise_right_speed0.0_angle15_bright0.00_contr1.00_640x480_seed10061.mp4 (392.9 KB)
+2025-11-26 15:53:54 - INFO -   [25/48] Generating video...
+2025-11-26 15:53:54 - INFO -     Texture: factory_dark, Direction: right, Speed: 6.00
+2025-11-26 15:53:56 - INFO -     ✓ Generated: treadmill_0000_factory_dark_right_speed6.0_angle0_bright0.00_contr1.00_640x480_seed10087.mp4 (545.5 KB)
+2025-11-26 15:53:56 - INFO -   [26/48] Generating video...
+2025-11-26 15:53:56 - INFO -     Texture: factory_dark, Direction: left, Speed: 0.00
+2025-11-26 15:53:58 - INFO -     ✓ Generated: treadmill_0000_factory_dark_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed10080.mp4 (208.5 KB)
+2025-11-26 15:53:58 - INFO -   [27/48] Generating video...
+2025-11-26 15:53:58 - INFO -     Texture: factory_dark, Direction: left, Speed: 6.00
+2025-11-26 15:54:00 - INFO -     ✓ Generated: treadmill_0000_factory_dark_left_speed6.0_angle30_bright0.00_contr1.00_640x480_seed10083.mp4 (770.4 KB)
+2025-11-26 15:54:00 - INFO -   [28/48] Generating video...
+2025-11-26 15:54:00 - INFO -     Texture: factory_dark_stripes, Direction: right, Speed: 0.00
+2025-11-26 15:54:01 - INFO -     ✓ Generated: treadmill_0000_factory_dark_stripes_right_speed0.0_angle30_bright0.00_contr1.00_640x480_seed10074.mp4 (43.5 KB)
+2025-11-26 15:54:01 - INFO -   [29/48] Generating video...
+2025-11-26 15:54:01 - INFO -     Texture: stripes, Direction: right, Speed: 6.00
+2025-11-26 15:54:03 - INFO -     ✓ Generated: treadmill_0000_stripes_right_speed6.0_angle30_bright0.00_contr1.00_640x480_seed10053.mp4 (175.6 KB)
+2025-11-26 15:54:03 - INFO -   [30/48] Generating video...
+2025-11-26 15:54:03 - INFO -     Texture: stripes, Direction: right, Speed: 0.00
+2025-11-26 15:54:04 - INFO -     ✓ Generated: treadmill_0000_stripes_right_speed0.0_angle30_bright0.00_contr1.00_640x480_seed10050.mp4 (76.7 KB)
+2025-11-26 15:54:04 - INFO -   [31/48] Generating video...
+2025-11-26 15:54:04 - INFO -     Texture: factory_dark_stripes, Direction: right, Speed: 0.00
+2025-11-26 15:54:05 - INFO -     ✓ Generated: treadmill_0000_factory_dark_stripes_right_speed0.0_angle0_bright0.00_contr1.00_640x480_seed10072.mp4 (42.0 KB)
+2025-11-26 15:54:05 - INFO -   [32/48] Generating video...
+2025-11-26 15:54:05 - INFO -     Texture: noise, Direction: left, Speed: 0.00
+2025-11-26 15:54:06 - INFO -     ✓ Generated: treadmill_0000_noise_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed10054.mp4 (529.1 KB)
+2025-11-26 15:54:06 - INFO -   [33/48] Generating video...
+2025-11-26 15:54:06 - INFO -     Texture: stripes, Direction: left, Speed: 6.00
+2025-11-26 15:54:06 - INFO -     ✓ Generated: treadmill_0000_stripes_left_speed6.0_angle30_bright0.00_contr1.00_640x480_seed10047.mp4 (175.5 KB)
+2025-11-26 15:54:06 - INFO -   [34/48] Generating video...
+2025-11-26 15:54:06 - INFO -     Texture: noise, Direction: right, Speed: 6.00
+2025-11-26 15:54:08 - INFO -     ✓ Generated: treadmill_0000_noise_right_speed6.0_angle15_bright0.00_contr1.00_640x480_seed10064.mp4 (2417.6 KB)
+2025-11-26 15:54:08 - INFO -   [35/48] Generating video...
+2025-11-26 15:54:08 - INFO -     Texture: factory_dark_stripes, Direction: left, Speed: 0.00
+2025-11-26 15:54:09 - INFO -     ✓ Generated: treadmill_0000_factory_dark_stripes_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed10068.mp4 (44.0 KB)
+2025-11-26 15:54:09 - INFO -   [36/48] Generating video...
+2025-11-26 15:54:09 - INFO -     Texture: noise, Direction: right, Speed: 6.00
+2025-11-26 15:54:10 - INFO -     ✓ Generated: treadmill_0000_noise_right_speed6.0_angle30_bright0.00_contr1.00_640x480_seed10065.mp4 (2430.9 KB)
+2025-11-26 15:54:10 - INFO -   [37/48] Generating video...
+2025-11-26 15:54:10 - INFO -     Texture: noise, Direction: left, Speed: 6.00
+2025-11-26 15:54:10 - INFO -     ✓ Generated: treadmill_0000_noise_left_speed6.0_angle0_bright0.00_contr1.00_640x480_seed10057.mp4 (854.9 KB)
+2025-11-26 15:54:10 - INFO -   [38/48] Generating video...
+2025-11-26 15:54:10 - INFO -     Texture: factory_dark_stripes, Direction: left, Speed: 0.00
+2025-11-26 15:54:11 - INFO -     ✓ Generated: treadmill_0000_factory_dark_stripes_left_speed0.0_angle15_bright0.00_contr1.00_640x480_seed10067.mp4 (43.6 KB)
+2025-11-26 15:54:11 - INFO -   [39/48] Generating video...
+2025-11-26 15:54:11 - INFO -     Texture: noise, Direction: left, Speed: 0.00
+2025-11-26 15:54:12 - INFO -     ✓ Generated: treadmill_0000_noise_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed10056.mp4 (393.8 KB)
+2025-11-26 15:54:12 - INFO -   [40/48] Generating video...
+2025-11-26 15:54:12 - INFO -     Texture: factory_dark_stripes, Direction: left, Speed: 6.00
+2025-11-26 15:54:14 - INFO -     ✓ Generated: treadmill_0000_factory_dark_stripes_left_speed6.0_angle30_bright0.00_contr1.00_640x480_seed10071.mp4 (83.1 KB)
+2025-11-26 15:54:14 - INFO -   [41/48] Generating video...
+2025-11-26 15:54:14 - INFO -     Texture: factory_dark, Direction: left, Speed: 6.00
+2025-11-26 15:54:16 - INFO -     ✓ Generated: treadmill_0000_factory_dark_left_speed6.0_angle15_bright0.00_contr1.00_640x480_seed10082.mp4 (769.7 KB)
+2025-11-26 15:54:16 - INFO -   [42/48] Generating video...
+2025-11-26 15:54:16 - INFO -     Texture: factory_dark, Direction: right, Speed: 0.00
+2025-11-26 15:54:16 - INFO -     ✓ Generated: treadmill_0000_factory_dark_right_speed0.0_angle15_bright0.00_contr1.00_640x480_seed10085.mp4 (207.4 KB)
+2025-11-26 15:54:16 - INFO -   [43/48] Generating video...
+2025-11-26 15:54:16 - INFO -     Texture: stripes, Direction: left, Speed: 0.00
+2025-11-26 15:54:18 - INFO -     ✓ Generated: treadmill_0000_stripes_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed10044.mp4 (76.8 KB)
+2025-11-26 15:54:18 - INFO -   [44/48] Generating video...
+2025-11-26 15:54:18 - INFO -     Texture: factory_dark, Direction: right, Speed: 0.00
+2025-11-26 15:54:19 - INFO -     ✓ Generated: treadmill_0000_factory_dark_right_speed0.0_angle30_bright0.00_contr1.00_640x480_seed10086.mp4 (207.1 KB)
+2025-11-26 15:54:19 - INFO -   [45/48] Generating video...
+2025-11-26 15:54:19 - INFO -     Texture: factory_dark_stripes, Direction: right, Speed: 6.00
+2025-11-26 15:54:21 - INFO -     ✓ Generated: treadmill_0000_factory_dark_stripes_right_speed6.0_angle0_bright0.00_contr1.00_640x480_seed10075.mp4 (77.1 KB)
+2025-11-26 15:54:21 - INFO -   [46/48] Generating video...
+2025-11-26 15:54:21 - INFO -     Texture: stripes, Direction: left, Speed: 0.00
+2025-11-26 15:54:22 - INFO -     ✓ Generated: treadmill_0000_stripes_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed10042.mp4 (61.1 KB)
+2025-11-26 15:54:22 - INFO -   [47/48] Generating video...
+2025-11-26 15:54:22 - INFO -     Texture: factory_dark_stripes, Direction: right, Speed: 0.00
+2025-11-26 15:54:22 - INFO -     ✓ Generated: treadmill_0000_factory_dark_stripes_right_speed0.0_angle15_bright0.00_contr1.00_640x480_seed10073.mp4 (44.1 KB)
+2025-11-26 15:54:22 - INFO -   [48/48] Generating video...
+2025-11-26 15:54:22 - INFO -     Texture: factory_dark, Direction: right, Speed: 6.00
+2025-11-26 15:54:23 - INFO -     ✓ Generated: treadmill_0000_factory_dark_right_speed6.0_angle30_bright0.00_contr1.00_640x480_seed10089.mp4 (776.6 KB)
+2025-11-26 15:54:23 - INFO - Successfully generated 48/48 videos
+2025-11-26 15:54:23 - INFO - Creating dataset JSON: /app/data/my_varied_dataset_test.json
+2025-11-26 15:54:23 - INFO -   ✓ Created dataset with 48 entries
+2025-11-26 15:54:23 - INFO - Updating dataset_info.json...
+2025-11-26 15:54:23 - INFO -   Created backup: dataset_info.json.backup
+2025-11-26 15:54:23 - INFO -   ✓ Added 'my_varied_dataset_test' to dataset_info.json
+2025-11-26 15:54:23 - INFO - Generating summary report...
+2025-11-26 15:54:23 - INFO - 
+======================================================================
+Dataset Generation Summary: my_varied_dataset_test
+======================================================================
+
+Generation Date: 2025-11-26 15:54:23
+Seed: 10042
+
+Dataset Statistics:
+----------------------------------------------------------------------
+  Total Videos: 48
+  Moving Videos: 24 (50.0%)
+  Stopped Videos: 24 (50.0%)
+
+  Speed Range: 6.00 - 6.00 px/frame
+
+Texture Distribution:
+  factory_dark   :  12 (25.0%)
+  factory_dark_stripes:  12 (25.0%)
+  noise          :  12 (25.0%)
+  stripes        :  12 (25.0%)
+
+Direction Distribution:
+  left           :  24 (50.0%)
+  right          :  24 (50.0%)
+
+File Sizes:
+  Total: 21.79 MB
+  Average: 0.45 MB per video
+
+Output Files:
+----------------------------------------------------------------------
+  Videos: data/my_varied_dataset_test/
+  Dataset JSON: /app/data/my_varied_dataset_test.json
+  Dataset Info: /app/data/dataset_info.json
+  Log File: data/my_varied_dataset_test/my_varied_dataset_test_build_log.txt
+
+======================================================================
+Dataset ready for training!
+======================================================================
+
+2025-11-26 15:54:23 - INFO - ======================================================================
+2025-11-26 15:54:23 - INFO - ✓ Dataset building complete!
+2025-11-26 15:54:23 - INFO - ======================================================================

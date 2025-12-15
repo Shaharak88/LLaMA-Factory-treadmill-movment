@@ -1,0 +1,1920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Dataset Review Report</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+            overflow-x: auto;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 1em;
+            font-weight: 500;
+            color: #495057;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        .tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .tab-content {
+            padding: 30px;
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h3 {
+            font-size: 1em;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .value {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        .distribution-chart {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .distribution-chart h3 {
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .bar-chart {
+            margin-bottom: 10px;
+        }
+
+        .bar-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .bar-label {
+            width: 150px;
+            font-size: 0.9em;
+            color: #495057;
+        }
+
+        .bar {
+            flex: 1;
+            height: 25px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            position: relative;
+            margin-right: 10px;
+        }
+
+        .bar-value {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            color: #856404;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            color: #0c5460;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .video-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .video-card video {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background: #000;
+        }
+
+        .video-card h4 {
+            font-size: 0.9em;
+            color: #667eea;
+            margin-bottom: 10px;
+            word-break: break-all;
+        }
+
+        .video-metadata {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            font-size: 0.85em;
+        }
+
+        .metadata-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px;
+            background: white;
+            border-radius: 4px;
+        }
+
+        .metadata-label {
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .metadata-value {
+            color: #667eea;
+        }
+
+        .group-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .group-header h3 {
+            font-size: 1.3em;
+        }
+
+        .group-count {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1em;
+            margin-bottom: 20px;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .subtabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .subtab {
+            padding: 10px 20px;
+            background: #e9ecef;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        .subtab:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .subtab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📹 Video Dataset Review Report</h1>
+            <p>Generated: 2025-12-02 12:35:54</p>
+            <p>Total Videos: 9</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab(event, 'overview')">Overview</button>
+            <button class="tab" onclick="switchTab(event, 'defaults')">Dataset Defaults</button>
+            <button class="tab" onclick="switchTab(event, 'texture')">By Texture</button>
+            <button class="tab" onclick="switchTab(event, 'direction')">By Direction</button>
+            <button class="tab" onclick="switchTab(event, 'speed')">By Speed</button>
+            <button class="tab" onclick="switchTab(event, 'angle')">By Angle</button>
+            <button class="tab" onclick="switchTab(event, 'objects')">Objects</button>
+            <button class="tab" onclick="switchTab(event, 'blur')">Blur Effects</button>
+            <button class="tab" onclick="switchTab(event, 'all')">All Videos</button>
+        </div>
+
+        <div id="overview" class="tab-content active">
+            <h2>📊 Statistical Overview</h2>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Videos</h3>
+                    <div class="value">9</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Unique Textures</h3>
+                    <div class="value">1</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Directions</h3>
+                    <div class="value">4</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Speed Variations</h3>
+                    <div class="value">5</div>
+                </div>
+            </div>
+
+            <div id="distribution-charts"></div>
+
+            <div id="representation-alerts"></div>
+        </div>
+
+        <div id="defaults" class="tab-content">
+            <h2>📋 Dataset Defaults & Common Values</h2>
+            <p style="margin-bottom: 20px; color: #495057;">Most common value for each parameter across all videos in this dataset.</p>
+            <div id="defaults-table"></div>
+        </div>
+
+        <div id="texture" class="tab-content"></div>
+        <div id="direction" class="tab-content"></div>
+        <div id="speed" class="tab-content"></div>
+        <div id="angle" class="tab-content"></div>
+        <div id="objects" class="tab-content"></div>
+        <div id="blur" class="tab-content"></div>
+
+        <div id="all" class="tab-content">
+            <h2>All Videos</h2>
+            <input type="text" class="search-box" id="searchBox" placeholder="Search videos by name, texture, direction, speed..." onkeyup="filterVideos()">
+            <div id="allVideosGrid" class="video-grid"></div>
+        </div>
+    </div>
+
+    <script>
+        const metadata = [
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_down_speed0.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed45.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "down",
+    "speed": "0.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "N/A",
+    "background_contrast": "N/A",
+    "object_enabled": "yes",
+    "object_type": "box",
+    "num_objects": "1",
+    "object_size": "30",
+    "object_position": "center",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "45"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_down_speed6.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed45.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "down",
+    "speed": "6.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "N/A",
+    "background_contrast": "N/A",
+    "object_enabled": "yes",
+    "object_type": "box",
+    "num_objects": "1",
+    "object_size": "30",
+    "object_position": "center",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "45"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_left_speed0.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed42.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "N/A",
+    "background_contrast": "N/A",
+    "object_enabled": "yes",
+    "object_type": "box",
+    "num_objects": "1",
+    "object_size": "30",
+    "object_position": "center",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "42"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_left_speed0.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed46.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "0.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "N/A",
+    "background_contrast": "N/A",
+    "object_enabled": "yes",
+    "object_type": "box",
+    "num_objects": "1",
+    "object_size": "30",
+    "object_position": "center",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "46"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_left_speed8.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed46.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "left",
+    "speed": "8.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "N/A",
+    "background_contrast": "N/A",
+    "object_enabled": "yes",
+    "object_type": "box",
+    "num_objects": "1",
+    "object_size": "30",
+    "object_position": "center",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "46"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_right_speed0.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed43.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "right",
+    "speed": "0.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "N/A",
+    "background_contrast": "N/A",
+    "object_enabled": "yes",
+    "object_type": "box",
+    "num_objects": "1",
+    "object_size": "30",
+    "object_position": "center",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "43"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_right_speed2.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed43.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "right",
+    "speed": "2.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "N/A",
+    "background_contrast": "N/A",
+    "object_enabled": "yes",
+    "object_type": "box",
+    "num_objects": "1",
+    "object_size": "30",
+    "object_position": "center",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "43"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_up_speed0.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed44.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "up",
+    "speed": "0.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "N/A",
+    "background_contrast": "N/A",
+    "object_enabled": "yes",
+    "object_type": "box",
+    "num_objects": "1",
+    "object_size": "30",
+    "object_position": "center",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "44"
+  },
+  {
+    "video_name": "treadmill_0000_subtle_gray_stripes_up_speed4.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed44.mp4",
+    "index": "0000",
+    "texture": "subtle_gray_stripes",
+    "direction": "up",
+    "speed": "4.0",
+    "angle": "0",
+    "brightness": "0.00",
+    "contrast": "1.00",
+    "stripe_contrast": "N/A",
+    "background_contrast": "N/A",
+    "object_enabled": "yes",
+    "object_type": "box",
+    "num_objects": "1",
+    "object_size": "30",
+    "object_position": "center",
+    "blur_enabled": "no",
+    "blur_type": "",
+    "blur_intensity": "",
+    "blur_variation": "no",
+    "resolution": "640x480",
+    "seed": "44"
+  }
+];
+        const stats = {
+  "total_videos": 9,
+  "distributions": {
+    "texture": {
+      "counts": {
+        "subtle_gray_stripes": 9
+      },
+      "unique_values": 1,
+      "average_per_value": 9.0
+    },
+    "direction": {
+      "counts": {
+        "left": 3,
+        "down": 2,
+        "right": 2,
+        "up": 2
+      },
+      "unique_values": 4,
+      "average_per_value": 2.25
+    },
+    "speed": {
+      "counts": {
+        "0.0": 5,
+        "6.0": 1,
+        "8.0": 1,
+        "2.0": 1,
+        "4.0": 1
+      },
+      "unique_values": 5,
+      "average_per_value": 1.8
+    },
+    "angle": {
+      "counts": {
+        "0": 9
+      },
+      "unique_values": 1,
+      "average_per_value": 9.0
+    },
+    "brightness": {
+      "counts": {
+        "0.00": 9
+      },
+      "unique_values": 1,
+      "average_per_value": 9.0
+    },
+    "contrast": {
+      "counts": {
+        "1.00": 9
+      },
+      "unique_values": 1,
+      "average_per_value": 9.0
+    },
+    "object_enabled": {
+      "counts": {
+        "yes": 9
+      },
+      "unique_values": 1,
+      "average_per_value": 9.0
+    },
+    "blur_enabled": {
+      "counts": {
+        "no": 9
+      },
+      "unique_values": 1,
+      "average_per_value": 9.0
+    }
+  },
+  "under_represented": [],
+  "over_represented": [
+    {
+      "parameter": "speed",
+      "value": "0.0",
+      "count": 5,
+      "expected": 1.8,
+      "ratio": 2.78
+    }
+  ]
+};
+        const groupCounts = {
+  "texture": {
+    "subtle_gray_stripes": 9
+  },
+  "direction": {
+    "down": 2,
+    "left": 3,
+    "right": 2,
+    "up": 2
+  },
+  "speed_range": {
+    "stationary": 5,
+    "medium (5-10)": 2,
+    "slow (0-5)": 2
+  },
+  "angle": {
+    "0\u00b0": 9
+  },
+  "objects": {
+    "box": 9
+  },
+  "blur": {
+    "no_blur": 9
+  }
+};
+        const samples = {
+  "texture": {
+    "subtle_gray_stripes": [
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_down_speed0.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed45.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "down",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "45"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_down_speed6.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed45.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "down",
+        "speed": "6.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "45"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_left_speed0.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed42.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "42"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_left_speed0.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed46.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "46"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_left_speed8.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed46.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "8.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "46"
+      }
+    ]
+  },
+  "direction": {
+    "down": [
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_down_speed0.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed45.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "down",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "45"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_down_speed6.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed45.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "down",
+        "speed": "6.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "45"
+      }
+    ],
+    "left": [
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_left_speed0.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed42.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "42"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_left_speed0.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed46.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "46"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_left_speed8.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed46.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "8.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "46"
+      }
+    ],
+    "right": [
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_right_speed0.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed43.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "right",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "43"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_right_speed2.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed43.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "right",
+        "speed": "2.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "43"
+      }
+    ],
+    "up": [
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_up_speed0.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed44.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "up",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "44"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_up_speed4.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed44.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "up",
+        "speed": "4.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "44"
+      }
+    ]
+  },
+  "speed_range": {
+    "stationary": [
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_down_speed0.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed45.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "down",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "45"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_left_speed0.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed42.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "42"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_left_speed0.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed46.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "46"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_right_speed0.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed43.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "right",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "43"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_up_speed0.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed44.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "up",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "44"
+      }
+    ],
+    "medium (5-10)": [
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_down_speed6.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed45.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "down",
+        "speed": "6.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "45"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_left_speed8.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed46.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "8.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "46"
+      }
+    ],
+    "slow (0-5)": [
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_right_speed2.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed43.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "right",
+        "speed": "2.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "43"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_up_speed4.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed44.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "up",
+        "speed": "4.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "44"
+      }
+    ]
+  },
+  "angle": {
+    "0\u00b0": [
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_down_speed0.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed45.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "down",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "45"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_down_speed6.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed45.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "down",
+        "speed": "6.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "45"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_left_speed0.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed42.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "42"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_left_speed0.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed46.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "46"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_left_speed8.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed46.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "8.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "46"
+      }
+    ]
+  },
+  "objects": {
+    "box": [
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_down_speed0.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed45.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "down",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "45"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_down_speed6.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed45.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "down",
+        "speed": "6.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "45"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_left_speed0.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed42.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "42"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_left_speed0.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed46.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "46"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_left_speed8.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed46.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "8.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "46"
+      }
+    ]
+  },
+  "blur": {
+    "no_blur": [
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_down_speed0.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed45.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "down",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "45"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_down_speed6.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed45.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "down",
+        "speed": "6.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "45"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_left_speed0.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed42.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "42"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_left_speed0.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed46.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "0.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "46"
+      },
+      {
+        "video_name": "treadmill_0000_subtle_gray_stripes_left_speed8.0_angle0_bright0.00_contr1.00_obj_boxx1_30_center_640x480_seed46.mp4",
+        "index": "0000",
+        "texture": "subtle_gray_stripes",
+        "direction": "left",
+        "speed": "8.0",
+        "angle": "0",
+        "brightness": "0.00",
+        "contrast": "1.00",
+        "stripe_contrast": "N/A",
+        "background_contrast": "N/A",
+        "object_enabled": "yes",
+        "object_type": "box",
+        "num_objects": "1",
+        "object_size": "30",
+        "object_position": "center",
+        "blur_enabled": "no",
+        "blur_type": "",
+        "blur_intensity": "",
+        "blur_variation": "no",
+        "resolution": "640x480",
+        "seed": "46"
+      }
+    ]
+  }
+};
+        const videoBaseUrl = 'data/videos/_exp_20251201_172008_train';
+
+        function switchTab(event, tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+
+            // Load content if not loaded
+            if (tabName === 'all' && document.getElementById('allVideosGrid').innerHTML === '') {
+                renderAllVideos();
+            }
+        }
+
+        function renderDistributionCharts() {
+            const container = document.getElementById('distribution-charts');
+
+            for (const [param, data] of Object.entries(stats.distributions)) {
+                const chartDiv = document.createElement('div');
+                chartDiv.className = 'distribution-chart';
+
+                const counts = data.counts;
+                const maxCount = Math.max(...Object.values(counts));
+
+                let barsHtml = '';
+                for (const [value, count] of Object.entries(counts)) {
+                    const width = (count / maxCount) * 100;
+                    barsHtml += `
+                        <div class="bar-item">
+                            <div class="bar-label">${value || 'empty'}</div>
+                            <div class="bar" style="width: ${width}%">
+                                <span class="bar-value">${count}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                chartDiv.innerHTML = `
+                    <h3>${param.charAt(0).toUpperCase() + param.slice(1)} Distribution</h3>
+                    <div class="bar-chart">${barsHtml}</div>
+                `;
+
+                container.appendChild(chartDiv);
+            }
+        }
+
+        function renderRepresentationAlerts() {
+            const container = document.getElementById('representation-alerts');
+
+            if (stats.under_represented.length > 0) {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-warning';
+                alertDiv.innerHTML = `
+                    <h3>⚠️ Under-represented Groups</h3>
+                    <p>The following parameter values have fewer samples than expected:</p>
+                    <ul>
+                        ${stats.under_represented.map(item =>
+                            `<li><strong>${item.parameter}: ${item.value}</strong> - ${item.count} videos (expected ~${item.expected}, ratio: ${item.ratio}x)</li>`
+                        ).join('')}
+                    </ul>
+                `;
+                container.appendChild(alertDiv);
+            }
+
+            if (stats.over_represented.length > 0) {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-info';
+                alertDiv.innerHTML = `
+                    <h3>📈 Over-represented Groups</h3>
+                    <p>The following parameter values have more samples than expected:</p>
+                    <ul>
+                        ${stats.over_represented.map(item =>
+                            `<li><strong>${item.parameter}: ${item.value}</strong> - ${item.count} videos (expected ~${item.expected}, ratio: ${item.ratio}x)</li>`
+                        ).join('')}
+                    </ul>
+                `;
+                container.appendChild(alertDiv);
+            }
+        }
+
+        function renderVideoCard(video) {
+            const videoUrl = videoBaseUrl ? `${videoBaseUrl}/${video.video_name}` : video.video_name;
+
+            return `
+                <div class="video-card">
+                    <video controls preload="metadata">
+                        <source src="${videoUrl}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <h4>${video.video_name}</h4>
+                    <div class="video-metadata">
+                        <div class="metadata-item">
+                            <span class="metadata-label">Index:</span>
+                            <span class="metadata-value">${video.index || 'N/A'}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Texture:</span>
+                            <span class="metadata-value">${video.texture || 'N/A'}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Direction:</span>
+                            <span class="metadata-value">${video.direction || 'N/A'}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Speed:</span>
+                            <span class="metadata-value">${video.speed || 'N/A'}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Angle:</span>
+                            <span class="metadata-value">${video.angle || 'N/A'}°</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Brightness:</span>
+                            <span class="metadata-value">${video.brightness || 'N/A'}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Contrast:</span>
+                            <span class="metadata-value">${video.contrast || 'N/A'}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Stripe Contrast:</span>
+                            <span class="metadata-value">${video.stripe_contrast || 'N/A'}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Background Contrast:</span>
+                            <span class="metadata-value">${video.background_contrast || 'N/A'}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Object Enabled:</span>
+                            <span class="metadata-value">${video.object_enabled || 'no'}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Object Type:</span>
+                            <span class="metadata-value">${video.object_type || 'N/A'}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Num Objects:</span>
+                            <span class="metadata-value">${video.num_objects || 'N/A'}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Object Size:</span>
+                            <span class="metadata-value">${video.object_size || 'N/A'}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Object Position:</span>
+                            <span class="metadata-value">${video.object_position || 'N/A'}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Blur Enabled:</span>
+                            <span class="metadata-value">${video.blur_enabled || 'no'}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Blur Type:</span>
+                            <span class="metadata-value">${video.blur_type || 'N/A'}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Blur Intensity:</span>
+                            <span class="metadata-value">${video.blur_intensity || 'N/A'}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Blur Variation:</span>
+                            <span class="metadata-value">${video.blur_variation || 'N/A'}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Resolution:</span>
+                            <span class="metadata-value">${video.resolution || 'N/A'}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Seed:</span>
+                            <span class="metadata-value">${video.seed || 'N/A'}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderGroupTab(tabId, categoryName) {
+            const container = document.getElementById(tabId);
+            const categoryData = samples[categoryName];
+
+            let html = `<h2>${categoryName.charAt(0).toUpperCase() + categoryName.slice(1)} Groups</h2>`;
+
+            for (const [groupName, videos] of Object.entries(categoryData)) {
+                html += `
+                    <div class="group-header">
+                        <h3>${groupName}</h3>
+                        <span class="group-count">${videos.length} samples shown</span>
+                    </div>
+                    <div class="video-grid">
+                        ${videos.map(video => renderVideoCard(video)).join('')}
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+
+        function renderAllVideos() {
+            const container = document.getElementById('allVideosGrid');
+            container.innerHTML = metadata.map(video => renderVideoCard(video)).join('');
+        }
+
+        function filterVideos() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            const videoCards = document.querySelectorAll('#allVideosGrid .video-card');
+
+            videoCards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                card.style.display = text.includes(searchTerm) ? 'block' : 'none';
+            });
+        }
+
+        function renderDefaultsTable() {
+            const container = document.getElementById('defaults-table');
+
+            // Calculate most common value for each field
+            const fields = [
+                'index', 'texture', 'direction', 'speed', 'angle', 'brightness', 'contrast',
+                'stripe_contrast', 'background_contrast', 'object_enabled', 'object_type',
+                'num_objects', 'object_size', 'object_position', 'blur_enabled', 'blur_type',
+                'blur_intensity', 'blur_variation', 'resolution', 'seed'
+            ];
+
+            const defaults = {};
+
+            fields.forEach(field => {
+                const counter = {};
+                metadata.forEach(video => {
+                    const value = video[field] || 'N/A';
+                    counter[value] = (counter[value] || 0) + 1;
+                });
+
+                // Find most common value
+                let maxCount = 0;
+                let mostCommon = 'N/A';
+                for (const [value, count] of Object.entries(counter)) {
+                    if (count > maxCount) {
+                        maxCount = count;
+                        mostCommon = value;
+                    }
+                }
+
+                defaults[field] = {
+                    value: mostCommon,
+                    count: maxCount,
+                    percentage: ((maxCount / metadata.length) * 100).toFixed(1)
+                };
+            });
+
+            // Render as a nice table
+            let html = `
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                                <th style="padding: 15px; text-align: left; border-radius: 8px 0 0 0;">Parameter</th>
+                                <th style="padding: 15px; text-align: left;">Most Common Value (Default)</th>
+                                <th style="padding: 15px; text-align: center;">Count</th>
+                                <th style="padding: 15px; text-align: center; border-radius: 0 8px 0 0;">Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            fields.forEach((field, index) => {
+                const bgColor = index % 2 === 0 ? '#ffffff' : '#f8f9fa';
+                const def = defaults[field];
+                html += `
+                    <tr style="background: ${bgColor};">
+                        <td style="padding: 12px; font-weight: 600; color: #495057; border-bottom: 1px solid #dee2e6;">
+                            ${field.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                        </td>
+                        <td style="padding: 12px; color: #667eea; font-family: monospace; border-bottom: 1px solid #dee2e6;">
+                            ${def.value}
+                        </td>
+                        <td style="padding: 12px; text-align: center; border-bottom: 1px solid #dee2e6;">
+                            ${def.count}
+                        </td>
+                        <td style="padding: 12px; text-align: center; border-bottom: 1px solid #dee2e6;">
+                            ${def.percentage}%
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', () => {
+            renderDistributionCharts();
+            renderRepresentationAlerts();
+            renderDefaultsTable();
+
+            // Render grouped tabs
+            renderGroupTab('texture', 'texture');
+            renderGroupTab('direction', 'direction');
+            renderGroupTab('speed', 'speed_range');
+            renderGroupTab('angle', 'angle');
+            renderGroupTab('objects', 'objects');
+            renderGroupTab('blur', 'blur');
+        });
+    </script>
+</body>
+</html>

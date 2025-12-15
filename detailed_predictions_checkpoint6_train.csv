@@ -1,0 +1,97 @@
+model,video,full_prediction,label
+base,treadmill_0000_stripes_right_speed14.0_angle0_bright0.00_contr1.00_640x480_seed51.mp4,The treadmill belt is stopped.,moving
+finetuned,treadmill_0000_stripes_right_speed14.0_angle0_bright0.00_contr1.00_640x480_seed51.mp4,The treadmill belt is moving.,moving
+base,treadmill_0000_noise_right_speed0.0_angle30_bright0.00_contr1.00_640x480_seed62.mp4,"The image provided is a static image and does not show any movement of the treadmill belt. Therefore, it cannot be determined whether the treadmill belt is moving or stopped based on this image alone. To determine the motion of the treadmill belt, you would need to observe the video footage or use a motion detection tool that can track the belt's movement.",stopped
+finetuned,treadmill_0000_noise_right_speed0.0_angle30_bright0.00_contr1.00_640x480_seed62.mp4,The treadmill belt is moving.,stopped
+base,treadmill_0000_factory_dark_stripes_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed71.mp4,The treadmill belt is moving.,moving
+finetuned,treadmill_0000_factory_dark_stripes_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed71.mp4,The treadmill belt is moving.,moving
+base,treadmill_0000_factory_dark_right_speed14.0_angle30_bright0.00_contr1.00_640x480_seed89.mp4,The treadmill belt is moving.,moving
+finetuned,treadmill_0000_factory_dark_right_speed14.0_angle30_bright0.00_contr1.00_640x480_seed89.mp4,The treadmill belt is moving.,moving
+base,treadmill_0000_stripes_right_speed0.0_angle30_bright0.00_contr1.00_640x480_seed50.mp4,The treadmill belt is stopped.,stopped
+finetuned,treadmill_0000_stripes_right_speed0.0_angle30_bright0.00_contr1.00_640x480_seed50.mp4,The treadmill belt is stopped.,stopped
+base,treadmill_0000_stripes_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed44.mp4,The treadmill belt is stopped.,stopped
+finetuned,treadmill_0000_stripes_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed44.mp4,The treadmill belt is moving.,stopped
+base,treadmill_0000_noise_right_speed0.0_angle0_bright0.00_contr1.00_640x480_seed60.mp4,The treadmill belt in the video is not moving. The image shows a static scene with no visible motion blur or any indication of movement on the treadmill belt.,stopped
+finetuned,treadmill_0000_noise_right_speed0.0_angle0_bright0.00_contr1.00_640x480_seed60.mp4,The treadmill belt is moving.,stopped
+base,treadmill_0000_factory_dark_right_speed0.0_angle30_bright0.00_contr1.00_640x480_seed86.mp4,The treadmill belt is stopped.,stopped
+finetuned,treadmill_0000_factory_dark_right_speed0.0_angle30_bright0.00_contr1.00_640x480_seed86.mp4,The treadmill belt is moving.,stopped
+base,treadmill_0000_noise_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed57.mp4,The treadmill belt is moving.,moving
+finetuned,treadmill_0000_noise_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed57.mp4,The treadmill belt is moving.,moving
+base,treadmill_0000_factory_dark_stripes_left_speed14.0_angle15_bright0.00_contr1.00_640x480_seed70.mp4,The treadmill belt is moving.,moving
+finetuned,treadmill_0000_factory_dark_stripes_left_speed14.0_angle15_bright0.00_contr1.00_640x480_seed70.mp4,The treadmill belt is moving.,moving
+base,treadmill_0000_stripes_left_speed14.0_angle15_bright0.00_contr1.00_640x480_seed46.mp4,The treadmill belt is stopped.,moving
+finetuned,treadmill_0000_stripes_left_speed14.0_angle15_bright0.00_contr1.00_640x480_seed46.mp4,The treadmill belt is moving.,moving
+base,treadmill_0000_stripes_right_speed0.0_angle15_bright0.00_contr1.00_640x480_seed49.mp4,The treadmill belt is stopped.,stopped
+finetuned,treadmill_0000_stripes_right_speed0.0_angle15_bright0.00_contr1.00_640x480_seed49.mp4,The treadmill belt is stopped.,stopped
+base,treadmill_0000_stripes_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed45.mp4,The treadmill belt is moving.,moving
+finetuned,treadmill_0000_stripes_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed45.mp4,The treadmill belt is moving.,moving
+base,treadmill_0000_noise_left_speed0.0_angle15_bright0.00_contr1.00_640x480_seed55.mp4,"The image provided is a static image and does not show any movement of the treadmill belt. Therefore, it cannot be determined whether the treadmill belt is moving or stopped based on this image alone. To determine the motion of the treadmill belt, you would need to observe the video footage or use a motion detection tool that can track the belt's movement.",stopped
+finetuned,treadmill_0000_noise_left_speed0.0_angle15_bright0.00_contr1.00_640x480_seed55.mp4,The treadmill belt is moving.,stopped
+base,treadmill_0000_factory_dark_stripes_right_speed0.0_angle30_bright0.00_contr1.00_640x480_seed74.mp4,The treadmill belt is stopped.,stopped
+finetuned,treadmill_0000_factory_dark_stripes_right_speed0.0_angle30_bright0.00_contr1.00_640x480_seed74.mp4,The treadmill belt is moving.,stopped
+base,treadmill_0000_noise_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed56.mp4,"The image provided is a static image and does not show any movement of the treadmill belt. Therefore, it cannot be determined whether the treadmill belt is moving or stopped based on this image alone. To determine the motion of the treadmill belt, you would need to observe the video footage or use a motion detection tool that can track the belt's movement.",stopped
+finetuned,treadmill_0000_noise_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed56.mp4,The treadmill belt is moving.,stopped
+base,treadmill_0000_factory_dark_stripes_right_speed14.0_angle30_bright0.00_contr1.00_640x480_seed77.mp4,The treadmill belt is moving.,moving
+finetuned,treadmill_0000_factory_dark_stripes_right_speed14.0_angle30_bright0.00_contr1.00_640x480_seed77.mp4,The treadmill belt is moving.,moving
+base,treadmill_0000_factory_dark_right_speed14.0_angle15_bright0.00_contr1.00_640x480_seed88.mp4,The treadmill belt is moving.,moving
+finetuned,treadmill_0000_factory_dark_right_speed14.0_angle15_bright0.00_contr1.00_640x480_seed88.mp4,The treadmill belt is moving.,moving
+base,treadmill_0000_noise_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed54.mp4,"The image provided is a static image and does not show any movement. Therefore, it cannot be determined whether the treadmill belt is moving or stopped based on this image alone. To determine the motion of the treadmill belt, you would need to observe the video footage or have access to the video itself.",stopped
+finetuned,treadmill_0000_noise_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed54.mp4,The treadmill belt is moving.,stopped
+base,treadmill_0000_stripes_right_speed14.0_angle30_bright0.00_contr1.00_640x480_seed53.mp4,The treadmill belt is stationary in the video.,moving
+finetuned,treadmill_0000_stripes_right_speed14.0_angle30_bright0.00_contr1.00_640x480_seed53.mp4,The treadmill belt is moving.,moving
+base,treadmill_0000_factory_dark_stripes_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed66.mp4,The treadmill belt is stopped.,stopped
+finetuned,treadmill_0000_factory_dark_stripes_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed66.mp4,The treadmill belt is moving.,stopped
+base,treadmill_0000_factory_dark_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed78.mp4,The treadmill belt is stopped.,stopped
+finetuned,treadmill_0000_factory_dark_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed78.mp4,The treadmill belt is moving.,stopped
+base,treadmill_0000_stripes_right_speed14.0_angle15_bright0.00_contr1.00_640x480_seed52.mp4,The treadmill belt is not moving in the video.,moving
+finetuned,treadmill_0000_stripes_right_speed14.0_angle15_bright0.00_contr1.00_640x480_seed52.mp4,The treadmill belt is moving.,moving
+base,treadmill_0000_factory_dark_right_speed0.0_angle15_bright0.00_contr1.00_640x480_seed85.mp4,The treadmill belt is stopped.,stopped
+finetuned,treadmill_0000_factory_dark_right_speed0.0_angle15_bright0.00_contr1.00_640x480_seed85.mp4,The treadmill belt is moving.,stopped
+base,treadmill_0000_factory_dark_stripes_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed68.mp4,The treadmill belt is stopped.,stopped
+finetuned,treadmill_0000_factory_dark_stripes_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed68.mp4,The treadmill belt is moving.,stopped
+base,treadmill_0000_factory_dark_stripes_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed69.mp4,The treadmill belt is moving.,moving
+finetuned,treadmill_0000_factory_dark_stripes_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed69.mp4,The treadmill belt is moving.,moving
+base,treadmill_0000_factory_dark_stripes_left_speed0.0_angle15_bright0.00_contr1.00_640x480_seed67.mp4,The treadmill belt is stopped.,stopped
+finetuned,treadmill_0000_factory_dark_stripes_left_speed0.0_angle15_bright0.00_contr1.00_640x480_seed67.mp4,The treadmill belt is moving.,stopped
+base,treadmill_0000_noise_right_speed14.0_angle15_bright0.00_contr1.00_640x480_seed64.mp4,"The treadmill belt in the video is moving. This can be determined by observing the motion of the belt, which appears to be continuous and consistent throughout the sequence of images. The belt's movement is evident from the slight changes in the position of the dots on the belt surface as it rotates.",moving
+finetuned,treadmill_0000_noise_right_speed14.0_angle15_bright0.00_contr1.00_640x480_seed64.mp4,The treadmill belt is moving.,moving
+base,treadmill_0000_factory_dark_stripes_right_speed14.0_angle15_bright0.00_contr1.00_640x480_seed76.mp4,The treadmill belt is moving.,moving
+finetuned,treadmill_0000_factory_dark_stripes_right_speed14.0_angle15_bright0.00_contr1.00_640x480_seed76.mp4,The treadmill belt is moving.,moving
+base,treadmill_0000_factory_dark_stripes_right_speed14.0_angle0_bright0.00_contr1.00_640x480_seed75.mp4,The treadmill belt is moving.,moving
+finetuned,treadmill_0000_factory_dark_stripes_right_speed14.0_angle0_bright0.00_contr1.00_640x480_seed75.mp4,The treadmill belt is moving.,moving
+base,treadmill_0000_factory_dark_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed80.mp4,The treadmill belt is stopped.,stopped
+finetuned,treadmill_0000_factory_dark_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed80.mp4,The treadmill belt is moving.,stopped
+base,treadmill_0000_noise_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed59.mp4,"The image provided is a static image and does not show any movement. Therefore, it is impossible to determine if the treadmill belt is moving or stopped based on this single image. To accurately determine the motion of the treadmill belt, you would need to observe the video footage over time.",moving
+finetuned,treadmill_0000_noise_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed59.mp4,The treadmill belt is moving.,moving
+base,treadmill_0000_noise_right_speed0.0_angle15_bright0.00_contr1.00_640x480_seed61.mp4,"The image provided is a static black-and-white image of a treadmill belt, and it does not show any movement. Therefore, based on this single frame, we cannot determine if the treadmill belt is moving or stopped. To accurately determine the motion of the treadmill belt, we would need to observe multiple frames over time or have additional information about the video's speed and duration.",stopped
+finetuned,treadmill_0000_noise_right_speed0.0_angle15_bright0.00_contr1.00_640x480_seed61.mp4,The treadmill belt is moving.,stopped
+base,treadmill_0000_noise_right_speed14.0_angle30_bright0.00_contr1.00_640x480_seed65.mp4,"The treadmill belt in the video is moving. This can be determined by observing the motion of the belt, which appears to be continuous and consistent throughout the sequence of images. The belt's movement is evident from the slight changes in the position of the dots on the belt surface, indicating that it is actively rotating.",moving
+finetuned,treadmill_0000_noise_right_speed14.0_angle30_bright0.00_contr1.00_640x480_seed65.mp4,The treadmill belt is moving.,moving
+base,treadmill_0000_factory_dark_stripes_right_speed0.0_angle15_bright0.00_contr1.00_640x480_seed73.mp4,The treadmill belt is stopped.,stopped
+finetuned,treadmill_0000_factory_dark_stripes_right_speed0.0_angle15_bright0.00_contr1.00_640x480_seed73.mp4,The treadmill belt is moving.,stopped
+base,treadmill_0000_factory_dark_right_speed14.0_angle0_bright0.00_contr1.00_640x480_seed87.mp4,The treadmill belt is moving.,moving
+finetuned,treadmill_0000_factory_dark_right_speed14.0_angle0_bright0.00_contr1.00_640x480_seed87.mp4,The treadmill belt is moving.,moving
+base,treadmill_0000_factory_dark_left_speed0.0_angle15_bright0.00_contr1.00_640x480_seed79.mp4,The treadmill belt is not moving.,stopped
+finetuned,treadmill_0000_factory_dark_left_speed0.0_angle15_bright0.00_contr1.00_640x480_seed79.mp4,The treadmill belt is moving.,stopped
+base,treadmill_0000_stripes_right_speed0.0_angle0_bright0.00_contr1.00_640x480_seed48.mp4,The treadmill belt is stopped.,stopped
+finetuned,treadmill_0000_stripes_right_speed0.0_angle0_bright0.00_contr1.00_640x480_seed48.mp4,The treadmill belt is moving.,stopped
+base,treadmill_0000_stripes_left_speed0.0_angle15_bright0.00_contr1.00_640x480_seed43.mp4,The treadmill belt is stopped.,stopped
+finetuned,treadmill_0000_stripes_left_speed0.0_angle15_bright0.00_contr1.00_640x480_seed43.mp4,The treadmill belt is moving.,stopped
+base,treadmill_0000_factory_dark_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed81.mp4,The treadmill belt is moving.,moving
+finetuned,treadmill_0000_factory_dark_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed81.mp4,The treadmill belt is moving.,moving
+base,treadmill_0000_stripes_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed47.mp4,The treadmill belt is stopped.,moving
+finetuned,treadmill_0000_stripes_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed47.mp4,The treadmill belt is moving.,moving
+base,treadmill_0000_noise_right_speed14.0_angle0_bright0.00_contr1.00_640x480_seed63.mp4,The treadmill belt is moving.,moving
+finetuned,treadmill_0000_noise_right_speed14.0_angle0_bright0.00_contr1.00_640x480_seed63.mp4,The treadmill belt is moving.,moving
+base,treadmill_0000_factory_dark_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed83.mp4,The treadmill belt is moving.,moving
+finetuned,treadmill_0000_factory_dark_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed83.mp4,The treadmill belt is moving.,moving
+base,treadmill_0000_factory_dark_stripes_right_speed0.0_angle0_bright0.00_contr1.00_640x480_seed72.mp4,The treadmill belt is stopped.,stopped
+finetuned,treadmill_0000_factory_dark_stripes_right_speed0.0_angle0_bright0.00_contr1.00_640x480_seed72.mp4,The treadmill belt is moving.,stopped
+base,treadmill_0000_factory_dark_right_speed0.0_angle0_bright0.00_contr1.00_640x480_seed84.mp4,The treadmill belt is stopped.,stopped
+finetuned,treadmill_0000_factory_dark_right_speed0.0_angle0_bright0.00_contr1.00_640x480_seed84.mp4,The treadmill belt is moving.,stopped
+base,treadmill_0000_factory_dark_left_speed14.0_angle15_bright0.00_contr1.00_640x480_seed82.mp4,The treadmill belt is moving.,moving
+finetuned,treadmill_0000_factory_dark_left_speed14.0_angle15_bright0.00_contr1.00_640x480_seed82.mp4,The treadmill belt is moving.,moving
+base,treadmill_0000_noise_left_speed14.0_angle15_bright0.00_contr1.00_640x480_seed58.mp4,"The treadmill belt in the video is moving. This can be determined by observing the motion of the belt, which appears to be continuous and consistent throughout the sequence of images. The belt's movement is evident from the slight changes in the position of the objects on the belt, such as the shoes and the person's feet, which shift slightly from one frame to the next.",moving
+finetuned,treadmill_0000_noise_left_speed14.0_angle15_bright0.00_contr1.00_640x480_seed58.mp4,The treadmill belt is moving.,moving
+base,treadmill_0000_stripes_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4,The treadmill belt is stopped.,stopped
+finetuned,treadmill_0000_stripes_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4,The treadmill belt is moving.,stopped

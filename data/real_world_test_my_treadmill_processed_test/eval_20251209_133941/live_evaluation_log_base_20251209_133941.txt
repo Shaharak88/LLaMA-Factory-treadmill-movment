@@ -1,0 +1,809 @@
+================================================================================
+MODEL: Base Model
+BASE MODEL PATH: Qwen/Qwen2.5-VL-3B-Instruct
+================================================================================
+
+[1/80] ✗ INCORRECT
+Video Name: treadmill_0000_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed42.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0000_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed42.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0000_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed42.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[2/80] ✗ INCORRECT
+Video Name: treadmill_0001_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed43.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0001_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed43.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0001_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed43.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[3/80] ✗ INCORRECT
+Video Name: treadmill_0002_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed44.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0002_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed44.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0002_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed44.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[4/80] ✗ INCORRECT
+Video Name: treadmill_0003_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed45.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0003_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed45.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0003_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed45.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[5/80] ✗ INCORRECT
+Video Name: treadmill_0004_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed46.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0004_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed46.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0004_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed46.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[6/80] ✗ INCORRECT
+Video Name: treadmill_0005_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed47.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0005_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed47.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0005_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed47.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[7/80] ✗ INCORRECT
+Video Name: treadmill_0006_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed48.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0006_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed48.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0006_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed48.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[8/80] ✗ INCORRECT
+Video Name: treadmill_0007_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed49.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0007_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed49.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0007_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed49.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[9/80] ✗ INCORRECT
+Video Name: treadmill_0008_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed50.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0008_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed50.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0008_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed50.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[10/80] ✗ INCORRECT
+Video Name: treadmill_0009_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed51.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0009_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed51.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0009_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed51.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[11/80] ✗ INCORRECT
+Video Name: treadmill_0010_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed52.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0010_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed52.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0010_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed52.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[12/80] ✗ INCORRECT
+Video Name: treadmill_0011_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed53.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0011_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed53.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0011_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed53.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[13/80] ✗ INCORRECT
+Video Name: treadmill_0012_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed54.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0012_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed54.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0012_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed54.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[14/80] ✗ INCORRECT
+Video Name: treadmill_0013_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed55.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0013_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed55.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0013_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed55.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[15/80] ✗ INCORRECT
+Video Name: treadmill_0014_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed56.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0014_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed56.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0014_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed56.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[16/80] ✗ INCORRECT
+Video Name: treadmill_0015_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed57.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0015_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed57.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0015_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed57.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[17/80] ✗ INCORRECT
+Video Name: treadmill_0016_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed58.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0016_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed58.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0016_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed58.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[18/80] ✗ INCORRECT
+Video Name: treadmill_0017_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed59.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0017_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed59.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0017_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed59.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[19/80] ✗ INCORRECT
+Video Name: treadmill_0018_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed60.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0018_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed60.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0018_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed60.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[20/80] ✗ INCORRECT
+Video Name: treadmill_0019_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed61.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0019_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed61.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0019_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed61.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[21/80] ✗ INCORRECT
+Video Name: treadmill_0020_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed62.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0020_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed62.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0020_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed62.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[22/80] ✗ INCORRECT
+Video Name: treadmill_0021_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed63.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0021_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed63.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0021_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed63.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[23/80] ✗ INCORRECT
+Video Name: treadmill_0022_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed64.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0022_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed64.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0022_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed64.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[24/80] ✗ INCORRECT
+Video Name: treadmill_0023_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed65.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0023_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed65.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0023_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed65.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[25/80] ✗ INCORRECT
+Video Name: treadmill_0024_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed66.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0024_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed66.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0024_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed66.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[26/80] ✗ INCORRECT
+Video Name: treadmill_0025_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed67.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0025_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed67.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0025_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed67.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[27/80] ✗ INCORRECT
+Video Name: treadmill_0026_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed68.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0026_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed68.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0026_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed68.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[28/80] ✗ INCORRECT
+Video Name: treadmill_0027_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed69.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0027_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed69.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0027_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed69.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[29/80] ✗ INCORRECT
+Video Name: treadmill_0028_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed70.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0028_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed70.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0028_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed70.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[30/80] ✗ INCORRECT
+Video Name: treadmill_0029_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed71.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0029_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed71.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0029_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed71.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[31/80] ✗ INCORRECT
+Video Name: treadmill_0030_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed72.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0030_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed72.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0030_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed72.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[32/80] ✗ INCORRECT
+Video Name: treadmill_0031_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed73.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0031_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed73.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0031_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed73.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[33/80] ✗ INCORRECT
+Video Name: treadmill_0032_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed74.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0032_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed74.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0032_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed74.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[34/80] ✗ INCORRECT
+Video Name: treadmill_0033_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed75.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0033_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed75.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0033_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed75.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[35/80] ✗ INCORRECT
+Video Name: treadmill_0034_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed76.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0034_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed76.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0034_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed76.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[36/80] ✗ INCORRECT
+Video Name: treadmill_0035_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed77.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0035_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed77.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0035_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed77.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[37/80] ✗ INCORRECT
+Video Name: treadmill_0036_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed78.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0036_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed78.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0036_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed78.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[38/80] ✗ INCORRECT
+Video Name: treadmill_0037_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed79.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0037_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed79.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0037_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed79.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[39/80] ✗ INCORRECT
+Video Name: treadmill_0038_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed80.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0038_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed80.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0038_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed80.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[40/80] ✗ INCORRECT
+Video Name: treadmill_0039_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed81.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0039_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed81.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0039_realworld_right_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed81.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[41/80] ✓ CORRECT
+Video Name: treadmill_0000_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed142.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0000_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed142.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0000_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed142.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[42/80] ✓ CORRECT
+Video Name: treadmill_0001_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed143.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0001_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed143.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0001_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed143.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[43/80] ✓ CORRECT
+Video Name: treadmill_0002_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed144.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0002_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed144.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0002_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed144.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[44/80] ✓ CORRECT
+Video Name: treadmill_0003_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed145.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0003_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed145.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0003_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed145.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[45/80] ✓ CORRECT
+Video Name: treadmill_0004_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed146.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0004_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed146.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0004_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed146.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[46/80] ✓ CORRECT
+Video Name: treadmill_0005_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed147.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0005_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed147.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0005_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed147.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[47/80] ✓ CORRECT
+Video Name: treadmill_0006_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed148.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0006_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed148.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0006_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed148.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[48/80] ✓ CORRECT
+Video Name: treadmill_0007_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed149.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0007_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed149.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0007_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed149.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[49/80] ✓ CORRECT
+Video Name: treadmill_0008_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed150.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0008_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed150.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0008_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed150.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[50/80] ✓ CORRECT
+Video Name: treadmill_0009_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed151.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0009_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed151.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0009_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed151.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[51/80] ✓ CORRECT
+Video Name: treadmill_0010_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed152.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0010_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed152.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0010_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed152.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[52/80] ✓ CORRECT
+Video Name: treadmill_0011_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed153.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0011_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed153.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0011_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed153.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[53/80] ✓ CORRECT
+Video Name: treadmill_0012_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed154.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0012_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed154.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0012_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed154.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[54/80] ✓ CORRECT
+Video Name: treadmill_0013_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed155.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0013_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed155.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0013_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed155.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[55/80] ✓ CORRECT
+Video Name: treadmill_0014_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed156.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0014_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed156.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0014_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed156.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[56/80] ✓ CORRECT
+Video Name: treadmill_0015_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed157.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0015_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed157.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0015_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed157.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[57/80] ✓ CORRECT
+Video Name: treadmill_0016_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed158.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0016_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed158.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0016_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed158.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[58/80] ✓ CORRECT
+Video Name: treadmill_0017_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed159.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0017_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed159.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0017_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed159.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[59/80] ✓ CORRECT
+Video Name: treadmill_0018_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed160.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0018_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed160.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0018_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed160.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[60/80] ✓ CORRECT
+Video Name: treadmill_0019_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed161.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0019_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed161.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0019_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed161.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[61/80] ✓ CORRECT
+Video Name: treadmill_0020_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed162.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0020_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed162.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0020_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed162.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[62/80] ✓ CORRECT
+Video Name: treadmill_0021_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed163.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0021_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed163.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0021_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed163.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[63/80] ✓ CORRECT
+Video Name: treadmill_0022_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed164.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0022_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed164.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0022_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed164.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[64/80] ✓ CORRECT
+Video Name: treadmill_0023_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed165.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0023_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed165.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0023_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed165.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[65/80] ✓ CORRECT
+Video Name: treadmill_0024_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed166.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0024_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed166.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0024_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed166.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[66/80] ✓ CORRECT
+Video Name: treadmill_0025_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed167.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0025_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed167.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0025_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed167.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[67/80] ✓ CORRECT
+Video Name: treadmill_0026_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed168.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0026_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed168.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0026_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed168.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[68/80] ✓ CORRECT
+Video Name: treadmill_0027_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed169.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0027_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed169.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0027_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed169.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[69/80] ✓ CORRECT
+Video Name: treadmill_0028_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed170.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0028_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed170.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0028_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed170.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[70/80] ✓ CORRECT
+Video Name: treadmill_0029_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed171.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0029_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed171.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0029_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed171.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[71/80] ✓ CORRECT
+Video Name: treadmill_0030_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed172.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0030_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed172.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0030_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed172.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[72/80] ✓ CORRECT
+Video Name: treadmill_0031_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed173.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0031_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed173.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0031_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed173.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[73/80] ✓ CORRECT
+Video Name: treadmill_0032_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed174.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0032_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed174.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0032_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed174.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[74/80] ✓ CORRECT
+Video Name: treadmill_0033_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed175.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0033_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed175.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0033_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed175.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[75/80] ✓ CORRECT
+Video Name: treadmill_0034_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed176.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0034_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed176.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0034_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed176.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[76/80] ✓ CORRECT
+Video Name: treadmill_0035_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed177.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0035_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed177.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0035_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed177.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[77/80] ✓ CORRECT
+Video Name: treadmill_0036_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed178.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0036_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed178.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0036_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed178.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[78/80] ✓ CORRECT
+Video Name: treadmill_0037_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed179.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0037_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed179.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0037_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed179.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[79/80] ✓ CORRECT
+Video Name: treadmill_0038_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed180.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0038_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed180.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0038_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed180.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[80/80] ✓ CORRECT
+Video Name: treadmill_0039_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed181.mp4
+Video Path (Relative): data/real_world_test_my_treadmill_processed_test/treadmill_0039_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed181.mp4
+Video Path (Absolute): /app/data/real_world_test_my_treadmill_processed_test/treadmill_0039_realworld_right_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed181.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): No
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+
+================================================================================
+Evaluation complete! Log saved to: /app/data/real_world_test_my_treadmill_processed_test/eval_20251209_133941/live_evaluation_log_base_20251209_133941.txt
+================================================================================

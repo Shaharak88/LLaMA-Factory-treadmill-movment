@@ -1,0 +1,38 @@
+======================================================================
+Dataset Generation Summary: test_combo_4textures
+======================================================================
+
+Generation Date: 2025-11-26 14:51:43
+Seed: 42
+
+Dataset Statistics:
+----------------------------------------------------------------------
+  Total Videos: 4
+  Moving Videos: 4 (100.0%)
+  Stopped Videos: 0 (0.0%)
+
+  Speed Range: 3.00 - 3.00 px/frame
+
+Texture Distribution:
+  grid           :   1 (25.0%)
+  noise          :   1 (25.0%)
+  rubber         :   1 (25.0%)
+  stripes        :   1 (25.0%)
+
+Direction Distribution:
+  right          :   4 (100.0%)
+
+File Sizes:
+  Total: 5.45 MB
+  Average: 1.36 MB per video
+
+Output Files:
+----------------------------------------------------------------------
+  Videos: data/test_combo_4textures/
+  Dataset JSON: /app/data/test_combo_4textures.json
+  Dataset Info: /app/data/dataset_info.json
+  Log File: data/test_combo_4textures/test_combo_4textures_build_log.txt
+
+======================================================================
+Dataset ready for training!
+======================================================================

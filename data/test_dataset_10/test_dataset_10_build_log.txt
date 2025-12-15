@@ -1,0 +1,188 @@
+2025-11-26 13:56:21 - INFO - Dataset Builder started - test_dataset_10
+2025-11-26 13:56:21 - INFO - Configuration: {'dataset_name': 'test_dataset_10', 'output_dir': 'data/test_dataset_10', 'num_videos': 10, 'train_split': 0.8, 'moving_ratio': 0.5, 'seed': 42, 'vary_parameters': True, 'texture_type': 'stripes', 'direction': 'right', 'speed_range': '1.0,8.0', 'resolution': '640x480', 'fps': 30, 'duration': 5.0, 'view_angle': 0.0, 'brightness': 0.0, 'contrast': 1.0, 'lighting_variation': 'none', 'lighting_intensity': 0.5, 'motion_blur': 0, 'camera_noise': 0.0}
+2025-11-26 13:56:21 - INFO - Validating prerequisites...
+2025-11-26 13:56:21 - INFO -   ✓ Found synthetic generation script
+2025-11-26 13:56:21 - INFO -   ✓ Found dataset_info.json
+2025-11-26 13:56:21 - INFO -   ✓ Python3 available: Python 3.12.3
+2025-11-26 13:56:21 - INFO - Generating video configurations...
+2025-11-26 13:56:21 - INFO -   Target: 5 moving, 5 stopped videos
+2025-11-26 13:56:21 - INFO - Generating 10 videos...
+2025-11-26 13:56:21 - INFO -   [1/10] Generating video...
+2025-11-26 13:56:21 - INFO -     Texture: rubber, Direction: left, Speed: 6.31
+2025-11-26 13:56:21 - ERROR -     ✗ Video generation failed:
+2025-11-26 13:56:21 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-11-26 13:56:21 - INFO -   [2/10] Generating video...
+2025-11-26 13:56:21 - INFO -     Texture: stripes, Direction: left, Speed: 6.19
+2025-11-26 13:56:22 - ERROR -     ✗ Video generation failed:
+2025-11-26 13:56:22 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-11-26 13:56:22 - INFO -   [3/10] Generating video...
+2025-11-26 13:56:22 - INFO -     Texture: stripes, Direction: right, Speed: 2.63
+2025-11-26 13:56:22 - ERROR -     ✗ Video generation failed:
+2025-11-26 13:56:22 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-11-26 13:56:22 - INFO -   [4/10] Generating video...
+2025-11-26 13:56:22 - INFO -     Texture: rubber, Direction: right, Speed: 0.00
+2025-11-26 13:56:23 - ERROR -     ✗ Video generation failed:
+2025-11-26 13:56:23 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-11-26 13:56:23 - INFO -   [5/10] Generating video...
+2025-11-26 13:56:23 - INFO -     Texture: grid, Direction: left, Speed: 3.51
+2025-11-26 13:56:23 - ERROR -     ✗ Video generation failed:
+2025-11-26 13:56:23 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-11-26 13:56:23 - INFO -   [6/10] Generating video...
+2025-11-26 13:56:23 - INFO -     Texture: noise, Direction: right, Speed: 0.00
+2025-11-26 13:56:24 - ERROR -     ✗ Video generation failed:
+2025-11-26 13:56:24 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-11-26 13:56:24 - INFO -   [7/10] Generating video...
+2025-11-26 13:56:24 - INFO -     Texture: noise, Direction: up, Speed: 0.00
+2025-11-26 13:56:24 - ERROR -     ✗ Video generation failed:
+2025-11-26 13:56:24 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-11-26 13:56:24 - INFO -   [8/10] Generating video...
+2025-11-26 13:56:24 - INFO -     Texture: grid, Direction: left, Speed: 4.86
+2025-11-26 13:56:25 - ERROR -     ✗ Video generation failed:
+2025-11-26 13:56:25 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-11-26 13:56:25 - INFO -   [9/10] Generating video...
+2025-11-26 13:56:25 - INFO -     Texture: rubber, Direction: right, Speed: 0.00
+2025-11-26 13:56:25 - ERROR -     ✗ Video generation failed:
+2025-11-26 13:56:25 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-11-26 13:56:25 - INFO -   [10/10] Generating video...
+2025-11-26 13:56:25 - INFO -     Texture: stripes, Direction: right, Speed: 0.00
+2025-11-26 13:56:26 - ERROR -     ✗ Video generation failed:
+2025-11-26 13:56:26 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-11-26 13:56:26 - INFO - Successfully generated 0/10 videos
+2025-11-26 13:56:26 - ERROR - 
+
+Error during dataset building: No videos were successfully generated
+Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/building_dataset.py", line 550, in build
+    raise RuntimeError("No videos were successfully generated")
+RuntimeError: No videos were successfully generated
+2025-11-26 11:58:15 - INFO - Dataset Builder started - test_dataset_10
+2025-11-26 11:58:15 - INFO - Configuration: {'dataset_name': 'test_dataset_10', 'output_dir': 'data/test_dataset_10', 'num_videos': 10, 'train_split': 0.8, 'moving_ratio': 0.5, 'seed': 42, 'vary_parameters': True, 'texture_type': 'stripes', 'direction': 'right', 'speed_range': '1.0,8.0', 'resolution': '640x480', 'fps': 30, 'duration': 5.0, 'view_angle': 0.0, 'brightness': 0.0, 'contrast': 1.0, 'lighting_variation': 'none', 'lighting_intensity': 0.5, 'motion_blur': 0, 'camera_noise': 0.0}
+2025-11-26 11:58:15 - INFO - Validating prerequisites...
+2025-11-26 11:58:15 - INFO -   ✓ Found synthetic generation script
+2025-11-26 11:58:15 - INFO -   ✓ Found dataset_info.json
+2025-11-26 11:58:15 - INFO -   ✓ Python3 available: Python 3.11.11
+2025-11-26 11:58:15 - INFO - Generating video configurations...
+2025-11-26 11:58:15 - INFO -   Target: 5 moving, 5 stopped videos
+2025-11-26 11:58:15 - INFO - Generating 10 videos...
+2025-11-26 11:58:15 - INFO -   [1/10] Generating video...
+2025-11-26 11:58:15 - INFO -     Texture: rubber, Direction: left, Speed: 6.31
+2025-11-26 11:58:56 - INFO -     ✓ Generated: treadmill_0000_rubber_left_speed6.3_angle-20_bright-0.03_contr0.87_640x480_seed44.mp4 (1154.9 KB)
+2025-11-26 11:58:56 - INFO -   [2/10] Generating video...
+2025-11-26 11:58:56 - INFO -     Texture: stripes, Direction: left, Speed: 6.19
+2025-11-26 11:58:59 - INFO -     ✓ Generated: treadmill_0000_stripes_left_speed6.2_angle-15_bright-0.14_contr0.76_640x480_seed42.mp4 (302.2 KB)
+2025-11-26 11:58:59 - INFO -   [3/10] Generating video...
+2025-11-26 11:58:59 - INFO -     Texture: stripes, Direction: right, Speed: 2.63
+2025-11-26 11:59:06 - INFO -     ✓ Generated: treadmill_0000_stripes_right_speed2.6_angle6_bright0.02_contr1.13_640x480_seed43.mp4 (503.3 KB)
+2025-11-26 11:59:06 - INFO -   [4/10] Generating video...
+2025-11-26 11:59:06 - INFO -     Texture: rubber, Direction: right, Speed: 0.00
+2025-11-26 11:59:45 - INFO -     ✓ Generated: treadmill_0000_rubber_right_speed0.0_angle-8_bright-0.12_contr0.86_640x480_seed43.mp4 (1107.9 KB)
+2025-11-26 11:59:45 - INFO -   [5/10] Generating video...
+2025-11-26 11:59:45 - INFO -     Texture: grid, Direction: left, Speed: 3.51
+2025-11-26 11:59:51 - INFO -     ✓ Generated: treadmill_0000_grid_left_speed3.5_angle-9_bright-0.09_contr0.73_640x480_seed45.mp4 (2555.9 KB)
+2025-11-26 11:59:52 - INFO -   [6/10] Generating video...
+2025-11-26 11:59:52 - INFO -     Texture: noise, Direction: right, Speed: 0.00
+2025-11-26 11:59:59 - INFO -     ✓ Generated: treadmill_0000_noise_right_speed0.0_angle-2_bright-0.09_contr1.26_640x480_seed44.mp4 (1477.9 KB)
+2025-11-26 11:59:59 - INFO -   [7/10] Generating video...
+2025-11-26 11:59:59 - INFO -     Texture: noise, Direction: up, Speed: 0.00
+2025-11-26 12:00:05 - INFO -     ✓ Generated: treadmill_0000_noise_up_speed0.0_angle29_bright0.14_contr1.22_640x480_seed42.mp4 (2613.8 KB)
+2025-11-26 12:00:05 - INFO -   [8/10] Generating video...
+2025-11-26 12:00:05 - INFO -     Texture: grid, Direction: left, Speed: 4.86
+2025-11-26 12:00:13 - INFO -     ✓ Generated: treadmill_0000_grid_left_speed4.9_angle20_bright0.05_contr1.22_640x480_seed46.mp4 (1053.6 KB)
+2025-11-26 12:00:13 - INFO -   [9/10] Generating video...
+2025-11-26 12:00:13 - INFO -     Texture: rubber, Direction: right, Speed: 0.00
+2025-11-26 12:00:52 - INFO -     ✓ Generated: treadmill_0000_rubber_right_speed0.0_angle9_bright-0.04_contr1.25_640x480_seed46.mp4 (1253.9 KB)
+2025-11-26 12:00:52 - INFO -   [10/10] Generating video...
+2025-11-26 12:00:52 - INFO -     Texture: stripes, Direction: right, Speed: 0.00
+2025-11-26 12:00:58 - INFO -     ✓ Generated: treadmill_0000_stripes_right_speed0.0_angle19_bright0.12_contr0.94_640x480_seed45.mp4 (1955.4 KB)
+2025-11-26 12:00:58 - INFO - Successfully generated 10/10 videos
+2025-11-26 12:00:58 - INFO - Creating dataset JSON: /app/data/test_dataset_10.json
+2025-11-26 12:00:58 - INFO -   ✓ Created dataset with 10 entries
+2025-11-26 12:00:58 - INFO - Updating dataset_info.json...
+2025-11-26 12:00:58 - INFO -   Created backup: dataset_info.json.backup
+2025-11-26 12:00:58 - INFO -   ✓ Added 'test_dataset_10' to dataset_info.json
+2025-11-26 12:00:58 - INFO - Generating summary report...
+2025-11-26 12:00:58 - INFO - 
+======================================================================
+Dataset Generation Summary: test_dataset_10
+======================================================================
+
+Generation Date: 2025-11-26 12:00:58
+Seed: 42
+
+Dataset Statistics:
+----------------------------------------------------------------------
+  Total Videos: 10
+  Moving Videos: 5 (50.0%)
+  Stopped Videos: 5 (50.0%)
+
+  Speed Range: 2.63 - 6.31 px/frame
+
+Texture Distribution:
+  grid           :   2 (20.0%)
+  noise          :   2 (20.0%)
+  rubber         :   3 (30.0%)
+  stripes        :   3 (30.0%)
+
+Direction Distribution:
+  left           :   4 (40.0%)
+  right          :   5 (50.0%)
+  up             :   1 (10.0%)
+
+File Sizes:
+  Total: 13.65 MB
+  Average: 1.37 MB per video
+
+Output Files:
+----------------------------------------------------------------------
+  Videos: data/test_dataset_10/
+  Dataset JSON: /app/data/test_dataset_10.json
+  Dataset Info: /app/data/dataset_info.json
+  Log File: data/test_dataset_10/test_dataset_10_build_log.txt
+
+======================================================================
+Dataset ready for training!
+======================================================================
+
+2025-11-26 12:00:58 - INFO - ======================================================================
+2025-11-26 12:00:58 - INFO - ✓ Dataset building complete!
+2025-11-26 12:00:58 - INFO - ======================================================================

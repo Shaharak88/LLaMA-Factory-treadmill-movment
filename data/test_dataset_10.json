@@ -1,0 +1,152 @@
+[
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped."
+      }
+    ],
+    "videos": [
+      "data/test_dataset_10/treadmill_0000_rubber_right_speed0.0_angle-8_bright-0.12_contr0.86_640x480_seed43.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving."
+      }
+    ],
+    "videos": [
+      "data/test_dataset_10/treadmill_0000_grid_left_speed3.5_angle-9_bright-0.09_contr0.73_640x480_seed45.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped."
+      }
+    ],
+    "videos": [
+      "data/test_dataset_10/treadmill_0000_stripes_right_speed0.0_angle19_bright0.12_contr0.94_640x480_seed45.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving."
+      }
+    ],
+    "videos": [
+      "data/test_dataset_10/treadmill_0000_stripes_left_speed6.2_angle-15_bright-0.14_contr0.76_640x480_seed42.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped."
+      }
+    ],
+    "videos": [
+      "data/test_dataset_10/treadmill_0000_noise_right_speed0.0_angle-2_bright-0.09_contr1.26_640x480_seed44.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped."
+      }
+    ],
+    "videos": [
+      "data/test_dataset_10/treadmill_0000_noise_up_speed0.0_angle29_bright0.14_contr1.22_640x480_seed42.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving."
+      }
+    ],
+    "videos": [
+      "data/test_dataset_10/treadmill_0000_rubber_left_speed6.3_angle-20_bright-0.03_contr0.87_640x480_seed44.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving."
+      }
+    ],
+    "videos": [
+      "data/test_dataset_10/treadmill_0000_grid_left_speed4.9_angle20_bright0.05_contr1.22_640x480_seed46.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped."
+      }
+    ],
+    "videos": [
+      "data/test_dataset_10/treadmill_0000_rubber_right_speed0.0_angle9_bright-0.04_contr1.25_640x480_seed46.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving."
+      }
+    ],
+    "videos": [
+      "data/test_dataset_10/treadmill_0000_stripes_right_speed2.6_angle6_bright0.02_contr1.13_640x480_seed43.mp4"
+    ]
+  }
+]

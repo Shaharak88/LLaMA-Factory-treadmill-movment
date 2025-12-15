@@ -1,0 +1,35 @@
+======================================================================
+Dataset Generation Summary: test_train
+======================================================================
+
+Generation Date: 2025-11-26 15:37:42
+Seed: 42
+
+Dataset Statistics:
+----------------------------------------------------------------------
+  Total Videos: 9
+  Moving Videos: 4 (44.4%)
+  Stopped Videos: 5 (55.6%)
+
+  Speed Range: 1.18 - 5.48 px/frame
+
+Texture Distribution:
+  stripes        :   9 (100.0%)
+
+Direction Distribution:
+  right          :   9 (100.0%)
+
+File Sizes:
+  Total: 2.78 MB
+  Average: 0.31 MB per video
+
+Output Files:
+----------------------------------------------------------------------
+  Videos: data/test_train/
+  Dataset JSON: /app/data/test_train.json
+  Dataset Info: /app/data/dataset_info.json
+  Log File: data/test_train/test_train_build_log.txt
+
+======================================================================
+Dataset ready for training!
+======================================================================

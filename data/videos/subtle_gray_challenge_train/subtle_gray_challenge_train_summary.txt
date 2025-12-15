@@ -1,0 +1,35 @@
+======================================================================
+Dataset Generation Summary: subtle_gray_challenge_train
+======================================================================
+
+Generation Date: 2025-11-27 16:37:07
+Seed: 42
+
+Dataset Statistics:
+----------------------------------------------------------------------
+  Total Videos: 128
+  Moving Videos: 64 (50.0%)
+  Stopped Videos: 64 (50.0%)
+
+  Speed Range: 14.00 - 14.00 px/frame
+
+Texture Distribution:
+  subtle_gray_stripes: 128 (100.0%)
+
+Direction Distribution:
+  left           : 128 (100.0%)
+
+File Sizes:
+  Total: 7.26 MB
+  Average: 0.06 MB per video
+
+Output Files:
+----------------------------------------------------------------------
+  Videos: data/subtle_gray_challenge_train/
+  Dataset JSON: /app/data/subtle_gray_challenge_train.json
+  Dataset Info: /app/data/dataset_info.json
+  Log File: data/subtle_gray_challenge_train/subtle_gray_challenge_train_build_log.txt
+
+======================================================================
+Dataset ready for training!
+======================================================================

@@ -1,0 +1,7 @@
+{
+  "adapter_path": "saves/dist_augment_x5_combined_loraplus_5ep_noquant",
+  "base_model": "Qwen/Qwen2.5-VL-3B-Instruct",
+  "test_dataset": "_exp_20251209_dist_augment_x5_combined_test",
+  "eval_method": "yesno",
+  "timestamp": "20251209_162349"
+}

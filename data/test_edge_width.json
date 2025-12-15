@@ -1,0 +1,62 @@
+[
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped."
+      }
+    ],
+    "videos": [
+      "data/test_edge_width/treadmill_0000_diamond_plate_down_speed0.0_angle24_bright0.17_contr0.92_640x480_seed1000.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving."
+      }
+    ],
+    "videos": [
+      "data/test_edge_width/treadmill_0000_stripes_down_speed4.4_angle23_bright0.06_contr1.09_640x480_seed999.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped."
+      }
+    ],
+    "videos": [
+      "data/test_edge_width/treadmill_0000_stripes_right_speed0.0_angle9_bright0.15_contr0.83_640x480_seed999.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving."
+      }
+    ],
+    "videos": [
+      "data/test_edge_width/treadmill_0000_noise_up_speed7.8_angle-27_bright0.11_contr0.94_640x480_seed1000.mp4"
+    ]
+  }
+]

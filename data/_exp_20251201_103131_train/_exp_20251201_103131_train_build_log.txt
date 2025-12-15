@@ -1,0 +1,2322 @@
+2025-12-01 10:31:31 - INFO - Dataset Builder started - _exp_20251201_103131_train
+2025-12-01 10:31:31 - INFO - Configuration: {'dataset_name': '_exp_20251201_103131_train', 'output_dir': 'data/_exp_20251201_103131_train', 'num_videos': 10, 'train_split': 0.8, 'moving_ratio': 0.5, 'seed': 42, 'vary_parameters': False, 'texture_type': 'subtle_gray_stripes', 'direction': 'left,right,up,down', 'speed_range': '0.0,14.0', 'resolution': '640,480', 'fps': '4', 'duration': '12.0', 'view_angle': '0.0,15.0', 'brightness': '1.0', 'contrast': '1.0', 'lighting_variation': '0.0', 'lighting_intensity': '1.0', 'motion_blur': '0', 'camera_noise': '0.0', 'edge_width': '5', 'stripe_width': '20', 'stripe_spacing': '20', 'stripe_gray': '20,21,22', 'background_gray': '15,16,17', 'stripe_distance_variance': '0.0'}
+2025-12-01 10:31:31 - INFO - Validating prerequisites...
+2025-12-01 10:31:31 - INFO -   [OK] Found synthetic generation script
+2025-12-01 10:31:31 - INFO -   [OK] Found dataset_info.json
+2025-12-01 10:31:31 - INFO -   [OK] Python3 available: Python 3.12.3
+2025-12-01 10:31:31 - INFO - Generating video configurations...
+2025-12-01 10:31:31 - INFO -   Generated 288 parameter combinations
+2025-12-01 10:31:31 - INFO -   Generated: 144 moving, 144 stopped videos
+2025-12-01 10:31:31 - INFO - Generating 288 videos...
+2025-12-01 10:31:31 - INFO -   [1/288] Generating video...
+2025-12-01 10:31:31 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:31:32 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:32 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:32 - INFO -   [2/288] Generating video...
+2025-12-01 10:31:32 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:31:33 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:33 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:33 - INFO -   [3/288] Generating video...
+2025-12-01 10:31:33 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:31:34 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:34 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:34 - INFO -   [4/288] Generating video...
+2025-12-01 10:31:34 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:31:35 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:35 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:35 - INFO -   [5/288] Generating video...
+2025-12-01 10:31:35 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:31:36 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:36 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:36 - INFO -   [6/288] Generating video...
+2025-12-01 10:31:36 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:31:37 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:37 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:37 - INFO -   [7/288] Generating video...
+2025-12-01 10:31:37 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:31:38 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:38 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:38 - INFO -   [8/288] Generating video...
+2025-12-01 10:31:38 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:31:38 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:38 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:38 - INFO -   [9/288] Generating video...
+2025-12-01 10:31:38 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:31:39 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:39 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:39 - INFO -   [10/288] Generating video...
+2025-12-01 10:31:39 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:31:40 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:40 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:40 - INFO -   [11/288] Generating video...
+2025-12-01 10:31:40 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:31:41 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:41 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:41 - INFO -   [12/288] Generating video...
+2025-12-01 10:31:41 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:31:42 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:42 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:42 - INFO -   [13/288] Generating video...
+2025-12-01 10:31:42 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:31:43 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:43 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:43 - INFO -   [14/288] Generating video...
+2025-12-01 10:31:43 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:31:43 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:43 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:43 - INFO -   [15/288] Generating video...
+2025-12-01 10:31:43 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:31:44 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:44 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:44 - INFO -   [16/288] Generating video...
+2025-12-01 10:31:44 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:31:45 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:45 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:45 - INFO -   [17/288] Generating video...
+2025-12-01 10:31:45 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:31:46 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:46 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:46 - INFO -   [18/288] Generating video...
+2025-12-01 10:31:46 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:31:47 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:47 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:47 - INFO -   [19/288] Generating video...
+2025-12-01 10:31:47 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:31:48 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:48 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:48 - INFO -   [20/288] Generating video...
+2025-12-01 10:31:48 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:31:49 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:49 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:49 - INFO -   [21/288] Generating video...
+2025-12-01 10:31:49 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:31:49 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:49 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:49 - INFO -   [22/288] Generating video...
+2025-12-01 10:31:49 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:31:50 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:50 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:50 - INFO -   [23/288] Generating video...
+2025-12-01 10:31:50 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:31:51 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:51 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:51 - INFO -   [24/288] Generating video...
+2025-12-01 10:31:51 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:31:52 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:52 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:52 - INFO -   [25/288] Generating video...
+2025-12-01 10:31:52 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:31:53 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:53 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:53 - INFO -   [26/288] Generating video...
+2025-12-01 10:31:53 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:31:53 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:53 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:53 - INFO -   [27/288] Generating video...
+2025-12-01 10:31:53 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:31:54 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:54 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:54 - INFO -   [28/288] Generating video...
+2025-12-01 10:31:54 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:31:58 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:58 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:58 - INFO -   [29/288] Generating video...
+2025-12-01 10:31:58 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:31:59 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:31:59 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:31:59 - INFO -   [30/288] Generating video...
+2025-12-01 10:31:59 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:32:00 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:00 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:00 - INFO -   [31/288] Generating video...
+2025-12-01 10:32:00 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:32:01 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:01 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:01 - INFO -   [32/288] Generating video...
+2025-12-01 10:32:01 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:32:01 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:01 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:01 - INFO -   [33/288] Generating video...
+2025-12-01 10:32:01 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:32:02 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:02 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:02 - INFO -   [34/288] Generating video...
+2025-12-01 10:32:02 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:32:03 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:03 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:03 - INFO -   [35/288] Generating video...
+2025-12-01 10:32:03 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:32:04 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:04 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:04 - INFO -   [36/288] Generating video...
+2025-12-01 10:32:04 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:32:05 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:05 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:05 - INFO -   [37/288] Generating video...
+2025-12-01 10:32:05 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:32:06 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:06 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:06 - INFO -   [38/288] Generating video...
+2025-12-01 10:32:06 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:32:06 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:06 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:06 - INFO -   [39/288] Generating video...
+2025-12-01 10:32:06 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:32:07 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:07 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:07 - INFO -   [40/288] Generating video...
+2025-12-01 10:32:07 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:32:08 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:08 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:08 - INFO -   [41/288] Generating video...
+2025-12-01 10:32:08 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:32:09 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:09 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:09 - INFO -   [42/288] Generating video...
+2025-12-01 10:32:09 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:32:09 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:09 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:09 - INFO -   [43/288] Generating video...
+2025-12-01 10:32:09 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:32:10 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:10 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:10 - INFO -   [44/288] Generating video...
+2025-12-01 10:32:10 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:32:11 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:11 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:11 - INFO -   [45/288] Generating video...
+2025-12-01 10:32:11 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:32:12 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:12 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:12 - INFO -   [46/288] Generating video...
+2025-12-01 10:32:12 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:32:12 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:12 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:12 - INFO -   [47/288] Generating video...
+2025-12-01 10:32:12 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:32:13 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:13 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:13 - INFO -   [48/288] Generating video...
+2025-12-01 10:32:13 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:32:14 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:14 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:14 - INFO -   [49/288] Generating video...
+2025-12-01 10:32:14 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:32:15 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:15 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:15 - INFO -   [50/288] Generating video...
+2025-12-01 10:32:15 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:32:16 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:16 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:16 - INFO -   [51/288] Generating video...
+2025-12-01 10:32:16 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:32:16 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:16 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:16 - INFO -   [52/288] Generating video...
+2025-12-01 10:32:16 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:32:17 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:17 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:17 - INFO -   [53/288] Generating video...
+2025-12-01 10:32:17 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:32:18 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:18 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:18 - INFO -   [54/288] Generating video...
+2025-12-01 10:32:18 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:32:19 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:19 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:19 - INFO -   [55/288] Generating video...
+2025-12-01 10:32:19 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:32:19 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:19 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:19 - INFO -   [56/288] Generating video...
+2025-12-01 10:32:19 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:32:20 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:20 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:20 - INFO -   [57/288] Generating video...
+2025-12-01 10:32:20 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:32:21 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:21 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:21 - INFO -   [58/288] Generating video...
+2025-12-01 10:32:21 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:32:21 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:21 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:21 - INFO -   [59/288] Generating video...
+2025-12-01 10:32:21 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:32:22 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:22 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:22 - INFO -   [60/288] Generating video...
+2025-12-01 10:32:22 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:32:23 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:23 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:23 - INFO -   [61/288] Generating video...
+2025-12-01 10:32:23 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:32:23 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:23 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:23 - INFO -   [62/288] Generating video...
+2025-12-01 10:32:23 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:32:24 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:24 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:24 - INFO -   [63/288] Generating video...
+2025-12-01 10:32:24 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:32:25 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:25 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:25 - INFO -   [64/288] Generating video...
+2025-12-01 10:32:25 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:32:25 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:25 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:25 - INFO -   [65/288] Generating video...
+2025-12-01 10:32:25 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:32:26 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:26 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:26 - INFO -   [66/288] Generating video...
+2025-12-01 10:32:26 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:32:27 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:27 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:27 - INFO -   [67/288] Generating video...
+2025-12-01 10:32:27 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:32:28 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:28 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:28 - INFO -   [68/288] Generating video...
+2025-12-01 10:32:28 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:32:28 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:28 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:28 - INFO -   [69/288] Generating video...
+2025-12-01 10:32:28 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:32:29 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:29 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:29 - INFO -   [70/288] Generating video...
+2025-12-01 10:32:29 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:32:33 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:33 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:33 - INFO -   [71/288] Generating video...
+2025-12-01 10:32:33 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:32:33 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:33 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:33 - INFO -   [72/288] Generating video...
+2025-12-01 10:32:33 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:32:34 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:34 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:34 - INFO -   [73/288] Generating video...
+2025-12-01 10:32:34 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:32:35 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:35 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:35 - INFO -   [74/288] Generating video...
+2025-12-01 10:32:35 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:32:36 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:36 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:36 - INFO -   [75/288] Generating video...
+2025-12-01 10:32:36 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:32:36 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:36 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:36 - INFO -   [76/288] Generating video...
+2025-12-01 10:32:36 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:32:37 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:37 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:37 - INFO -   [77/288] Generating video...
+2025-12-01 10:32:37 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:32:38 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:38 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:38 - INFO -   [78/288] Generating video...
+2025-12-01 10:32:38 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:32:39 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:39 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:39 - INFO -   [79/288] Generating video...
+2025-12-01 10:32:39 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:32:40 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:40 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:40 - INFO -   [80/288] Generating video...
+2025-12-01 10:32:40 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:32:40 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:40 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:40 - INFO -   [81/288] Generating video...
+2025-12-01 10:32:40 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:32:41 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:41 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:41 - INFO -   [82/288] Generating video...
+2025-12-01 10:32:41 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:32:42 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:42 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:42 - INFO -   [83/288] Generating video...
+2025-12-01 10:32:42 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:32:42 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:42 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:42 - INFO -   [84/288] Generating video...
+2025-12-01 10:32:42 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:32:43 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:43 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:43 - INFO -   [85/288] Generating video...
+2025-12-01 10:32:43 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:32:44 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:44 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:44 - INFO -   [86/288] Generating video...
+2025-12-01 10:32:44 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:32:45 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:45 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:45 - INFO -   [87/288] Generating video...
+2025-12-01 10:32:45 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:32:46 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:46 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:46 - INFO -   [88/288] Generating video...
+2025-12-01 10:32:46 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:32:46 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:46 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:46 - INFO -   [89/288] Generating video...
+2025-12-01 10:32:46 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:32:47 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:47 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:47 - INFO -   [90/288] Generating video...
+2025-12-01 10:32:47 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:32:48 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:48 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:48 - INFO -   [91/288] Generating video...
+2025-12-01 10:32:48 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:32:49 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:49 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:49 - INFO -   [92/288] Generating video...
+2025-12-01 10:32:49 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:32:50 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:50 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:50 - INFO -   [93/288] Generating video...
+2025-12-01 10:32:50 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:32:50 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:50 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:50 - INFO -   [94/288] Generating video...
+2025-12-01 10:32:50 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:32:51 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:51 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:51 - INFO -   [95/288] Generating video...
+2025-12-01 10:32:51 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:32:52 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:52 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:52 - INFO -   [96/288] Generating video...
+2025-12-01 10:32:52 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:32:53 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:53 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:53 - INFO -   [97/288] Generating video...
+2025-12-01 10:32:53 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:32:54 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:54 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:54 - INFO -   [98/288] Generating video...
+2025-12-01 10:32:54 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:32:55 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:55 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:55 - INFO -   [99/288] Generating video...
+2025-12-01 10:32:55 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:32:56 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:56 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:56 - INFO -   [100/288] Generating video...
+2025-12-01 10:32:56 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:32:56 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:56 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:56 - INFO -   [101/288] Generating video...
+2025-12-01 10:32:56 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:32:57 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:57 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:57 - INFO -   [102/288] Generating video...
+2025-12-01 10:32:57 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:32:58 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:58 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:58 - INFO -   [103/288] Generating video...
+2025-12-01 10:32:58 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:32:59 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:59 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:59 - INFO -   [104/288] Generating video...
+2025-12-01 10:32:59 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:32:59 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:32:59 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:32:59 - INFO -   [105/288] Generating video...
+2025-12-01 10:32:59 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:33:00 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:00 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:00 - INFO -   [106/288] Generating video...
+2025-12-01 10:33:00 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:33:01 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:01 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:01 - INFO -   [107/288] Generating video...
+2025-12-01 10:33:01 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:33:02 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:02 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:02 - INFO -   [108/288] Generating video...
+2025-12-01 10:33:02 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:33:02 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:02 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:02 - INFO -   [109/288] Generating video...
+2025-12-01 10:33:02 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:33:03 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:03 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:03 - INFO -   [110/288] Generating video...
+2025-12-01 10:33:03 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:33:04 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:04 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:04 - INFO -   [111/288] Generating video...
+2025-12-01 10:33:04 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:33:07 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:07 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:07 - INFO -   [112/288] Generating video...
+2025-12-01 10:33:07 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:33:08 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:08 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:08 - INFO -   [113/288] Generating video...
+2025-12-01 10:33:08 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:33:09 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:09 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:09 - INFO -   [114/288] Generating video...
+2025-12-01 10:33:09 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:33:09 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:09 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:09 - INFO -   [115/288] Generating video...
+2025-12-01 10:33:09 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:33:10 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:10 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:10 - INFO -   [116/288] Generating video...
+2025-12-01 10:33:10 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:33:11 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:11 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:11 - INFO -   [117/288] Generating video...
+2025-12-01 10:33:11 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:33:12 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:12 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:12 - INFO -   [118/288] Generating video...
+2025-12-01 10:33:12 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:33:13 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:13 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:13 - INFO -   [119/288] Generating video...
+2025-12-01 10:33:13 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:33:14 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:14 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:14 - INFO -   [120/288] Generating video...
+2025-12-01 10:33:14 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:33:14 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:14 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:14 - INFO -   [121/288] Generating video...
+2025-12-01 10:33:14 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:33:15 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:15 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:15 - INFO -   [122/288] Generating video...
+2025-12-01 10:33:15 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:33:16 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:16 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:16 - INFO -   [123/288] Generating video...
+2025-12-01 10:33:16 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:33:17 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:17 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:17 - INFO -   [124/288] Generating video...
+2025-12-01 10:33:17 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:33:18 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:18 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:18 - INFO -   [125/288] Generating video...
+2025-12-01 10:33:18 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:33:18 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:18 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:18 - INFO -   [126/288] Generating video...
+2025-12-01 10:33:18 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:33:19 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:19 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:19 - INFO -   [127/288] Generating video...
+2025-12-01 10:33:19 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:33:20 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:20 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:20 - INFO -   [128/288] Generating video...
+2025-12-01 10:33:20 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:33:20 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:20 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:20 - INFO -   [129/288] Generating video...
+2025-12-01 10:33:20 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:33:21 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:21 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:21 - INFO -   [130/288] Generating video...
+2025-12-01 10:33:21 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:33:22 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:22 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:22 - INFO -   [131/288] Generating video...
+2025-12-01 10:33:22 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:33:23 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:23 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:23 - INFO -   [132/288] Generating video...
+2025-12-01 10:33:23 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:33:24 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:24 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:24 - INFO -   [133/288] Generating video...
+2025-12-01 10:33:24 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:33:24 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:24 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:24 - INFO -   [134/288] Generating video...
+2025-12-01 10:33:24 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:33:25 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:25 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:25 - INFO -   [135/288] Generating video...
+2025-12-01 10:33:25 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:33:26 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:26 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:26 - INFO -   [136/288] Generating video...
+2025-12-01 10:33:26 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:33:26 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:26 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:26 - INFO -   [137/288] Generating video...
+2025-12-01 10:33:26 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:33:27 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:27 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:27 - INFO -   [138/288] Generating video...
+2025-12-01 10:33:27 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:33:28 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:28 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:28 - INFO -   [139/288] Generating video...
+2025-12-01 10:33:28 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:33:29 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:29 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:29 - INFO -   [140/288] Generating video...
+2025-12-01 10:33:29 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:33:30 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:30 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:30 - INFO -   [141/288] Generating video...
+2025-12-01 10:33:30 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:33:30 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:30 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:30 - INFO -   [142/288] Generating video...
+2025-12-01 10:33:30 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:33:31 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:31 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:31 - INFO -   [143/288] Generating video...
+2025-12-01 10:33:31 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:33:32 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:32 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:32 - INFO -   [144/288] Generating video...
+2025-12-01 10:33:32 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:33:33 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:33 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:33 - INFO -   [145/288] Generating video...
+2025-12-01 10:33:33 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:33:33 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:33 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:33 - INFO -   [146/288] Generating video...
+2025-12-01 10:33:33 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:33:34 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:34 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:34 - INFO -   [147/288] Generating video...
+2025-12-01 10:33:34 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:33:35 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:35 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:35 - INFO -   [148/288] Generating video...
+2025-12-01 10:33:35 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:33:36 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:36 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:36 - INFO -   [149/288] Generating video...
+2025-12-01 10:33:36 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:33:37 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:37 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:37 - INFO -   [150/288] Generating video...
+2025-12-01 10:33:37 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:33:38 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:38 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:38 - INFO -   [151/288] Generating video...
+2025-12-01 10:33:38 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:33:38 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:38 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:38 - INFO -   [152/288] Generating video...
+2025-12-01 10:33:38 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:33:39 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:39 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:39 - INFO -   [153/288] Generating video...
+2025-12-01 10:33:39 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:33:43 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:43 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:43 - INFO -   [154/288] Generating video...
+2025-12-01 10:33:43 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:33:43 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:43 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:43 - INFO -   [155/288] Generating video...
+2025-12-01 10:33:43 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:33:44 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:44 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:44 - INFO -   [156/288] Generating video...
+2025-12-01 10:33:44 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:33:45 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:45 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:45 - INFO -   [157/288] Generating video...
+2025-12-01 10:33:45 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:33:46 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:46 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:46 - INFO -   [158/288] Generating video...
+2025-12-01 10:33:46 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:33:47 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:47 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:47 - INFO -   [159/288] Generating video...
+2025-12-01 10:33:47 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:33:47 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:47 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:47 - INFO -   [160/288] Generating video...
+2025-12-01 10:33:47 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:33:48 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:48 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:48 - INFO -   [161/288] Generating video...
+2025-12-01 10:33:48 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:33:49 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:49 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:49 - INFO -   [162/288] Generating video...
+2025-12-01 10:33:49 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:33:50 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:50 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:50 - INFO -   [163/288] Generating video...
+2025-12-01 10:33:50 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:33:51 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:51 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:51 - INFO -   [164/288] Generating video...
+2025-12-01 10:33:51 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:33:52 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:52 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:52 - INFO -   [165/288] Generating video...
+2025-12-01 10:33:52 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:33:52 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:52 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:52 - INFO -   [166/288] Generating video...
+2025-12-01 10:33:52 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:33:53 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:53 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:53 - INFO -   [167/288] Generating video...
+2025-12-01 10:33:53 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:33:54 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:54 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:54 - INFO -   [168/288] Generating video...
+2025-12-01 10:33:54 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:33:55 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:55 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:55 - INFO -   [169/288] Generating video...
+2025-12-01 10:33:55 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:33:56 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:56 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:56 - INFO -   [170/288] Generating video...
+2025-12-01 10:33:56 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:33:56 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:56 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:56 - INFO -   [171/288] Generating video...
+2025-12-01 10:33:56 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:33:57 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:57 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:57 - INFO -   [172/288] Generating video...
+2025-12-01 10:33:57 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:33:58 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:58 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:58 - INFO -   [173/288] Generating video...
+2025-12-01 10:33:58 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:33:59 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:59 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:59 - INFO -   [174/288] Generating video...
+2025-12-01 10:33:59 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:33:59 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:33:59 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:33:59 - INFO -   [175/288] Generating video...
+2025-12-01 10:33:59 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:34:00 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:00 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:00 - INFO -   [176/288] Generating video...
+2025-12-01 10:34:00 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:34:01 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:01 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:01 - INFO -   [177/288] Generating video...
+2025-12-01 10:34:01 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:34:02 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:02 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:02 - INFO -   [178/288] Generating video...
+2025-12-01 10:34:02 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:34:02 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:02 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:02 - INFO -   [179/288] Generating video...
+2025-12-01 10:34:02 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:34:03 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:03 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:03 - INFO -   [180/288] Generating video...
+2025-12-01 10:34:03 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:34:04 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:04 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:04 - INFO -   [181/288] Generating video...
+2025-12-01 10:34:04 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:34:05 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:05 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:05 - INFO -   [182/288] Generating video...
+2025-12-01 10:34:05 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:34:05 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:05 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:05 - INFO -   [183/288] Generating video...
+2025-12-01 10:34:05 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:34:06 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:06 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:06 - INFO -   [184/288] Generating video...
+2025-12-01 10:34:06 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:34:07 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:07 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:07 - INFO -   [185/288] Generating video...
+2025-12-01 10:34:07 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:34:08 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:08 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:08 - INFO -   [186/288] Generating video...
+2025-12-01 10:34:08 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:34:08 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:08 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:08 - INFO -   [187/288] Generating video...
+2025-12-01 10:34:08 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:34:09 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:09 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:09 - INFO -   [188/288] Generating video...
+2025-12-01 10:34:09 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:34:10 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:10 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:10 - INFO -   [189/288] Generating video...
+2025-12-01 10:34:10 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:34:11 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:11 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:11 - INFO -   [190/288] Generating video...
+2025-12-01 10:34:11 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:34:12 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:12 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:12 - INFO -   [191/288] Generating video...
+2025-12-01 10:34:12 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:34:13 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:13 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:13 - INFO -   [192/288] Generating video...
+2025-12-01 10:34:13 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:34:13 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:13 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:13 - INFO -   [193/288] Generating video...
+2025-12-01 10:34:13 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:34:17 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:17 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:17 - INFO -   [194/288] Generating video...
+2025-12-01 10:34:17 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:34:17 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:17 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:17 - INFO -   [195/288] Generating video...
+2025-12-01 10:34:17 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:34:18 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:18 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:18 - INFO -   [196/288] Generating video...
+2025-12-01 10:34:18 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:34:19 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:19 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:19 - INFO -   [197/288] Generating video...
+2025-12-01 10:34:19 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:34:20 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:20 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:20 - INFO -   [198/288] Generating video...
+2025-12-01 10:34:20 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:34:20 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:20 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:20 - INFO -   [199/288] Generating video...
+2025-12-01 10:34:20 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:34:21 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:21 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:21 - INFO -   [200/288] Generating video...
+2025-12-01 10:34:21 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:34:22 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:22 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:22 - INFO -   [201/288] Generating video...
+2025-12-01 10:34:22 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:34:23 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:23 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:23 - INFO -   [202/288] Generating video...
+2025-12-01 10:34:23 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:34:23 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:23 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:23 - INFO -   [203/288] Generating video...
+2025-12-01 10:34:23 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:34:24 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:24 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:24 - INFO -   [204/288] Generating video...
+2025-12-01 10:34:24 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:34:25 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:25 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:25 - INFO -   [205/288] Generating video...
+2025-12-01 10:34:25 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:34:26 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:26 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:26 - INFO -   [206/288] Generating video...
+2025-12-01 10:34:26 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:34:26 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:26 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:26 - INFO -   [207/288] Generating video...
+2025-12-01 10:34:26 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:34:27 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:27 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:27 - INFO -   [208/288] Generating video...
+2025-12-01 10:34:27 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:34:28 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:28 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:28 - INFO -   [209/288] Generating video...
+2025-12-01 10:34:28 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:34:29 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:29 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:29 - INFO -   [210/288] Generating video...
+2025-12-01 10:34:29 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:34:30 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:30 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:30 - INFO -   [211/288] Generating video...
+2025-12-01 10:34:30 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:34:30 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:30 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:30 - INFO -   [212/288] Generating video...
+2025-12-01 10:34:30 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:34:31 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:31 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:31 - INFO -   [213/288] Generating video...
+2025-12-01 10:34:31 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:34:32 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:32 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:32 - INFO -   [214/288] Generating video...
+2025-12-01 10:34:32 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:34:33 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:33 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:33 - INFO -   [215/288] Generating video...
+2025-12-01 10:34:33 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:34:34 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:34 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:34 - INFO -   [216/288] Generating video...
+2025-12-01 10:34:34 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:34:34 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:35 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:35 - INFO -   [217/288] Generating video...
+2025-12-01 10:34:35 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:34:35 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:35 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:35 - INFO -   [218/288] Generating video...
+2025-12-01 10:34:35 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:34:36 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:36 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:36 - INFO -   [219/288] Generating video...
+2025-12-01 10:34:36 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:34:37 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:37 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:37 - INFO -   [220/288] Generating video...
+2025-12-01 10:34:37 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:34:38 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:38 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:38 - INFO -   [221/288] Generating video...
+2025-12-01 10:34:38 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:34:39 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:39 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:39 - INFO -   [222/288] Generating video...
+2025-12-01 10:34:39 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:34:40 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:40 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:40 - INFO -   [223/288] Generating video...
+2025-12-01 10:34:40 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:34:41 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:41 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:41 - INFO -   [224/288] Generating video...
+2025-12-01 10:34:41 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:34:42 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:42 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:42 - INFO -   [225/288] Generating video...
+2025-12-01 10:34:42 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:34:43 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:43 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:43 - INFO -   [226/288] Generating video...
+2025-12-01 10:34:43 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:34:43 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:43 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:43 - INFO -   [227/288] Generating video...
+2025-12-01 10:34:43 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:34:44 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:44 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:44 - INFO -   [228/288] Generating video...
+2025-12-01 10:34:44 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:34:45 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:45 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:45 - INFO -   [229/288] Generating video...
+2025-12-01 10:34:45 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:34:45 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:45 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:45 - INFO -   [230/288] Generating video...
+2025-12-01 10:34:45 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:34:46 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:46 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:46 - INFO -   [231/288] Generating video...
+2025-12-01 10:34:46 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:34:47 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:47 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:47 - INFO -   [232/288] Generating video...
+2025-12-01 10:34:47 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:34:48 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:48 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:48 - INFO -   [233/288] Generating video...
+2025-12-01 10:34:48 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:34:49 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:49 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:49 - INFO -   [234/288] Generating video...
+2025-12-01 10:34:49 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:34:52 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:52 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:52 - INFO -   [235/288] Generating video...
+2025-12-01 10:34:52 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:34:53 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:53 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:53 - INFO -   [236/288] Generating video...
+2025-12-01 10:34:53 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:34:54 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:54 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:54 - INFO -   [237/288] Generating video...
+2025-12-01 10:34:54 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:34:55 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:55 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:55 - INFO -   [238/288] Generating video...
+2025-12-01 10:34:55 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:34:56 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:56 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:56 - INFO -   [239/288] Generating video...
+2025-12-01 10:34:56 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:34:57 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:57 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:57 - INFO -   [240/288] Generating video...
+2025-12-01 10:34:57 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:34:58 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:58 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:58 - INFO -   [241/288] Generating video...
+2025-12-01 10:34:58 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:34:59 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:34:59 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:34:59 - INFO -   [242/288] Generating video...
+2025-12-01 10:34:59 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:35:00 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:00 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:00 - INFO -   [243/288] Generating video...
+2025-12-01 10:35:00 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:35:01 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:01 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:01 - INFO -   [244/288] Generating video...
+2025-12-01 10:35:01 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:35:02 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:02 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:02 - INFO -   [245/288] Generating video...
+2025-12-01 10:35:02 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:35:02 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:02 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:02 - INFO -   [246/288] Generating video...
+2025-12-01 10:35:02 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:35:03 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:03 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:03 - INFO -   [247/288] Generating video...
+2025-12-01 10:35:03 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:35:03 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:03 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:03 - INFO -   [248/288] Generating video...
+2025-12-01 10:35:03 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:35:04 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:04 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:04 - INFO -   [249/288] Generating video...
+2025-12-01 10:35:04 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:35:05 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:05 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:05 - INFO -   [250/288] Generating video...
+2025-12-01 10:35:05 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:35:05 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:05 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:05 - INFO -   [251/288] Generating video...
+2025-12-01 10:35:05 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:35:06 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:06 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:06 - INFO -   [252/288] Generating video...
+2025-12-01 10:35:06 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:35:06 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:06 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:06 - INFO -   [253/288] Generating video...
+2025-12-01 10:35:06 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:35:07 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:07 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:07 - INFO -   [254/288] Generating video...
+2025-12-01 10:35:07 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:35:07 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:07 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:07 - INFO -   [255/288] Generating video...
+2025-12-01 10:35:07 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:35:08 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:08 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:08 - INFO -   [256/288] Generating video...
+2025-12-01 10:35:08 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:35:08 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:08 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:08 - INFO -   [257/288] Generating video...
+2025-12-01 10:35:08 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:35:09 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:09 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:09 - INFO -   [258/288] Generating video...
+2025-12-01 10:35:09 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:35:09 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:09 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:09 - INFO -   [259/288] Generating video...
+2025-12-01 10:35:09 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:35:10 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:10 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:10 - INFO -   [260/288] Generating video...
+2025-12-01 10:35:10 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:35:10 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:10 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:10 - INFO -   [261/288] Generating video...
+2025-12-01 10:35:10 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:35:11 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:11 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:11 - INFO -   [262/288] Generating video...
+2025-12-01 10:35:11 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:35:11 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:11 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:11 - INFO -   [263/288] Generating video...
+2025-12-01 10:35:11 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 10:35:12 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:12 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:12 - INFO -   [264/288] Generating video...
+2025-12-01 10:35:12 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:35:13 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:13 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:13 - INFO -   [265/288] Generating video...
+2025-12-01 10:35:13 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:35:13 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:13 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:13 - INFO -   [266/288] Generating video...
+2025-12-01 10:35:13 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:35:14 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:14 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:14 - INFO -   [267/288] Generating video...
+2025-12-01 10:35:14 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:35:15 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:15 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:15 - INFO -   [268/288] Generating video...
+2025-12-01 10:35:15 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:35:15 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:15 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:15 - INFO -   [269/288] Generating video...
+2025-12-01 10:35:15 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:35:16 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:16 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:16 - INFO -   [270/288] Generating video...
+2025-12-01 10:35:16 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 0.00
+2025-12-01 10:35:16 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:16 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:16 - INFO -   [271/288] Generating video...
+2025-12-01 10:35:16 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 14.00
+2025-12-01 10:35:17 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:17 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:17 - INFO -   [272/288] Generating video...
+2025-12-01 10:35:17 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:35:17 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:17 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:17 - INFO -   [273/288] Generating video...
+2025-12-01 10:35:17 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:35:18 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:18 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:18 - INFO -   [274/288] Generating video...
+2025-12-01 10:35:18 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:35:18 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:18 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:18 - INFO -   [275/288] Generating video...
+2025-12-01 10:35:18 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:35:19 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:19 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:19 - INFO -   [276/288] Generating video...
+2025-12-01 10:35:19 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:35:19 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:19 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:19 - INFO -   [277/288] Generating video...
+2025-12-01 10:35:19 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:35:20 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:20 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:20 - INFO -   [278/288] Generating video...
+2025-12-01 10:35:20 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:35:20 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:20 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:20 - INFO -   [279/288] Generating video...
+2025-12-01 10:35:20 - INFO -     Texture: subtle_gray_stripes, Direction: up, Speed: 0.00
+2025-12-01 10:35:21 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:21 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:21 - INFO -   [280/288] Generating video...
+2025-12-01 10:35:21 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:35:21 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:21 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:21 - INFO -   [281/288] Generating video...
+2025-12-01 10:35:21 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 0.00
+2025-12-01 10:35:22 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:22 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:22 - INFO -   [282/288] Generating video...
+2025-12-01 10:35:22 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:35:22 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:22 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:22 - INFO -   [283/288] Generating video...
+2025-12-01 10:35:22 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:35:23 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:23 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:23 - INFO -   [284/288] Generating video...
+2025-12-01 10:35:23 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:35:23 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:23 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:23 - INFO -   [285/288] Generating video...
+2025-12-01 10:35:23 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:35:26 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:26 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:26 - INFO -   [286/288] Generating video...
+2025-12-01 10:35:26 - INFO -     Texture: subtle_gray_stripes, Direction: down, Speed: 14.00
+2025-12-01 10:35:27 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:27 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:27 - INFO -   [287/288] Generating video...
+2025-12-01 10:35:27 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 10:35:27 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:27 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:27 - INFO -   [288/288] Generating video...
+2025-12-01 10:35:27 - INFO -     Texture: subtle_gray_stripes, Direction: right, Speed: 14.00
+2025-12-01 10:35:28 - ERROR -     [FAIL] Video generation failed:
+2025-12-01 10:35:28 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-12-01 10:35:28 - INFO - Successfully generated 0/288 videos
+2025-12-01 10:35:28 - ERROR - 
+
+Error during dataset building: No videos were successfully generated
+Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/building_dataset.py", line 707, in build
+    raise RuntimeError("No videos were successfully generated")
+RuntimeError: No videos were successfully generated

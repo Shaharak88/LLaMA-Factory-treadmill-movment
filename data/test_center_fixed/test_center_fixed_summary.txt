@@ -1,0 +1,35 @@
+======================================================================
+Dataset Generation Summary: test_center_fixed
+======================================================================
+
+Generation Date: 2025-12-07 15:35:44
+Seed: 42
+
+Dataset Statistics:
+----------------------------------------------------------------------
+  Total Videos: 4
+  Moving Videos: 4 (100.0%)
+  Stopped Videos: 0 (0.0%)
+
+  Speed Range: 3.00 - 3.00 px/frame
+
+Texture Distribution:
+  subtle_gray_stripes:   4 (100.0%)
+
+Direction Distribution:
+  right          :   4 (100.0%)
+
+File Sizes:
+  Total: 0.18 MB
+  Average: 0.04 MB per video
+
+Output Files:
+----------------------------------------------------------------------
+  Videos: data/test_center_fixed/
+  Dataset JSON: /app/data/test_center_fixed.json
+  Dataset Info: /app/data/dataset_info.json
+  Log File: data/test_center_fixed/test_center_fixed_build_log.txt
+
+======================================================================
+Dataset ready for training!
+======================================================================

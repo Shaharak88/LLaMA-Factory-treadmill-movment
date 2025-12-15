@@ -1,0 +1,39 @@
+======================================================================
+Dataset Generation Summary: my_varied_dataset2_train
+======================================================================
+
+Generation Date: 2025-11-26 18:42:05
+Seed: 42
+
+Dataset Statistics:
+----------------------------------------------------------------------
+  Total Videos: 48
+  Moving Videos: 24 (50.0%)
+  Stopped Videos: 24 (50.0%)
+
+  Speed Range: 14.00 - 14.00 px/frame
+
+Texture Distribution:
+  factory_dark   :  12 (25.0%)
+  factory_dark_stripes:  12 (25.0%)
+  noise          :  12 (25.0%)
+  stripes        :  12 (25.0%)
+
+Direction Distribution:
+  left           :  24 (50.0%)
+  right          :  24 (50.0%)
+
+File Sizes:
+  Total: 34.37 MB
+  Average: 0.72 MB per video
+
+Output Files:
+----------------------------------------------------------------------
+  Videos: data/my_varied_dataset2_train/
+  Dataset JSON: /app/data/my_varied_dataset2_train.json
+  Dataset Info: /app/data/dataset_info.json
+  Log File: data/my_varied_dataset2_train/my_varied_dataset2_train_build_log.txt
+
+======================================================================
+Dataset ready for training!
+======================================================================

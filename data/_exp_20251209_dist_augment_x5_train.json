@@ -1,0 +1,752 @@
+[
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "no"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg120_left_speed0.0_angle0_dist1.01_distrand_bright0.00_contr1.00_640x480_seed1200.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "no"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg120_left_speed0.0_angle0_dist1.01_distrand_bright0.00_contr1.00_640x480_seed1300.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "no"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg120_left_speed0.0_angle0_dist1.01_distrand_bright0.00_contr1.00_640x480_seed1400.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "no"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg120_left_speed0.0_angle0_dist1.01_distrand_bright0.00_contr1.00_640x480_seed1500.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "no"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg120_left_speed0.0_angle0_dist1.01_distrand_bright0.00_contr1.00_640x480_seed1600.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "no"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg120_left_speed0.0_angle30_dist1.02_distrand_bright0.00_contr1.00_640x480_seed1201.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "no"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg120_left_speed0.0_angle30_dist1.02_distrand_bright0.00_contr1.00_640x480_seed1301.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "no"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg120_left_speed0.0_angle30_dist1.02_distrand_bright0.00_contr1.00_640x480_seed1401.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "no"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg120_left_speed0.0_angle30_dist1.02_distrand_bright0.00_contr1.00_640x480_seed1501.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "no"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg120_left_speed0.0_angle30_dist1.02_distrand_bright0.00_contr1.00_640x480_seed1601.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "yes"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg120_left_speed14.0_angle0_dist1.05_distrand_bright0.00_contr1.00_640x480_seed1205.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "yes"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg120_left_speed14.0_angle0_dist1.05_distrand_bright0.00_contr1.00_640x480_seed1305.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "yes"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg120_left_speed14.0_angle0_dist1.05_distrand_bright0.00_contr1.00_640x480_seed1405.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "yes"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg120_left_speed14.0_angle0_dist1.05_distrand_bright0.00_contr1.00_640x480_seed1505.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "yes"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg120_left_speed14.0_angle0_dist1.05_distrand_bright0.00_contr1.00_640x480_seed1605.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "yes"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg120_left_speed14.0_angle30_dist1.01_distrand_bright0.00_contr1.00_640x480_seed1206.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "yes"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg120_left_speed14.0_angle30_dist1.01_distrand_bright0.00_contr1.00_640x480_seed1306.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "yes"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg120_left_speed14.0_angle30_dist1.01_distrand_bright0.00_contr1.00_640x480_seed1406.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "yes"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg120_left_speed14.0_angle30_dist1.01_distrand_bright0.00_contr1.00_640x480_seed1506.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "yes"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg120_left_speed14.0_angle30_dist1.01_distrand_bright0.00_contr1.00_640x480_seed1606.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "no"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg121_left_speed0.0_angle0_dist1.08_distrand_bright0.00_contr1.00_640x480_seed1202.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "no"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg121_left_speed0.0_angle0_dist1.08_distrand_bright0.00_contr1.00_640x480_seed1302.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "no"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg121_left_speed0.0_angle0_dist1.08_distrand_bright0.00_contr1.00_640x480_seed1402.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "no"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg121_left_speed0.0_angle0_dist1.08_distrand_bright0.00_contr1.00_640x480_seed1502.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "no"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg121_left_speed0.0_angle0_dist1.08_distrand_bright0.00_contr1.00_640x480_seed1602.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "no"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg121_left_speed0.0_angle30_dist1.02_distrand_bright0.00_contr1.00_640x480_seed1203.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "no"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg121_left_speed0.0_angle30_dist1.02_distrand_bright0.00_contr1.00_640x480_seed1303.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "no"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg121_left_speed0.0_angle30_dist1.02_distrand_bright0.00_contr1.00_640x480_seed1403.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "no"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg121_left_speed0.0_angle30_dist1.02_distrand_bright0.00_contr1.00_640x480_seed1503.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "no"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg121_left_speed0.0_angle30_dist1.02_distrand_bright0.00_contr1.00_640x480_seed1603.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "yes"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg121_left_speed14.0_angle0_dist1.06_distrand_bright0.00_contr1.00_640x480_seed1207.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "yes"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg121_left_speed14.0_angle0_dist1.06_distrand_bright0.00_contr1.00_640x480_seed1307.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "yes"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg121_left_speed14.0_angle0_dist1.06_distrand_bright0.00_contr1.00_640x480_seed1407.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "yes"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg121_left_speed14.0_angle0_dist1.06_distrand_bright0.00_contr1.00_640x480_seed1507.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "yes"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg121_left_speed14.0_angle0_dist1.06_distrand_bright0.00_contr1.00_640x480_seed1607.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "yes"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg121_left_speed14.0_angle30_dist1.04_distrand_bright0.00_contr1.00_640x480_seed1208.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "yes"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg121_left_speed14.0_angle30_dist1.04_distrand_bright0.00_contr1.00_640x480_seed1308.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "yes"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg121_left_speed14.0_angle30_dist1.04_distrand_bright0.00_contr1.00_640x480_seed1408.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "yes"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg121_left_speed14.0_angle30_dist1.04_distrand_bright0.00_contr1.00_640x480_seed1508.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "yes"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg121_left_speed14.0_angle30_dist1.04_distrand_bright0.00_contr1.00_640x480_seed1608.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "no"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg123_left_speed0.0_angle0_dist1.05_distrand_bright0.00_contr1.00_640x480_seed1204.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "no"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg123_left_speed0.0_angle0_dist1.05_distrand_bright0.00_contr1.00_640x480_seed1304.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "no"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg123_left_speed0.0_angle0_dist1.05_distrand_bright0.00_contr1.00_640x480_seed1404.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "no"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg123_left_speed0.0_angle0_dist1.05_distrand_bright0.00_contr1.00_640x480_seed1504.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "no"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg123_left_speed0.0_angle0_dist1.05_distrand_bright0.00_contr1.00_640x480_seed1604.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "yes"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg123_left_speed14.0_angle0_dist1.06_distrand_bright0.00_contr1.00_640x480_seed1209.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "yes"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg123_left_speed14.0_angle0_dist1.06_distrand_bright0.00_contr1.00_640x480_seed1309.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "yes"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg123_left_speed14.0_angle0_dist1.06_distrand_bright0.00_contr1.00_640x480_seed1409.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "yes"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg123_left_speed14.0_angle0_dist1.06_distrand_bright0.00_contr1.00_640x480_seed1509.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Is there movement in the video? Answer only with yes or no."
+      },
+      {
+        "role": "assistant",
+        "content": "yes"
+      }
+    ],
+    "videos": [
+      "data/_exp_20251209_dist_augment_x5_train/treadmill_0000_subtle_gray_stripes_stripe226_bg123_left_speed14.0_angle0_dist1.06_distrand_bright0.00_contr1.00_640x480_seed1609.mp4"
+    ]
+  }
+]

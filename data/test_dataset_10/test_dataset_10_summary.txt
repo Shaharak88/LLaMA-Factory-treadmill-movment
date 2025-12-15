@@ -1,0 +1,40 @@
+======================================================================
+Dataset Generation Summary: test_dataset_10
+======================================================================
+
+Generation Date: 2025-11-26 12:00:58
+Seed: 42
+
+Dataset Statistics:
+----------------------------------------------------------------------
+  Total Videos: 10
+  Moving Videos: 5 (50.0%)
+  Stopped Videos: 5 (50.0%)
+
+  Speed Range: 2.63 - 6.31 px/frame
+
+Texture Distribution:
+  grid           :   2 (20.0%)
+  noise          :   2 (20.0%)
+  rubber         :   3 (30.0%)
+  stripes        :   3 (30.0%)
+
+Direction Distribution:
+  left           :   4 (40.0%)
+  right          :   5 (50.0%)
+  up             :   1 (10.0%)
+
+File Sizes:
+  Total: 13.65 MB
+  Average: 1.37 MB per video
+
+Output Files:
+----------------------------------------------------------------------
+  Videos: data/test_dataset_10/
+  Dataset JSON: /app/data/test_dataset_10.json
+  Dataset Info: /app/data/dataset_info.json
+  Log File: data/test_dataset_10/test_dataset_10_build_log.txt
+
+======================================================================
+Dataset ready for training!
+======================================================================

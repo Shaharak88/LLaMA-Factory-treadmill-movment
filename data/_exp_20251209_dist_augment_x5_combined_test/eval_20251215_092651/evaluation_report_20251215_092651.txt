@@ -1,0 +1,367 @@
+======================================================================
+TREADMILL MOTION DETECTION - SIMPLE EVALUATION REPORT
+======================================================================
+
+Date: 2025-12-15 09:38:45.246076
+Dataset: _exp_20251209_dist_augment_x5_combined_test
+Fine-Tuned Model Adapter Path: saves/exp125_hf_shuffle_b14g1_32kpx_4fps_noquant_20251215_111845
+Fine-Tuned Model Adapter Name: exp125_hf_shuffle_b14g1_32kpx_4fps_noquant_20251215_111845
+
+BASE MODEL
+==========
+
+OVERALL METRICS:
+  Accuracy:  50.00% (160/320)
+  F1 Score:  33.33%
+  Precision: 25.00%
+  Recall:    50.00%
+
+PER-CLASS METRICS:
+  Moving:  0/160 (Acc: 0.00%, F1: 0.00%)
+  Stopped: 160/160 (Acc: 100.00%, F1: 66.67%)
+
+PER-TEXTURE BREAKDOWN:
+  subtle_gray_stripes_stripe226_bg120:
+    Total: 20 videos
+    Accuracy: 50.00% (10/20)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/10 (F1: 0.00%)
+    Stopped: 10/10 (F1: 66.67%)
+
+  subtle_gray_stripes_stripe226_bg121:
+    Total: 20 videos
+    Accuracy: 50.00% (10/20)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/10 (F1: 0.00%)
+    Stopped: 10/10 (F1: 66.67%)
+
+  subtle_gray_stripes_stripe226_bg123:
+    Total: 20 videos
+    Accuracy: 50.00% (10/20)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/10 (F1: 0.00%)
+    Stopped: 10/10 (F1: 66.67%)
+
+  subtle_gray_stripes_stripe226_bg124:
+    Total: 20 videos
+    Accuracy: 50.00% (10/20)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/10 (F1: 0.00%)
+    Stopped: 10/10 (F1: 66.67%)
+
+  subtle_gray_stripes_stripe227_bg120:
+    Total: 20 videos
+    Accuracy: 50.00% (10/20)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/10 (F1: 0.00%)
+    Stopped: 10/10 (F1: 66.67%)
+
+  subtle_gray_stripes_stripe227_bg121:
+    Total: 20 videos
+    Accuracy: 50.00% (10/20)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/10 (F1: 0.00%)
+    Stopped: 10/10 (F1: 66.67%)
+
+  subtle_gray_stripes_stripe227_bg123:
+    Total: 20 videos
+    Accuracy: 50.00% (10/20)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/10 (F1: 0.00%)
+    Stopped: 10/10 (F1: 66.67%)
+
+  subtle_gray_stripes_stripe227_bg124:
+    Total: 20 videos
+    Accuracy: 50.00% (10/20)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/10 (F1: 0.00%)
+    Stopped: 10/10 (F1: 66.67%)
+
+  subtle_gray_stripes_stripe228_bg120:
+    Total: 20 videos
+    Accuracy: 50.00% (10/20)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/10 (F1: 0.00%)
+    Stopped: 10/10 (F1: 66.67%)
+
+  subtle_gray_stripes_stripe228_bg121:
+    Total: 20 videos
+    Accuracy: 50.00% (10/20)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/10 (F1: 0.00%)
+    Stopped: 10/10 (F1: 66.67%)
+
+  subtle_gray_stripes_stripe228_bg123:
+    Total: 20 videos
+    Accuracy: 50.00% (10/20)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/10 (F1: 0.00%)
+    Stopped: 10/10 (F1: 66.67%)
+
+  subtle_gray_stripes_stripe228_bg124:
+    Total: 20 videos
+    Accuracy: 50.00% (10/20)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/10 (F1: 0.00%)
+    Stopped: 10/10 (F1: 66.67%)
+
+  subtle_gray_stripes_stripe229_bg120:
+    Total: 20 videos
+    Accuracy: 50.00% (10/20)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/10 (F1: 0.00%)
+    Stopped: 10/10 (F1: 66.67%)
+
+  subtle_gray_stripes_stripe229_bg121:
+    Total: 20 videos
+    Accuracy: 50.00% (10/20)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/10 (F1: 0.00%)
+    Stopped: 10/10 (F1: 66.67%)
+
+  subtle_gray_stripes_stripe229_bg123:
+    Total: 20 videos
+    Accuracy: 50.00% (10/20)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/10 (F1: 0.00%)
+    Stopped: 10/10 (F1: 66.67%)
+
+  subtle_gray_stripes_stripe229_bg124:
+    Total: 20 videos
+    Accuracy: 50.00% (10/20)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/10 (F1: 0.00%)
+    Stopped: 10/10 (F1: 66.67%)
+
+PER-ANGLE BREAKDOWN:
+  angle0:
+    Total: 160 videos
+    Accuracy: 50.00% (80/160)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/80 (F1: 0.00%)
+    Stopped: 80/80 (F1: 66.67%)
+
+  angle30:
+    Total: 160 videos
+    Accuracy: 50.00% (80/160)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/80 (F1: 0.00%)
+    Stopped: 80/80 (F1: 66.67%)
+
+FINE-TUNED MODEL
+================
+
+OVERALL METRICS:
+  Accuracy:  53.12% (170/320)
+  F1 Score:  47.35%
+  Precision: 55.57%
+  Recall:    53.12%
+
+PER-CLASS METRICS:
+  Moving:  32/160 (Acc: 20.00%, F1: 29.91%)
+  Stopped: 138/160 (Acc: 86.25%, F1: 64.79%)
+
+PER-TEXTURE BREAKDOWN:
+  subtle_gray_stripes_stripe226_bg120:
+    Total: 20 videos
+    Accuracy: 60.00% (12/20)
+    F1 Score: 52.38%
+    Precision: 77.78%
+    Recall: 60.00%
+    Moving: 2/10 (F1: 33.33%)
+    Stopped: 10/10 (F1: 71.43%)
+
+  subtle_gray_stripes_stripe226_bg121:
+    Total: 20 videos
+    Accuracy: 50.00% (10/20)
+    F1 Score: 45.05%
+    Precision: 50.00%
+    Recall: 50.00%
+    Moving: 2/10 (F1: 28.57%)
+    Stopped: 8/10 (F1: 61.54%)
+
+  subtle_gray_stripes_stripe226_bg123:
+    Total: 20 videos
+    Accuracy: 50.00% (10/20)
+    F1 Score: 45.05%
+    Precision: 50.00%
+    Recall: 50.00%
+    Moving: 2/10 (F1: 28.57%)
+    Stopped: 8/10 (F1: 61.54%)
+
+  subtle_gray_stripes_stripe226_bg124:
+    Total: 20 videos
+    Accuracy: 55.00% (11/20)
+    F1 Score: 48.72%
+    Precision: 59.80%
+    Recall: 55.00%
+    Moving: 2/10 (F1: 30.77%)
+    Stopped: 9/10 (F1: 66.67%)
+
+  subtle_gray_stripes_stripe227_bg120:
+    Total: 20 videos
+    Accuracy: 55.00% (11/20)
+    F1 Score: 48.72%
+    Precision: 59.80%
+    Recall: 55.00%
+    Moving: 2/10 (F1: 30.77%)
+    Stopped: 9/10 (F1: 66.67%)
+
+  subtle_gray_stripes_stripe227_bg121:
+    Total: 20 videos
+    Accuracy: 50.00% (10/20)
+    F1 Score: 45.05%
+    Precision: 50.00%
+    Recall: 50.00%
+    Moving: 2/10 (F1: 28.57%)
+    Stopped: 8/10 (F1: 61.54%)
+
+  subtle_gray_stripes_stripe227_bg123:
+    Total: 20 videos
+    Accuracy: 50.00% (10/20)
+    F1 Score: 45.05%
+    Precision: 50.00%
+    Recall: 50.00%
+    Moving: 2/10 (F1: 28.57%)
+    Stopped: 8/10 (F1: 61.54%)
+
+  subtle_gray_stripes_stripe227_bg124:
+    Total: 20 videos
+    Accuracy: 50.00% (10/20)
+    F1 Score: 45.05%
+    Precision: 50.00%
+    Recall: 50.00%
+    Moving: 2/10 (F1: 28.57%)
+    Stopped: 8/10 (F1: 61.54%)
+
+  subtle_gray_stripes_stripe228_bg120:
+    Total: 20 videos
+    Accuracy: 60.00% (12/20)
+    F1 Score: 52.38%
+    Precision: 77.78%
+    Recall: 60.00%
+    Moving: 2/10 (F1: 33.33%)
+    Stopped: 10/10 (F1: 71.43%)
+
+  subtle_gray_stripes_stripe228_bg121:
+    Total: 20 videos
+    Accuracy: 55.00% (11/20)
+    F1 Score: 48.72%
+    Precision: 59.80%
+    Recall: 55.00%
+    Moving: 2/10 (F1: 30.77%)
+    Stopped: 9/10 (F1: 66.67%)
+
+  subtle_gray_stripes_stripe228_bg123:
+    Total: 20 videos
+    Accuracy: 55.00% (11/20)
+    F1 Score: 48.72%
+    Precision: 59.80%
+    Recall: 55.00%
+    Moving: 2/10 (F1: 30.77%)
+    Stopped: 9/10 (F1: 66.67%)
+
+  subtle_gray_stripes_stripe228_bg124:
+    Total: 20 videos
+    Accuracy: 55.00% (11/20)
+    F1 Score: 48.72%
+    Precision: 59.80%
+    Recall: 55.00%
+    Moving: 2/10 (F1: 30.77%)
+    Stopped: 9/10 (F1: 66.67%)
+
+  subtle_gray_stripes_stripe229_bg120:
+    Total: 20 videos
+    Accuracy: 55.00% (11/20)
+    F1 Score: 48.72%
+    Precision: 59.80%
+    Recall: 55.00%
+    Moving: 2/10 (F1: 30.77%)
+    Stopped: 9/10 (F1: 66.67%)
+
+  subtle_gray_stripes_stripe229_bg121:
+    Total: 20 videos
+    Accuracy: 50.00% (10/20)
+    F1 Score: 45.05%
+    Precision: 50.00%
+    Recall: 50.00%
+    Moving: 2/10 (F1: 28.57%)
+    Stopped: 8/10 (F1: 61.54%)
+
+  subtle_gray_stripes_stripe229_bg123:
+    Total: 20 videos
+    Accuracy: 50.00% (10/20)
+    F1 Score: 45.05%
+    Precision: 50.00%
+    Recall: 50.00%
+    Moving: 2/10 (F1: 28.57%)
+    Stopped: 8/10 (F1: 61.54%)
+
+  subtle_gray_stripes_stripe229_bg124:
+    Total: 20 videos
+    Accuracy: 50.00% (10/20)
+    F1 Score: 45.05%
+    Precision: 50.00%
+    Recall: 50.00%
+    Moving: 2/10 (F1: 28.57%)
+    Stopped: 8/10 (F1: 61.54%)
+
+PER-ANGLE BREAKDOWN:
+  angle0:
+    Total: 160 videos
+    Accuracy: 53.75% (86/160)
+    F1 Score: 47.80%
+    Precision: 56.89%
+    Recall: 53.75%
+    Moving: 16/80 (F1: 30.19%)
+    Stopped: 70/80 (F1: 65.42%)
+
+  angle30:
+    Total: 160 videos
+    Accuracy: 52.50% (84/160)
+    F1 Score: 46.89%
+    Precision: 54.33%
+    Recall: 52.50%
+    Moving: 16/80 (F1: 29.63%)
+    Stopped: 68/80 (F1: 64.15%)
+
+======================================================================
+COMPARISON
+======================================================================
+Improvement: +3.12%

@@ -1,0 +1,36 @@
+======================================================================
+Dataset Generation Summary: local_angle_test_train
+======================================================================
+
+Generation Date: 2025-12-01 07:59:23
+Seed: 200
+
+Dataset Statistics:
+----------------------------------------------------------------------
+  Total Videos: 8
+  Moving Videos: 4 (50.0%)
+  Stopped Videos: 4 (50.0%)
+
+  Speed Range: 14.00 - 14.00 px/frame
+
+Texture Distribution:
+  subtle_gray_stripes:   8 (100.0%)
+
+Direction Distribution:
+  left           :   4 (50.0%)
+  right          :   4 (50.0%)
+
+File Sizes:
+  Total: 0.65 MB
+  Average: 0.08 MB per video
+
+Output Files:
+----------------------------------------------------------------------
+  Videos: data/local_angle_test_train/
+  Dataset JSON: /app/data/local_angle_test_train.json
+  Dataset Info: /app/data/dataset_info.json
+  Log File: data/local_angle_test_train/local_angle_test_train_build_log.txt
+
+======================================================================
+Dataset ready for training!
+======================================================================

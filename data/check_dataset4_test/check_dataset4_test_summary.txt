@@ -1,0 +1,35 @@
+======================================================================
+Dataset Generation Summary: check_dataset4_test
+======================================================================
+
+Generation Date: 2025-11-26 17:51:07
+Seed: 10042
+
+Dataset Statistics:
+----------------------------------------------------------------------
+  Total Videos: 4
+  Moving Videos: 2 (50.0%)
+  Stopped Videos: 2 (50.0%)
+
+  Speed Range: 12.00 - 12.00 px/frame
+
+Texture Distribution:
+  stripes        :   4 (100.0%)
+
+Direction Distribution:
+  left           :   4 (100.0%)
+
+File Sizes:
+  Total: 0.47 MB
+  Average: 0.12 MB per video
+
+Output Files:
+----------------------------------------------------------------------
+  Videos: data/check_dataset4_test/
+  Dataset JSON: /app/data/check_dataset4_test.json
+  Dataset Info: /app/data/dataset_info.json
+  Log File: data/check_dataset4_test/check_dataset4_test_build_log.txt
+
+======================================================================
+Dataset ready for training!
+======================================================================

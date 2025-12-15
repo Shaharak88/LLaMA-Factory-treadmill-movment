@@ -1,0 +1,165 @@
+2025-12-01 09:48:07 - INFO - Dataset Builder started - _exp_20251201_114722_test
+2025-12-01 09:48:07 - INFO - Configuration: {'dataset_name': '_exp_20251201_114722_test', 'output_dir': 'data/_exp_20251201_114722_test', 'num_videos': 10, 'train_split': 0.8, 'moving_ratio': 0.5, 'seed': 42, 'vary_parameters': False, 'texture_type': 'subtle_gray_stripes', 'direction': 'left', 'speed_range': '0.0,14.0', 'resolution': '640x480', 'fps': '4', 'duration': '12.0', 'view_angle': '7.0,22.0', 'brightness': '1.0', 'contrast': '1.0', 'lighting_variation': 'none', 'lighting_intensity': '1.0', 'motion_blur': '0', 'camera_noise': '0.0', 'edge_width': '5', 'stripe_width': '20', 'stripe_spacing': '20', 'stripe_gray': '15,16,17', 'background_gray': '10,11,12', 'stripe_distance_variance': '0.0'}
+2025-12-01 09:48:07 - INFO - Validating prerequisites...
+2025-12-01 09:48:07 - INFO -   [OK] Found synthetic generation script
+2025-12-01 09:48:07 - INFO -   [OK] Found dataset_info.json
+2025-12-01 09:48:07 - INFO -   [OK] Python3 available: Python 3.11.11
+2025-12-01 09:48:07 - INFO - Generating video configurations...
+2025-12-01 09:48:07 - INFO -   Generated 36 parameter combinations
+2025-12-01 09:48:07 - INFO -   Generated: 18 moving, 18 stopped videos
+2025-12-01 09:48:07 - INFO - Generating 36 videos...
+2025-12-01 09:48:07 - INFO -   [1/36] Generating video...
+2025-12-01 09:48:07 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 09:48:10 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed14.0_angle22_bright1.00_contr1.00_640x480_seed69.mp4 (20.8 KB)
+2025-12-01 09:48:10 - INFO -   [2/36] Generating video...
+2025-12-01 09:48:10 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 09:48:12 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed14.0_angle22_bright1.00_contr1.00_640x480_seed72.mp4 (20.8 KB)
+2025-12-01 09:48:12 - INFO -   [3/36] Generating video...
+2025-12-01 09:48:12 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 09:48:14 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed14.0_angle7_bright1.00_contr1.00_640x480_seed65.mp4 (20.8 KB)
+2025-12-01 09:48:14 - INFO -   [4/36] Generating video...
+2025-12-01 09:48:14 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 09:48:17 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed0.0_angle22_bright1.00_contr1.00_640x480_seed51.mp4 (20.8 KB)
+2025-12-01 09:48:17 - INFO -   [5/36] Generating video...
+2025-12-01 09:48:17 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 09:48:19 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed0.0_angle22_bright1.00_contr1.00_640x480_seed56.mp4 (20.8 KB)
+2025-12-01 09:48:19 - INFO -   [6/36] Generating video...
+2025-12-01 09:48:19 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 09:48:21 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed0.0_angle7_bright1.00_contr1.00_640x480_seed43.mp4 (20.8 KB)
+2025-12-01 09:48:21 - INFO -   [7/36] Generating video...
+2025-12-01 09:48:21 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 09:48:24 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed0.0_angle22_bright1.00_contr1.00_640x480_seed54.mp4 (20.8 KB)
+2025-12-01 09:48:24 - INFO -   [8/36] Generating video...
+2025-12-01 09:48:24 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 09:48:28 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed0.0_angle7_bright1.00_contr1.00_640x480_seed49.mp4 (20.8 KB)
+2025-12-01 09:48:28 - INFO -   [9/36] Generating video...
+2025-12-01 09:48:28 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 09:48:31 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed0.0_angle7_bright1.00_contr1.00_640x480_seed46.mp4 (20.8 KB)
+2025-12-01 09:48:31 - INFO -   [10/36] Generating video...
+2025-12-01 09:48:31 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 09:48:33 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed0.0_angle7_bright1.00_contr1.00_640x480_seed50.mp4 (20.8 KB)
+2025-12-01 09:48:33 - INFO -   [11/36] Generating video...
+2025-12-01 09:48:33 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 09:48:36 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed0.0_angle22_bright1.00_contr1.00_640x480_seed55.mp4 (20.8 KB)
+2025-12-01 09:48:36 - INFO -   [12/36] Generating video...
+2025-12-01 09:48:36 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 09:48:38 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed14.0_angle22_bright1.00_contr1.00_640x480_seed70.mp4 (20.8 KB)
+2025-12-01 09:48:38 - INFO -   [13/36] Generating video...
+2025-12-01 09:48:38 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 09:48:41 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed14.0_angle22_bright1.00_contr1.00_640x480_seed71.mp4 (20.8 KB)
+2025-12-01 09:48:41 - INFO -   [14/36] Generating video...
+2025-12-01 09:48:41 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 09:48:43 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed0.0_angle22_bright1.00_contr1.00_640x480_seed52.mp4 (20.8 KB)
+2025-12-01 09:48:43 - INFO -   [15/36] Generating video...
+2025-12-01 09:48:43 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 09:48:45 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed14.0_angle7_bright1.00_contr1.00_640x480_seed68.mp4 (20.8 KB)
+2025-12-01 09:48:45 - INFO -   [16/36] Generating video...
+2025-12-01 09:48:45 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 09:48:48 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed0.0_angle7_bright1.00_contr1.00_640x480_seed44.mp4 (20.8 KB)
+2025-12-01 09:48:48 - INFO -   [17/36] Generating video...
+2025-12-01 09:48:48 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 09:48:50 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed14.0_angle22_bright1.00_contr1.00_640x480_seed76.mp4 (20.8 KB)
+2025-12-01 09:48:50 - INFO -   [18/36] Generating video...
+2025-12-01 09:48:50 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 09:48:52 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed0.0_angle22_bright1.00_contr1.00_640x480_seed59.mp4 (20.8 KB)
+2025-12-01 09:48:52 - INFO -   [19/36] Generating video...
+2025-12-01 09:48:52 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 09:48:55 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed14.0_angle7_bright1.00_contr1.00_640x480_seed66.mp4 (20.8 KB)
+2025-12-01 09:48:55 - INFO -   [20/36] Generating video...
+2025-12-01 09:48:55 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 09:48:57 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed0.0_angle7_bright1.00_contr1.00_640x480_seed48.mp4 (20.8 KB)
+2025-12-01 09:48:57 - INFO -   [21/36] Generating video...
+2025-12-01 09:48:57 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 09:48:59 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed14.0_angle7_bright1.00_contr1.00_640x480_seed60.mp4 (20.8 KB)
+2025-12-01 09:48:59 - INFO -   [22/36] Generating video...
+2025-12-01 09:48:59 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 09:49:04 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed0.0_angle22_bright1.00_contr1.00_640x480_seed58.mp4 (20.8 KB)
+2025-12-01 09:49:04 - INFO -   [23/36] Generating video...
+2025-12-01 09:49:04 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 09:49:06 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed14.0_angle22_bright1.00_contr1.00_640x480_seed73.mp4 (20.8 KB)
+2025-12-01 09:49:06 - INFO -   [24/36] Generating video...
+2025-12-01 09:49:06 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 09:49:08 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed0.0_angle7_bright1.00_contr1.00_640x480_seed42.mp4 (20.8 KB)
+2025-12-01 09:49:08 - INFO -   [25/36] Generating video...
+2025-12-01 09:49:08 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 09:49:11 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed14.0_angle7_bright1.00_contr1.00_640x480_seed62.mp4 (20.8 KB)
+2025-12-01 09:49:11 - INFO -   [26/36] Generating video...
+2025-12-01 09:49:11 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 09:49:13 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed0.0_angle22_bright1.00_contr1.00_640x480_seed57.mp4 (20.8 KB)
+2025-12-01 09:49:13 - INFO -   [27/36] Generating video...
+2025-12-01 09:49:13 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 09:49:15 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed0.0_angle22_bright1.00_contr1.00_640x480_seed53.mp4 (20.8 KB)
+2025-12-01 09:49:15 - INFO -   [28/36] Generating video...
+2025-12-01 09:49:15 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 09:49:18 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed0.0_angle7_bright1.00_contr1.00_640x480_seed45.mp4 (20.8 KB)
+2025-12-01 09:49:18 - INFO -   [29/36] Generating video...
+2025-12-01 09:49:18 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 09:49:20 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed14.0_angle7_bright1.00_contr1.00_640x480_seed63.mp4 (20.8 KB)
+2025-12-01 09:49:20 - INFO -   [30/36] Generating video...
+2025-12-01 09:49:20 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 0.00
+2025-12-01 09:49:22 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed0.0_angle7_bright1.00_contr1.00_640x480_seed47.mp4 (20.8 KB)
+2025-12-01 09:49:22 - INFO -   [31/36] Generating video...
+2025-12-01 09:49:22 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 09:49:24 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed14.0_angle7_bright1.00_contr1.00_640x480_seed64.mp4 (20.8 KB)
+2025-12-01 09:49:24 - INFO -   [32/36] Generating video...
+2025-12-01 09:49:24 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 09:49:27 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed14.0_angle22_bright1.00_contr1.00_640x480_seed74.mp4 (20.8 KB)
+2025-12-01 09:49:27 - INFO -   [33/36] Generating video...
+2025-12-01 09:49:27 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 09:49:29 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed14.0_angle22_bright1.00_contr1.00_640x480_seed75.mp4 (20.8 KB)
+2025-12-01 09:49:29 - INFO -   [34/36] Generating video...
+2025-12-01 09:49:29 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 09:49:31 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed14.0_angle22_bright1.00_contr1.00_640x480_seed77.mp4 (20.8 KB)
+2025-12-01 09:49:31 - INFO -   [35/36] Generating video...
+2025-12-01 09:49:31 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 09:49:34 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed14.0_angle7_bright1.00_contr1.00_640x480_seed61.mp4 (20.8 KB)
+2025-12-01 09:49:34 - INFO -   [36/36] Generating video...
+2025-12-01 09:49:34 - INFO -     Texture: subtle_gray_stripes, Direction: left, Speed: 14.00
+2025-12-01 09:49:39 - INFO -     [OK] Generated: treadmill_0000_subtle_gray_stripes_left_speed14.0_angle7_bright1.00_contr1.00_640x480_seed67.mp4 (20.8 KB)
+2025-12-01 09:49:39 - INFO - Successfully generated 36/36 videos
+2025-12-01 09:49:39 - INFO - Creating dataset JSON: /app/data/_exp_20251201_114722_test.json
+2025-12-01 09:49:39 - INFO -   [OK] Created dataset with 36 entries
+2025-12-01 09:49:39 - INFO - Updating dataset_info.json...
+2025-12-01 09:49:39 - INFO -   Created backup: dataset_info.json.backup
+2025-12-01 09:49:39 - INFO -   [OK] Added '_exp_20251201_114722_test' to dataset_info.json
+2025-12-01 09:49:39 - INFO - Generating summary report...
+2025-12-01 09:49:39 - INFO - 
+======================================================================
+Dataset Generation Summary: _exp_20251201_114722_test
+======================================================================
+
+Generation Date: 2025-12-01 09:49:39
+Seed: 42
+
+Dataset Statistics:
+----------------------------------------------------------------------
+  Total Videos: 36
+  Moving Videos: 18 (50.0%)
+  Stopped Videos: 18 (50.0%)
+
+  Speed Range: 14.00 - 14.00 px/frame
+
+Texture Distribution:
+  subtle_gray_stripes:  36 (100.0%)
+
+Direction Distribution:
+  left           :  36 (100.0%)
+
+File Sizes:
+  Total: 0.73 MB
+  Average: 0.02 MB per video
+
+Output Files:
+----------------------------------------------------------------------
+  Videos: data/_exp_20251201_114722_test/
+  Dataset JSON: /app/data/_exp_20251201_114722_test.json
+  Dataset Info: /app/data/dataset_info.json
+  Log File: data/_exp_20251201_114722_test/_exp_20251201_114722_test_build_log.txt
+
+======================================================================
+Dataset ready for training!
+======================================================================
+
+2025-12-01 09:49:39 - INFO - ======================================================================
+2025-12-01 09:49:39 - INFO - [OK] Dataset building complete!
+2025-12-01 09:49:39 - INFO - ======================================================================

@@ -1,0 +1,35 @@
+======================================================================
+Dataset Generation Summary: test_factory_textures
+======================================================================
+
+Generation Date: 2025-11-26 14:00:36
+Seed: 123
+
+Dataset Statistics:
+----------------------------------------------------------------------
+  Total Videos: 2
+  Moving Videos: 1 (50.0%)
+  Stopped Videos: 1 (50.0%)
+
+  Speed Range: 1.37 - 1.37 px/frame
+
+Texture Distribution:
+  factory_dark   :   2 (100.0%)
+
+Direction Distribution:
+  right          :   2 (100.0%)
+
+File Sizes:
+  Total: 2.32 MB
+  Average: 1.16 MB per video
+
+Output Files:
+----------------------------------------------------------------------
+  Videos: data/test_factory_textures/
+  Dataset JSON: /app/data/test_factory_textures.json
+  Dataset Info: /app/data/dataset_info.json
+  Log File: data/test_factory_textures/test_factory_textures_build_log.txt
+
+======================================================================
+Dataset ready for training!
+======================================================================

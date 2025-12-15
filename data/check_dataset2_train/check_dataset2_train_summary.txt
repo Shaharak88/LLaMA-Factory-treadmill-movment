@@ -1,0 +1,35 @@
+======================================================================
+Dataset Generation Summary: check_dataset2_train
+======================================================================
+
+Generation Date: 2025-11-26 16:45:03
+Seed: 42
+
+Dataset Statistics:
+----------------------------------------------------------------------
+  Total Videos: 4
+  Moving Videos: 2 (50.0%)
+  Stopped Videos: 2 (50.0%)
+
+  Speed Range: 12.00 - 12.00 px/frame
+
+Texture Distribution:
+  stripes        :   4 (100.0%)
+
+Direction Distribution:
+  left           :   4 (100.0%)
+
+File Sizes:
+  Total: 0.48 MB
+  Average: 0.12 MB per video
+
+Output Files:
+----------------------------------------------------------------------
+  Videos: data/check_dataset2_train/
+  Dataset JSON: /app/data/check_dataset2_train.json
+  Dataset Info: /app/data/dataset_info.json
+  Log File: data/check_dataset2_train/check_dataset2_train_build_log.txt
+
+======================================================================
+Dataset ready for training!
+======================================================================

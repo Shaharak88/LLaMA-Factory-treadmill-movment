@@ -1,0 +1,2570 @@
+================================================================================
+MODEL: Fine-Tuned Model (LoRA)
+BASE MODEL PATH: Qwen/Qwen2.5-VL-3B-Instruct
+ADAPTER PATH: saves/lora_speed0_14_7ep_20251204
+================================================================================
+
+[1/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg6_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed277.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg6_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed277.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg6_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed277.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[2/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg10_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed257.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg10_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed257.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg10_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed257.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[3/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg9_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed88.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg9_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed88.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg9_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed88.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[4/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg7_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed182.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg7_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed182.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg7_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed182.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[5/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg3_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed98.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg3_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed98.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg3_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed98.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[6/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg4_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed139.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg4_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed139.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg4_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed139.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[7/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg10_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed217.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg10_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed217.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg10_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed217.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[8/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg4_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed83.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg4_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed83.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg4_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed83.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[9/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg6_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed181.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg6_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed181.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg6_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed181.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[10/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg10_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed65.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg10_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed65.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg10_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed65.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[11/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg5_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed180.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg5_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed180.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg5_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed180.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[12/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg7_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed190.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg7_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed190.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg7_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed190.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[13/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg3_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed170.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg3_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed170.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg3_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed170.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[14/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg3_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed186.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg3_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed186.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg3_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed186.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[15/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg6_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed93.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg6_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed93.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg6_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed93.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[16/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg9_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed48.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg9_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed48.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg9_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed48.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[17/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg8_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed215.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg8_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed215.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg8_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed215.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[18/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg8_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed127.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg8_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed127.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg8_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed127.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[19/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg3_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed266.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg3_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed266.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg3_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed266.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[20/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg9_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed160.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg9_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed160.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg9_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed160.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[21/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg10_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed49.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg10_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed49.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg10_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed49.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[22/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg8_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed167.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg8_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed167.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg8_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed167.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[23/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg5_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed140.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg5_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed140.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg5_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed140.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[24/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg7_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed214.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg7_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed214.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg7_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed214.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[25/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg10_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed97.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg10_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed97.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg10_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed97.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[26/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg4_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed51.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg4_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed51.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg4_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed51.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[27/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg7_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed270.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg7_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed270.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg7_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed270.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[28/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg10_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed209.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg10_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed209.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg10_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed209.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[29/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg8_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed143.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg8_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed143.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg8_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed143.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[30/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg3_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed178.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg3_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed178.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg3_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed178.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[31/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg10_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed193.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg10_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed193.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg10_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed193.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[32/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg6_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed165.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg6_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed165.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg6_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed165.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[33/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg3_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed242.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg3_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed242.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg3_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed242.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[34/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg5_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed60.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg5_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed60.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg5_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed60.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[35/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg3_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed138.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg3_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed138.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg3_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed138.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[36/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg7_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed166.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg7_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed166.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg7_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed166.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[37/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg7_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed78.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg7_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed78.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg7_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed78.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[38/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg4_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed99.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg4_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed99.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg4_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed99.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[39/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg4_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed123.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg4_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed123.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg4_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed123.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[40/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg10_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed153.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg10_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed153.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg10_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed153.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[41/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg10_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed73.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg10_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed73.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg10_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed73.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[42/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg9_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed200.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg9_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed200.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg9_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed200.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[43/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg3_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed162.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg3_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed162.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg3_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed162.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[44/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg9_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed288.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg9_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed288.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg9_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed288.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[45/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg5_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed44.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg5_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed44.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg5_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed44.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[46/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg7_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed126.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg7_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed126.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg7_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed126.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[47/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg3_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed50.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg3_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed50.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg3_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed50.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[48/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg4_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed147.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg4_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed147.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg4_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed147.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[49/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg7_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed278.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg7_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed278.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg7_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed278.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[50/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg6_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed229.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg6_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed229.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg6_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed229.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[51/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg3_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed106.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg3_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed106.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg3_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed106.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[52/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg9_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed64.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg9_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed64.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg9_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed64.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[53/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg9_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed232.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg9_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed232.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg9_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed232.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[54/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg5_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed228.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg5_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed228.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg5_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed228.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[55/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg5_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed276.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg5_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed276.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg5_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed276.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[56/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg8_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed239.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg8_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed239.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg8_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed239.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[57/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg9_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed248.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg9_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed248.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg9_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed248.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[58/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg10_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed169.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg10_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed169.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg10_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed169.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[59/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg8_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed95.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg8_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed95.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg8_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed95.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[60/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg6_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed117.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg6_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed117.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg6_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed117.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[61/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg8_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed47.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg8_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed47.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg8_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed47.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[62/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg7_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed54.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg7_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed54.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg7_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed54.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[63/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg8_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed135.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg8_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed135.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg8_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed135.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[64/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg7_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed262.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg7_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed262.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg7_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed262.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[65/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg8_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed287.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg8_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed287.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg8_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed287.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[66/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg8_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed247.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg8_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed247.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg8_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed247.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[67/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg7_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed94.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg7_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed94.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg7_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed94.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[68/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg5_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed68.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg5_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed68.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg5_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed68.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[69/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg6_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed245.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg6_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed245.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg6_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed245.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[70/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg8_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed175.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg8_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed175.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg8_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed175.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[71/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg9_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed72.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg9_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed72.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg9_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed72.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[72/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg3_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed218.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg3_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed218.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg3_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed218.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[73/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg6_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed221.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg6_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed221.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg6_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed221.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[74/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg10_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed201.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg10_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed201.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg10_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed201.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[75/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg7_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed206.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg7_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed206.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg7_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed206.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[76/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg9_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed80.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg9_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed80.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg9_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed80.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[77/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg5_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed124.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg5_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed124.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg5_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed124.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[78/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg9_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed240.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg9_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed240.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg9_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed240.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[79/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg9_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed280.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg9_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed280.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg9_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed280.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[80/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg3_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed90.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg3_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed90.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg3_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed90.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[81/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg7_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed286.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg7_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed286.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg7_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed286.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[82/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg9_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed96.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg9_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed96.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg9_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed96.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[83/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg6_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed269.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg6_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed269.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg6_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed269.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[84/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg3_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed258.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg3_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed258.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg3_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed258.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[85/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg6_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed237.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg6_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed237.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg6_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed237.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[86/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg10_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed249.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg10_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed249.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg10_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed249.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[87/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg10_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed57.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg10_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed57.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg10_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed57.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[88/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg10_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed233.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg10_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed233.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg10_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed233.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[89/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg3_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed66.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg3_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed66.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg3_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed66.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[90/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg6_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed173.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg6_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed173.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg6_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed173.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[91/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg3_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed146.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg3_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed146.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg3_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed146.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[92/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg8_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed191.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg8_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed191.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg8_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed191.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[93/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg4_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed211.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg4_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed211.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg4_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed211.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[94/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg4_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed235.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg4_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed235.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg4_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed235.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[95/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg6_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed133.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg6_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed133.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg6_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed133.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[96/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg4_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed91.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg4_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed91.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg4_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed91.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[97/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg8_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed183.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg8_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed183.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg8_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed183.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[98/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg5_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed252.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg5_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed252.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg5_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed252.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[99/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg3_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed122.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg3_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed122.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg3_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed122.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[100/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg4_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed203.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg4_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed203.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg4_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed203.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[101/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg8_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed71.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg8_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed71.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg8_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed71.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[102/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg7_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed70.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg7_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed70.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg7_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed70.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[103/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg10_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed137.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg10_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed137.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg10_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed137.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[104/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg10_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed89.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg10_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed89.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg10_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed89.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[105/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg3_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed226.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg3_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed226.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg3_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed226.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[106/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg9_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed168.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg9_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed168.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg9_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed168.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[107/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg5_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed292.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg5_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed292.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg5_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed292.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[108/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg3_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed202.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg3_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed202.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg3_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed202.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[109/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg5_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed196.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg5_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed196.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg5_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed196.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[110/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg6_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed253.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg6_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed253.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg6_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed253.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[111/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg4_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed115.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg4_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed115.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg4_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed115.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[112/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg7_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed102.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg7_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed102.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg7_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed102.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[113/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg4_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed251.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg4_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed251.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg4_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed251.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[114/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg8_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed119.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg8_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed119.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg8_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed119.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[115/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg9_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed216.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg9_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed216.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg9_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed216.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[116/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg9_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed256.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg9_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed256.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg9_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed256.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[117/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg9_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed208.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg9_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed208.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg9_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed208.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[118/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg4_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed179.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg4_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed179.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg4_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed179.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[119/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg8_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed279.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg8_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed279.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg8_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed279.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[120/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg5_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed116.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg5_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed116.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg5_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed116.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[121/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg6_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed69.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg6_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed69.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg6_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed69.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[122/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg10_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed265.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg10_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed265.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg10_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed265.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[123/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg9_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed144.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg9_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed144.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg9_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed144.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[124/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg9_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed176.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg9_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed176.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg9_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed176.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[125/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg6_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed125.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg6_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed125.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg6_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed125.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[126/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg8_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed295.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg8_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed295.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg8_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed295.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[127/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg5_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed164.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg5_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed164.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg5_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed164.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[128/256] ✗ INCORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg5_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed76.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg5_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed76.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg5_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed76.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[129/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg5_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed172.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg5_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed172.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg5_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed172.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[130/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg4_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed155.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg4_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed155.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg4_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed155.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[131/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg7_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed222.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg7_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed222.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg7_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed222.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[132/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg3_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed210.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg3_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed210.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg3_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed210.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[133/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg5_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed156.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg5_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed156.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg5_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed156.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[134/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg6_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed213.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg6_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed213.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg6_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed213.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[135/256] ✗ INCORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg10_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed81.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg10_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed81.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg10_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed81.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[136/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg9_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed296.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg9_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed296.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg9_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed296.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[137/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg4_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed267.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg4_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed267.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg4_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed267.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[138/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg8_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed271.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg8_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed271.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg8_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed271.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[139/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg5_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed108.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg5_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed108.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg5_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed108.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[140/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg4_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed59.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg4_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed59.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg4_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed59.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[141/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg10_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed273.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg10_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed273.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg10_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed273.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[142/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg10_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed281.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg10_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed281.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg10_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed281.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[143/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg9_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed56.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg9_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed56.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg9_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed56.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[144/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg9_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed136.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg9_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed136.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg9_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed136.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[145/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg3_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed282.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg3_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed282.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg3_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed282.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[146/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg8_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed231.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg8_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed231.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg8_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed231.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[147/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg5_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed268.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg5_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed268.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg5_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed268.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[148/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg5_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed100.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg5_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed100.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg5_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed100.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[149/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg7_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed174.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg7_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed174.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg7_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed174.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[150/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg6_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed85.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg6_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed85.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg6_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed85.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[151/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg4_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed67.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg4_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed67.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg4_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed67.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[152/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg3_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed274.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg3_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed274.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg3_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed274.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[153/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg5_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed244.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg5_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed244.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg5_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed244.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[154/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg7_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed62.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg7_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed62.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg7_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed62.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[155/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg8_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed63.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg8_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed63.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg8_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed63.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[156/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg4_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed195.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg4_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed195.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg4_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed195.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[157/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg7_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed46.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg7_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed46.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg7_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed46.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[158/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg9_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed264.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg9_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed264.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg9_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed264.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[159/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg6_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed45.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg6_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed45.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg6_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed45.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[160/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg8_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed87.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg8_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed87.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg8_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed87.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[161/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg3_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed74.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg3_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed74.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg3_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed74.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[162/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg6_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed157.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg6_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed157.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg6_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed157.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[163/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg9_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed224.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg9_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed224.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg9_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed224.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[164/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg7_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed158.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg7_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed158.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg7_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed158.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[165/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg9_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed192.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg9_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed192.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg9_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed192.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[166/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg7_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed150.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg7_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed150.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg7_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed150.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[167/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg8_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed223.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg8_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed223.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg8_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed223.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[168/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg9_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed184.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg9_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed184.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg9_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed184.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[169/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg4_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed75.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg4_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed75.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg4_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed75.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[170/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg4_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed275.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg4_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed275.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg4_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed275.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[171/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg7_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed134.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg7_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed134.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg7_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed134.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[172/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg7_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed110.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg7_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed110.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg7_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed110.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[173/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg4_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed107.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg4_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed107.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg4_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed107.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[174/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg3_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg3_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg3_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[175/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg5_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed52.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg5_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed52.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg5_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed52.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[176/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg4_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed131.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg4_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed131.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg4_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed131.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[177/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg6_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed141.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg6_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed141.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg6_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed141.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[178/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg3_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed250.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg3_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed250.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg3_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed250.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[179/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg9_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed120.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg9_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed120.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg9_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed120.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[180/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg4_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed187.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg4_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed187.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg4_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed187.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[181/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg7_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed294.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg7_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed294.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg7_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed294.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[182/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg6_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed261.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg6_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed261.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg6_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed261.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[183/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg5_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed92.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg5_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed92.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg5_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed92.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[184/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg9_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed272.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg9_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed272.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg9_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed272.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[185/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg5_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed84.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg5_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed84.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg5_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed84.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[186/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg5_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed212.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg5_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed212.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg5_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed212.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[187/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg7_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed86.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg7_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed86.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg7_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed86.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[188/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg4_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed43.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg4_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed43.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg4_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed43.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[189/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg7_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed198.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg7_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed198.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg7_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed198.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[190/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg10_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed161.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg10_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed161.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg10_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed161.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[191/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg10_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed113.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg10_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed113.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg10_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed113.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[192/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg5_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed260.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg5_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed260.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg5_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed260.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[193/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg10_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed297.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg10_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed297.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg10_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed297.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[194/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg6_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed61.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg6_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed61.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg6_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed61.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[195/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg6_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed149.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg6_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed149.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg6_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed149.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[196/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg5_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed220.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg5_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed220.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg5_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed220.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[197/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg9_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed104.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg9_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed104.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg9_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed104.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[198/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg9_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed112.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg9_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed112.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg9_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed112.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[199/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg9_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed152.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg9_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed152.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg9_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed152.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[200/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg6_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed77.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg6_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed77.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg6_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed77.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[201/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg5_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed148.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg5_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed148.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg5_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed148.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[202/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg8_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed207.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg8_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed207.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg8_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed207.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[203/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg6_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed109.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg6_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed109.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg6_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed109.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[204/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg6_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed53.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg6_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed53.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg6_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed53.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[205/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg5_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed204.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg5_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed204.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg5_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed204.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[206/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg5_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed236.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg5_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed236.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg5_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed236.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[207/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg3_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed58.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg3_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed58.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg3_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed58.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[208/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg6_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed189.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg6_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed189.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg6_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed189.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[209/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg6_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed101.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg6_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed101.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg6_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed101.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[210/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg7_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed254.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg7_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed254.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg7_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed254.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[211/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg6_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed285.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg6_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed285.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg6_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed285.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[212/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg8_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed55.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg8_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed55.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg8_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed55.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[213/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg4_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed259.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg4_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed259.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg4_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed259.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[214/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg7_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed230.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg7_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed230.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg7_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed230.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[215/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg3_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed154.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg3_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed154.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg3_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed154.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[216/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg3_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed114.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg3_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed114.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg3_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed114.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[217/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg8_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed79.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg8_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed79.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg8_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed79.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[218/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg3_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed82.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg3_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed82.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg3_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed82.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[219/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg7_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed142.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg7_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed142.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg7_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed142.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[220/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg8_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed111.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg8_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed111.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg8_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed111.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[221/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg4_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed171.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg4_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed171.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg4_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed171.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[222/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg10_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed177.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg10_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed177.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg10_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed177.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[223/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe88_bg8_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed151.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg8_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed151.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe88_bg8_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed151.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[224/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg10_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed129.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg10_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed129.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg10_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed129.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[225/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg7_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed118.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg7_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed118.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg7_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed118.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[226/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg5_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed284.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg5_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed284.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg5_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed284.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[227/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg10_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed225.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg10_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed225.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg10_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed225.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[228/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg7_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed246.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg7_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed246.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg7_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed246.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[229/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg4_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed291.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg4_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed291.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg4_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed291.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[230/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg4_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed283.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg4_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed283.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg4_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed283.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[231/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg8_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed103.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg8_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed103.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg8_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed103.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[232/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg10_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed185.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg10_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed185.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg10_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed185.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[233/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg8_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed159.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg8_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed159.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg8_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed159.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[234/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg4_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed163.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg4_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed163.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg4_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed163.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[235/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg6_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed197.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg6_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed197.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg6_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed197.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[236/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg8_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed255.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg8_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed255.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg8_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed255.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[237/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg4_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed243.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg4_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed243.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg4_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed243.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[238/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg10_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed289.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg10_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed289.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg10_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed289.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[239/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg4_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed227.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg4_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed227.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg4_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed227.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[240/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg3_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed194.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg3_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed194.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg3_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed194.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[241/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg6_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed293.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg6_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed293.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg6_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed293.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[242/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg6_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed205.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg6_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed205.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg6_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed205.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[243/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg5_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed132.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg5_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed132.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg5_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed132.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[244/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg3_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed130.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg3_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed130.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg3_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed130.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[245/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg10_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed105.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg10_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed105.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg10_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed105.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[246/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg5_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed188.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg5_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed188.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg5_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed188.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[247/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg7_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed238.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg7_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed238.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg7_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed238.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[248/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg8_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed263.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg8_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed263.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg8_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed263.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[249/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe86_bg8_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed199.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg8_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed199.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe86_bg8_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed199.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[250/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe89_bg4_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed219.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg4_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed219.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe89_bg4_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed219.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[251/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg10_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed241.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg10_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed241.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg10_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed241.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[252/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe87_bg10_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed145.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg10_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed145.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe87_bg10_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed145.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[253/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe85_bg9_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed128.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg9_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed128.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe85_bg9_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed128.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+[254/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe90_bg3_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed290.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg3_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed290.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe90_bg3_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed290.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[255/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe83_bg3_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed234.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg3_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed234.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe83_bg3_left_speed14.0_angle30_bright0.00_contr1.00_640x480_seed234.mp4
+Speed: 14.0
+Label (Ground Truth): moving
+Model Answer (Raw): yes
+Parsed Classification: moving
+--------------------------------------------------------------------------------
+
+[256/256] ✓ CORRECT
+Video Name: treadmill_0000_subtle_gray_stripes_stripe84_bg10_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed121.mp4
+Video Path (Relative): data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg10_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed121.mp4
+Video Path (Absolute): /app/data/_exp_20251204_133345_test/treadmill_0000_subtle_gray_stripes_stripe84_bg10_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed121.mp4
+Speed: 0.0
+Label (Ground Truth): stopped
+Model Answer (Raw): no
+Parsed Classification: stopped
+--------------------------------------------------------------------------------
+
+
+================================================================================
+Evaluation complete! Log saved to: /app/data/_exp_20251204_133345_test/eval_20251204_170424/live_evaluation_log_finetuned_20251204_170424.txt
+================================================================================

@@ -1,0 +1,149 @@
+======================================================================
+TREADMILL MOTION DETECTION - SIMPLE EVALUATION REPORT
+======================================================================
+
+Date: 2025-11-29 12:15:46.273804
+Dataset: yesno_factory_v2_test
+
+BASE MODEL
+==========
+
+OVERALL METRICS:
+  Accuracy:  50.00% (36/72)
+  F1 Score:  0.00%
+  Precision: 0.00%
+  Recall:    0.00%
+
+PER-CLASS METRICS:
+  Moving:  0/36 (Acc: 0.00%, F1: 0.00%)
+  Stopped: 36/36 (Acc: 100.00%, F1: 66.67%)
+
+PER-TEXTURE BREAKDOWN:
+  factory_dark:
+    Total: 24 videos
+    Accuracy: 50.00% (12/24)
+    F1 Score: 0.00%
+    Precision: 0.00%
+    Recall: 0.00%
+    Moving: 0/12 (F1: 0.00%)
+    Stopped: 12/12 (F1: 66.67%)
+
+  factory_dark_stripes:
+    Total: 24 videos
+    Accuracy: 50.00% (12/24)
+    F1 Score: 0.00%
+    Precision: 0.00%
+    Recall: 0.00%
+    Moving: 0/12 (F1: 0.00%)
+    Stopped: 12/12 (F1: 66.67%)
+
+  subtle_gray_stripes:
+    Total: 24 videos
+    Accuracy: 50.00% (12/24)
+    F1 Score: 0.00%
+    Precision: 0.00%
+    Recall: 0.00%
+    Moving: 0/12 (F1: 0.00%)
+    Stopped: 12/12 (F1: 66.67%)
+
+PER-ANGLE BREAKDOWN:
+  angle0:
+    Total: 24 videos
+    Accuracy: 50.00% (12/24)
+    F1 Score: 0.00%
+    Precision: 0.00%
+    Recall: 0.00%
+    Moving: 0/12 (F1: 0.00%)
+    Stopped: 12/12 (F1: 66.67%)
+
+  angle15:
+    Total: 24 videos
+    Accuracy: 50.00% (12/24)
+    F1 Score: 0.00%
+    Precision: 0.00%
+    Recall: 0.00%
+    Moving: 0/12 (F1: 0.00%)
+    Stopped: 12/12 (F1: 66.67%)
+
+  angle30:
+    Total: 24 videos
+    Accuracy: 50.00% (12/24)
+    F1 Score: 0.00%
+    Precision: 0.00%
+    Recall: 0.00%
+    Moving: 0/12 (F1: 0.00%)
+    Stopped: 12/12 (F1: 66.67%)
+
+FINE-TUNED MODEL
+================
+
+OVERALL METRICS:
+  Accuracy:  100.00% (72/72)
+  F1 Score:  100.00%
+  Precision: 100.00%
+  Recall:    100.00%
+
+PER-CLASS METRICS:
+  Moving:  36/36 (Acc: 100.00%, F1: 100.00%)
+  Stopped: 36/36 (Acc: 100.00%, F1: 100.00%)
+
+PER-TEXTURE BREAKDOWN:
+  factory_dark:
+    Total: 24 videos
+    Accuracy: 100.00% (24/24)
+    F1 Score: 100.00%
+    Precision: 100.00%
+    Recall: 100.00%
+    Moving: 12/12 (F1: 100.00%)
+    Stopped: 12/12 (F1: 100.00%)
+
+  factory_dark_stripes:
+    Total: 24 videos
+    Accuracy: 100.00% (24/24)
+    F1 Score: 100.00%
+    Precision: 100.00%
+    Recall: 100.00%
+    Moving: 12/12 (F1: 100.00%)
+    Stopped: 12/12 (F1: 100.00%)
+
+  subtle_gray_stripes:
+    Total: 24 videos
+    Accuracy: 100.00% (24/24)
+    F1 Score: 100.00%
+    Precision: 100.00%
+    Recall: 100.00%
+    Moving: 12/12 (F1: 100.00%)
+    Stopped: 12/12 (F1: 100.00%)
+
+PER-ANGLE BREAKDOWN:
+  angle0:
+    Total: 24 videos
+    Accuracy: 100.00% (24/24)
+    F1 Score: 100.00%
+    Precision: 100.00%
+    Recall: 100.00%
+    Moving: 12/12 (F1: 100.00%)
+    Stopped: 12/12 (F1: 100.00%)
+
+  angle15:
+    Total: 24 videos
+    Accuracy: 100.00% (24/24)
+    F1 Score: 100.00%
+    Precision: 100.00%
+    Recall: 100.00%
+    Moving: 12/12 (F1: 100.00%)
+    Stopped: 12/12 (F1: 100.00%)
+
+  angle30:
+    Total: 24 videos
+    Accuracy: 100.00% (24/24)
+    F1 Score: 100.00%
+    Precision: 100.00%
+    Recall: 100.00%
+    Moving: 12/12 (F1: 100.00%)
+    Stopped: 12/12 (F1: 100.00%)
+
+======================================================================
+COMPARISON
+======================================================================
+Improvement: +50.00%

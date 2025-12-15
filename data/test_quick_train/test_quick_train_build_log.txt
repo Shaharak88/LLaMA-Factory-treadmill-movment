@@ -1,0 +1,25 @@
+2025-11-30 17:38:10 - INFO - Dataset Builder started - test_quick_train
+2025-11-30 17:38:10 - INFO - Configuration: {'dataset_name': 'test_quick_train', 'output_dir': 'data/test_quick_train', 'num_videos': 1, 'train_split': 0.8, 'moving_ratio': 0.5, 'seed': 99, 'vary_parameters': False, 'texture_type': 'stripes', 'direction': 'right', 'speed_range': '1.0,8.0', 'resolution': '640x480', 'fps': '30', 'duration': '5.0', 'view_angle': '0.0', 'brightness': '0.0', 'contrast': '1.0', 'lighting_variation': 'none', 'lighting_intensity': '0.5', 'motion_blur': '0', 'camera_noise': '0.0', 'edge_width': '0.1', 'stripe_width': '10', 'stripe_spacing': '60', 'stripe_gray': '125', 'background_gray': '140', 'stripe_distance_variance': '0.0'}
+2025-11-30 17:38:10 - INFO - Validating prerequisites...
+2025-11-30 17:38:10 - INFO -   [OK] Found synthetic generation script
+2025-11-30 17:38:10 - INFO -   [OK] Found dataset_info.json
+2025-11-30 17:38:10 - INFO -   [OK] Python3 available: Python 3.12.3
+2025-11-30 17:38:10 - INFO - Generating video configurations...
+2025-11-30 17:38:10 - INFO -   Target: 0 moving, 1 stopped videos
+2025-11-30 17:38:10 - INFO - Generating 1 videos...
+2025-11-30 17:38:10 - INFO -   [1/1] Generating video...
+2025-11-30 17:38:10 - INFO -     Texture: stripes, Direction: right, Speed: 0.00
+2025-11-30 17:38:11 - ERROR -     [FAIL] Video generation failed:
+2025-11-30 17:38:11 - ERROR -     Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/data/synthetic_treadmill/synthetic_data_generation.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+
+2025-11-30 17:38:11 - INFO - Successfully generated 0/1 videos
+2025-11-30 17:38:11 - ERROR - 
+
+Error during dataset building: No videos were successfully generated
+Traceback (most recent call last):
+  File "/mnt/c/Users/shaha/Desktop/Qwen2.5/LLaMA-Factory/building_dataset.py", line 707, in build
+    raise RuntimeError("No videos were successfully generated")
+RuntimeError: No videos were successfully generated

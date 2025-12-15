@@ -1,0 +1,9 @@
+video_name,index,texture,direction,speed,angle,brightness,contrast,stripe_contrast,background_contrast,object_enabled,object_type,num_objects,object_size,object_position,blur_enabled,blur_type,blur_intensity,blur_variation,resolution,seed
+treadmill_0000_subtle_gray_stripes_stripe228_bg120_left_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed42.mp4,0000,subtle_gray_stripes,left,0.0,0,0.00,1.00,228,120,no,,,,,no,,,no,640x480,42
+treadmill_0000_subtle_gray_stripes_stripe228_bg120_left_speed0.0_angle30_dist1.0_bright0.00_contr1.00_640x480_seed44.mp4,0000,subtle_gray_stripes,left,0.0,30,0.00,1.00,228,120,no,,,,,no,,,no,640x480,44
+treadmill_0000_subtle_gray_stripes_stripe228_bg120_left_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed46.mp4,0000,subtle_gray_stripes,left,14.0,0,0.00,1.00,228,120,no,,,,,no,,,no,640x480,46
+treadmill_0000_subtle_gray_stripes_stripe228_bg120_left_speed14.0_angle30_dist1.0_bright0.00_contr1.00_640x480_seed48.mp4,0000,subtle_gray_stripes,left,14.0,30,0.00,1.00,228,120,no,,,,,no,,,no,640x480,48
+treadmill_0000_subtle_gray_stripes_stripe229_bg120_left_speed0.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed43.mp4,0000,subtle_gray_stripes,left,0.0,0,0.00,1.00,229,120,no,,,,,no,,,no,640x480,43
+treadmill_0000_subtle_gray_stripes_stripe229_bg120_left_speed0.0_angle30_dist1.0_bright0.00_contr1.00_640x480_seed45.mp4,0000,subtle_gray_stripes,left,0.0,30,0.00,1.00,229,120,no,,,,,no,,,no,640x480,45
+treadmill_0000_subtle_gray_stripes_stripe229_bg120_left_speed14.0_angle0_dist1.0_bright0.00_contr1.00_640x480_seed47.mp4,0000,subtle_gray_stripes,left,14.0,0,0.00,1.00,229,120,no,,,,,no,,,no,640x480,47
+treadmill_0000_subtle_gray_stripes_stripe229_bg120_left_speed14.0_angle30_dist1.0_bright0.00_contr1.00_640x480_seed49.mp4,0000,subtle_gray_stripes,left,14.0,30,0.00,1.00,229,120,no,,,,,no,,,no,640x480,49

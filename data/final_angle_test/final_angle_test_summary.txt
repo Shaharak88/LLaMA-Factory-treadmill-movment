@@ -1,0 +1,38 @@
+======================================================================
+Dataset Generation Summary: final_angle_test
+======================================================================
+
+Generation Date: 2025-12-01 08:38:47
+Seed: 10600
+
+Dataset Statistics:
+----------------------------------------------------------------------
+  Total Videos: 48
+  Moving Videos: 24 (50.0%)
+  Stopped Videos: 24 (50.0%)
+
+  Speed Range: 14.00 - 14.00 px/frame
+
+Texture Distribution:
+  subtle_gray_stripes:  48 (100.0%)
+
+Direction Distribution:
+  down           :  12 (25.0%)
+  left           :  12 (25.0%)
+  right          :  12 (25.0%)
+  up             :  12 (25.0%)
+
+File Sizes:
+  Total: 4.04 MB
+  Average: 0.08 MB per video
+
+Output Files:
+----------------------------------------------------------------------
+  Videos: data/final_angle_test/
+  Dataset JSON: /app/data/final_angle_test.json
+  Dataset Info: /app/data/dataset_info.json
+  Log File: data/final_angle_test/final_angle_test_build_log.txt
+
+======================================================================
+Dataset ready for training!
+======================================================================

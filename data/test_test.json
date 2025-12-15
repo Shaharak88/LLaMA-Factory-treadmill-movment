@@ -1,0 +1,17 @@
+[
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped."
+      }
+    ],
+    "videos": [
+      "data/test_test/treadmill_0000_stripes_right_speed0.0_angle0_bright0.00_contr1.00_640x480_seed10042.mp4"
+    ]
+  }
+]

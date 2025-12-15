@@ -1,0 +1,39 @@
+======================================================================
+Dataset Generation Summary: test_edge_width
+======================================================================
+
+Generation Date: 2025-11-26 13:59:58
+Seed: 999
+
+Dataset Statistics:
+----------------------------------------------------------------------
+  Total Videos: 4
+  Moving Videos: 2 (50.0%)
+  Stopped Videos: 2 (50.0%)
+
+  Speed Range: 4.38 - 7.82 px/frame
+
+Texture Distribution:
+  diamond_plate  :   1 (25.0%)
+  noise          :   1 (25.0%)
+  stripes        :   2 (50.0%)
+
+Direction Distribution:
+  down           :   2 (50.0%)
+  right          :   1 (25.0%)
+  up             :   1 (25.0%)
+
+File Sizes:
+  Total: 9.85 MB
+  Average: 2.46 MB per video
+
+Output Files:
+----------------------------------------------------------------------
+  Videos: data/test_edge_width/
+  Dataset JSON: /app/data/test_edge_width.json
+  Dataset Info: /app/data/dataset_info.json
+  Log File: data/test_edge_width/test_edge_width_build_log.txt
+
+======================================================================
+Dataset ready for training!
+======================================================================

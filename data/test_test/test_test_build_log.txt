@@ -1,0 +1,57 @@
+2025-11-26 15:37:42 - INFO - Dataset Builder started - test_test
+2025-11-26 15:37:42 - INFO - Configuration: {'dataset_name': 'test_test', 'output_dir': 'data/test_test', 'num_videos': 1, 'train_split': 0.8, 'moving_ratio': 0.5, 'seed': 10042, 'vary_parameters': False, 'texture_type': 'stripes', 'direction': 'right', 'speed_range': '1.0,8.0', 'resolution': '640x480', 'fps': '30', 'duration': '5.0', 'view_angle': '0.0', 'brightness': '0.0', 'contrast': '1.0', 'lighting_variation': 'none', 'lighting_intensity': '0.5', 'motion_blur': '0', 'camera_noise': '0.0', 'edge_width': '0.1'}
+2025-11-26 15:37:42 - INFO - Validating prerequisites...
+2025-11-26 15:37:42 - INFO -   ✓ Found synthetic generation script
+2025-11-26 15:37:43 - INFO -   ✓ Found dataset_info.json
+2025-11-26 15:37:43 - INFO -   ✓ Python3 available: Python 3.11.11
+2025-11-26 15:37:43 - INFO - Generating video configurations...
+2025-11-26 15:37:43 - INFO -   Target: 0 moving, 1 stopped videos
+2025-11-26 15:37:43 - INFO - Generating 1 videos...
+2025-11-26 15:37:43 - INFO -   [1/1] Generating video...
+2025-11-26 15:37:43 - INFO -     Texture: stripes, Direction: right, Speed: 0.00
+2025-11-26 15:37:46 - INFO -     ✓ Generated: treadmill_0000_stripes_right_speed0.0_angle0_bright0.00_contr1.00_640x480_seed10042.mp4 (200.9 KB)
+2025-11-26 15:37:46 - INFO - Successfully generated 1/1 videos
+2025-11-26 15:37:46 - INFO - Creating dataset JSON: /app/data/test_test.json
+2025-11-26 15:37:46 - INFO -   ✓ Created dataset with 1 entries
+2025-11-26 15:37:46 - INFO - Updating dataset_info.json...
+2025-11-26 15:37:46 - INFO -   Created backup: dataset_info.json.backup
+2025-11-26 15:37:46 - INFO -   ✓ Added 'test_test' to dataset_info.json
+2025-11-26 15:37:46 - INFO - Generating summary report...
+2025-11-26 15:37:47 - INFO - 
+======================================================================
+Dataset Generation Summary: test_test
+======================================================================
+
+Generation Date: 2025-11-26 15:37:46
+Seed: 10042
+
+Dataset Statistics:
+----------------------------------------------------------------------
+  Total Videos: 1
+  Moving Videos: 0 (0.0%)
+  Stopped Videos: 1 (100.0%)
+
+Texture Distribution:
+  stripes        :   1 (100.0%)
+
+Direction Distribution:
+  right          :   1 (100.0%)
+
+File Sizes:
+  Total: 0.20 MB
+  Average: 0.20 MB per video
+
+Output Files:
+----------------------------------------------------------------------
+  Videos: data/test_test/
+  Dataset JSON: /app/data/test_test.json
+  Dataset Info: /app/data/dataset_info.json
+  Log File: data/test_test/test_test_build_log.txt
+
+======================================================================
+Dataset ready for training!
+======================================================================
+
+2025-11-26 15:37:47 - INFO - ======================================================================
+2025-11-26 15:37:47 - INFO - ✓ Dataset building complete!
+2025-11-26 15:37:47 - INFO - ======================================================================

@@ -1,0 +1,70 @@
+2025-11-26 16:08:36 - INFO - Dataset Builder started - check_dataset_train
+2025-11-26 16:08:36 - INFO - Configuration: {'dataset_name': 'check_dataset_train', 'output_dir': 'data/check_dataset_train', 'num_videos': 90, 'train_split': 0.8, 'moving_ratio': 0.5, 'seed': 42, 'vary_parameters': False, 'texture_type': 'stripes', 'direction': 'left', 'speed_range': '0,12.0', 'resolution': '640x480', 'fps': '4', 'duration': '12.0', 'view_angle': '0.0,30.0', 'brightness': '0.0', 'contrast': '1.0', 'lighting_variation': 'none', 'lighting_intensity': '0.5', 'motion_blur': '0', 'camera_noise': '0.0', 'edge_width': '0.1'}
+2025-11-26 16:08:36 - INFO - Validating prerequisites...
+2025-11-26 16:08:36 - INFO -   ✓ Found synthetic generation script
+2025-11-26 16:08:36 - INFO -   ✓ Found dataset_info.json
+2025-11-26 16:08:36 - INFO -   ✓ Python3 available: Python 3.11.11
+2025-11-26 16:08:36 - INFO - Generating video configurations...
+2025-11-26 16:08:36 - INFO -   Using parameter combination mode
+2025-11-26 16:08:36 - INFO -   Generated 4 parameter combinations
+2025-11-26 16:08:36 - INFO -   Generated: 2 moving, 2 stopped videos
+2025-11-26 16:08:36 - INFO - Generating 4 videos...
+2025-11-26 16:08:36 - INFO -   [1/4] Generating video...
+2025-11-26 16:08:36 - INFO -     Texture: stripes, Direction: left, Speed: 0.00
+2025-11-26 16:08:38 - INFO -     ✓ Generated: treadmill_0000_stripes_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed42.mp4 (61.2 KB)
+2025-11-26 16:08:38 - INFO -   [2/4] Generating video...
+2025-11-26 16:08:38 - INFO -     Texture: stripes, Direction: left, Speed: 12.00
+2025-11-26 16:08:39 - INFO -     ✓ Generated: treadmill_0000_stripes_left_speed12.0_angle30_bright0.00_contr1.00_640x480_seed45.mp4 (205.9 KB)
+2025-11-26 16:08:39 - INFO -   [3/4] Generating video...
+2025-11-26 16:08:39 - INFO -     Texture: stripes, Direction: left, Speed: 0.00
+2025-11-26 16:08:41 - INFO -     ✓ Generated: treadmill_0000_stripes_left_speed0.0_angle30_bright0.00_contr1.00_640x480_seed43.mp4 (76.8 KB)
+2025-11-26 16:08:41 - INFO -   [4/4] Generating video...
+2025-11-26 16:08:41 - INFO -     Texture: stripes, Direction: left, Speed: 12.00
+2025-11-26 16:08:43 - INFO -     ✓ Generated: treadmill_0000_stripes_left_speed12.0_angle0_bright0.00_contr1.00_640x480_seed44.mp4 (142.9 KB)
+2025-11-26 16:08:43 - INFO - Successfully generated 4/4 videos
+2025-11-26 16:08:43 - INFO - Creating dataset JSON: /app/data/check_dataset_train.json
+2025-11-26 16:08:43 - INFO -   ✓ Created dataset with 4 entries
+2025-11-26 16:08:43 - INFO - Updating dataset_info.json...
+2025-11-26 16:08:43 - INFO -   Created backup: dataset_info.json.backup
+2025-11-26 16:08:43 - INFO -   ✓ Added 'check_dataset_train' to dataset_info.json
+2025-11-26 16:08:43 - INFO - Generating summary report...
+2025-11-26 16:08:43 - INFO - 
+======================================================================
+Dataset Generation Summary: check_dataset_train
+======================================================================
+
+Generation Date: 2025-11-26 16:08:43
+Seed: 42
+
+Dataset Statistics:
+----------------------------------------------------------------------
+  Total Videos: 4
+  Moving Videos: 2 (50.0%)
+  Stopped Videos: 2 (50.0%)
+
+  Speed Range: 12.00 - 12.00 px/frame
+
+Texture Distribution:
+  stripes        :   4 (100.0%)
+
+Direction Distribution:
+  left           :   4 (100.0%)
+
+File Sizes:
+  Total: 0.48 MB
+  Average: 0.12 MB per video
+
+Output Files:
+----------------------------------------------------------------------
+  Videos: data/check_dataset_train/
+  Dataset JSON: /app/data/check_dataset_train.json
+  Dataset Info: /app/data/dataset_info.json
+  Log File: data/check_dataset_train/check_dataset_train_build_log.txt
+
+======================================================================
+Dataset ready for training!
+======================================================================
+
+2025-11-26 16:08:43 - INFO - ======================================================================
+2025-11-26 16:08:43 - INFO - ✓ Dataset building complete!
+2025-11-26 16:08:43 - INFO - ======================================================================

@@ -1,0 +1,33 @@
+======================================================================
+Dataset Generation Summary: test_test
+======================================================================
+
+Generation Date: 2025-11-26 15:37:46
+Seed: 10042
+
+Dataset Statistics:
+----------------------------------------------------------------------
+  Total Videos: 1
+  Moving Videos: 0 (0.0%)
+  Stopped Videos: 1 (100.0%)
+
+Texture Distribution:
+  stripes        :   1 (100.0%)
+
+Direction Distribution:
+  right          :   1 (100.0%)
+
+File Sizes:
+  Total: 0.20 MB
+  Average: 0.20 MB per video
+
+Output Files:
+----------------------------------------------------------------------
+  Videos: data/test_test/
+  Dataset JSON: /app/data/test_test.json
+  Dataset Info: /app/data/dataset_info.json
+  Log File: data/test_test/test_test_build_log.txt
+
+======================================================================
+Dataset ready for training!
+======================================================================

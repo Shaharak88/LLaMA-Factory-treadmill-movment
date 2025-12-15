@@ -1,0 +1,40 @@
+======================================================================
+Dataset Generation Summary: yesno_subtle_factory_train
+======================================================================
+
+Generation Date: 2025-11-29 11:29:42
+Seed: 42
+
+Dataset Statistics:
+----------------------------------------------------------------------
+  Total Videos: 72
+  Moving Videos: 36 (50.0%)
+  Stopped Videos: 36 (50.0%)
+
+  Speed Range: 14.00 - 14.00 px/frame
+
+Texture Distribution:
+  factory_dark   :  24 (33.3%)
+  factory_dark_stripes:  24 (33.3%)
+  subtle_gray_stripes:  24 (33.3%)
+
+Direction Distribution:
+  down           :  18 (25.0%)
+  left           :  18 (25.0%)
+  right          :  18 (25.0%)
+  up             :  18 (25.0%)
+
+File Sizes:
+  Total: 24.85 MB
+  Average: 0.35 MB per video
+
+Output Files:
+----------------------------------------------------------------------
+  Videos: data/yesno_subtle_factory_train/
+  Dataset JSON: /app/data/yesno_subtle_factory_train.json
+  Dataset Info: /app/data/dataset_info.json
+  Log File: data/yesno_subtle_factory_train/yesno_subtle_factory_train_build_log.txt
+
+======================================================================
+Dataset ready for training!
+======================================================================

@@ -1,0 +1,131 @@
+======================================================================
+TREADMILL MOTION DETECTION - SIMPLE EVALUATION REPORT
+======================================================================
+
+Date: 2025-11-30 12:45:35.341325
+Dataset: subtle_gray_angles4_test
+
+BASE MODEL
+==========
+
+OVERALL METRICS:
+  Accuracy:  50.00% (128/256)
+  F1 Score:  0.00%
+  Precision: 0.00%
+  Recall:    0.00%
+
+PER-CLASS METRICS:
+  Moving:  0/128 (Acc: 0.00%, F1: 0.00%)
+  Stopped: 128/128 (Acc: 100.00%, F1: 66.67%)
+
+PER-TEXTURE BREAKDOWN:
+  subtle_gray_stripes:
+    Total: 256 videos
+    Accuracy: 50.00% (128/256)
+    F1 Score: 0.00%
+    Precision: 0.00%
+    Recall: 0.00%
+    Moving: 0/128 (F1: 0.00%)
+    Stopped: 128/128 (F1: 66.67%)
+
+PER-ANGLE BREAKDOWN:
+  angle0:
+    Total: 64 videos
+    Accuracy: 50.00% (32/64)
+    F1 Score: 0.00%
+    Precision: 0.00%
+    Recall: 0.00%
+    Moving: 0/32 (F1: 0.00%)
+    Stopped: 32/32 (F1: 66.67%)
+
+  angle15:
+    Total: 64 videos
+    Accuracy: 50.00% (32/64)
+    F1 Score: 0.00%
+    Precision: 0.00%
+    Recall: 0.00%
+    Moving: 0/32 (F1: 0.00%)
+    Stopped: 32/32 (F1: 66.67%)
+
+  angle30:
+    Total: 64 videos
+    Accuracy: 50.00% (32/64)
+    F1 Score: 0.00%
+    Precision: 0.00%
+    Recall: 0.00%
+    Moving: 0/32 (F1: 0.00%)
+    Stopped: 32/32 (F1: 66.67%)
+
+  angle45:
+    Total: 64 videos
+    Accuracy: 50.00% (32/64)
+    F1 Score: 0.00%
+    Precision: 0.00%
+    Recall: 0.00%
+    Moving: 0/32 (F1: 0.00%)
+    Stopped: 32/32 (F1: 66.67%)
+
+FINE-TUNED MODEL
+================
+
+OVERALL METRICS:
+  Accuracy:  99.61% (255/256)
+  F1 Score:  99.61%
+  Precision: 99.22%
+  Recall:    100.00%
+
+PER-CLASS METRICS:
+  Moving:  128/128 (Acc: 100.00%, F1: 99.61%)
+  Stopped: 127/128 (Acc: 99.22%, F1: 99.61%)
+
+PER-TEXTURE BREAKDOWN:
+  subtle_gray_stripes:
+    Total: 256 videos
+    Accuracy: 99.61% (255/256)
+    F1 Score: 99.61%
+    Precision: 99.22%
+    Recall: 100.00%
+    Moving: 128/128 (F1: 99.61%)
+    Stopped: 127/128 (F1: 99.61%)
+
+PER-ANGLE BREAKDOWN:
+  angle0:
+    Total: 64 videos
+    Accuracy: 100.00% (64/64)
+    F1 Score: 100.00%
+    Precision: 100.00%
+    Recall: 100.00%
+    Moving: 32/32 (F1: 100.00%)
+    Stopped: 32/32 (F1: 100.00%)
+
+  angle15:
+    Total: 64 videos
+    Accuracy: 98.44% (63/64)
+    F1 Score: 98.46%
+    Precision: 96.97%
+    Recall: 100.00%
+    Moving: 32/32 (F1: 98.46%)
+    Stopped: 31/32 (F1: 98.41%)
+
+  angle30:
+    Total: 64 videos
+    Accuracy: 100.00% (64/64)
+    F1 Score: 100.00%
+    Precision: 100.00%
+    Recall: 100.00%
+    Moving: 32/32 (F1: 100.00%)
+    Stopped: 32/32 (F1: 100.00%)
+
+  angle45:
+    Total: 64 videos
+    Accuracy: 100.00% (64/64)
+    F1 Score: 100.00%
+    Precision: 100.00%
+    Recall: 100.00%
+    Moving: 32/32 (F1: 100.00%)
+    Stopped: 32/32 (F1: 100.00%)
+
+======================================================================
+COMPARISON
+======================================================================
+Improvement: +49.61%

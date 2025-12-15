@@ -1,0 +1,115 @@
+======================================================================
+TREADMILL MOTION DETECTION - SIMPLE EVALUATION REPORT
+======================================================================
+
+Date: 2025-12-07 14:25:16.495328
+Dataset: _exp_20251207_162301_test
+Fine-Tuned Model Adapter Path: saves/speedgray_extreme_test_dec7
+Fine-Tuned Model Adapter Name: speedgray_extreme_test_dec7
+
+BASE MODEL
+==========
+
+OVERALL METRICS:
+  Accuracy:  50.00% (12/24)
+  F1 Score:  33.33%
+  Precision: 25.00%
+  Recall:    50.00%
+
+PER-CLASS METRICS:
+  Moving:  0/12 (Acc: 0.00%, F1: 0.00%)
+  Stopped: 12/12 (Acc: 100.00%, F1: 66.67%)
+
+PER-TEXTURE BREAKDOWN:
+  subtle_gray_stripes_stripe83_bg3:
+    Total: 12 videos
+    Accuracy: 50.00% (6/12)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/6 (F1: 0.00%)
+    Stopped: 6/6 (F1: 66.67%)
+
+  subtle_gray_stripes_stripe83_bg4:
+    Total: 12 videos
+    Accuracy: 50.00% (6/12)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/6 (F1: 0.00%)
+    Stopped: 6/6 (F1: 66.67%)
+
+PER-ANGLE BREAKDOWN:
+  angle0:
+    Total: 12 videos
+    Accuracy: 50.00% (6/12)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/6 (F1: 0.00%)
+    Stopped: 6/6 (F1: 66.67%)
+
+  angle30:
+    Total: 12 videos
+    Accuracy: 50.00% (6/12)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/6 (F1: 0.00%)
+    Stopped: 6/6 (F1: 66.67%)
+
+FINE-TUNED MODEL
+================
+
+OVERALL METRICS:
+  Accuracy:  50.00% (12/24)
+  F1 Score:  33.33%
+  Precision: 25.00%
+  Recall:    50.00%
+
+PER-CLASS METRICS:
+  Moving:  0/12 (Acc: 0.00%, F1: 0.00%)
+  Stopped: 12/12 (Acc: 100.00%, F1: 66.67%)
+
+PER-TEXTURE BREAKDOWN:
+  subtle_gray_stripes_stripe83_bg3:
+    Total: 12 videos
+    Accuracy: 50.00% (6/12)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/6 (F1: 0.00%)
+    Stopped: 6/6 (F1: 66.67%)
+
+  subtle_gray_stripes_stripe83_bg4:
+    Total: 12 videos
+    Accuracy: 50.00% (6/12)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/6 (F1: 0.00%)
+    Stopped: 6/6 (F1: 66.67%)
+
+PER-ANGLE BREAKDOWN:
+  angle0:
+    Total: 12 videos
+    Accuracy: 50.00% (6/12)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/6 (F1: 0.00%)
+    Stopped: 6/6 (F1: 66.67%)
+
+  angle30:
+    Total: 12 videos
+    Accuracy: 50.00% (6/12)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/6 (F1: 0.00%)
+    Stopped: 6/6 (F1: 66.67%)
+
+======================================================================
+COMPARISON
+======================================================================
+Improvement: +0.00%

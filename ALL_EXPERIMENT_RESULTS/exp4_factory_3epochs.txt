@@ -1,0 +1,77 @@
+======================================================================
+TREADMILL MOTION DETECTION - SIMPLE EVALUATION REPORT
+======================================================================
+
+Date: 2025-11-29 11:46:00.920766
+Dataset: yesno_subtle_factory_test
+
+BASE MODEL
+==========
+
+OVERALL METRICS:
+  Accuracy:  50.00% (36/72)
+  F1 Score:  0.00%
+  Precision: 0.00%
+  Recall:    0.00%
+
+PER-CLASS METRICS:
+  Moving:  0/36 (Acc: 0.00%, F1: 0.00%)
+  Stopped: 36/36 (Acc: 100.00%, F1: 66.67%)
+
+PER-TEXTURE BREAKDOWN:
+  unknown:
+    Total: 72 videos
+    Accuracy: 50.00% (36/72)
+    F1 Score: 0.00%
+    Precision: 0.00%
+    Recall: 0.00%
+    Moving: 0/36 (F1: 0.00%)
+    Stopped: 36/36 (F1: 66.67%)
+
+PER-ANGLE BREAKDOWN:
+  unknown:
+    Total: 72 videos
+    Accuracy: 50.00% (36/72)
+    F1 Score: 0.00%
+    Precision: 0.00%
+    Recall: 0.00%
+    Moving: 0/36 (F1: 0.00%)
+    Stopped: 36/36 (F1: 66.67%)
+
+FINE-TUNED MODEL
+================
+
+OVERALL METRICS:
+  Accuracy:  66.67% (48/72)
+  F1 Score:  75.00%
+  Precision: 60.00%
+  Recall:    100.00%
+
+PER-CLASS METRICS:
+  Moving:  36/36 (Acc: 100.00%, F1: 75.00%)
+  Stopped: 12/36 (Acc: 33.33%, F1: 50.00%)
+
+PER-TEXTURE BREAKDOWN:
+  unknown:
+    Total: 72 videos
+    Accuracy: 66.67% (48/72)
+    F1 Score: 75.00%
+    Precision: 60.00%
+    Recall: 100.00%
+    Moving: 36/36 (F1: 75.00%)
+    Stopped: 12/36 (F1: 50.00%)
+
+PER-ANGLE BREAKDOWN:
+  unknown:
+    Total: 72 videos
+    Accuracy: 66.67% (48/72)
+    F1 Score: 75.00%
+    Precision: 60.00%
+    Recall: 100.00%
+    Moving: 36/36 (F1: 75.00%)
+    Stopped: 12/36 (F1: 50.00%)
+
+======================================================================
+COMPARISON
+======================================================================
+Improvement: +16.67%

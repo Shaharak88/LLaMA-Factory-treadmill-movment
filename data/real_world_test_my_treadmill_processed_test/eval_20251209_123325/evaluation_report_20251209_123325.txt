@@ -1,0 +1,79 @@
+======================================================================
+TREADMILL MOTION DETECTION - SIMPLE EVALUATION REPORT
+======================================================================
+
+Date: 2025-12-09 12:39:13.996730
+Dataset: real_world_test_my_treadmill_processed_test
+Fine-Tuned Model Adapter Path: saves/5epoch_dec9_loraplus
+Fine-Tuned Model Adapter Name: 5epoch_dec9_loraplus
+
+BASE MODEL
+==========
+
+OVERALL METRICS:
+  Accuracy:  50.00% (40/80)
+  F1 Score:  33.33%
+  Precision: 25.00%
+  Recall:    50.00%
+
+PER-CLASS METRICS:
+  Moving:  0/40 (Acc: 0.00%, F1: 0.00%)
+  Stopped: 40/40 (Acc: 100.00%, F1: 66.67%)
+
+PER-TEXTURE BREAKDOWN:
+  realworld:
+    Total: 80 videos
+    Accuracy: 50.00% (40/80)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/40 (F1: 0.00%)
+    Stopped: 40/40 (F1: 66.67%)
+
+PER-ANGLE BREAKDOWN:
+  angle0:
+    Total: 80 videos
+    Accuracy: 50.00% (40/80)
+    F1 Score: 33.33%
+    Precision: 25.00%
+    Recall: 50.00%
+    Moving: 0/40 (F1: 0.00%)
+    Stopped: 40/40 (F1: 66.67%)
+
+FINE-TUNED MODEL
+================
+
+OVERALL METRICS:
+  Accuracy:  52.50% (42/80)
+  F1 Score:  51.41%
+  Precision: 52.75%
+  Recall:    52.50%
+
+PER-CLASS METRICS:
+  Moving:  15/40 (Acc: 37.50%, F1: 44.12%)
+  Stopped: 27/40 (Acc: 67.50%, F1: 58.70%)
+
+PER-TEXTURE BREAKDOWN:
+  realworld:
+    Total: 80 videos
+    Accuracy: 52.50% (42/80)
+    F1 Score: 51.41%
+    Precision: 52.75%
+    Recall: 52.50%
+    Moving: 15/40 (F1: 44.12%)
+    Stopped: 27/40 (F1: 58.70%)
+
+PER-ANGLE BREAKDOWN:
+  angle0:
+    Total: 80 videos
+    Accuracy: 52.50% (42/80)
+    F1 Score: 51.41%
+    Precision: 52.75%
+    Recall: 52.50%
+    Moving: 15/40 (F1: 44.12%)
+    Stopped: 27/40 (F1: 58.70%)
+
+======================================================================
+COMPARISON
+======================================================================
+Improvement: +2.50%

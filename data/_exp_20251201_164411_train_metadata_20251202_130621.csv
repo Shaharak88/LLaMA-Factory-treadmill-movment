@@ -1,0 +1,10 @@
+video_name,index,texture,direction,speed,angle,brightness,contrast,stripe_contrast,background_contrast,object_enabled,object_type,num_objects,object_size,object_position,blur_enabled,blur_type,blur_intensity,blur_variation,resolution,seed
+treadmill_0000_subtle_gray_stripes_down_speed0.0_angle0_bright1.00_contr1.00_obj_boxx1_30_center_640x480_seed45.mp4,0000,subtle_gray_stripes,down,0.0,0,1.00,1.00,N/A,N/A,yes,box,1,30,center,no,,,no,640x480,45
+treadmill_0000_subtle_gray_stripes_down_speed6.0_angle0_bright1.00_contr1.00_obj_boxx1_30_center_640x480_seed45.mp4,0000,subtle_gray_stripes,down,6.0,0,1.00,1.00,N/A,N/A,yes,box,1,30,center,no,,,no,640x480,45
+treadmill_0000_subtle_gray_stripes_left_speed0.0_angle0_bright1.00_contr1.00_obj_boxx1_30_center_640x480_seed42.mp4,0000,subtle_gray_stripes,left,0.0,0,1.00,1.00,N/A,N/A,yes,box,1,30,center,no,,,no,640x480,42
+treadmill_0000_subtle_gray_stripes_left_speed0.0_angle0_bright1.00_contr1.00_obj_boxx1_30_center_640x480_seed46.mp4,0000,subtle_gray_stripes,left,0.0,0,1.00,1.00,N/A,N/A,yes,box,1,30,center,no,,,no,640x480,46
+treadmill_0000_subtle_gray_stripes_left_speed8.0_angle0_bright1.00_contr1.00_obj_boxx1_30_center_640x480_seed46.mp4,0000,subtle_gray_stripes,left,8.0,0,1.00,1.00,N/A,N/A,yes,box,1,30,center,no,,,no,640x480,46
+treadmill_0000_subtle_gray_stripes_right_speed0.0_angle0_bright1.00_contr1.00_obj_boxx1_30_center_640x480_seed43.mp4,0000,subtle_gray_stripes,right,0.0,0,1.00,1.00,N/A,N/A,yes,box,1,30,center,no,,,no,640x480,43
+treadmill_0000_subtle_gray_stripes_right_speed2.0_angle0_bright1.00_contr1.00_obj_boxx1_30_center_640x480_seed43.mp4,0000,subtle_gray_stripes,right,2.0,0,1.00,1.00,N/A,N/A,yes,box,1,30,center,no,,,no,640x480,43
+treadmill_0000_subtle_gray_stripes_up_speed0.0_angle0_bright1.00_contr1.00_obj_boxx1_30_center_640x480_seed44.mp4,0000,subtle_gray_stripes,up,0.0,0,1.00,1.00,N/A,N/A,yes,box,1,30,center,no,,,no,640x480,44
+treadmill_0000_subtle_gray_stripes_up_speed4.0_angle0_bright1.00_contr1.00_obj_boxx1_30_center_640x480_seed44.mp4,0000,subtle_gray_stripes,up,4.0,0,1.00,1.00,N/A,N/A,yes,box,1,30,center,no,,,no,640x480,44
