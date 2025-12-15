@@ -545,6 +545,10 @@ ddp_timeout: 180000000
 ### Sampler Configuration
 sampler_type: {self._get_effective_sampler_type()}
 
+### Video Processing Configuration
+video_max_pixels: {self.args.video_max_pixels}
+video_min_pixels: {self.args.video_min_pixels}
+
 ### Additional Settings
 report_to: tensorboard
 seed: {self.args.seed}
@@ -985,6 +989,13 @@ Notes:
                            help='Video FPS for evaluation (default: 4.0)')
     eval_group.add_argument('--eval_video_maxlen', type=int, default=128,
                            help='Max video length for evaluation (default: 128)')
+    eval_group.add_argument('--video_max_pixels', type=int, default=65536,
+                           help='Max pixels per video frame (default: 65536 = 256x256). '
+                                'Controls video resolution during training AND evaluation. '
+                                'Larger values preserve more detail but use more memory.')
+    eval_group.add_argument('--video_min_pixels', type=int, default=256,
+                           help='Min pixels per video frame (default: 256 = 16x16). '
+                                'Frames smaller than this will be upscaled.')
     eval_group.add_argument('--gpu_memory_utilization', type=float, default=0.8,
                            help='GPU memory utilization for vllm (default: 0.8)')
 

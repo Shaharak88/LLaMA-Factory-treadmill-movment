@@ -163,6 +163,8 @@ GRAD_ACCUMULATION="8"
 SAVE_STEPS="100"
 EVAL_VIDEO_FPS="4"
 EVAL_VIDEO_MAXLEN="128"
+VIDEO_MAX_PIXELS="65536"  # Default: 256x256 pixels per frame
+VIDEO_MIN_PIXELS="256"    # Default: 16x16 pixels minimum
 
 # Flags
 EXECUTION_MODE="remote"  # "local" or "remote"
@@ -315,6 +317,10 @@ EXPERIMENT PARAMETERS:
     --learning-rate RATE    Learning rate (default: 5e-5)
     --batch-size N          Batch size (default: 1)
     --grad-accum N          Gradient accumulation (default: 8)
+    --video-max-pixels N    Max pixels per video frame (default: 65536 = 256x256)
+                            Larger values preserve more detail but use more memory
+                            Examples: 65536 (256x256), 147456 (384x384), 307200 (640x480)
+    --video-min-pixels N    Min pixels per video frame (default: 256 = 16x16)
 
 EXAMPLES:
     # Basic run with defaults (same train/test)
@@ -587,6 +593,14 @@ parse_args() {
                 ;;
             --grad-accum)
                 GRAD_ACCUMULATION="$2"
+                shift 2
+                ;;
+            --video-max-pixels)
+                VIDEO_MAX_PIXELS="$2"
+                shift 2
+                ;;
+            --video-min-pixels)
+                VIDEO_MIN_PIXELS="$2"
                 shift 2
                 ;;
             # Object parameters
@@ -1091,7 +1105,9 @@ step_run_training() {
         --gradient_accumulation_steps '$GRAD_ACCUMULATION' \
         --save_steps '$SAVE_STEPS' \
         --eval_video_fps '$EVAL_VIDEO_FPS' \
-        --eval_video_maxlen '$EVAL_VIDEO_MAXLEN'"
+        --eval_video_maxlen '$EVAL_VIDEO_MAXLEN' \
+        --video_max_pixels '$VIDEO_MAX_PIXELS' \
+        --video_min_pixels '$VIDEO_MIN_PIXELS'"
 
     # Add adapter_type parameter
     train_pipeline_cmd="$train_pipeline_cmd --adapter_type '$ADAPTER_TYPE'"
