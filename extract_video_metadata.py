@@ -14,7 +14,6 @@ import subprocess
 import csv
 import re
 import os
-import json
 import argparse
 from datetime import datetime
 from typing import Dict, List, Optional, Union
@@ -237,53 +236,56 @@ def parse_video_filename(filename: str) -> Dict[str, str]:
     return metadata
 
 
-def load_video_order_from_json(json_path: str) -> tuple[str, List[str]]:
+def list_videos_on_server(server: str, dataset_path: str, docker_container: Optional[str] = None) -> List[str]:
     """
-    Load video paths from dataset JSON file in order.
+    Connect to server and list all video files in the dataset directory.
 
     Args:
-        json_path: Path to dataset JSON file
+        server: SSH server address
+        dataset_path: Path to dataset directory on server (or in Docker container)
+        docker_container: Optional Docker container name to execute commands in
 
     Returns:
-        Tuple of (dataset_name, list of video filenames in JSON order)
+        List of video filenames
     """
-    print(f"Reading JSON file: {json_path}")
-
-    with open(json_path, 'r') as f:
-        data = json.load(f)
-
-    if not isinstance(data, list):
-        raise ValueError(f"Expected JSON to be a list, got {type(data)}")
-
-    # Extract video paths in order
-    video_filenames = []
-    for idx, entry in enumerate(data):
-        if 'videos' not in entry:
-            print(f"Warning: Entry {idx} missing 'videos' field, skipping")
-            continue
-
-        videos = entry['videos']
-        if isinstance(videos, list):
-            if len(videos) == 0:
-                print(f"Warning: Entry {idx} has empty videos list, skipping")
-                continue
-            video_path = videos[0]
+    try:
+        # Build command based on whether we're using Docker or not
+        if docker_container:
+            # SSH into server and execute docker command
+            docker_cmd = f'docker exec {docker_container} bash -c "ls -1 {dataset_path}/*.mp4 2>/dev/null"'
+            cmd = ['ssh', server, docker_cmd]
         else:
-            video_path = videos
+            # Direct SSH command
+            cmd = ['ssh', server, f'ls -1 "{dataset_path}"/*.mp4 2>/dev/null']
 
-        # Extract just the filename (not full path)
-        filename = os.path.basename(video_path)
-        video_filenames.append(filename)
+        print(f"Connecting to {server}...")
+        if docker_container:
+            print(f"Using Docker container: {docker_container}")
+        print(f"Listing videos in {dataset_path}...")
 
-    # Extract dataset name from JSON filename
-    # Format: data/_exp_20251209_dist_augment_train.json -> _exp_20251209_dist_augment_train
-    json_filename = os.path.basename(json_path)
-    dataset_name = json_filename.replace('.json', '')
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            check=True
+        )
 
-    print(f"Dataset: {dataset_name}")
-    print(f"Found {len(video_filenames)} videos in JSON (in order)")
+        # Extract just the filenames (basename)
+        videos = []
+        for line in result.stdout.strip().split('\n'):
+            line = line.strip()
+            if line and line.endswith('.mp4'):
+                # Get just the filename, not the full path
+                videos.append(os.path.basename(line))
 
-    return dataset_name, video_filenames
+        print(f"Found {len(videos)} videos")
+
+        return videos
+
+    except subprocess.CalledProcessError as e:
+        print(f"Error connecting to server or listing files: {e}")
+        print(f"stderr: {e.stderr}")
+        return []
 
 
 def save_metadata_to_csv(metadata_list: List[Dict[str, str]], output_file: str):
@@ -384,69 +386,96 @@ def save_metadata_to_csv(metadata_list: List[Dict[str, str]], output_file: str):
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Extract video metadata from JSON dataset file and save to CSV',
+        description='Extract video metadata from server dataset and save to CSV',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Extract metadata from dataset JSON (preserves video order from JSON)
-  python extract_video_metadata.py data/_exp_20251209_dist_augment_train.json
+  # Extract metadata for a specific dataset (uses default Docker container: llamafactory)
+  python extract_video_metadata.py preformat_right_only_20251130_141204
 
   # Specify custom output directory
-  python extract_video_metadata.py data/my_dataset_train.json --output-dir ./data
+  python extract_video_metadata.py preformat_right_only_20251130_141204 --output-dir ./metadata
+
+  # Use custom Docker container
+  python extract_video_metadata.py my_dataset --docker-container my_container
+
+  # Use custom server without Docker
+  python extract_video_metadata.py my_dataset --server user@hostname --docker-container ""
 """
     )
 
     parser.add_argument(
-        'json_file',
-        help='Path to dataset JSON file (e.g., data/_exp_20251209_dist_augment_train.json)'
+        'dataset_name',
+        help='Name of the dataset (will look in /app/data/{dataset_name}/ on server)'
+    )
+
+    parser.add_argument(
+        '--server',
+        default='seedoo@hetzner-gpu.tail9e6e7.ts.net',
+        help='SSH server address (default: seedoo@hetzner-gpu.tail9e6e7.ts.net)'
+    )
+
+    parser.add_argument(
+        '--dataset-base-path',
+        default='/app/data',
+        help='Base path for datasets on server (default: /app/data)'
+    )
+
+    parser.add_argument(
+        '--docker-container',
+        default='llamafactory',
+        help='Docker container name to execute commands in (default: llamafactory)'
     )
 
     parser.add_argument(
         '--output-dir',
         default='./data',
-        help='Base directory for output (default: ./data). CSV will be saved in {output-dir}/{dataset_name}/'
+        help='Base directory for datasets (default: ./data). CSV will be saved in ./data/{dataset_name}/'
     )
 
     args = parser.parse_args()
 
-    # Load video order from JSON
-    try:
-        dataset_name, video_filenames = load_video_order_from_json(args.json_file)
-    except Exception as e:
-        print(f"Error loading JSON file: {e}")
-        return
+    # Construct full dataset path on server
+    dataset_path = f"{args.dataset_base_path}/{args.dataset_name}"
 
     # Create output directory: ./data/{dataset_name}/
-    dataset_output_dir = os.path.join(args.output_dir, dataset_name)
+    # This matches the dataset folder structure
+    dataset_output_dir = os.path.join(args.output_dir, args.dataset_name)
     os.makedirs(dataset_output_dir, exist_ok=True)
 
-    # Use FIXED filename (no timestamp)
+    # Generate output filename with timestamp
+    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
     output_file = os.path.join(
-        dataset_output_dir,
-        f"{dataset_name}_metadata.csv"
+        dataset_output_dir,  # Changed: now saves inside dataset folder
+        f"{args.dataset_name}_metadata_{timestamp}.csv"
     )
 
     print("=" * 60)
-    print("Video Metadata Extraction (JSON-Based)")
+    print("Video Metadata Extraction")
     print("=" * 60)
-    print(f"Dataset: {dataset_name}")
-    print(f"JSON file: {args.json_file}")
+    print(f"Dataset: {args.dataset_name}")
+    print(f"Server: {args.server}")
+    print(f"Docker container: {args.docker_container}")
+    print(f"Remote path: {dataset_path}")
     print(f"Output file: {output_file}")
     print("=" * 60)
     print()
 
-    if not video_filenames:
-        print("No videos found in JSON")
+    # Get list of videos from server
+    videos = list_videos_on_server(args.server, dataset_path, args.docker_container)
+
+    if not videos:
+        print("No videos found or error occurred")
         return
 
-    # Parse metadata from filenames (in JSON order)
+    # Parse metadata from filenames
     print("\nParsing video filenames...")
     metadata_list = []
-    for video in video_filenames:
+    for video in videos:
         metadata = parse_video_filename(video)
         metadata_list.append(metadata)
 
-    # Save to CSV (preserves JSON order)
+    # Save to CSV
     save_metadata_to_csv(metadata_list, output_file)
 
     print("\nDone!")
