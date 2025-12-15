@@ -442,8 +442,10 @@ Examples:
     # Parse metadata from filenames (in JSON order)
     print("\nParsing video filenames...")
     metadata_list = []
-    for video in video_filenames:
+    for idx, video in enumerate(video_filenames):
         metadata = parse_video_filename(video)
+        # Override index with sequential position matching JSON order (not filename number)
+        metadata['index'] = idx
         metadata_list.append(metadata)
 
     # Save to CSV (preserves JSON order)
