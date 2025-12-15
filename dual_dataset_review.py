@@ -195,38 +195,30 @@ def extract_metadata(dataset_name: str, server: str, remote_base: str,
     This ensures consistency with standalone metadata extraction and includes
     all features (distance, etc.) automatically.
     """
-    print(f"📋 Extracting metadata using extract_video_metadata.py...")
+    print(f"📋 Extracting metadata using extract_video_metadata.py (JSON-based)...")
     print(f"   Dataset: {dataset_name}")
-    print(f"   Server: {server}")
-    if docker_container:
-        print(f"   Docker: {docker_container}")
 
-    # Build command to run extract_video_metadata.py
+    # Build command to run extract_video_metadata.py with JSON file
     script_path = Path(__file__).parent / "extract_video_metadata.py"
+    json_file = os.path.join(output_dir, f"{dataset_name}.json")
+
     cmd = [
         "python3", str(script_path),
-        dataset_name,
-        "--server", server,
-        "--dataset-base-path", remote_base,
+        json_file,
         "--output-dir", output_dir,
     ]
-
-    if docker_container:
-        cmd.extend(["--docker-container", docker_container])
 
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, check=True)
         print(result.stdout)
 
-        # Find the generated CSV file (extract_video_metadata.py saves to dataset folder)
+        # Find the generated CSV file (extract_video_metadata.py saves with fixed name)
         dataset_dir = os.path.join(output_dir, dataset_name)
-        csv_files = list(Path(dataset_dir).glob(f"{dataset_name}_metadata_*.csv"))
+        csv_file = os.path.join(dataset_dir, f"{dataset_name}_metadata.csv")
 
-        if csv_files:
-            # Return the most recent one
-            latest_csv = max(csv_files, key=lambda p: p.stat().st_mtime)
-            print(f"   ✅ Metadata CSV: {latest_csv}")
-            return str(latest_csv)
+        if os.path.exists(csv_file):
+            print(f"   ✅ Metadata CSV: {csv_file}")
+            return csv_file
         else:
             print("   ❌ No CSV file found after extraction")
             return None

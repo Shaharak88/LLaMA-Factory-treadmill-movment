@@ -1013,11 +1013,11 @@ step_build_datasets() {
 step_extract_metadata() {
     log_step "STEP 2.5: Extract metadata CSVs for datasets"
 
-    log_info "Extracting metadata with distance and all parameters..."
+    log_info "Extracting metadata with distance and all parameters (preserving JSON order)..."
 
-    # Extract metadata for train dataset
+    # Extract metadata for train dataset using JSON file
     log_info "Extracting train dataset metadata..."
-    local train_cmd="python3 extract_video_metadata.py ${DATASET_NAME}_train --output-dir ./data"
+    local train_cmd="python3 extract_video_metadata.py data/${DATASET_NAME}_train.json --output-dir ./data"
 
     if [ "$LOCAL_MODE" = true ]; then
         run_cmd "$train_cmd" "Extracting train metadata..."
@@ -1025,9 +1025,9 @@ step_extract_metadata() {
         run_cmd "cd '$REMOTE_DIR' && $train_cmd" "Extracting train metadata..."
     fi
 
-    # Extract metadata for test dataset
+    # Extract metadata for test dataset using JSON file
     log_info "Extracting test dataset metadata..."
-    local test_cmd="python3 extract_video_metadata.py ${DATASET_NAME}_test --output-dir ./data"
+    local test_cmd="python3 extract_video_metadata.py data/${DATASET_NAME}_test.json --output-dir ./data"
 
     if [ "$LOCAL_MODE" = true ]; then
         run_cmd "$test_cmd" "Extracting test metadata..."
@@ -1035,7 +1035,7 @@ step_extract_metadata() {
         run_cmd "cd '$REMOTE_DIR' && $test_cmd" "Extracting test metadata..."
     fi
 
-    log_success "Metadata CSVs created with dynamic feature extraction (includes distance)"
+    log_success "Metadata CSVs created with JSON order preserved (includes distance)"
     log_info "CSVs saved to: data/${DATASET_NAME}_train/ and data/${DATASET_NAME}_test/"
 }
 
