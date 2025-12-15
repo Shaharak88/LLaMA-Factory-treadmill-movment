@@ -38,7 +38,7 @@ if TYPE_CHECKING:
     from transformers import PreTrainedTokenizer, ProcessorMixin
     from transformers.trainer import PredictionOutput
 
-    from ...hparams import FinetuningArguments, ModelArguments
+    from ...hparams import DataArguments, FinetuningArguments, ModelArguments
 
 
 logger = logging.get_logger(__name__)
@@ -52,6 +52,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         finetuning_args: "FinetuningArguments",
         processor: Optional["ProcessorMixin"],
         model_args: Optional["ModelArguments"] = None,
+        data_args: Optional["DataArguments"] = None,
         gen_kwargs: Optional[dict[str, Any]] = None,
         **kwargs,
     ) -> None:
@@ -70,6 +71,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
             self.model_accepts_loss_kwargs = False
 
         self.finetuning_args = finetuning_args
+        self.data_args = data_args
         if gen_kwargs is not None:
             # https://github.com/huggingface/transformers/blob/v4.45.0/src/transformers/trainer_seq2seq.py#L287
             self._gen_kwargs = gen_kwargs
@@ -304,9 +306,25 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                     "Please use world_size=1 or choose a different sampler."
                 )
 
+            # Get dataset name from data_args (required for hierarchical_balanced sampler)
+            # data_args.dataset is a list (split by comma in __post_init__)
+            if self.data_args is None or not self.data_args.dataset:
+                raise ValueError(
+                    "hierarchical_balanced sampler requires data_args with dataset name.\n"
+                    "Ensure data_args is passed to the trainer."
+                )
+            if len(self.data_args.dataset) != 1:
+                raise ValueError(
+                    f"hierarchical_balanced sampler requires exactly one dataset.\n"
+                    f"Got: {self.data_args.dataset}"
+                )
+            # Dataset name already has _train suffix (e.g., "_exp_xxx_train")
+            dataset_name = self.data_args.dataset[0]
+
             batch_sampler = HierarchicalBalancedBatchSampler(
                 dataset=self.train_dataset,
                 batch_size=batch_size,
+                dataset_name=dataset_name,
                 drop_last=True,
                 shuffle=True,
                 seed=self.args.seed,

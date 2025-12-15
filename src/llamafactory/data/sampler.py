@@ -2098,6 +2098,7 @@ class HierarchicalBalancedBatchSampler(Sampler[List[int]]):
         self,
         dataset: Dataset,
         batch_size: int,
+        dataset_name: str,
         drop_last: bool = True,
         shuffle: bool = True,
         seed: int = 42,
@@ -2110,6 +2111,7 @@ class HierarchicalBalancedBatchSampler(Sampler[List[int]]):
 
         self.dataset = dataset
         self.batch_size = batch_size
+        self.dataset_name = dataset_name
         self.drop_last = True  # Always true for this sampler
         self.shuffle = shuffle
         self.seed = seed
@@ -2126,7 +2128,7 @@ class HierarchicalBalancedBatchSampler(Sampler[List[int]]):
             )
 
         # ========== CSV Discovery and Loading (STRICT - NO FALLBACK) ==========
-        csv_path = self._find_metadata_csv(dataset, data_dir)
+        csv_path = self._find_metadata_csv(dataset_name, data_dir)
         logger.info_rank0(f"HierarchicalBalancedBatchSampler: Loading metadata from {csv_path}")
 
         self.metadata_df = pd.read_csv(csv_path)
@@ -2260,29 +2262,20 @@ class HierarchicalBalancedBatchSampler(Sampler[List[int]]):
             f"batch_size={batch_size}, half_batch={batch_size // 2}"
         )
 
-    def _find_metadata_csv(self, dataset: Dataset, data_dir: str) -> str:
+    def _find_metadata_csv(self, dataset_name: str, data_dir: str) -> str:
         """
         Discover metadata CSV INSIDE dataset folder ONLY (STRICT - NO FALLBACK).
 
         Expected location: {data_dir}/{dataset_name}/{dataset_name}_metadata.csv
 
+        Args:
+            dataset_name: The full dataset name with _train suffix (e.g., "_exp_20251209_dist_augment_train")
+            data_dir: Root data directory (default: "data")
+
         Raises:
-            ValueError: If dataset name cannot be determined
             FileNotFoundError: If CSV does not exist at expected location
         """
-        dataset_name = None
-        if hasattr(dataset, 'dataset_attr'):
-            if hasattr(dataset.dataset_attr, 'dataset_name'):
-                dataset_name = dataset.dataset_attr.dataset_name
-            elif hasattr(dataset.dataset_attr, 'file_name'):
-                dataset_name = dataset.dataset_attr.file_name.replace('.json', '')
-
-        if not dataset_name:
-            raise ValueError(
-                "Cannot determine dataset name from dataset object.\n"
-                "Dataset must have dataset_attr.dataset_name or dataset_attr.file_name"
-            )
-
+        # dataset_name already includes _train suffix
         dataset_folder = Path(data_dir) / dataset_name
         csv_inside = dataset_folder / f"{dataset_name}_metadata.csv"
 
