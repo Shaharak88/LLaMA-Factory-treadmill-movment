@@ -289,7 +289,7 @@ class MMPluginMixin:
                     if not is_valid_image(frame) and not isinstance(frame, dict) and not os.path.exists(frame):
                         raise ValueError("Invalid image found in video frames.")
                 frames = video
-                durations.append(len(frames) / kwargs.get("video_fps", 4.0))
+                durations.append(len(frames) / kwargs.get("video_fps", 2.0))
             else:
                 container = av.open(video, "r")
                 video_stream = next(stream for stream in container.streams if stream.type == "video")
@@ -300,7 +300,7 @@ class MMPluginMixin:
                         frames.append(frame.to_image())
 
                 if video_stream.duration is None:
-                    durations.append(len(frames) / kwargs.get("video_fps", 4.0))
+                    durations.append(len(frames) / kwargs.get("video_fps", 2.0))
                 else:
                     durations.append(float(video_stream.duration * video_stream.time_base))
 
@@ -382,7 +382,7 @@ class MMPluginMixin:
                 videos,
                 image_max_pixels=getattr(processor, "video_max_pixels", 256 * 256),
                 image_min_pixels=getattr(processor, "video_min_pixels", 16 * 16),
-                video_fps=getattr(processor, "video_fps", 4.0),
+                video_fps=getattr(processor, "video_fps", 2.0),
                 video_maxlen=getattr(processor, "video_maxlen", 128),
             )["videos"]
             if "videos" in inspect.signature(video_processor.preprocess).parameters:  # for qwen2_vl and video_llava
@@ -596,7 +596,7 @@ class InternVLPlugin(BasePlugin):
                 videos,
                 image_max_pixels=getattr(processor, "video_max_pixels", 256 * 256),
                 image_min_pixels=getattr(processor, "video_min_pixels", 16 * 16),
-                video_fps=getattr(processor, "video_fps", 4.0),
+                video_fps=getattr(processor, "video_fps", 2.0),
                 video_maxlen=getattr(processor, "video_maxlen", 128),
             )["videos"]
 
@@ -978,7 +978,7 @@ class MiniCPMVPlugin(BasePlugin):
                 videos,
                 image_max_pixels=getattr(processor, "video_max_pixels", 256 * 256),
                 image_min_pixels=getattr(processor, "video_min_pixels", 16 * 16),
-                video_fps=getattr(processor, "video_fps", 4.0),
+                video_fps=getattr(processor, "video_fps", 2.0),
                 video_maxlen=getattr(processor, "video_maxlen", 128),
             )["videos"]
             video_inputs = image_processor(videos, do_pad=True, max_slice_nums=2, return_tensors="pt")
@@ -1448,8 +1448,8 @@ class Qwen2VLPlugin(BasePlugin):
                         raise ValueError("Invalid image found in video frames.")
 
                 frames = video
-                fps_per_video.append(kwargs.get("video_fps", 4.0))
-                durations.append(len(frames) / kwargs.get("video_fps", 4.0))
+                fps_per_video.append(kwargs.get("video_fps", 2.0))
+                durations.append(len(frames) / kwargs.get("video_fps", 2.0))
             else:
                 container = av.open(video, "r")
                 video_stream = next(stream for stream in container.streams if stream.type == "video")
@@ -1460,8 +1460,8 @@ class Qwen2VLPlugin(BasePlugin):
                         frames.append(frame.to_image())
 
                 if video_stream.duration is None:
-                    fps_per_video.append(kwargs.get("video_fps", 4.0))
-                    durations.append(len(frames) / kwargs.get("video_fps", 4.0))
+                    fps_per_video.append(kwargs.get("video_fps", 2.0))
+                    durations.append(len(frames) / kwargs.get("video_fps", 2.0))
                 else:
                     fps_per_video.append(len(sample_indices) / float(video_stream.duration * video_stream.time_base))
                     durations.append(float(video_stream.duration * video_stream.time_base))
@@ -1498,7 +1498,7 @@ class Qwen2VLPlugin(BasePlugin):
                 videos,
                 image_max_pixels=getattr(processor, "video_max_pixels", 256 * 256),
                 image_min_pixels=getattr(processor, "video_min_pixels", 16 * 16),
-                video_fps=getattr(processor, "video_fps", 4.0),
+                video_fps=getattr(processor, "video_fps", 2.0),
                 video_maxlen=getattr(processor, "video_maxlen", 128),
             )
             mm_inputs.update(video_processor(videos=video_data["videos"], return_tensors="pt"))
@@ -1583,7 +1583,7 @@ class Qwen3VLPlugin(Qwen2VLPlugin):
                 videos,
                 image_max_pixels=getattr(processor, "video_max_pixels", 256 * 256),
                 image_min_pixels=getattr(processor, "video_min_pixels", 16 * 16),
-                video_fps=getattr(processor, "video_fps", 4.0),
+                video_fps=getattr(processor, "video_fps", 2.0),
                 video_maxlen=getattr(processor, "video_maxlen", 128),
             )
             video_metadata = [
@@ -1701,12 +1701,12 @@ class GLM4VPlugin(Qwen2VLPlugin):
                 videos,
                 image_max_pixels=getattr(processor, "video_max_pixels", 256 * 256),
                 image_min_pixels=getattr(processor, "video_min_pixels", 16 * 16),
-                video_fps=getattr(processor, "video_fps", 4.0),
+                video_fps=getattr(processor, "video_fps", 2.0),
                 video_maxlen=getattr(processor, "video_maxlen", 128),
             )
             # prepare video metadata
             video_metadata = [
-                {"fps": 4, "duration": duration, "total_frames": len(video)}
+                {"fps": 2, "duration": duration, "total_frames": len(video)}
                 for video, duration in zip(video_data["videos"], video_data["durations"])
             ]
             mm_inputs.update(video_processor(images=None, videos=video_data["videos"], video_metadata=video_metadata))
@@ -1836,7 +1836,7 @@ class Qwen2OmniPlugin(Qwen2VLPlugin):
                 videos,
                 image_max_pixels=getattr(processor, "video_max_pixels", 256 * 256),
                 image_min_pixels=getattr(processor, "video_min_pixels", 16 * 16),
-                video_fps=getattr(processor, "video_fps", 4.0),
+                video_fps=getattr(processor, "video_fps", 2.0),
                 video_maxlen=getattr(processor, "video_maxlen", 128),
             )
             mm_inputs.update(video_processor(videos=video_dict["videos"], return_tensors="pt"))

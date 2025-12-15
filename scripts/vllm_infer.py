@@ -65,7 +65,7 @@ def vllm_infer(
     pipeline_parallel_size: int = 1,
     image_max_pixels: int = 768 * 768,
     image_min_pixels: int = 32 * 32,
-    video_fps: float = 4.0,
+    video_fps: float = 2.0,
     video_maxlen: int = 128,
     batch_size: int = 1024,
 ):

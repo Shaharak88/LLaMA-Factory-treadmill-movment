@@ -431,8 +431,8 @@ def parse_arguments() -> argparse.Namespace:
                        help='Maximum new tokens to generate (default: 128)')
     parser.add_argument('--batch_size', type=int, default=1024,
                        help='Batch size for inference (default: 1024)')
-    parser.add_argument('--video_fps', type=float, default=4.0,
-                       help='Video FPS for processing (default: 4.0)')
+    parser.add_argument('--video_fps', type=float, default=2.0,
+                       help='Video FPS for processing (default: 2.0)')
     parser.add_argument('--video_maxlen', type=int, default=128,
                        help='Maximum video length (default: 128)')
     parser.add_argument('--image_max_pixels', type=int, default=768*768,

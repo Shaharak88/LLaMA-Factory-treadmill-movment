@@ -879,7 +879,7 @@ def parse_arguments():
     parser.add_argument('--template', type=str, default='qwen2_vl')
     parser.add_argument('--max_new_tokens', type=int, default=128)
     parser.add_argument('--batch_size', type=int, default=1)
-    parser.add_argument('--video_fps', type=float, default=4.0)
+    parser.add_argument('--video_fps', type=float, default=2.0)
     parser.add_argument('--video_maxlen', type=int, default=128)
     parser.add_argument('--image_max_pixels', type=int)
     parser.add_argument('--image_min_pixels', type=int)
