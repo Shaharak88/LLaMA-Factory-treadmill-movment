@@ -1,0 +1,32 @@
+Read DEPLOYMENT.md
+
+Never do silent failures. Excepts should always be in outer most block. never on sub sections. Never do control flow using try except. If you must do try except always log.exception the full strack trace! 
+
+Never do silent failures. Excepts should always be in outer most block. never on sub sections. Never do control flow using try except. If you must do try except always log.exception the full strack trace! 
+
+Never do silent failures. Excepts should always be in outer most block. never on sub sections. Never do control flow using try except. If you must do try except always log.exception the full strack trace! 
+
+
+NEVER EVER EVER EVER DO SILENT EXEPTIONS!! IF THERE IS AN ERROR ALWAYS REPORT IT!! 
+
+every time you are trying to run anything then run only in the container!
+
+read also:
+run experiment QUICK_REFERENCE:
+@./EXPERIMENT_PIPELINE_DOCUMENTATION/QUICK_REFERENCE.md
+whenever we are changing the code:
+other then what I asked dont change or omit any other logic!!	
+do that change, make sure no other changes are needed in the code, look very good everywhere in the code and every other thing that could be affected from this change!! and commit it and add a detailed comment about the changes in the commit.
+
+
+ always read DEPLOYMENT.md in order to understand how to connect to the server.
+
+I am working with git, for every change we make DONT EVER CREATE a new copy, work only with git commands. you can use git to understand what was changed and if somthing broke you can read the commits to understand what was the problem.
+
+
+always try to see before implementing something new if the logic already exits
+
+For every git change do it locally
+
+
+Never do silent failures. Excepts should always be in outer most block. never on sub sections. Never do control flow using try except. If you must do try except always log.exception the full strack trace! 

@@ -1,0 +1,242 @@
+[
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving."
+      }
+    ],
+    "videos": [
+      "data/final_angle_train/treadmill_0000_subtle_gray_stripes_right_speed14.0_angle15_bright0.00_contr1.00_640x480_seed607.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving."
+      }
+    ],
+    "videos": [
+      "data/final_angle_train/treadmill_0000_subtle_gray_stripes_left_speed14.0_angle0_bright0.00_contr1.00_640x480_seed602.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped."
+      }
+    ],
+    "videos": [
+      "data/final_angle_train/treadmill_0000_subtle_gray_stripes_down_speed0.0_angle15_bright0.00_contr1.00_640x480_seed613.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving."
+      }
+    ],
+    "videos": [
+      "data/final_angle_train/treadmill_0000_subtle_gray_stripes_up_speed14.0_angle0_bright0.00_contr1.00_640x480_seed610.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving."
+      }
+    ],
+    "videos": [
+      "data/final_angle_train/treadmill_0000_subtle_gray_stripes_left_speed14.0_angle15_bright0.00_contr1.00_640x480_seed603.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving."
+      }
+    ],
+    "videos": [
+      "data/final_angle_train/treadmill_0000_subtle_gray_stripes_down_speed14.0_angle0_bright0.00_contr1.00_640x480_seed614.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped."
+      }
+    ],
+    "videos": [
+      "data/final_angle_train/treadmill_0000_subtle_gray_stripes_left_speed0.0_angle0_bright0.00_contr1.00_640x480_seed600.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving."
+      }
+    ],
+    "videos": [
+      "data/final_angle_train/treadmill_0000_subtle_gray_stripes_up_speed14.0_angle15_bright0.00_contr1.00_640x480_seed611.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving."
+      }
+    ],
+    "videos": [
+      "data/final_angle_train/treadmill_0000_subtle_gray_stripes_right_speed14.0_angle0_bright0.00_contr1.00_640x480_seed606.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped."
+      }
+    ],
+    "videos": [
+      "data/final_angle_train/treadmill_0000_subtle_gray_stripes_up_speed0.0_angle15_bright0.00_contr1.00_640x480_seed609.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped."
+      }
+    ],
+    "videos": [
+      "data/final_angle_train/treadmill_0000_subtle_gray_stripes_right_speed0.0_angle15_bright0.00_contr1.00_640x480_seed605.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped."
+      }
+    ],
+    "videos": [
+      "data/final_angle_train/treadmill_0000_subtle_gray_stripes_down_speed0.0_angle0_bright0.00_contr1.00_640x480_seed612.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped."
+      }
+    ],
+    "videos": [
+      "data/final_angle_train/treadmill_0000_subtle_gray_stripes_right_speed0.0_angle0_bright0.00_contr1.00_640x480_seed604.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped."
+      }
+    ],
+    "videos": [
+      "data/final_angle_train/treadmill_0000_subtle_gray_stripes_up_speed0.0_angle0_bright0.00_contr1.00_640x480_seed608.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is stopped."
+      }
+    ],
+    "videos": [
+      "data/final_angle_train/treadmill_0000_subtle_gray_stripes_left_speed0.0_angle15_bright0.00_contr1.00_640x480_seed601.mp4"
+    ]
+  },
+  {
+    "messages": [
+      {
+        "role": "user",
+        "content": "<video>Analyze this video. Is the treadmill belt moving or stopped?"
+      },
+      {
+        "role": "assistant",
+        "content": "The treadmill belt is moving."
+      }
+    ],
+    "videos": [
+      "data/final_angle_train/treadmill_0000_subtle_gray_stripes_down_speed14.0_angle15_bright0.00_contr1.00_640x480_seed615.mp4"
+    ]
+  }
+]

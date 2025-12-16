@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Experiment Runs Summary</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        h2 {
+            color: #555;
+            margin-top: 40px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 30px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th {
+            background-color: #4a5568;
+            color: white;
+            padding: 14px 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        tr:hover {
+            background-color: #f7fafc;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        .best-score {
+            background-color: #3182ce !important;
+            color: white;
+            font-weight: bold;
+        }
+        .best-score:hover {
+            background-color: #2c5282 !important;
+        }
+        .f1-score {
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+        .dataset-count {
+            color: #718096;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Experiment Runs Summary - F1 Scores by Dataset</h1>
+
+    <h2>_exp_20251208_230500 <span class="dataset-count">(15 runs)</span></h2>
+    <table>
+        <tr>
+            <th>Exp ID</th>
+            <th>Model Name</th>
+            <th>Sampler</th>
+            <th>Epochs</th>
+            <th>F1 Score</th>
+        </tr>
+        <tr class="best-score">
+            <td>74</td>
+            <td>loraplus_random_sampler_dec10</td>
+            <td>Our random shuffle</td>
+            <td>5</td>
+            <td class="f1-score">83.28</td>
+        </tr>
+        <tr class="best-score">
+            <td>76</td>
+            <td>loraplus_random_sampler_fixed_dec10</td>
+            <td>Our random shuffle</td>
+            <td>5</td>
+            <td class="f1-score">83.28</td>
+        </tr>
+        <tr class="best-score">
+            <td>81</td>
+            <td>loraplus_hf_shuffle_5epochs_dec10</td>
+            <td>Our random shuffle</td>
+            <td>5</td>
+            <td class="f1-score">83.28</td>
+        </tr>
+        <tr class="">
+            <td>46</td>
+            <td>5epoch_dec9_loraplus</td>
+            <td>HF shuffle (default)</td>
+            <td>5</td>
+            <td class="f1-score">80.71</td>
+        </tr>
+        <tr class="">
+            <td>67</td>
+            <td>random_sampler_test_loraplus_5ep</td>
+            <td>HF shuffle</td>
+            <td>5</td>
+            <td class="f1-score">80.71</td>
+        </tr>
+        <tr class="">
+            <td>75</td>
+            <td>loraplus_hf_shuffle_dec10</td>
+            <td>HF shuffle</td>
+            <td>5</td>
+            <td class="f1-score">80.71</td>
+        </tr>
+        <tr class="">
+            <td>77</td>
+            <td>loraplus_iter_count_fix_dec10</td>
+            <td>Our random shuffle (iter fix)</td>
+            <td>5</td>
+            <td class="f1-score">80.71</td>
+        </tr>
+        <tr class="">
+            <td>82</td>
+            <td>loraplus_hf_sequential_dec10</td>
+            <td>Sequential (no shuffle)</td>
+            <td>5</td>
+            <td class="f1-score">78.64</td>
+        </tr>
+        <tr class="">
+            <td>69</td>
+            <td>random_batch_sampler_test_5ep_v2</td>
+            <td>Batch sampler</td>
+            <td>5</td>
+            <td class="f1-score">71.49</td>
+        </tr>
+        <tr class="">
+            <td>41</td>
+            <td>left_distrand_320test_dec8_loraplus</td>
+            <td>HF shuffle (default)</td>
+            <td>7</td>
+            <td class="f1-score">71.33</td>
+        </tr>
+        <tr class="">
+            <td>65</td>
+            <td>balanced_sampling_test_loraplus</td>
+            <td>Balanced</td>
+            <td>3</td>
+            <td class="f1-score">67.44</td>
+        </tr>
+        <tr class="">
+            <td>79</td>
+            <td>loraplus_10epochs_dec10</td>
+            <td>HF shuffle (default)</td>
+            <td>10</td>
+            <td class="f1-score">66.87</td>
+        </tr>
+        <tr class="">
+            <td>80</td>
+            <td>loraplus_10epochs_noshuffle_dec10</td>
+            <td>No shuffle</td>
+            <td>10</td>
+            <td class="f1-score">50.29</td>
+        </tr>
+        <tr class="">
+            <td>66</td>
+            <td>balanced_sampling_test_loraplus_5ep</td>
+            <td>Balanced</td>
+            <td>5</td>
+            <td class="f1-score">50.15</td>
+        </tr>
+        <tr class="">
+            <td>7</td>
+            <td>loraplus_balanced_exp230500_dec10</td>
+            <td>Balanced</td>
+            <td>5</td>
+            <td class="f1-score">43.38</td>
+        </tr>
+    </table>
+
+    <h2>_exp_20251209_dist_augment <span class="dataset-count">(3 runs)</span></h2>
+    <table>
+        <tr>
+            <th>Exp ID</th>
+            <th>Model Name</th>
+            <th>Sampler</th>
+            <th>Epochs</th>
+            <th>F1 Score</th>
+        </tr>
+        <tr class="best-score">
+            <td>54</td>
+            <td>dist_augment_loraplus_20ep_dec9</td>
+            <td>HF shuffle (default)</td>
+            <td>20</td>
+            <td class="f1-score">53.17</td>
+        </tr>
+        <tr class="">
+            <td>50</td>
+            <td>dist_augment_loraplus_dec9</td>
+            <td>HF shuffle (default)</td>
+            <td>7</td>
+            <td class="f1-score">52.66</td>
+        </tr>
+        <tr class="">
+            <td>6</td>
+            <td>loraplus_balanced_dist_augment_dec10</td>
+            <td>Balanced</td>
+            <td>5</td>
+            <td class="f1-score">52.15</td>
+        </tr>
+    </table>
+
+    <h2>_exp_20251209_dist_augment_x5_combined <span class="dataset-count">(4 runs)</span></h2>
+    <table>
+        <tr>
+            <th>Exp ID</th>
+            <th>Model Name</th>
+            <th>Sampler</th>
+            <th>Epochs</th>
+            <th>F1 Score</th>
+        </tr>
+        <tr class="best-score">
+            <td>4</td>
+            <td>loraplus_balanced_x5combined_dec10_b14</td>
+            <td>Balanced</td>
+            <td>5</td>
+            <td class="f1-score">77.21</td>
+        </tr>
+        <tr class="">
+            <td>3</td>
+            <td>loraplus_balanced_x5combined_dec10</td>
+            <td>Balanced</td>
+            <td>5</td>
+            <td class="f1-score">76.50</td>
+        </tr>
+        <tr class="">
+            <td>62</td>
+            <td>dist_augment_x5_combined_loraplus_5ep</td>
+            <td>HF shuffle (default)</td>
+            <td>5</td>
+            <td class="f1-score">52.38</td>
+        </tr>
+        <tr class="">
+            <td>63</td>
+            <td>dist_augment_x5_combined_loraplus_5ep_noquant</td>
+            <td>HF shuffle (default)</td>
+            <td>5</td>
+            <td class="f1-score">52.38</td>
+        </tr>
+    </table>
+
+</body>
+</html>

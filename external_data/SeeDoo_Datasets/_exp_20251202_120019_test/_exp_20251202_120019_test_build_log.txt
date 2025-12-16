@@ -1,0 +1,173 @@
+2025-12-02 10:01:04 - INFO - Dataset Builder started - _exp_20251202_120019_test
+2025-12-02 10:01:04 - INFO - Configuration: {'dataset_name': '_exp_20251202_120019_test', 'output_dir': 'data/_exp_20251202_120019_test', 'num_videos': 10, 'train_split': 1.0, 'moving_ratio': 0.5, 'seed': 42, 'vary_parameters': False, 'texture_type': 'factory_dark,factory_dark_stripes,noise,stripes', 'direction': 'left,right', 'speed_range': '0.0,14.0', 'resolution': '640x480', 'fps': '4', 'duration': '12.0', 'view_angle': '22,45', 'brightness': '0.0', 'contrast': '1.0', 'lighting_variation': 'none', 'lighting_intensity': '1.0', 'motion_blur': '0', 'camera_noise': '0.0', 'edge_width': '0.1', 'stripe_width': '20', 'stripe_spacing': '20', 'stripe_gray': '15', 'background_gray': '10', 'stripe_distance_variance': '0.0', 'add_object': False, 'object_type': 'box', 'object_position': 'center', 'object_size': 'medium', 'num_objects': 1, 'add_blur': False, 'blur_type': 'gaussian', 'blur_intensity': '0.3', 'random_blur_variation': False}
+2025-12-02 10:01:04 - INFO - Validating prerequisites...
+2025-12-02 10:01:04 - INFO -   [OK] Found synthetic generation script
+2025-12-02 10:01:04 - INFO -   [OK] Found dataset_info.json
+2025-12-02 10:01:04 - INFO -   [OK] Python3 available: Python 3.11.11
+2025-12-02 10:01:04 - INFO - Generating video configurations...
+2025-12-02 10:01:04 - INFO -   Generated 32 parameter combinations
+2025-12-02 10:01:04 - INFO -   Generated: 16 moving, 16 stopped videos
+2025-12-02 10:01:04 - INFO - Generating 32 videos...
+2025-12-02 10:01:04 - INFO -   [1/32] Generating video...
+2025-12-02 10:01:04 - INFO -     Texture: noise, Direction: right, Speed: 0.00
+2025-12-02 10:01:05 - INFO -     [OK] Generated: treadmill_0000_noise_right_speed0.0_angle22_bright0.00_contr1.00_640x480_seed62.mp4 (392.8 KB)
+2025-12-02 10:01:05 - INFO -   [2/32] Generating video...
+2025-12-02 10:01:05 - INFO -     Texture: factory_dark_stripes, Direction: left, Speed: 14.00
+2025-12-02 10:01:05 - INFO -     DEBUG CMD for factory_dark_stripes: python3 /app/data/synthetic_treadmill/synthetic_data_generation.py --num_videos 1 --output_dir data/_exp_20251202_120019_test --seed 53 --texture_type factory_dark_stripes --direction left --speed 14.0 --view_angle 45.0 --brightness 0.0 --contrast 1.0 --lighting_variation none --lighting_intensity 1.0 --motion_blur 0 --camera_noise 0.0 --edge_width 0.1 --resolution 640x480 --fps 4 --duration 12.0
+2025-12-02 10:01:06 - INFO -     [OK] Generated: treadmill_0000_factory_dark_stripes_left_speed14.0_angle45_bright0.00_contr1.00_640x480_seed53.mp4 (145.2 KB)
+2025-12-02 10:01:06 - INFO -   [3/32] Generating video...
+2025-12-02 10:01:06 - INFO -     Texture: noise, Direction: right, Speed: 14.00
+2025-12-02 10:01:07 - INFO -     [OK] Generated: treadmill_0000_noise_right_speed14.0_angle22_bright0.00_contr1.00_640x480_seed64.mp4 (3702.9 KB)
+2025-12-02 10:01:07 - INFO -   [4/32] Generating video...
+2025-12-02 10:01:07 - INFO -     Texture: stripes, Direction: right, Speed: 14.00
+2025-12-02 10:01:08 - INFO -     [OK] Generated: treadmill_0000_stripes_right_speed14.0_angle45_bright0.00_contr1.00_640x480_seed73.mp4 (256.9 KB)
+2025-12-02 10:01:08 - INFO -   [5/32] Generating video...
+2025-12-02 10:01:08 - INFO -     Texture: noise, Direction: left, Speed: 0.00
+2025-12-02 10:01:09 - INFO -     [OK] Generated: treadmill_0000_noise_left_speed0.0_angle45_bright0.00_contr1.00_640x480_seed59.mp4 (393.2 KB)
+2025-12-02 10:01:09 - INFO -   [6/32] Generating video...
+2025-12-02 10:01:09 - INFO -     Texture: noise, Direction: right, Speed: 14.00
+2025-12-02 10:01:10 - INFO -     [OK] Generated: treadmill_0000_noise_right_speed14.0_angle45_bright0.00_contr1.00_640x480_seed65.mp4 (3683.5 KB)
+2025-12-02 10:01:10 - INFO -   [7/32] Generating video...
+2025-12-02 10:01:10 - INFO -     Texture: factory_dark_stripes, Direction: right, Speed: 0.00
+2025-12-02 10:01:10 - INFO -     DEBUG CMD for factory_dark_stripes: python3 /app/data/synthetic_treadmill/synthetic_data_generation.py --num_videos 1 --output_dir data/_exp_20251202_120019_test --seed 54 --texture_type factory_dark_stripes --direction right --speed 0.0 --view_angle 22.0 --brightness 0.0 --contrast 1.0 --lighting_variation none --lighting_intensity 1.0 --motion_blur 0 --camera_noise 0.0 --edge_width 0.1 --resolution 640x480 --fps 4 --duration 12.0
+2025-12-02 10:01:11 - INFO -     [OK] Generated: treadmill_0000_factory_dark_stripes_right_speed0.0_angle22_bright0.00_contr1.00_640x480_seed54.mp4 (70.1 KB)
+2025-12-02 10:01:11 - INFO -   [8/32] Generating video...
+2025-12-02 10:01:11 - INFO -     Texture: factory_dark_stripes, Direction: right, Speed: 14.00
+2025-12-02 10:01:11 - INFO -     DEBUG CMD for factory_dark_stripes: python3 /app/data/synthetic_treadmill/synthetic_data_generation.py --num_videos 1 --output_dir data/_exp_20251202_120019_test --seed 56 --texture_type factory_dark_stripes --direction right --speed 14.0 --view_angle 22.0 --brightness 0.0 --contrast 1.0 --lighting_variation none --lighting_intensity 1.0 --motion_blur 0 --camera_noise 0.0 --edge_width 0.1 --resolution 640x480 --fps 4 --duration 12.0
+2025-12-02 10:01:12 - INFO -     [OK] Generated: treadmill_0000_factory_dark_stripes_right_speed14.0_angle22_bright0.00_contr1.00_640x480_seed56.mp4 (144.8 KB)
+2025-12-02 10:01:12 - INFO -   [9/32] Generating video...
+2025-12-02 10:01:12 - INFO -     Texture: factory_dark, Direction: right, Speed: 0.00
+2025-12-02 10:01:12 - INFO -     DEBUG CMD for factory_dark: python3 /app/data/synthetic_treadmill/synthetic_data_generation.py --num_videos 1 --output_dir data/_exp_20251202_120019_test --seed 47 --texture_type factory_dark --direction right --speed 0.0 --view_angle 45.0 --brightness 0.0 --contrast 1.0 --lighting_variation none --lighting_intensity 1.0 --motion_blur 0 --camera_noise 0.0 --edge_width 0.1 --resolution 640x480 --fps 4 --duration 12.0
+2025-12-02 10:01:13 - INFO -     [OK] Generated: treadmill_0000_factory_dark_right_speed0.0_angle45_bright0.00_contr1.00_640x480_seed47.mp4 (207.6 KB)
+2025-12-02 10:01:13 - INFO -   [10/32] Generating video...
+2025-12-02 10:01:13 - INFO -     Texture: stripes, Direction: left, Speed: 14.00
+2025-12-02 10:01:14 - INFO -     [OK] Generated: treadmill_0000_stripes_left_speed14.0_angle22_bright0.00_contr1.00_640x480_seed68.mp4 (257.5 KB)
+2025-12-02 10:01:14 - INFO -   [11/32] Generating video...
+2025-12-02 10:01:14 - INFO -     Texture: factory_dark, Direction: left, Speed: 0.00
+2025-12-02 10:01:14 - INFO -     DEBUG CMD for factory_dark: python3 /app/data/synthetic_treadmill/synthetic_data_generation.py --num_videos 1 --output_dir data/_exp_20251202_120019_test --seed 42 --texture_type factory_dark --direction left --speed 0.0 --view_angle 22.0 --brightness 0.0 --contrast 1.0 --lighting_variation none --lighting_intensity 1.0 --motion_blur 0 --camera_noise 0.0 --edge_width 0.1 --resolution 640x480 --fps 4 --duration 12.0
+2025-12-02 10:01:15 - INFO -     [OK] Generated: treadmill_0000_factory_dark_left_speed0.0_angle22_bright0.00_contr1.00_640x480_seed42.mp4 (208.3 KB)
+2025-12-02 10:01:15 - INFO -   [12/32] Generating video...
+2025-12-02 10:01:15 - INFO -     Texture: noise, Direction: left, Speed: 14.00
+2025-12-02 10:01:16 - INFO -     [OK] Generated: treadmill_0000_noise_left_speed14.0_angle45_bright0.00_contr1.00_640x480_seed61.mp4 (2835.0 KB)
+2025-12-02 10:01:16 - INFO -   [13/32] Generating video...
+2025-12-02 10:01:16 - INFO -     Texture: stripes, Direction: left, Speed: 0.00
+2025-12-02 10:01:17 - INFO -     [OK] Generated: treadmill_0000_stripes_left_speed0.0_angle22_bright0.00_contr1.00_640x480_seed66.mp4 (115.2 KB)
+2025-12-02 10:01:17 - INFO -   [14/32] Generating video...
+2025-12-02 10:01:17 - INFO -     Texture: stripes, Direction: right, Speed: 14.00
+2025-12-02 10:01:18 - INFO -     [OK] Generated: treadmill_0000_stripes_right_speed14.0_angle22_bright0.00_contr1.00_640x480_seed72.mp4 (255.7 KB)
+2025-12-02 10:01:18 - INFO -   [15/32] Generating video...
+2025-12-02 10:01:18 - INFO -     Texture: noise, Direction: left, Speed: 0.00
+2025-12-02 10:01:19 - INFO -     [OK] Generated: treadmill_0000_noise_left_speed0.0_angle22_bright0.00_contr1.00_640x480_seed58.mp4 (393.5 KB)
+2025-12-02 10:01:19 - INFO -   [16/32] Generating video...
+2025-12-02 10:01:19 - INFO -     Texture: factory_dark_stripes, Direction: left, Speed: 0.00
+2025-12-02 10:01:19 - INFO -     DEBUG CMD for factory_dark_stripes: python3 /app/data/synthetic_treadmill/synthetic_data_generation.py --num_videos 1 --output_dir data/_exp_20251202_120019_test --seed 50 --texture_type factory_dark_stripes --direction left --speed 0.0 --view_angle 22.0 --brightness 0.0 --contrast 1.0 --lighting_variation none --lighting_intensity 1.0 --motion_blur 0 --camera_noise 0.0 --edge_width 0.1 --resolution 640x480 --fps 4 --duration 12.0
+2025-12-02 10:01:20 - INFO -     [OK] Generated: treadmill_0000_factory_dark_stripes_left_speed0.0_angle22_bright0.00_contr1.00_640x480_seed50.mp4 (70.5 KB)
+2025-12-02 10:01:20 - INFO -   [17/32] Generating video...
+2025-12-02 10:01:20 - INFO -     Texture: stripes, Direction: right, Speed: 0.00
+2025-12-02 10:01:21 - INFO -     [OK] Generated: treadmill_0000_stripes_right_speed0.0_angle22_bright0.00_contr1.00_640x480_seed70.mp4 (114.8 KB)
+2025-12-02 10:01:21 - INFO -   [18/32] Generating video...
+2025-12-02 10:01:21 - INFO -     Texture: factory_dark, Direction: left, Speed: 14.00
+2025-12-02 10:01:21 - INFO -     DEBUG CMD for factory_dark: python3 /app/data/synthetic_treadmill/synthetic_data_generation.py --num_videos 1 --output_dir data/_exp_20251202_120019_test --seed 45 --texture_type factory_dark --direction left --speed 14.0 --view_angle 45.0 --brightness 0.0 --contrast 1.0 --lighting_variation none --lighting_intensity 1.0 --motion_blur 0 --camera_noise 0.0 --edge_width 0.1 --resolution 640x480 --fps 4 --duration 12.0
+2025-12-02 10:01:22 - INFO -     [OK] Generated: treadmill_0000_factory_dark_left_speed14.0_angle45_bright0.00_contr1.00_640x480_seed45.mp4 (905.2 KB)
+2025-12-02 10:01:22 - INFO -   [19/32] Generating video...
+2025-12-02 10:01:22 - INFO -     Texture: stripes, Direction: left, Speed: 14.00
+2025-12-02 10:01:23 - INFO -     [OK] Generated: treadmill_0000_stripes_left_speed14.0_angle45_bright0.00_contr1.00_640x480_seed69.mp4 (258.0 KB)
+2025-12-02 10:01:23 - INFO -   [20/32] Generating video...
+2025-12-02 10:01:23 - INFO -     Texture: factory_dark, Direction: right, Speed: 0.00
+2025-12-02 10:01:23 - INFO -     DEBUG CMD for factory_dark: python3 /app/data/synthetic_treadmill/synthetic_data_generation.py --num_videos 1 --output_dir data/_exp_20251202_120019_test --seed 46 --texture_type factory_dark --direction right --speed 0.0 --view_angle 22.0 --brightness 0.0 --contrast 1.0 --lighting_variation none --lighting_intensity 1.0 --motion_blur 0 --camera_noise 0.0 --edge_width 0.1 --resolution 640x480 --fps 4 --duration 12.0
+2025-12-02 10:01:24 - INFO -     [OK] Generated: treadmill_0000_factory_dark_right_speed0.0_angle22_bright0.00_contr1.00_640x480_seed46.mp4 (208.0 KB)
+2025-12-02 10:01:24 - INFO -   [21/32] Generating video...
+2025-12-02 10:01:24 - INFO -     Texture: factory_dark, Direction: right, Speed: 14.00
+2025-12-02 10:01:24 - INFO -     DEBUG CMD for factory_dark: python3 /app/data/synthetic_treadmill/synthetic_data_generation.py --num_videos 1 --output_dir data/_exp_20251202_120019_test --seed 48 --texture_type factory_dark --direction right --speed 14.0 --view_angle 22.0 --brightness 0.0 --contrast 1.0 --lighting_variation none --lighting_intensity 1.0 --motion_blur 0 --camera_noise 0.0 --edge_width 0.1 --resolution 640x480 --fps 4 --duration 12.0
+2025-12-02 10:01:25 - INFO -     [OK] Generated: treadmill_0000_factory_dark_right_speed14.0_angle22_bright0.00_contr1.00_640x480_seed48.mp4 (1198.6 KB)
+2025-12-02 10:01:25 - INFO -   [22/32] Generating video...
+2025-12-02 10:01:25 - INFO -     Texture: factory_dark, Direction: left, Speed: 0.00
+2025-12-02 10:01:25 - INFO -     DEBUG CMD for factory_dark: python3 /app/data/synthetic_treadmill/synthetic_data_generation.py --num_videos 1 --output_dir data/_exp_20251202_120019_test --seed 43 --texture_type factory_dark --direction left --speed 0.0 --view_angle 45.0 --brightness 0.0 --contrast 1.0 --lighting_variation none --lighting_intensity 1.0 --motion_blur 0 --camera_noise 0.0 --edge_width 0.1 --resolution 640x480 --fps 4 --duration 12.0
+2025-12-02 10:01:26 - INFO -     [OK] Generated: treadmill_0000_factory_dark_left_speed0.0_angle45_bright0.00_contr1.00_640x480_seed43.mp4 (207.3 KB)
+2025-12-02 10:01:26 - INFO -   [23/32] Generating video...
+2025-12-02 10:01:26 - INFO -     Texture: factory_dark_stripes, Direction: left, Speed: 0.00
+2025-12-02 10:01:26 - INFO -     DEBUG CMD for factory_dark_stripes: python3 /app/data/synthetic_treadmill/synthetic_data_generation.py --num_videos 1 --output_dir data/_exp_20251202_120019_test --seed 51 --texture_type factory_dark_stripes --direction left --speed 0.0 --view_angle 45.0 --brightness 0.0 --contrast 1.0 --lighting_variation none --lighting_intensity 1.0 --motion_blur 0 --camera_noise 0.0 --edge_width 0.1 --resolution 640x480 --fps 4 --duration 12.0
+2025-12-02 10:01:27 - INFO -     [OK] Generated: treadmill_0000_factory_dark_stripes_left_speed0.0_angle45_bright0.00_contr1.00_640x480_seed51.mp4 (70.7 KB)
+2025-12-02 10:01:27 - INFO -   [24/32] Generating video...
+2025-12-02 10:01:27 - INFO -     Texture: factory_dark, Direction: right, Speed: 14.00
+2025-12-02 10:01:27 - INFO -     DEBUG CMD for factory_dark: python3 /app/data/synthetic_treadmill/synthetic_data_generation.py --num_videos 1 --output_dir data/_exp_20251202_120019_test --seed 49 --texture_type factory_dark --direction right --speed 14.0 --view_angle 45.0 --brightness 0.0 --contrast 1.0 --lighting_variation none --lighting_intensity 1.0 --motion_blur 0 --camera_noise 0.0 --edge_width 0.1 --resolution 640x480 --fps 4 --duration 12.0
+2025-12-02 10:01:28 - INFO -     [OK] Generated: treadmill_0000_factory_dark_right_speed14.0_angle45_bright0.00_contr1.00_640x480_seed49.mp4 (1004.5 KB)
+2025-12-02 10:01:28 - INFO -   [25/32] Generating video...
+2025-12-02 10:01:28 - INFO -     Texture: stripes, Direction: left, Speed: 0.00
+2025-12-02 10:01:29 - INFO -     [OK] Generated: treadmill_0000_stripes_left_speed0.0_angle45_bright0.00_contr1.00_640x480_seed67.mp4 (115.0 KB)
+2025-12-02 10:01:29 - INFO -   [26/32] Generating video...
+2025-12-02 10:01:29 - INFO -     Texture: factory_dark_stripes, Direction: left, Speed: 14.00
+2025-12-02 10:01:29 - INFO -     DEBUG CMD for factory_dark_stripes: python3 /app/data/synthetic_treadmill/synthetic_data_generation.py --num_videos 1 --output_dir data/_exp_20251202_120019_test --seed 52 --texture_type factory_dark_stripes --direction left --speed 14.0 --view_angle 22.0 --brightness 0.0 --contrast 1.0 --lighting_variation none --lighting_intensity 1.0 --motion_blur 0 --camera_noise 0.0 --edge_width 0.1 --resolution 640x480 --fps 4 --duration 12.0
+2025-12-02 10:01:30 - INFO -     [OK] Generated: treadmill_0000_factory_dark_stripes_left_speed14.0_angle22_bright0.00_contr1.00_640x480_seed52.mp4 (145.1 KB)
+2025-12-02 10:01:30 - INFO -   [27/32] Generating video...
+2025-12-02 10:01:30 - INFO -     Texture: noise, Direction: right, Speed: 0.00
+2025-12-02 10:01:31 - INFO -     [OK] Generated: treadmill_0000_noise_right_speed0.0_angle45_bright0.00_contr1.00_640x480_seed63.mp4 (392.6 KB)
+2025-12-02 10:01:31 - INFO -   [28/32] Generating video...
+2025-12-02 10:01:31 - INFO -     Texture: stripes, Direction: right, Speed: 0.00
+2025-12-02 10:01:32 - INFO -     [OK] Generated: treadmill_0000_stripes_right_speed0.0_angle45_bright0.00_contr1.00_640x480_seed71.mp4 (114.7 KB)
+2025-12-02 10:01:32 - INFO -   [29/32] Generating video...
+2025-12-02 10:01:32 - INFO -     Texture: noise, Direction: left, Speed: 14.00
+2025-12-02 10:01:33 - INFO -     [OK] Generated: treadmill_0000_noise_left_speed14.0_angle22_bright0.00_contr1.00_640x480_seed60.mp4 (2802.7 KB)
+2025-12-02 10:01:33 - INFO -   [30/32] Generating video...
+2025-12-02 10:01:33 - INFO -     Texture: factory_dark_stripes, Direction: right, Speed: 0.00
+2025-12-02 10:01:33 - INFO -     DEBUG CMD for factory_dark_stripes: python3 /app/data/synthetic_treadmill/synthetic_data_generation.py --num_videos 1 --output_dir data/_exp_20251202_120019_test --seed 55 --texture_type factory_dark_stripes --direction right --speed 0.0 --view_angle 45.0 --brightness 0.0 --contrast 1.0 --lighting_variation none --lighting_intensity 1.0 --motion_blur 0 --camera_noise 0.0 --edge_width 0.1 --resolution 640x480 --fps 4 --duration 12.0
+2025-12-02 10:01:34 - INFO -     [OK] Generated: treadmill_0000_factory_dark_stripes_right_speed0.0_angle45_bright0.00_contr1.00_640x480_seed55.mp4 (70.2 KB)
+2025-12-02 10:01:34 - INFO -   [31/32] Generating video...
+2025-12-02 10:01:34 - INFO -     Texture: factory_dark, Direction: left, Speed: 14.00
+2025-12-02 10:01:34 - INFO -     DEBUG CMD for factory_dark: python3 /app/data/synthetic_treadmill/synthetic_data_generation.py --num_videos 1 --output_dir data/_exp_20251202_120019_test --seed 44 --texture_type factory_dark --direction left --speed 14.0 --view_angle 22.0 --brightness 0.0 --contrast 1.0 --lighting_variation none --lighting_intensity 1.0 --motion_blur 0 --camera_noise 0.0 --edge_width 0.1 --resolution 640x480 --fps 4 --duration 12.0
+2025-12-02 10:01:34 - INFO -     [OK] Generated: treadmill_0000_factory_dark_left_speed14.0_angle22_bright0.00_contr1.00_640x480_seed44.mp4 (868.8 KB)
+2025-12-02 10:01:34 - INFO -   [32/32] Generating video...
+2025-12-02 10:01:34 - INFO -     Texture: factory_dark_stripes, Direction: right, Speed: 14.00
+2025-12-02 10:01:34 - INFO -     DEBUG CMD for factory_dark_stripes: python3 /app/data/synthetic_treadmill/synthetic_data_generation.py --num_videos 1 --output_dir data/_exp_20251202_120019_test --seed 57 --texture_type factory_dark_stripes --direction right --speed 14.0 --view_angle 45.0 --brightness 0.0 --contrast 1.0 --lighting_variation none --lighting_intensity 1.0 --motion_blur 0 --camera_noise 0.0 --edge_width 0.1 --resolution 640x480 --fps 4 --duration 12.0
+2025-12-02 10:01:35 - INFO -     [OK] Generated: treadmill_0000_factory_dark_stripes_right_speed14.0_angle45_bright0.00_contr1.00_640x480_seed57.mp4 (145.0 KB)
+2025-12-02 10:01:35 - INFO - Successfully generated 32/32 videos
+2025-12-02 10:01:35 - INFO - Creating dataset JSON: /app/data/_exp_20251202_120019_test.json
+2025-12-02 10:01:35 - INFO -   [OK] Created dataset with 32 entries
+2025-12-02 10:01:35 - INFO - Updating dataset_info.json...
+2025-12-02 10:01:35 - INFO -   Created backup: dataset_info.json.backup
+2025-12-02 10:01:35 - INFO -   [OK] Added '_exp_20251202_120019_test' to dataset_info.json
+2025-12-02 10:01:35 - INFO - Generating summary report...
+2025-12-02 10:01:35 - INFO - 
+======================================================================
+Dataset Generation Summary: _exp_20251202_120019_test
+======================================================================
+
+Generation Date: 2025-12-02 10:01:35
+Seed: 42
+
+Dataset Statistics:
+----------------------------------------------------------------------
+  Total Videos: 32
+  Moving Videos: 16 (50.0%)
+  Stopped Videos: 16 (50.0%)
+
+  Speed Range: 14.00 - 14.00 px/frame
+
+Texture Distribution:
+  factory_dark   :   8 (25.0%)
+  factory_dark_stripes:   8 (25.0%)
+  noise          :   8 (25.0%)
+  stripes        :   8 (25.0%)
+
+Direction Distribution:
+  left           :  16 (50.0%)
+  right          :  16 (50.0%)
+
+File Sizes:
+  Total: 21.24 MB
+  Average: 0.66 MB per video
+
+Output Files:
+----------------------------------------------------------------------
+  Videos: data/_exp_20251202_120019_test/
+  Dataset JSON: /app/data/_exp_20251202_120019_test.json
+  Dataset Info: /app/data/dataset_info.json
+  Log File: data/_exp_20251202_120019_test/_exp_20251202_120019_test_build_log.txt
+
+======================================================================
+Dataset ready for training!
+======================================================================
+
+2025-12-02 10:01:35 - INFO - ======================================================================
+2025-12-02 10:01:35 - INFO - [OK] Dataset building complete!
+2025-12-02 10:01:35 - INFO - ======================================================================
